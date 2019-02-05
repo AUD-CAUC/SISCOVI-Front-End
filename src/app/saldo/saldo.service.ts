@@ -14,7 +14,7 @@ export class SaldoService {
         return new Date(ano, mes, dia);
     }
     getSaldoFuncao(codigoContrato: number) {
-        const url = this.config.myApi + '/saldo/getSaldoTotal/' + codigoContrato + '/' + this.config.user.id;
+        const url = this.config.myApi + '/saldo/getSaldoFuncao/' + codigoContrato + '/' + this.config.user.id;
         return this.http.get(url).map(res => res.json());
     }
     getSaldoIndividual(codigoContrato: number) {
