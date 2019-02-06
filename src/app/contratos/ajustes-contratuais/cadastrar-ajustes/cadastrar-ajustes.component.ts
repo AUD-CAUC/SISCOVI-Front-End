@@ -14,6 +14,7 @@ import {CargoService} from '../../../cargos/cargo.service';
 import {EventoContratual} from '../evento-contratual';
 import {TipoEventoContratual} from '../tipo-evento-contratual';
 import {HistoricoGestor} from '../../../historico/historico-gestor';
+import {MaterializeAction} from 'angular2-materialize';
 
 @Component({
     selector: 'app-cadastrar-ajustes',
@@ -38,7 +39,11 @@ export class CadastrarAjustesComponent {
     segundoSubstituto: string;
     cadastroAjuste = new EventEmitter();
     tiposEventosContratuais: TipoEventoContratual[] = [];
-
+    modalActions = new EventEmitter<string | MaterializeAction>();
+    tempCon: Contrato;
+    primeiroHistAdd = false;
+    segundoHistAdd = false;
+    loadModal = false;
     constructor(private contratoService: ContratosService, private userService: UserService, private config: ConfigService, private  fb: FormBuilder, private percentService: PercentualService,
                 private convService: ConvencaoService, private ref: ChangeDetectorRef, private cargoService: CargoService) {
         this.contratoService.getContratosDoUsuario().subscribe(res => {
@@ -251,6 +256,7 @@ export class CadastrarAjustesComponent {
     }
 
     verificaAjusteASerCadastrado() {
+        this.tempCon = null;
         const contrato: Contrato = Object.assign({}, this.contrato);
         const funcoesContrato: Cargo[] = this.contrato.funcoes;
         contrato.percentuais = [];
@@ -354,6 +360,7 @@ export class CadastrarAjustesComponent {
                 create = true;
             }
             if (create) {
+                this.primeiroHistAdd = true;
                 const hist: HistoricoGestor = new HistoricoGestor();
                 hist.inicio = this.stringToDate(this.myForm.get('inicioVigencia').value);
                 hist.gestor = this.myForm.get('primeiroSubstituto').value;
@@ -373,6 +380,7 @@ export class CadastrarAjustesComponent {
                 create = true;
             }
             if (create) {
+              this.segundoHistAdd = true;
                 const hist: HistoricoGestor = new HistoricoGestor();
                 hist.inicio = this.stringToDate(this.myForm.get('inicioVigencia').value);
                 hist.gestor = this.myForm.get('segundoSubstituto').value;
@@ -383,9 +391,8 @@ export class CadastrarAjustesComponent {
 
         }
         contrato.eventoContratual = eventoContratual;
-        this.contratoService.cadastrarAjuste(contrato).subscribe(res => {
-
-        });
+        this.tempCon = Object.assign({}, contrato);
+        this.openModal();
     }
 
     public findInvalidControls() {
@@ -397,5 +404,13 @@ export class CadastrarAjustesComponent {
             }
         }
         return invalid;
+    }
+    openModal() {
+      this.loadModal = true;
+      console.log(this.tempCon);
+      this.modalActions.emit({action: 'modal', params: ['open']});
+    }
+    closeModal() {
+      this.modalActions.emit({action: 'modal', params: ['close']});
     }
 }

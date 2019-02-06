@@ -21,9 +21,11 @@
       <h5 class="left-align">Informações Gerais</h5>
       <div class="row">
         <div class="input-field col s5">
-          <select materialize="material_select" [materializeSelectOptions]="tiposEventosContratuais" id="tipo_ajuste" formControlName="tipoAjuste" required>
+          <select materialize="material_select" [materializeSelectOptions]="tiposEventosContratuais" id="tipo_ajuste"
+                  formControlName="tipoAjuste" required>
             <option disabled>Selecione o tipo de Ajuste</option>
-           <option *ngFor="let tipoEvento of tiposEventosContratuais" [value]="tipoEvento.cod">{{tipoEvento.tipo}}</option>
+            <option *ngFor="let tipoEvento of tiposEventosContratuais" [value]="tipoEvento.cod">{{tipoEvento.tipo}}
+            </option>
           </select>
           <label for="tipo_ajuste">Tipo de Ajuste<span class="mensagem-erro">*</span></label>
         </div>
@@ -114,7 +116,8 @@
       </div>
       <div class="row">
         <div class="input-field col s12">
-                    <textarea class="materialize-textarea" (input)="verificaAjusteASerCadastrado()" materialize id="assunto" formControlName="assunto"
+                    <textarea class="materialize-textarea" (input)="verificaAjusteASerCadastrado()" materialize
+                              id="assunto" formControlName="assunto"
                               data-length="120"></textarea>
           <label for="assunto">Assunto</label>
         </div>
@@ -142,13 +145,15 @@
               100 | percent}}
             </option>
           </select>
-          <label for="percentual_decimo_terceiro">Percentual de Décimo Terceiro<span class="mensagem-erro">*</span></label>
+          <label for="percentual_decimo_terceiro">Percentual de Décimo Terceiro<span
+            class="mensagem-erro">*</span></label>
         </div>
         <div class="input-field col s3">
           <input id="percentual_incidencia" class="validate" currencyMask
                  [options]="{ prefix: '', thousands: '.', decimal: ',', allowNegative: 'false', suffix: '%'}"
                  type="text" formControlName="percentualIncidencia">
-          <label for="percentual_incidencia">Percentual de Incidência do Submódulo 4.1<span class="mensagem-erro">*</span></label>
+          <label for="percentual_incidencia">Percentual de Incidência do Submódulo 4.1<span
+            class="mensagem-erro">*</span></label>
         </div>
       </div>
       <h5 class="left-align">Funções do Contrato</h5>
@@ -223,7 +228,26 @@
       </button> -->
     </form>
     <div class="center-align">
-      <button class="btn waves-effect" [disabled]="myForm.invalid" (click)="verificaAjusteASerCadastrado()">Cadastrar Contrato</button>
+      <button class="btn waves-effect" [disabled]="myForm.invalid" (click)="verificaAjusteASerCadastrado()">Cadastrar
+        Contrato
+      </button>
     </div>
+  </div>
+</div>
+<div *ngIf="loadModal" id="modal1" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]"
+     [materializeActions]="modalActions">
+  <div class="modal-content">
+    <h4 class="center">Confirmar Alterações de ajuste</h4>
+    <div class="divider"></div>
+    <br>
+
+    <div class="left-align">
+      <div class="valign-wrapper">
+        <span class="warning-text"><i class="material-icons left">warning</i>As alterações não poderão ser desfeitas</span>
+      </div>
+    </div>
+  <div class="modal-footer">
+    <button class="btn waves-effect left" (click)="closeModal()">Cancelar</button>
+    <button class="btn waves-effect right">Confirmar</button>
   </div>
 </div>
