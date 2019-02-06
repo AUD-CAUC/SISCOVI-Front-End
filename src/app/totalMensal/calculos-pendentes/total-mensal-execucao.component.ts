@@ -23,6 +23,12 @@ export class TotalMensalExecucaoComponent implements OnInit {
     config: ConfigService;
     isSelected = false;
     totaisAvaliados: TotalMensalPendente[] = [];
+    somaFerias: number[] = [];
+    somaTerco: number[] = [];
+    somaDecimo: number[] = [];
+    somaIncidencia: number[] = [];
+    somaMultaFGTS: number[] = [];
+    somaSaldo: number[] = [];
     modalActions = new EventEmitter<string | MaterializeAction>();
     modalActions2 = new EventEmitter<string| MaterializeAction>();
     modalActions3 = new EventEmitter<string | MaterializeAction>();
@@ -63,6 +69,24 @@ export class TotalMensalExecucaoComponent implements OnInit {
                     });
                     control.push(addCtrl);
                 });
+
+                this.somaFerias = new Array(this.totais.length).fill(0);
+                this.somaTerco = new Array(this.totais.length).fill(0);
+                this.somaDecimo = new Array(this.totais.length).fill(0);
+                this.somaIncidencia = new Array(this.totais.length).fill(0);
+                this.somaMultaFGTS = new Array(this.totais.length).fill(0);
+                this.somaSaldo = new Array(this.totais.length).fill(0);
+
+                for (let i = 0; i < this.totais.length; i++) {
+                  for (let j = 0; j < this.totais[i].totaisMensais.totais.length; j++) {
+                    this.somaFerias[i] = this.somaFerias[i] + this.totais[i].totaisMensais.totais[j].ferias;
+                    this.somaTerco[i] = this.somaTerco[i] + this.totais[i].totaisMensais.totais[j].tercoConstitucional;
+                    this.somaDecimo[i] = this.somaDecimo[i] + this.totais[i].totaisMensais.totais[j].decimoTerceiro;
+                    this.somaIncidencia[i] = this.somaIncidencia[i] + this.totais[i].totaisMensais.totais[j].incidencia;
+                    this.somaMultaFGTS[i] = this.somaMultaFGTS[i] + this.totais[i].totaisMensais.totais[j].multaFGTS;
+                    this.somaSaldo[i] = this.somaSaldo[i] + this.totais[i].totaisMensais.totais[j].total;
+                  }
+                }
             }
         }
         this.totalMensalFormAfter = this.fb.group({
