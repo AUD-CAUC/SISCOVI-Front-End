@@ -21,6 +21,10 @@ export class ResgateFeriasComponent implements OnInit {
     isSelected = false;
     selected = false;
     protected diasConcedidos: number[] = [];
+    somaFerias = 0;
+    somaIncidenciaFerias = 0;
+    somaIncidenciaTerco = 0;
+    somaTerco = 0;
     feriasCalcular: FeriasCalcular[] = [];
     modalActions = new EventEmitter<string | MaterializeAction>();
     modalActions2 = new EventEmitter<string | MaterializeAction>();
@@ -446,6 +450,11 @@ export class ResgateFeriasComponent implements OnInit {
         if ((this.feriasCalcular.length > 0) && aux) {
             this.diasConcedidos = [];
             for (let i = 0; i < this.feriasCalcular.length; i++) {
+                this.somaFerias = 0;
+                this.somaTerco = 0;
+                this.somaIncidenciaFerias = 0;
+                this.somaIncidenciaTerco = 0;
+
                 this.getDiasConcedidos(this.feriasCalcular[i].inicioFerias, this.feriasCalcular[i].fimFerias, this.feriasCalcular[i].diasVendidos, i);
                 this.feriasService.getValoresFeriasTerceirizado(this.feriasCalcular[i]).subscribe(res => {
                     if (!res.error) {
@@ -458,6 +467,12 @@ export class ResgateFeriasComponent implements OnInit {
                                 this.feriasCalcular[i].pTotalIncidenciaTerco = terceirizado.valorRestituicaoFerias.valorIncidenciaTercoConstitucional;
                                 this.feriasCalcular[i].inicioPeriodoAquisitivo = terceirizado.valorRestituicaoFerias.inicioPeriodoAquisitivo;
                                 this.feriasCalcular[i].fimPeriodoAquisitivo = terceirizado.valorRestituicaoFerias.fimPeriodoAquisitivo;
+
+                                this.somaFerias = this.somaFerias + terceirizado.valorRestituicaoFerias.valorFerias;
+                                this.somaTerco = this.somaTerco + terceirizado.valorRestituicaoFerias.valorTercoConstitucional;
+                                this.somaIncidenciaFerias = this.somaIncidenciaFerias + terceirizado.valorRestituicaoFerias.valorIncidenciaFerias;
+                                this.somaIncidenciaTerco = this.somaIncidenciaTerco + terceirizado.valorRestituicaoFerias.valorIncidenciaTercoConstitucional;
+
                                 if (i === (this.feriasCalcular.length - 1)) {
                                     this.openModal3();
                                 }
