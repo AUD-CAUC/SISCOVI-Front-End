@@ -71,5 +71,17 @@
             <td>{{saldo.saldo | currency:'BRL':true:'1.2-2'}}</td>
         </tr>
         </tbody>
+        <tfoot>
+        <tr>
+          <th >Somatório</th>
+          <th > </th>
+          <th >{{somaFerias| currency:'BRL':true:'1.2-2'}}</th>
+          <th >{{somaTerco| currency:'BRL':true:'1.2-2'}}</th>
+          <th >{{somaDecimo| currency:'BRL':true:'1.2-2'}}</th>
+          <th >{{somaIncidencia| currency:'BRL':true:'1.2-2'}}</th>
+          <th >{{somaMultaFGTS| currency:'BRL':true:'1.2-2'}}</th>
+          <th >{{somaSaldo| currency:'BRL':true:'1.2-2'}}</th>
+        </tr>
+        </tfoot>
     </table>
 </div>
