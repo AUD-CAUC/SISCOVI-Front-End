@@ -28,6 +28,12 @@ export class TotalMensalCalculoComponent implements OnInit {
     modalActions2 = new EventEmitter<string | MaterializeAction>();
     tmService: TotalMensalService;
     resultado: TotalMensal[];
+    somaFerias = 0;
+    somaTerco = 0;
+    somaDecimo = 0;
+    somaIncidencia = 0;
+    somaMultaFGTS = 0;
+    somaSaldo = 0;
     @Output() close = new EventEmitter();
     @Output() navegaParaViewDeCalculos = new EventEmitter();
     private anoSelecionado: number;
@@ -146,6 +152,20 @@ export class TotalMensalCalculoComponent implements OnInit {
             this.tmService.calcularTotalMensal(this.myForm.get('contrato').value, this.myForm.get('mes').value, this.myForm.get('ano').value).subscribe(res => {
                 if (!res.error) {
                     this.resultado = res;
+                    this.somaFerias = 0;
+                    this.somaTerco = 0;
+                    this.somaDecimo = 0;
+                    this.somaIncidencia = 0;
+                    this.somaMultaFGTS = 0;
+                    this.somaSaldo = 0;
+                    for (let i = 0; i < this.resultado.length; i++) {
+                      this.somaFerias = this.somaFerias + this.resultado[i].ferias;
+                      this.somaTerco = this.somaTerco + this.resultado[i].tercoConstitucional;
+                      this.somaDecimo = this.somaDecimo + this.resultado[i].decimoTerceiro;
+                      this.somaIncidencia = this.somaIncidencia + this.resultado[i].incidencia;
+                      this.somaMultaFGTS = this.somaMultaFGTS + this.resultado[i].multaFGTS;
+                      this.somaSaldo = this.somaSaldo + this.resultado[i].total;
+                    }
                     this.openModal();
                 } else {
                     this.myForm.setErrors({'mensagem': res.error});

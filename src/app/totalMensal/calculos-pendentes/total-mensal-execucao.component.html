@@ -80,6 +80,18 @@
                                 <td class="black-text text-darken-2">{{calculo.total | currency:'BRL':true:'1.2-2'}}</td>
                             </tr>
                             </tbody>
+                            <tfoot>
+                            <tr>
+                              <th >Somatório</th>
+                              <th > </th>
+                              <th >{{somaFerias[i]| currency:'BRL':true:'1.2-2'}}</th>
+                              <th >{{somaTerco[i]| currency:'BRL':true:'1.2-2'}}</th>
+                              <th >{{somaDecimo[i]| currency:'BRL':true:'1.2-2'}}</th>
+                              <th >{{somaIncidencia[i]| currency:'BRL':true:'1.2-2'}}</th>
+                              <th >{{somaMultaFGTS[i]| currency:'BRL':true:'1.2-2'}}</th>
+                              <th >{{somaSaldo[i]| currency:'BRL':true:'1.2-2'}}</th>
+                            </tr>
+                            </tfoot>
                         </table>
                     </td>
                 </tr>

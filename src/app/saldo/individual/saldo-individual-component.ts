@@ -17,6 +17,12 @@ export class SaldoIndividualComponent {
   isSelected = false;
   saldos: SaldoIndividual[];
   config: ConfigService;
+  somaFerias = 0;
+  somaTerco = 0;
+  somaDecimo = 0;
+  somaIncidencia = 0;
+  somaMultaFGTS = 0;
+  somaSaldo = 0;
 
   constructor(config: ConfigService, private saldoService: SaldoService, private contratoService: ContratosService, private ref: ChangeDetectorRef) {
     this.config = config;
@@ -29,6 +35,21 @@ export class SaldoIndividualComponent {
             this.saldos = null;
             this.ref.markForCheck();
           } else {
+            this.somaFerias = 0;
+            this.somaTerco = 0;
+            this.somaDecimo = 0;
+            this.somaIncidencia = 0;
+            this.somaMultaFGTS = 0;
+            this.somaSaldo = 0;
+            for (let i = 0; i < this.saldos.length; i++) {
+              this.somaFerias = this.somaFerias + this.saldos[i].feriasRetido - this.saldos[i].feriasRestituido;
+              this.somaTerco = this.somaTerco + this.saldos[i].tercoRetido - this.saldos[i].tercoRestituido;
+              this.somaDecimo = this.somaDecimo + this.saldos[i].decimoTerceiroRetido - this.saldos[i].decimoTerceiroRestituido;
+              this.somaIncidencia = this.somaIncidencia + (this.saldos[i].incidenciaRetido - this.saldos[i].incidenciaFeriasRestituido -
+                this.saldos[i].incidenciaTercoRestituido - this.saldos[i].incidenciaDecimoTerceiroRestituido);
+              this.somaMultaFGTS = this.somaMultaFGTS + this.saldos[i].multaFgtsRetido;
+              this.somaSaldo = this.somaSaldo + this.saldos[i].saldo;
+            }
           }
         });
       }
@@ -43,7 +64,21 @@ export class SaldoIndividualComponent {
           this.saldoService = null;
           this.ref.markForCheck();
         } else {
-
+          this.somaFerias = 0;
+          this.somaTerco = 0;
+          this.somaDecimo = 0;
+          this.somaIncidencia = 0;
+          this.somaMultaFGTS = 0;
+          this.somaSaldo = 0;
+          for (let i = 0; i < this.saldos.length; i++) {
+            this.somaFerias = this.somaFerias + this.saldos[i].feriasRetido - this.saldos[i].feriasRestituido;
+            this.somaTerco = this.somaTerco + this.saldos[i].tercoRetido - this.saldos[i].tercoRestituido;
+            this.somaDecimo = this.somaDecimo + this.saldos[i].decimoTerceiroRetido - this.saldos[i].decimoTerceiroRestituido;
+            this.somaIncidencia = this.somaIncidencia + (this.saldos[i].incidenciaRetido - this.saldos[i].incidenciaFeriasRestituido -
+              this.saldos[i].incidenciaTercoRestituido - this.saldos[i].incidenciaDecimoTerceiroRestituido);
+            this.somaMultaFGTS = this.somaMultaFGTS + this.saldos[i].multaFgtsRetido;
+            this.somaSaldo = this.somaSaldo + this.saldos[i].saldo;
+          }
         }
       });
     }
