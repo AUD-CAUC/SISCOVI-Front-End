@@ -3,28 +3,28 @@ import {RescisaoService} from '../rescisao.service';
 import {ContratosService} from '../../contratos/contratos.service';
 import {ConfigService} from '../../_shared/config.service';
 import {Contrato} from '../../contratos/contrato';
-import {FeriasCalculosPendentes} from '../ferias-pendentes/ferias-calculos-pendentes';
+import {RescisaoCalculosPendentes} from '../rescisoes-pendentes/rescisao-calculos-pendentes';
 
 @Component({
-  selector: 'app-relatorio-retencoes-ferias-component',
-  templateUrl: './relatorio-retencoes-ferias.component.html',
-  styleUrls: ['../ferias.component.scss']
+  selector: 'app-relatorio-restituicoes-rescisao-component',
+  templateUrl: './relatorio-restituicoes-rescisao.component.html',
+  styleUrls: ['../rescisao.component.scss']
 })
-export class RelatorioRetencoesFeriasComponent {
+export class RelatorioRestituicoesRescisaoComponent {
   contratos: Contrato[];
   @Input() codigoContrato = 0;
   isSelected = false;
-  calculosFerias: FeriasCalculosPendentes[];
+  calculosRescisao: RescisaoCalculosPendentes[];
   config: ConfigService;
-  constructor(private feriasService: FeriasService, private contratoService: ContratosService, config: ConfigService, private ref: ChangeDetectorRef) {
+  constructor(private rescisaoService: RescisaoService, private contratoService: ContratosService, config: ConfigService, private ref: ChangeDetectorRef) {
     this.config = config;
     this.contratoService.getContratosDoUsuario().subscribe(res => {
       this.contratos = res;
       if (this.codigoContrato) {
-        this.feriasService.getRetencoesFerias(this.codigoContrato).subscribe(res2 => {
-          this.calculosFerias = res2;
-          if (this.calculosFerias.length === 0) {
-            this.calculosFerias = null;
+        this.rescisaoService.getRestituicoesRescisao(this.codigoContrato).subscribe(res2 => {
+          this.calculosRescisao = res2;
+          if (this.calculosRescisao.length === 0) {
+            this.calculosRescisao = null;
             this.ref.markForCheck();
           }
         });
@@ -34,10 +34,10 @@ export class RelatorioRetencoesFeriasComponent {
   defineCodigoContrato(codigoContrato: number): void {
     this.codigoContrato = codigoContrato;
     if (this.codigoContrato) {
-      this.feriasService.getRetencoesFerias(this.codigoContrato).subscribe(res2 => {
-        this.calculosFerias = res2;
-        if (this.calculosFerias.length === 0) {
-          this.calculosFerias = null;
+      this.rescisaoService.getRestituicoesRescisao(this.codigoContrato).subscribe(res2 => {
+        this.calculosRescisao = res2;
+        if (this.calculosRescisao.length === 0) {
+          this.calculosRescisao = null;
           this.ref.markForCheck();
         }
       });

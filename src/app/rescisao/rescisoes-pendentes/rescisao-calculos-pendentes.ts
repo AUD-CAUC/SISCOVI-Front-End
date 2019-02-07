@@ -1,6 +1,6 @@
 import {RescisaoCalcular} from '../rescisao-calcular';
 
-export class RescisaoFeriasCalculosPendentes {
+export class RescisaoCalculosPendentes {
   cod: number;
   calcularRescisaoModel: RescisaoCalcular;
   nomeTerceirizado: string;

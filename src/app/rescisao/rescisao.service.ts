@@ -37,12 +37,14 @@ export class RescisaoService {
         const url = '';
         return this.http.get(url).map(res => res.json());
     }
-
+    getRestituicoesRescisao(codigoContrato: number) {
+      const url = this.config.myApi + '/rescisao/getRestituicoesRescisao/' + codigoContrato + '/' + this.config.user.id;
+      return this.http.get(url).map(res => res.json());
+    }
     getCalculosPendentes(codigoContrato: number) {
         const url = '';
         return this.http.get(url).map(res => res.json());
     }
-
     getCalculosPendentesNegados(codigoContrato: number) {
         const url = '';
         return this.http.get(url).map(res => res.json());

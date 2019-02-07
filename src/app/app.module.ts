@@ -97,6 +97,7 @@ import {GerenciarCargosTerceirizadosComponent} from './cargos/gerenciar-cargos-t
 import {SaldoService} from './saldo/saldo.service';
 import {SaldoIndividualComponent} from './saldo/individual/saldo-individual-component';
 import {SaldoFuncaoComponent} from './saldo/funcao/saldo-funcao.component';
+import {RelatorioRestituicoesRescisaoComponent} from './rescisao/relatorio-restituicao-rescisao/relatorio-restituicoes-rescisao.component';
 
 @NgModule({
   declarations: [
@@ -172,6 +173,7 @@ import {SaldoFuncaoComponent} from './saldo/funcao/saldo-funcao.component';
     GerenciarCargosTerceirizadosComponent,
     SaldoFuncaoComponent,
     SaldoIndividualComponent,
+    RelatorioRestituicoesRescisaoComponent,
   ],
   imports: [
     BrowserModule,
