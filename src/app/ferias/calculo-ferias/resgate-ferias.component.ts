@@ -45,7 +45,7 @@ export class ResgateFeriasComponent implements OnInit {
                 codTerceirizadoContrato: new FormControl(item.codigoTerceirizadoContrato, [Validators.required]),
                 inicioPeriodoAquisitivo: new FormControl(item.inicioPeriodoAquisitivo, [Validators.required]),
                 fimPeriodoAquisitivo: new FormControl(item.fimPeriodoAquisitivo, [Validators.required]),
-                parcelas: new FormControl(0, [Validators.required]),
+                parcelas: new FormControl('0', [Validators.required]),
                 selected: new FormControl(this.isSelected),
                 existeCalculoAnterior: new FormControl(item.existeCalculoAnterior),
                 tipoRestituicao: new FormControl(this.tipoRestituicao, [Validators.required]),
@@ -62,8 +62,8 @@ export class ResgateFeriasComponent implements OnInit {
             this.feriasResgate.get('calcularTerceirizados').get('' + i).get('codTerceirizadoContrato').setValidators(Validators.required);
             this.feriasResgate.get('calcularTerceirizados').get('' + i).get('inicioPeriodoAquisitivo').setValidators(Validators.required);
             this.feriasResgate.get('calcularTerceirizados').get('' + i).get('fimPeriodoAquisitivo').setValidators(Validators.required);
-            this.feriasResgate.get('calcularTerceirizados').get('' + i).get('parcelas').setValidators(Validators.required);
-            this.feriasResgate.get('calcularTerceirizados').get('' + i).get('parcelas').setValue(0);
+            this.feriasResgate.get('calcularTerceirizados').get('' + i).get('parcelas').setValidators([Validators.required, this.parcelaValidator]);
+            this.feriasResgate.get('calcularTerceirizados').get('' + i).get('parcelas').setValue('0');
             this.feriasResgate.get('calcularTerceirizados').get('' + i).get('tipoRestituicao').setValidators(Validators.required);
             this.feriasResgate.get('calcularTerceirizados').get('' + i).get('diasVendidos').setValidators([this.diasVendidosValidator, Validators.required]);
             this.feriasResgate.get('calcularTerceirizados').get('' + i).get('inicioFerias').setValidators([Validators.required,
@@ -79,6 +79,71 @@ export class ResgateFeriasComponent implements OnInit {
                 Validators.maxLength(10),
                 this.operacaoValidator]);
         }
+    }
+    public parcelaValidator(control: AbstractControl): {[key: string]: any} {
+      const mensagem = [];
+      let error = false;
+      let parcelaSelecionada: string = control.value;
+      const parcelaAnt: string = control.parent.get('parcelaAnterior').value;
+      if (control.value === 0) {
+        parcelaSelecionada = '0';
+      }
+      if (parcelaAnt === null && !error) {
+
+        if (parcelaSelecionada === '2' || parcelaSelecionada === '3') {
+          mensagem.push('Deve realizar a Primeira parcela');
+          error = true;
+
+        }
+      } else if (parcelaAnt === '0' && !error) {
+        // Não pode realizar parcela única.
+        mensagem.push('Não é possível realizar a parcela única');
+        error = true;
+      } else if (parcelaAnt === '1' && !error) {
+        if (parcelaSelecionada === '1') {
+          // Já realizou essa parcela.
+          mensagem.push('Primeira parcela já realizada');
+          error = true;
+        } else if (parcelaSelecionada === '3') {
+          // Deve realizar a Segunda antes da Terceira.
+          mensagem.push('Deve realizar a Segunda parcela antes da Terceira');
+          error = true;
+        }
+      } else if (parcelaAnt === '2' && !error) {
+        if (parcelaSelecionada === '0') {
+          // Não pode realizar parcela única.
+          mensagem.push('Não é possível realizar a parcela única');
+          error = true;
+        } else if (parcelaSelecionada === '1') {
+          mensagem.push('Primeira parcela já realizada');
+          // Já realizou essa parcela.
+          error = true;
+        } else if (parcelaSelecionada === '2') {
+          mensagem.push('Segunda parcela já realizada');
+          // Já realizou essa parcela.
+          error = true;
+        }
+      } else if (parcelaAnt === '3' && !error) {
+        if (parcelaSelecionada === '0') {
+          // Não pode realizar parcela única.
+          mensagem.push('Não é possível realizar a parcela única');
+          error = true;
+        } else if (parcelaSelecionada === '1') {
+          // Já realizou essa parcela.
+          mensagem.push('Primeira parcela já realizada');
+          error = true;
+        } else if (parcelaSelecionada === '2') {
+          // Já realizou essa parcela.
+          mensagem.push('Segunda parcela já realizada');
+          error = true;
+        } else if (parcelaSelecionada === '3') {
+          // Já realizou essa parcela.
+          mensagem.push('Terceira parcela já realizada');
+          error = true;
+        }
+      }
+
+      return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
     }
     public myDateValidator(control: AbstractControl): {[key: string]: any} {
         const val = control.value;
@@ -139,7 +204,6 @@ export class ResgateFeriasComponent implements OnInit {
         return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
     }
     public operacaoValidator(control: AbstractControl): {[key: string]: any} | null {
-        console.log(control.parent);
         const mensagem = [];
         let saldo: number;
         let diasDeFerias: number;
@@ -178,114 +242,61 @@ export class ResgateFeriasComponent implements OnInit {
             mensagem.push('A quantidade de dias de férias mais os dias vendido não pode ser superior ao saldo total.');
             error = true;
         }
-        if (diasDeFerias <= 0) {
+        if (diasDeFerias <= 0 && !error) {
             mensagem.push('A data de início do usufruto deve ser maior que a data final do usufruto.');
             error = true;
         }
-        if (diasDeFerias < 5) {
+        if (diasDeFerias < 5 && !error) {
             mensagem.push('A quantidade mínima de dias deve ser 5');
             error = true;
         }
-        if (parcelaAnt === null && !error) {
 
-            if (parcelaSelecionada === '2' || parcelaSelecionada === '3') {
-                mensagem.push('Deve realizar a Primeira parcela');
-                error = true;
-            } else if (parcelaSelecionada === '0') {
-                if (saldo !== (diasDeFerias + diasVendidos)) {
-                    mensagem.push('Em parcelas únicas deve utilizar todo o saldo');
-                    error = true;
-                }
-            } else if (parcelaSelecionada === '1') {
-                if (saldo < 19) { // Deve ter mais de 19 dias de saldo para poder parcelar.
-                    mensagem.push('Saldo total insuficiente para o parcelamento');
-                    error = true;
-                } else { // Caso tenha saldo.
-                    if (diasDeFerias < 14 && diasDeFerias >= 5) { // Caso for tirar menos de 14 dias e mais de 5 dias.
-                        if (saldo - (diasDeFerias + diasVendidos) < 14) {
-                            // Deve ter mais de 14 dias para tirar na próxima parcela.
-                            mensagem.push('Só é possível tirar no mínimo 5 dias e no máximo ' + (saldo - diasVendidos - 14) + ' dias de férias vendendo ' + diasVendidos + ' dias');
-                            error = true;
-                        }
-                    } else { // Caso for tirar mais de 14 dias.
-                        if (saldo - (diasDeFerias - diasVendidos) < 5) {
-                            // Deve ter pelo menos 5 dias para tirar na próxima parcela.
-                            mensagem.push('Só é possível tirar no máximo ' + (saldo - diasVendidos - 5) + ' dias de férias vendendo ' + diasVendidos + ' dias');
-                            error = true;
-                        }
-                    }
-                }
-            }
-        } else if (parcelaAnt === '0' && !error) {
-            // Não pode realizar parcela única.
-            mensagem.push('Não é possível realizar a parcela única');
+        if (parcelaSelecionada === '0' && !error) {
+          if (saldo !== (diasDeFerias + diasVendidos)) {
+            mensagem.push('Em parcelas únicas deve utilizar todo o saldo');
             error = true;
-        } else if (parcelaAnt === '1' && !error) {
-            if (parcelaSelecionada === '1') {
-                // Já realizou essa parcela.
-                mensagem.push('Primeira parcela já realizada');
-                error = true;
-            } else if (parcelaSelecionada === '2') {
-                if ((jaTirou14Dias === false) && (diasDeFerias < 14) && (saldo - diasDeFerias < 14)) {
-                    // Caso não tenha tirado os 14 dias.
-                    // E não for tirar nesta parcela.
-                    // DEVE ter saldo maior que 14 para tirar na próxima.
-                    mensagem.push('Só é possível tirar no mínimo 5 dias e no máximo ' + (saldo - 14) + ' dias de férias');
-                    error = true;
-                }
-            } else if (parcelaSelecionada === '3') {
-                // Deve realizar a Segunda antes da Terceira.
-                mensagem.push('Deve realizar a Segunda parcela antes da Terceira');
-                error = true;
-            }
-        } else if (parcelaAnt === '2' && !error) {
-            if (parcelaSelecionada === '0') {
-                // Não pode realizar parcela única.
-                mensagem.push('Não é possível realizar a parcela única');
-                error = true;
-            } else if (parcelaSelecionada === '1') {
-                mensagem.push('Primeira parcela já realizada');
-                // Já realizou essa parcela.
-                error = true;
-            } else if (parcelaSelecionada === '2') {
-                mensagem.push('Segunda parcela já realizada');
-                // Já realizou essa parcela.
-                error = true;
-            } else if (parcelaSelecionada === '3') {
-                if (saldo < 5) {
-                    // Deve ter mais de 5 dias de saldo disponível.
-                    mensagem.push('Para realizar esta parcela é preciso ter um saldo de no mínimo 5 dias');
-                    error = true;
-                } else {
-                    if (jaTirou14Dias === false) { // Caso não tenha tirado os 14 dias
-                        if (diasDeFerias < 14) {
-                            // Deve tirar os 14 dias nesta parcela.
-                            mensagem.push('Só é possível tirar no mínimo 14 dias de férias');
-                            error = true;
-                        }
-                    }
-                }
-            }
-        } else if (parcelaAnt === '3' && !error) {
-            if (parcelaSelecionada === '0') {
-                // Não pode realizar parcela única.
-                mensagem.push('Não é possível realizar a parcela única');
-                error = true;
-            } else if (parcelaSelecionada === '1') {
-                // Já realizou essa parcela.
-                mensagem.push('Primeira parcela já realizada');
-                error = true;
-            } else if (parcelaSelecionada === '2') {
-                // Já realizou essa parcela.
-                mensagem.push('Segunda parcela já realizada');
-                error = true;
-            } else if (parcelaSelecionada === '3') {
-                // Já realizou essa parcela.
-                mensagem.push('Terceira parcela já realizada');
-                error = true;
-            }
-        } else {
+          }
+        } else if (parcelaSelecionada === '1' && !error) {
+          if (saldo < 19) { // Deve ter mais de 19 dias de saldo para poder parcelar.
+            mensagem.push('Saldo total insuficiente para o parcelamento');
             error = true;
+          } else { // Caso tenha saldo.
+            if (diasDeFerias < 14 && diasDeFerias >= 5) { // Caso for tirar menos de 14 dias e mais de 5 dias.
+              if (saldo - (diasDeFerias + diasVendidos) < 14) {
+                // Deve ter mais de 14 dias para tirar na próxima parcela.
+                mensagem.push('Só é possível tirar no mínimo 5 dias e no máximo ' + (saldo - diasVendidos - 14) + ' dias de férias vendendo ' + diasVendidos + ' dias');
+                error = true;
+              }
+            } else { // Caso for tirar mais de 14 dias.
+              if (saldo - (diasDeFerias - diasVendidos) < 5) {
+                // Deve ter pelo menos 5 dias para tirar na próxima parcela.
+                mensagem.push('Só é possível tirar no máximo ' + (saldo - diasVendidos - 5) + ' dias de férias vendendo ' + diasVendidos + ' dias');
+                error = true;
+              }
+            }
+          }
+        } else if (parcelaSelecionada === '2' && !error) {
+          if ((jaTirou14Dias === false) && (diasDeFerias < 14) && (saldo - diasDeFerias < 14)) {
+            // Caso não tenha tirado os 14 dias.
+            // E não for tirar nesta parcela.
+            // DEVE ter saldo maior que 14 para tirar na próxima.
+            mensagem.push('Só é possível tirar no mínimo 5 dias e no máximo ' + (saldo - 14) + ' dias de férias');
+            error = true;
+          }
+        } else if (parcelaSelecionada === '3' && !error) {
+          if (saldo < 5) {
+            // Deve ter mais de 5 dias de saldo disponível.
+            mensagem.push('Para realizar esta parcela é preciso ter um saldo de no mínimo 5 dias');
+            error = true;
+          } else {
+            if (jaTirou14Dias === false) { // Caso não tenha tirado os 14 dias
+              if (diasDeFerias < 14) {
+                // Deve tirar os 14 dias nesta parcela.
+                mensagem.push('Só é possível tirar no mínimo 14 dias de férias');
+                error = true;
+              }
+            }
+          }
         }
 
         return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;

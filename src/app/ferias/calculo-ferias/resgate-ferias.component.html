@@ -35,6 +35,11 @@
                                     <option value="2">Segunda</option>
                                     <option value="3">Terceira</option>
                                 </select>
+                                <div *ngIf="feriasResgate.get('calcularTerceirizados').get('' + k).get('parcelas').getError('mensagem')">
+                                  <div *ngFor="let msg of feriasResgate.get('calcularTerceirizados').get('' + k).get('parcelas').getError('mensagem')[0]">
+                                    <span class="mensagem-erro">{{msg}}</span>
+                                  </div>
+                                </div>
                             </div>
                         </div>
                     </div>
