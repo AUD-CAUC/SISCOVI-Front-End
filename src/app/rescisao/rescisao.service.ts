@@ -48,7 +48,7 @@ export class RescisaoService {
         return this.http.get(url).map(res => res.json());
     }
 
-    salvarDecimoTerceiroAvaliados(codigoContrato: number, calculosAvaliados: RescisaoPendente[]) {
+    salvarRescisoesAvaliadas(codigoContrato: number, calculosAvaliados: RescisaoPendente[]) {
         const url = '';
         return this.http.get(url).map(res => res.json());
     }
