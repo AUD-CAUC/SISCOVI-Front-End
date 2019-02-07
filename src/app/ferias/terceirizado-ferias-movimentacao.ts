@@ -9,6 +9,11 @@ export class TerceirizadoFeriasMovimentacao {
     private _valorRestituicaoFerias: ValorRestituicaoFerias;
     private _diasUsufruidos: number;
     private _parcela14Dias: boolean;
+    private _parcelaAnterior: string;
+
+    get parcelaAnterior(): string {
+      return this._parcelaAnterior;
+    }
 
     get existeCalculoAnterior(): boolean {
         return this._existeCalculoAnterior;

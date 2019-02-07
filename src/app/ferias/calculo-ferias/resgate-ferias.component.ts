@@ -52,6 +52,9 @@ export class ResgateFeriasComponent implements OnInit {
                 diasVendidos: new FormControl(0, [this.diasVendidosValidator, Validators.required]),
                 inicioFerias: new FormControl('', [this.inicioUsufrutoValidator, Validators.required, this.myDateValidator]),
                 fimFerias: new FormControl('', [this.fimUsufrutoValidator, Validators.required, this.myDateValidator]),
+                parcela14dias: new FormControl(item.parcela14Dias),
+                diasUsufruidos: new FormControl(item.diasUsufruidos),
+                parcelaAnterior: new FormControl(item.parcelaAnterior),
             });
             control2.push(addCtrl);
         });
@@ -136,13 +139,14 @@ export class ResgateFeriasComponent implements OnInit {
         return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
     }
     public operacaoValidator(control: AbstractControl): {[key: string]: any} | null {
+        console.log(control.parent);
         const mensagem = [];
-        const saldo = 22;
+        let saldo: number;
         let diasDeFerias: number;
         const diasVendidos: number = control.parent.get('diasVendidos').value;
-        const parcelaAnt: string = null;
+        const parcelaAnt: string = control.parent.get('parcelaAnterior').value;
         const parcelaSelecionada: string = control.parent.get('parcelas').value;
-        const jaTirou14Dias: Boolean = false;
+        const jaTirou14Dias: Boolean = control.parent.get('parcela14dias').value;
         let error: Boolean = false;
         let dia: number;
         let mes: number;
@@ -156,8 +160,19 @@ export class ResgateFeriasComponent implements OnInit {
         mes = Number(control.parent.get('inicioFerias').value.split('/')[1]) - 1;
         ano = Number(control.parent.get('inicioFerias').value.split('/')[2]);
         const inicioUsufruto: Date = new Date(ano, mes, dia);
-        const diff = fimUsufruto.getTime() - inicioUsufruto.getTime();
+        let diff = fimUsufruto.getTime() - inicioUsufruto.getTime();
         diasDeFerias = Math.round(diff / (1000 * 3600 * 24)) + 1;
+
+        dia = Number(control.parent.get('fimPeriodoAquisitivo').value.split('-')[0]);
+        mes = Number(control.parent.get('fimPeriodoAquisitivo').value.split('-')[1]) - 1;
+        ano = Number(control.parent.get('fimPeriodoAquisitivo').value.split('-')[2]);
+        const fimPeriodoAquisitivo: Date = new Date(ano, mes, dia);
+        dia = Number(control.parent.get('inicioPeriodoAquisitivo').value.split('-')[0]);
+        mes = Number(control.parent.get('inicioPeriodoAquisitivo').value.split('-')[1]) - 1;
+        ano = Number(control.parent.get('inicioPeriodoAquisitivo').value.split('-')[2]);
+        const inicioPeriodoAquisitivo: Date = new Date(ano, mes, dia);
+        diff = Math.abs(fimPeriodoAquisitivo.getTime() - inicioPeriodoAquisitivo.getTime());
+        saldo = (Math.round(((diff / (1000 * 3600 * 24)) + 1) / 12)) - control.parent.get('diasUsufruidos').value;
 
         if (diasDeFerias + diasVendidos > saldo) {
             mensagem.push('A quantidade de dias de férias mais os dias vendido não pode ser superior ao saldo total.');
