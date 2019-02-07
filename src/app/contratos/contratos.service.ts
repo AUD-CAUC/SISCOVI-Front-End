@@ -41,7 +41,6 @@ export class ContratosService {
         }
         if (contrato.percentuais.length > 0) {
             contrato.percentuais.forEach(item => {
-                console.log(item.percentual);
                 const perc = {
                     percentual: item.percentual,
                     dataInicio: this.convertDate(item.dataInicio),
@@ -74,7 +73,7 @@ export class ContratosService {
         const evento = {
             tipo: {
                 cod: contrato.eventoContratual.tipo.cod,
-                tipo: contrato.eventoContratual.tipo
+                tipo: contrato.eventoContratual.tipo.tipo
             },
             prorrogacao: contrato.eventoContratual.prorrogacao,
             assunto: contrato.eventoContratual.assunto,
