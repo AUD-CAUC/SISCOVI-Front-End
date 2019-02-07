@@ -18,7 +18,7 @@ import {Observable} from 'rxjs/Observable';
 export class TotalMensalPendenteComponent implements OnInit {
     @Input() codigoContrato: number;
     contratos: Contrato[];
-    totais: TotalMensalPendente[] = [];
+    totais: TotalMensalPendente[][] = [];
     totalMensalForm: FormGroup;
     totalMennsalFormAfter: FormGroup;
     config: ConfigService;
@@ -41,79 +41,89 @@ export class TotalMensalPendenteComponent implements OnInit {
         this.config = config;
         this.contratoService.getContratosDoUsuario().subscribe(res => {
             this.contratos = res;
-            if (this.totais) {
-                this.formInit();
+            for (let i = 0; i < this.contratos.length; i++) {
+              this.defineCodigoContrato(this.contratos[i].codigo, i);
             }
-            if (this.codigoContrato) {
-                this.totalMensalService.getTotaisPendentes(this.codigoContrato).subscribe(res2 => {
-                    const historico: TotalMensalPendente[] = [];
-                    if (!res.error) {
-                        this.totais = res2;
-                    }
-                    if (this.totais) {
-                        for (let i = 0; i < res.length; i++) {
-                            if (res[i].status === 'NEGADO') {
-                                const a: any =  res.slice(i, i + 1);
-                                const val: TotalMensalPendente = a[0];
-                                historico.push(val as TotalMensalPendente);
-                                res.splice(i, 1);
-                                i = -1;
-                            }
-                        }
-                        this.historicoPendente = historico;
-                        this.notifications = this.historicoPendente.length;
-                        this.ref.markForCheck();
-                        this.formInit();
-                    }
-                });
-            }
+            // if (this.totais[0]) {
+            //     this.formInit();
+            // }
+            // if (this.codigoContrato) {
+            //     this.totalMensalService.getTotaisPendentes(this.codigoContrato).subscribe(res2 => {
+            //         const historico: TotalMensalPendente[] = [];
+            //         if (!res.error) {
+            //             console.log();
+            //             this.totais = res2;
+            //         }
+            //         if (this.totais) {
+            //             for (let i = 0; i < res.length; i++) {
+            //                 if (res[i].status === 'NEGADO') {
+            //                     const a: any =  res.slice(i, i + 1);
+            //                     const val: TotalMensalPendente = a[0];
+            //                     historico.push(val as TotalMensalPendente);
+            //                     res.splice(i, 1);
+            //                     i = -1;
+            //                 }
+            //             }
+            //             this.historicoPendente = historico;
+            //             this.notifications = this.historicoPendente.length;
+            //             this.ref.markForCheck();
+            //             this.formInit();
+            //         }
+            //     });
+            // }
         });
     }
     ngOnInit() {
-        if (this.totais.length > 0) {
-            if (this.totais.length > 0) {
-                const historico: TotalMensalPendente[] = [];
-                for (let i = 0; i < this.totais.length; i++) {
-                    if (this.totais[i].status === 'NEGADO') {
-                        const a: any =  this.totais.slice(i, i + 1);
-                        const val: TotalMensalPendente = a[0];
-                        historico.push(val as TotalMensalPendente);
-                        this.totais.splice(i, 1);
-                    }
-                }
-                this.historicoPendente = historico;
-                this.notifications = this.historicoPendente.length;
-                this.ref.markForCheck();
-            }
-        }
-        this.formInit();
+        // if (this.totais.length > 0) {
+        //     if (this.totais.length > 0) {
+        //         const historico: TotalMensalPendente[] = [];
+        //         for (let j = 0; j < this.totais.length; j++) {
+        //           for (let i = 0; i < this.totais[j].length; i++) {
+        //             if (this.totais[j][i].status === 'NEGADO') {
+        //               const a: any =  this.totais.slice(i, i + 1);
+        //               const val: TotalMensalPendente = a[0];
+        //               historico.push(val as TotalMensalPendente);
+        //               this.totais.splice(i, 1);
+        //             }
+        //           }
+        //         }
+        //         this.historicoPendente = historico;
+        //         this.notifications = this.historicoPendente.length;
+        //         this.ref.markForCheck();
+        //     }
+        // }
+        // this.formInit();
     }
-    formInit() {
+    formInit(codigo: number) {
             this.totalMensalForm = this.fb.group({
                 avaliacaoDeCalculo: this.fb.array([])
             });
-            if (this.totais) {
+            if (this.totais[0]) {
                 if (this.totais.length > 0) {
                     const control = <FormArray>this.totalMensalForm.controls.avaliacaoDeCalculo;
-                    this.totais.forEach(item => {
+                    for (let i = 0; i < this.totais.length; i++) {
+                      this.totais[i].forEach(item => {
                         const addCtrl = this.fb.group({
-                            avaliacao: new FormControl('S'),
-                            selected: new FormControl(false),
-                            dataReferencia: new FormControl(item.totaisMensais.dataReferencia)
+                          avaliacao: new FormControl('S'),
+                          selected: new FormControl(false),
+                          dataReferencia: new FormControl(item.totaisMensais.dataReferencia),
+                          codigo: new FormControl(codigo)
                         });
                         control.push(addCtrl);
-                    });
+                      });
+                    }
+                    console.log(control);
                 }
             }
             this.totalMennsalFormAfter = this.fb.group({
                 calculosAvaliados: this.fb.array([])
             });
     }
-    defineCodigoContrato(codigo: number) {
+    defineCodigoContrato(codigo: number, v: number) {
         this.historicoPendente = [];
         this.codigoContrato = codigo;
         if (this.totais.length > 0) {
-            this.totais = [];
+            this.totais[v] = [];
         }
         this.totalMensalService.getTotaisPendentes(codigo).subscribe(res => {
             const historico: TotalMensalPendente[] = [];
@@ -128,29 +138,30 @@ export class TotalMensalPendenteComponent implements OnInit {
                     }
                 }
                 this.historicoPendente = historico;
-                this.totais = res;
+                this.totais[v] = res;
 
-                this.somaFerias = new Array(res.length).fill(0);
-                this.somaTerco = new Array(res.length).fill(0);
-                this.somaDecimo = new Array(res.length).fill(0);
-                this.somaIncidencia = new Array(res.length).fill(0);
-                this.somaMultaFGTS = new Array(res.length).fill(0);
-                this.somaSaldo = new Array(res.length).fill(0);
-
-                for (let i = 0; i < this.totais.length; i++) {
-                  for (let j = 0; j < this.totais[i].totaisMensais.totais.length; j++) {
-                    this.somaFerias[i] = this.somaFerias[i] + this.totais[i].totaisMensais.totais[j].ferias;
-                    this.somaTerco[i] = this.somaTerco[i] + this.totais[i].totaisMensais.totais[j].tercoConstitucional;
-                    this.somaDecimo[i] = this.somaDecimo[i] + this.totais[i].totaisMensais.totais[j].decimoTerceiro;
-                    this.somaIncidencia[i] = this.somaIncidencia[i] + this.totais[i].totaisMensais.totais[j].incidencia;
-                    this.somaMultaFGTS[i] = this.somaMultaFGTS[i] + this.totais[i].totaisMensais.totais[j].multaFGTS;
-                    this.somaSaldo[i] = this.somaSaldo[i] + this.totais[i].totaisMensais.totais[j].total;
-                  }
-                }
+                // this.somaFerias = new Array(res.length).fill(0);
+                // this.somaTerco = new Array(res.length).fill(0);
+                // this.somaDecimo = new Array(res.length).fill(0);
+                // this.somaIncidencia = new Array(res.length).fill(0);
+                // this.somaMultaFGTS = new Array(res.length).fill(0);
+                // this.somaSaldo = new Array(res.length).fill(0);
+                //
+                // for (let i = 0; i < this.totais.length; i++) {
+                //   for (let j = 0; j < this.totais[v][i].totaisMensais.totais.length; j++) {
+                //     this.somaFerias[i] = this.somaFerias[i] + this.totais[v][i].totaisMensais.totais[j].ferias;
+                //     this.somaTerco[i] = this.somaTerco[i] + this.totais[v][i].totaisMensais.totais[j].tercoConstitucional;
+                //     this.somaDecimo[i] = this.somaDecimo[i] + this.totais[v][i].totaisMensais.totais[j].decimoTerceiro;
+                //     this.somaIncidencia[i] = this.somaIncidencia[i] + this.totais[v][i].totaisMensais.totais[j].incidencia;
+                //     this.somaMultaFGTS[i] = this.somaMultaFGTS[i] + this.totais[v][i].totaisMensais.totais[j].multaFGTS;
+                //     this.somaSaldo[i] = this.somaSaldo[i] + this.totais[v][i].totaisMensais.totais[j].total;
+                //   }
+                // }
             }
             this.notifications = this.historicoPendente.length;
-            if (this.formInit()) {
-                this.formInit();
+            if (this.formInit(codigo)) {
+                console.log(codigo);
+                this.formInit(codigo);
             }
         });
     }
@@ -198,7 +209,7 @@ export class TotalMensalPendenteComponent implements OnInit {
         for (let i = 0; i < this.totais.length; i++) {
             if (this.totalMensalForm.get('avaliacaoDeCalculo').get('' + i).get('selected').value) {
                 aux++;
-                const listaTotalMensalData = new ListaTotalMensalData(this.totalMensalForm.get('avaliacaoDeCalculo').get('' + i).get('dataReferencia').value, this.totais[i].totaisMensais.totais);
+                const listaTotalMensalData = new ListaTotalMensalData(this.totalMensalForm.get('avaliacaoDeCalculo').get('' + i).get('dataReferencia').value, this.totais[1][i].totaisMensais.totais);
                 const objeto = new TotalMensalPendente(listaTotalMensalData, this.totalMensalForm.get('avaliacaoDeCalculo').get('' + i).get('avaliacao').value);
                 this.totaisAvaliados.push(objeto);
             }
