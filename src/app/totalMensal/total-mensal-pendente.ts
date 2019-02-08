@@ -16,6 +16,9 @@ export class TotalMensalPendente {
     get totaisMensais(): ListaTotalMensalData {
         return this._totaisMensais;
     }
+    get codigoContrato(): number {
+        return this._codigoContrato;
+    }
 
     set observacoes(value: string) {
         this._observacoes = value;

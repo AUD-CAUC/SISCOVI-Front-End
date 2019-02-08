@@ -51,74 +51,72 @@
         </tr>
         </thead>
         <tbody>
-        <div *ngFor="let contrato of totais; let k = index">
-        <tr *ngFor="let total of contrato; let i = index"
-            [class.status]="total.status == 'NEGADO' && config.user.perfil.sigla == 'USUÁRIO'"
-            (dblclick)="corrigeCalculo(total.totaisMensais.dataReferencia)">
-          <td *ngIf="config.user.perfil.sigla == 'ADMINISTRADOR'">
-            <div [formGroupName]="i">
-              <input type="checkbox" class="checkbox-black" [checked]="isSelected" [ngModel]="isSelected"
-                     formControlName="selected" id="{{i}}"/>
-              <label for="{{i}}"></label>
-            </div>
-          </td>
-          <td *ngIf="config.user.perfil.sigla == 'USUÁRIO'">{{total.status}} </td>
-          <td *ngIf="config.user.perfil.sigla == 'ADMINISTRADOR'">
-            <div [formGroupName]="i">
-              <div class="row">
-                <div class="input-field col s12">
-                  <select materialize="material_select" formControlName="avaliacao">
-                    <option value="S">APROVAR</option>
-                    <option value="N">REJEITAR</option>
-                  </select>
+          <tr *ngFor="let total of totais; let i = index"
+              [class.status]="total.status == 'NEGADO' && config.user.perfil.sigla == 'USUÁRIO'"
+              (dblclick)="corrigeCalculo(total.totaisMensais.dataReferencia)">
+            <td *ngIf="config.user.perfil.sigla == 'ADMINISTRADOR'">
+              <div [formGroupName]="i">
+                <input type="checkbox" class="checkbox-black" [checked]="isSelected" [ngModel]="isSelected"
+                       formControlName="selected" id="{{i}}"/>
+                <label for="{{i}}"></label>
+              </div>
+            </td>
+            <td *ngIf="config.user.perfil.sigla == 'USUÁRIO'">{{total.status}} </td>
+            <td *ngIf="config.user.perfil.sigla == 'ADMINISTRADOR'">
+              <div [formGroupName]="i">
+                <div class="row">
+                  <div class="input-field col s12">
+                    <select materialize="material_select" formControlName="avaliacao">
+                      <option value="S">APROVAR</option>
+                      <option value="N">REJEITAR</option>
+                    </select>
+                  </div>
                 </div>
               </div>
-            </div>
-          </td>
-          <td>{{total.totaisMensais.dataReferencia | date: 'shortDate'}}</td>
-          <td>
-            <table class="highlight centered responsive-table">
-              <thead>
-              <tr>
-                <th>Função</th>
-                <th>Número de Terceirizados por Função</th>
-                <th>Férias</th>
-                <th>Terço Constitucional</th>
-                <th>Décimo Terceiro</th>
-                <th>Incidência Retido</th>
-                <th>Multa do FGTS</th>
-                <th class="total-calculo">Total</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr *ngFor="let calculo of total.totaisMensais.totais"
-                  [class.status]="total.status == 'NEGADO' && config.user.perfil.sigla == 'USUÁRIO'">
-                <td>{{calculo.funcao }}</td>
-                <td>{{calculo.numeroTerceirizados}}</td>
-                <td>{{calculo.ferias | currency:'BRL':true:'1.2-2'}}</td>
-                <td>{{calculo.tercoConstitucional | currency:'BRL':true:'1.2-2'}}</td>
-                <td>{{calculo.decimoTerceiro | currency:'BRL':true:'1.2-2'}}</td>
-                <td>{{calculo.incidencia | currency:'BRL':true:'1.2-2'}}</td>
-                <td>{{calculo.multaFGTS | currency:'BRL':true:'1.2-2'}}</td>
-                <td class="total-calculo">{{calculo.total | currency:'BRL':true:'1.2-2'}}</td>
-              </tr>
-              </tbody>
-              <!--<tfoot>-->
-              <!--<tr>-->
-              <!--<th>Somatório</th>-->
-              <!--<th></th>-->
-              <!--<th>{{somaFerias[i]| currency:'BRL':true:'1.2-2'}}</th>-->
-              <!--<th>{{somaTerco[i]| currency:'BRL':true:'1.2-2'}}</th>-->
-              <!--<th>{{somaDecimo[i]| currency:'BRL':true:'1.2-2'}}</th>-->
-              <!--<th>{{somaIncidencia[i]| currency:'BRL':true:'1.2-2'}}</th>-->
-              <!--<th>{{somaMultaFGTS[i]| currency:'BRL':true:'1.2-2'}}</th>-->
-              <!--<th>{{somaSaldo[i]| currency:'BRL':true:'1.2-2'}}</th>-->
-              <!--</tr>-->
-              <!--</tfoot>-->
-            </table>
-          </td>
-        </tr>
-        </div>
+            </td>
+            <td>{{total.totaisMensais.dataReferencia | date: 'shortDate'}}</td>
+            <td>
+              <table class="highlight centered responsive-table">
+                <thead>
+                <tr>
+                  <th>Função</th>
+                  <th>Número de Terceirizados por Função</th>
+                  <th>Férias</th>
+                  <th>Terço Constitucional</th>
+                  <th>Décimo Terceiro</th>
+                  <th>Incidência Retido</th>
+                  <th>Multa do FGTS</th>
+                  <th class="total-calculo">Total</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let calculo of total.totaisMensais.totais"
+                    [class.status]="total.status == 'NEGADO' && config.user.perfil.sigla == 'USUÁRIO'">
+                  <td>{{calculo.funcao }}</td>
+                  <td>{{calculo.numeroTerceirizados}}</td>
+                  <td>{{calculo.ferias | currency:'BRL':true:'1.2-2'}}</td>
+                  <td>{{calculo.tercoConstitucional | currency:'BRL':true:'1.2-2'}}</td>
+                  <td>{{calculo.decimoTerceiro | currency:'BRL':true:'1.2-2'}}</td>
+                  <td>{{calculo.incidencia | currency:'BRL':true:'1.2-2'}}</td>
+                  <td>{{calculo.multaFGTS | currency:'BRL':true:'1.2-2'}}</td>
+                  <td class="total-calculo">{{calculo.total | currency:'BRL':true:'1.2-2'}}</td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                <th>Somatório</th>
+                <th></th>
+                <th>{{somaFerias[i]| currency:'BRL':true:'1.2-2'}}</th>
+                <th>{{somaTerco[i]| currency:'BRL':true:'1.2-2'}}</th>
+                <th>{{somaDecimo[i]| currency:'BRL':true:'1.2-2'}}</th>
+                <th>{{somaIncidencia[i]| currency:'BRL':true:'1.2-2'}}</th>
+                <th>{{somaMultaFGTS[i]| currency:'BRL':true:'1.2-2'}}</th>
+                <th>{{somaSaldo[i]| currency:'BRL':true:'1.2-2'}}</th>
+                </tr>
+                </tfoot>
+              </table>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
