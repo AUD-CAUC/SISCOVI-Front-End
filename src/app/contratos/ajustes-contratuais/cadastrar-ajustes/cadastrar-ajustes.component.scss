@@ -115,3 +115,36 @@ div .select-wrapper input .select-dropdown.disabled.initialized:disabled {
   text-decoration: solid !important;
   font-weight: bold !important;
 }
+.warning-text {
+  color: #ff8f00;
+}
+
+div#modal1.modal.open {
+  position: fixed;
+  top: 10ch;
+  background-color: white;
+  display: block;
+  opacity: 1;
+  transform: scaleX(1);
+  top: 10ch !important;
+  left: 10ch !important;
+  min-width: 185ch !important;
+  max-width: 210ch !important;
+  max-height: 90ch;
+}
+div .modal-footer {
+  background-color: white;
+}
+
+.highlight:hover {
+  background-color: #212121;
+  color: whitesmoke;
+}
+.modal-footer {
+  text-align:center;
+}
+.modal-footer button {
+  display:inline-block;
+  margin:0 15px;
+  float:none; /*if you set float already */
+}
