@@ -10,7 +10,7 @@ import {ActivatedRoute, Router} from '@angular/router';
     templateUrl: './ajuste-contrato.component.html',
     styleUrls: ['./ajuste-contrato.component.scss']
 })
-export class AjusteContratoComponent implements OnInit{
+export class AjusteContratoComponent implements OnInit {
     contratos: Contrato[];
     modalActions = new EventEmitter<string | MaterializeAction>();
     eventos: EventoContratual[] = [];

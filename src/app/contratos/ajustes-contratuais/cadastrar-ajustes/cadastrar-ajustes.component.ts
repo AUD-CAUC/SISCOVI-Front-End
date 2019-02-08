@@ -257,7 +257,6 @@ export class CadastrarAjustesComponent {
   }
 
   verificaAjusteASerCadastrado() {
-    console.log(this.contrato);
     this.tempCon = null;
     const contrato: Contrato = Object.assign({}, this.contrato);
     const funcoesContrato: Cargo[] = this.contrato.funcoes;
@@ -454,7 +453,6 @@ export class CadastrarAjustesComponent {
   }
 
   cadastrarAjuste() {
-    console.log(this.tempCon);
     this.contratoService.cadastrarAjuste(this.tempCon).subscribe(res => {
         this.closeModal();
         this.openModal2();

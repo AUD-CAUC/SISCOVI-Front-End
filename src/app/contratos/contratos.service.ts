@@ -93,7 +93,6 @@ export class ContratosService {
             numeroProcessoSTJ: contrato.numeroProcessoSTJ,
             eventoContratual: evento
         };
-        console.log(data);
        return  this.http.post(url, data).map(res => res.json());
     }
 
