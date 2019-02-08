@@ -4,6 +4,7 @@ export class TotalMensalPendente {
     private _totaisMensais: ListaTotalMensalData;
     private _status: string;
     private _observacoes: string;
+    private _codigoContrato: number;
 
     constructor(totaisMensais: ListaTotalMensalData, status: string) {
         this._totaisMensais = totaisMensais;

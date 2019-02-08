@@ -107,7 +107,7 @@ export class TotalMensalPendenteComponent implements OnInit {
                           avaliacao: new FormControl('S'),
                           selected: new FormControl(false),
                           dataReferencia: new FormControl(item.totaisMensais.dataReferencia),
-                          codigo: new FormControl(codigo)
+                          codigoContrato: new FormControl(codigo)
                         });
                         control.push(addCtrl);
                       });
@@ -138,6 +138,9 @@ export class TotalMensalPendenteComponent implements OnInit {
                     }
                 }
                 this.historicoPendente = historico;
+                for (let i = 0; i < res.length; i++) {
+                  res[i].codigoContrato = codigo;
+                }
                 this.totais[v] = res;
 
                 // this.somaFerias = new Array(res.length).fill(0);
