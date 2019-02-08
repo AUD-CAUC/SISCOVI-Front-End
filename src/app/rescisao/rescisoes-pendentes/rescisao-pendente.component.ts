@@ -174,7 +174,7 @@ export class RescisaoPendenteComponent implements OnInit {
         for (let i = 0; i < this.calculosAvaliados.length; i++) {
             this.calculosAvaliados[i].observacoes = this.decimoTerceiroFormAfter.get('calculosAvaliados').get('' + i).get('observacoes').value;
         }
-        this.rescisaoService.salvarDecimoTerceiroAvaliados(this.codigoContrato, this.calculosAvaliados).subscribe(res => {
+        this.rescisaoService.salvarRescisoesAvaliadas(this.codigoContrato, this.calculosAvaliados).subscribe(res => {
             if (res.success) {
                 this.openModal3();
                 this.closeModal2();

@@ -10,7 +10,7 @@
                 <li class="tab col s3 text-grey text-darken-1"><a [class.active]="testeExecutados()" (click)="setExecutadosActive()">Cálculos Pendentes de Execução</a></li>
             </ul>
         </div>
-        <div id="test1" class="col s12" active="testeRetencoes()"><app-relatorio-retencoes-ferias-component *ngIf="testeRetencoes()"></app-relatorio-retencoes-ferias-component></div>
+        <div id="test1" class="col s12" active="testeRetencoes()"><app-relatorio-restituicoes-rescisao-component *ngIf="testeRetencoes()"></app-relatorio-restituicoes-rescisao-component></div>
         <div id="test2" class="col s12" active="testeCalculo()"><app-calculo-rescisao-component *ngIf="testeCalculo()" (navegaParaViewDeCalculos)="calculosPendentes($event)"></app-calculo-rescisao-component></div>
         <div id="test3" class="col s12" active="testePendentes()"><app-rescisao-pendente-component *ngIf="testePendentes()" [codigoContrato]="codigoContrato"></app-rescisao-pendente-component></div>
     </div>
