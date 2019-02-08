@@ -16,6 +16,7 @@ import {TipoEventoContratual} from '../tipo-evento-contratual';
 import {HistoricoGestor} from '../../../historico/historico-gestor';
 import {MaterializeAction} from 'angular2-materialize';
 import {Router} from '@angular/router';
+import {Rubrica} from '../../../rubricas/rubrica';
 
 @Component({
   selector: 'app-cadastrar-ajustes',
@@ -256,6 +257,7 @@ export class CadastrarAjustesComponent {
   }
 
   verificaAjusteASerCadastrado() {
+    console.log(this.contrato);
     this.tempCon = null;
     const contrato: Contrato = Object.assign({}, this.contrato);
     const funcoesContrato: Cargo[] = this.contrato.funcoes;
@@ -306,6 +308,11 @@ export class CadastrarAjustesComponent {
           pct.dataFim = this.stringToDate(this.myForm.get('fimVigencia').value);
           pct.dataAditamento = this.stringToDate(this.myForm.get('assinatura').value);
           pct.percentual = Number(this.myForm.get('percentualDecimoTerceiro').value);
+          const rubrica = new Rubrica();
+          rubrica.codigo = 3;
+          rubrica.nome = 'Décimo terceiro salário';
+          rubrica.sigla = '13°';
+          pct.rubrica = rubrica;
           contrato.percentuais.push(pct);
         }
       }
@@ -318,12 +325,22 @@ export class CadastrarAjustesComponent {
           pct.dataFim = this.stringToDate(this.myForm.get('fimVigencia').value);
           pct.dataAditamento = this.stringToDate(this.myForm.get('assinatura').value);
           pct.percentual = Number(this.myForm.get('percentualFerias').value);
+          let rubrica = new Rubrica();
+          rubrica.codigo = 1;
+          rubrica.nome = 'Férias';
+          rubrica.sigla = 'Férias';
+          pct.rubrica = rubrica;
           contrato.percentuais.push(pct);
           pct = this.contrato.percentuais.find(item => item.nome.includes('Terço'));
           pct.dataInicio = this.stringToDate(this.myForm.get('inicioVigencia').value);
           pct.dataFim = this.stringToDate(this.myForm.get('fimVigencia').value);
           pct.dataAditamento = this.stringToDate(this.myForm.get('assinatura').value);
           pct.percentual = Number(this.myForm.get('percentualFerias').value) / 3;
+          rubrica = new Rubrica();
+          rubrica.codigo = 2;
+          rubrica.nome = 'Terço constitucional';
+          rubrica.sigla = 'Terço constitucional';
+          pct.rubrica = rubrica;
           contrato.percentuais.push(pct);
         }
       }
@@ -336,6 +353,11 @@ export class CadastrarAjustesComponent {
           pct.dataFim = this.stringToDate(this.myForm.get('fimVigencia').value);
           pct.dataAditamento = this.stringToDate(this.myForm.get('assinatura').value);
           pct.percentual = Number(this.myForm.get('percentualIncidencia').value);
+          const rubrica = new Rubrica();
+          rubrica.codigo = 7;
+          rubrica.nome = 'Incidência do submódulo 4.1';
+          rubrica.sigla = 'Submódulo 4.1';
+          pct.rubrica = rubrica;
           contrato.percentuais.push(pct);
 
         }
@@ -420,7 +442,7 @@ export class CadastrarAjustesComponent {
 
   closeModal2() {
     this.modalActions2.emit({action: 'modal', params: ['close']});
-    this.navToAjustes(this.contrato.codigo);
+    this.navToAjustes();
   }
 
   openModal3() {
@@ -444,7 +466,7 @@ export class CadastrarAjustesComponent {
     );
   }
 
-  private navToAjustes(cod: number) {
-    this.router.navigate(['ajustes-contratuais', cod], {skipLocationChange: true});
+  private navToAjustes() {
+    this.router.navigate(['ajustes-contratuais'], {skipLocationChange: true});
   }
 }
