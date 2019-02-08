@@ -450,6 +450,7 @@ export class CadastrarAjustesComponent {
 
   closeModal3() {
     this.modalActions3.emit({action: 'modal', params: ['close']});
+    this.navToAjustes();
   }
 
   cadastrarAjuste() {
