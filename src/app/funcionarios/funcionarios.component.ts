@@ -1,11 +1,10 @@
-import {ChangeDetectorRef, Component, EventEmitter} from '@angular/core';
+import {Component, EventEmitter} from '@angular/core';
 import {Contrato} from '../contratos/contrato';
 import {ContratosService} from '../contratos/contratos.service';
 import {FuncionariosService} from './funcionarios.service';
 import {Funcionario} from './funcionario';
 import {PagerService} from '../_shared/pager.service';
 import {MaterializeAction} from 'angular2-materialize';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({

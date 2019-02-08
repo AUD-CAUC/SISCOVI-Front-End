@@ -35,10 +35,12 @@ import {SaldoFuncaoComponent} from './saldo/funcao/saldo-funcao.component';
 
 const routes: Routes = [
   {path: '', pathMatch: 'full', redirectTo: 'home'},
-  {path: 're' , component: IndicadoresComponent, canActivate: [LoggedInGuard],
+  {
+    path: 're', component: IndicadoresComponent, canActivate: [LoggedInGuard],
     children: []
   },
-  {path: '', component: ComumComponent,
+  {
+    path: '', component: ComumComponent,
     children: [
       {path: 'login', component: LoginComponent},
       {path: 'indicadores', component: IndicadoresComponent, canActivate: [LoggedInGuard]},
@@ -52,8 +54,16 @@ const routes: Routes = [
       {path: 'cargosContrato', component: CargosDoContratoComponent, canActivate: [LoggedInGuard]},
       {path: 'convencoes', component: ConvencoesColetivasComponent, canActivate: [LoggedInGuard]},
       {path: 'terceirizados', component: FuncionariosComponent, canActivate: [LoggedInGuard, ProfileGuard]},
-      {path: 'terceirizados/:id', component: CadastrarTerceirizadoComponent, canActivate: [LoggedInGuard, ProfileGuard]},
-      {path: 'terceirizados/cadastro-terceirizado', component: CadastrarTerceirizadoComponent, canActivate: [LoggedInGuard, ProfileGuard]},
+      {
+        path: 'terceirizados/:id',
+        component: CadastrarTerceirizadoComponent,
+        canActivate: [LoggedInGuard, ProfileGuard]
+      },
+      {
+        path: 'terceirizados/cadastro-terceirizado',
+        component: CadastrarTerceirizadoComponent,
+        canActivate: [LoggedInGuard, ProfileGuard]
+      },
       {path: 'funcoes-dos-terceirizados', component: CargosDosFuncionariosComponent, canActivate: [LoggedInGuard]},
       {path: 'vigencias', component: VigenciaDosContratosComponent, canActivate: [LoggedInGuard]},
       {path: 'home', component: InicioComponent, canActivate: [LoggedInGuard]},
@@ -65,18 +75,37 @@ const routes: Routes = [
       {path: 'saldoConta', component: InicioComponent, canActivate: [LoggedInGuard]},
       {path: 'percentEst', component: PercentuaisEstaticosComponent, canActivate: [LoggedInGuard, ProfileGuard]},
       {path: 'ajustes-contratuais', component: AjusteContratoComponent, canActivate: [LoggedInGuard]},
-      {path: 'ajustes-contratuais/cadastrar-ajuste', component: CadastrarAjustesComponent, canActivate: [LoggedInGuard]},
+      {
+        path: 'ajustes-contratuais/cadastrar-ajuste',
+        component: CadastrarAjustesComponent,
+        canActivate: [LoggedInGuard]
+      },
       {path: 'historico-gestores', component: HistoricoGestoresComponent, canActivate: [LoggedInGuard]},
-      {path: 'historico-gestores/:id', component: CadastrarGestorContratoComponent, canActivate: [LoggedInGuard]},
-      {path: 'historico-gestores/cadastro-gestor-contrato', component: CadastrarGestorContratoComponent, canActivate: [LoggedInGuard]},
-      {path: 'funcoes-dos-terceirizados/gerenciar-funcoes-terceirizados', component: GerenciarCargosTerceirizadosComponent, canActivate: [LoggedInGuard]},
+      {
+        path: 'historico-gestores/:id',
+        component: CadastrarGestorContratoComponent,
+        canActivate: [LoggedInGuard, ProfileGuard]
+      },
+      {
+        path: 'historico-gestores/cadastro-gestor-contrato',
+        component: CadastrarGestorContratoComponent,
+        canActivate: [LoggedInGuard, ProfileGuard]
+      },
+      {
+        path: 'funcoes-dos-terceirizados/gerenciar-funcoes-terceirizados',
+        component: GerenciarCargosTerceirizadosComponent,
+        canActivate: [LoggedInGuard]
+      },
       {path: 'contratos/cadastro-contrato', component: CadastroContratoComponent, canActivate: [LoggedInGuard]},
       {path: 'saldo/individual', component: SaldoIndividualComponent, canActivate: [LoggedInGuard]},
-        {path: 'saldo/total', component: SaldoFuncaoComponent, canActivate: [LoggedInGuard]},
-    ]}
+      {path: 'saldo/total', component: SaldoFuncaoComponent, canActivate: [LoggedInGuard]},
+    ]
+  }
 ];
+
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule {
+}

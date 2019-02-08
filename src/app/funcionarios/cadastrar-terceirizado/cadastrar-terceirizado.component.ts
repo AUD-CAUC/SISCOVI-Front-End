@@ -30,7 +30,6 @@ export class CadastrarTerceirizadoComponent implements OnInit {
     terceirizadosPlanilhaForm: FormGroup;
     constructor(private fb: FormBuilder, private  terceirizadoService: FuncionariosService, private  route: ActivatedRoute, private router: Router, private ref: ChangeDetectorRef) {
         this.route.params.subscribe(params => {
-            console.log(params);
           if (!isNaN(params['id'])) {
             this.id = params['id'];
           }

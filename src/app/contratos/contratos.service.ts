@@ -6,6 +6,7 @@ import {FormularioCadastroContrato} from './cadastro-contrato/formulario.cadastr
 import {Observable} from 'rxjs/Observable';
 import {EventoContratual} from './ajustes-contratuais/evento-contratual';
 import {TipoEventoContratual} from './ajustes-contratuais/tipo-evento-contratual';
+import {Convencao} from '../convencoes-coletivas/convencao';
 
 @Injectable()
 export class ContratosService {
@@ -42,6 +43,7 @@ export class ContratosService {
         if (contrato.percentuais.length > 0) {
             contrato.percentuais.forEach(item => {
                 const perc = {
+                    nome: item.nome,
                     percentual: item.percentual,
                     dataInicio: this.convertDate(item.dataInicio),
                     dataAditamento: this.convertDate(item.dataAditamento),
@@ -52,6 +54,10 @@ export class ContratosService {
         }
         if (contrato.funcoes.length > 0) {
             contrato.funcoes.forEach(funcao => {
+              let convencaoCol: Convencao = null;
+              if (funcao.convencao) {
+                convencaoCol = funcao.convencao;
+              }
                 const func = {
                     codigo: funcao.codigo,
                     nome: funcao.nome,
@@ -59,13 +65,7 @@ export class ContratosService {
                     remuneracao: funcao.remuneracao,
                     adicionais: funcao.adicionais,
                     trienios: funcao.trienios,
-                    convencao: {
-                        codigo: funcao.convencao.codigo,
-                        nome: funcao.convencao.nome,
-                        dataBase: this.convertDate(funcao.convencao.dataBase),
-                        descricao: funcao.convencao.descricao,
-                        sigla: funcao.convencao.sigla
-                    }
+                    convencao: convencaoCol
                 };
                 funcoes.push(func);
             });
@@ -82,6 +82,7 @@ export class ContratosService {
             dataAssinatura: this.convertDate(contrato.eventoContratual.dataAssinatura)
         };
         const data = {
+            codigo: contrato.codigo,
             cnpj: contrato.cnpj,
             nomeDaEmpresa: contrato.nomeDaEmpresa,
             numeroDoContrato: contrato.numeroDoContrato,
@@ -92,6 +93,7 @@ export class ContratosService {
             numeroProcessoSTJ: contrato.numeroProcessoSTJ,
             eventoContratual: evento
         };
+        console.log(data);
        return  this.http.post(url, data).map(res => res.json());
     }
 

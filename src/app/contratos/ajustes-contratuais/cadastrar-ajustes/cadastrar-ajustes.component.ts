@@ -15,6 +15,7 @@ import {EventoContratual} from '../evento-contratual';
 import {TipoEventoContratual} from '../tipo-evento-contratual';
 import {HistoricoGestor} from '../../../historico/historico-gestor';
 import {MaterializeAction} from 'angular2-materialize';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-cadastrar-ajustes',
@@ -44,8 +45,9 @@ export class CadastrarAjustesComponent {
   modalActions3 = new EventEmitter<string | MaterializeAction>();
   tempCon: Contrato;
 
-  constructor(private contratoService: ContratosService, private userService: UserService, private config: ConfigService, private  fb: FormBuilder, private percentService: PercentualService,
-              private convService: ConvencaoService, private ref: ChangeDetectorRef, private cargoService: CargoService) {
+  constructor(private contratoService: ContratosService, private userService: UserService, private config: ConfigService,
+              private  fb: FormBuilder, private percentService: PercentualService, private convService: ConvencaoService,
+              private ref: ChangeDetectorRef, private cargoService: CargoService, private router: Router) {
     this.contratoService.getContratosDoUsuario().subscribe(res => {
       this.contratos = res;
     });
@@ -333,7 +335,7 @@ export class CadastrarAjustesComponent {
           pct.dataInicio = this.stringToDate(this.myForm.get('inicioVigencia').value);
           pct.dataFim = this.stringToDate(this.myForm.get('fimVigencia').value);
           pct.dataAditamento = this.stringToDate(this.myForm.get('assinatura').value);
-          pct.percentual = Number(this.myForm.get('percentualDecimoTerceiro').value);
+          pct.percentual = Number(this.myForm.get('percentualIncidencia').value);
           contrato.percentuais.push(pct);
 
         }
@@ -418,6 +420,7 @@ export class CadastrarAjustesComponent {
 
   closeModal2() {
     this.modalActions2.emit({action: 'modal', params: ['close']});
+    this.navToAjustes(this.contrato.codigo);
   }
 
   openModal3() {
@@ -429,13 +432,19 @@ export class CadastrarAjustesComponent {
   }
 
   cadastrarAjuste() {
+    console.log(this.tempCon);
     this.contratoService.cadastrarAjuste(this.tempCon).subscribe(res => {
         this.closeModal();
         this.openModal2();
       },
       error2 => {
+        this.closeModal();
         this.openModal3();
       }
     );
+  }
+
+  private navToAjustes(cod: number) {
+    this.router.navigate(['ajustes-contratuais', cod], {skipLocationChange: true});
   }
 }

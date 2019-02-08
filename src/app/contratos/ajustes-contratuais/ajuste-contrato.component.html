@@ -11,8 +11,8 @@
         <select materialize="material_select" [materializeSelectOptions]="contratos"
                 (change)="onChange($event.target.value)">
           <option disabled>Selecione um Contrato</option>
-          <option *ngFor="let contrato of contratos" [value]="contrato.codigo">{{contrato.nomeDaEmpresa}} -
-            Contrato Nº: {{contrato.numeroDoContrato}}/{{contrato.anoDoContrato}}
+          <option *ngFor="let contrato of contratos" [value]="contrato.codigo"
+                  [selected]="contrato.codigo == codigoContrato">{{contrato.nomeDaEmpresa}} - Contrato Nº: {{contrato.numeroDoContrato}}/{{contrato.anoDoContrato}}
           </option>
         </select>
       </div>

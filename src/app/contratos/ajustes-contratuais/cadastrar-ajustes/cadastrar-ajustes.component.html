@@ -116,7 +116,7 @@
       </div>
       <div class="row">
         <div class="input-field col s12">
-                    <textarea class="materialize-textarea" (input)="verificaAjusteASerCadastrado()" materialize
+                    <textarea class="materialize-textarea" materialize
                               id="assunto" formControlName="assunto"
                               data-length="120"></textarea>
           <label for="assunto">Assunto</label>
@@ -316,7 +316,7 @@
             <li class="active">
               <div class=""><h5>Percentuais</h5></div>
               <div class="row highlight" *ngFor="let percentual of tempCon.percentuais">
-                <div class="col s3 offset-s1">
+                <div class="col s5 offset-s1">
                   <h5>Percentual:
                     <small>{{percentual.nome}}</small>
                   </h5>
@@ -355,12 +355,12 @@
                     <small>{{funcao.trienios | currency:'BRL':true:'1.2-2'}}</small>
                   </h5>
                 </div>
-                <div class=" col s3 offset-s1">
+                <div class=" col s3 offset-s1" *ngIf="funcao.convencao">
                   <h5>Convencção Coletiva:
                     <small>{{funcao.convencao.sigla}}</small>
                   </h5>
                 </div>
-                <div class=" col s2">
+                <div class=" col s2" *ngIf="funcao.convencao">
                   <h5>Data Base:
                     <small>{{funcao.convencao.dataBase | date: 'shortDate'}}</small>
                   </h5>
@@ -386,5 +386,17 @@
   </div>
   <div class="modal-footer">
     <button id="button-footer" class="btn waves-effect" (click)="closeModal2()">Ok</button>
+  </div>
+</div>
+<div id="modal3" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]"
+     [materializeActions]="modalActions2">
+  <div class="modal-content">
+    <h4 class="center">Erro</h4>
+    <br>
+    <h5 class=" center"><span class="mensagem-erro">Houve uma falha ao tentar cadastrar o ajuste ! Tente novamente mais tarde ou entre em contato
+      com o administrador do sistema</span></h5>
+  </div>
+  <div class="modal-footer">
+    <button class="button-footer" class="btn waves-effect" (click)="closeModal2()">Ok</button>
   </div>
 </div>
