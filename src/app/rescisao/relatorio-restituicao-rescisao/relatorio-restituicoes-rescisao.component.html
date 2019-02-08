@@ -1,0 +1,84 @@
+<br>
+<div class="row">
+  <div class="input-field col l7">
+    <select id="selecao_contrato"materialize="material_select" [materializeSelectOptions]="contratos" (change)="defineCodigoContrato($event.target.value)">
+      <option disabled>Selecione um Contrato</option>
+      <option *ngFor="let contrato of contratos" [value]="contrato.codigo" [selected]="codigoContrato == contrato.codigo">{{contrato.nomeDaEmpresa}} - Contrato nº: {{contrato.numeroDoContrato}}</option>
+    </select>
+    <label for="selecao_contrato">Contrato<span class="red-text"> *</span></label>
+  </div>
+</div>
+<div class="container" *ngIf="!calculosRescisao && codigoContrato">
+  <div class="row">
+    <div class="col s12 grey lighten-4" style="margin-top: 1em">
+      <br>
+      <h5 class="center-align">Não há nenhuma restituição feita ainda! <i class="small material-icons">mood_bad</i></h5>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col  l12" >
+    <table *ngIf="codigoContrato && calculosRescisao" class="highlight centered responsive-table">
+      <thead>
+      <tr>
+        <th>Terceirizado</th>
+        <th>Cargo</th>
+        <th>Tipo de restituição</th>
+        <th>Tipo de rescisao</th>
+        <th>Desligamento</th>
+        <th>Décimo terceiro</th>
+        <th>Incidência sobre décimo terceiro</th>
+        <th>Multa do FGTS sobre décimo terceiro</th>
+        <th>Início férias vencidas</th>
+        <th>Fim férias vencidas</th>
+        <th>Valor férias vencidas</th>
+        <th>Valor terço vencido</th>
+        <th>Incidência sobre férias vencidas</th>
+        <th>Incidência sobre terço vencido</th>
+        <th>Multa do FGTS sobre o férias vencidas</th>
+        <th>Multa do FGTS sobre o terço vencido</th>
+        <th>Início férias proporcionais</th>
+        <th>Fim férias proporcionais</th>
+        <th>Valor férias proporcionais</th>
+        <th>Valor terço proporcional</th>
+        <th>Incidência sobre férias proporcional</th>
+        <th>Incidência sobre terço proporcional</th>
+        <th>Multa do FGTS sobre o férias proporcional</th>
+        <th>Multa do FGTS sobre o terço proporcional</th>
+        <th>Multa do FGTS sobre o salário</th>
+        <th>Total</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let calculos of calculosRescisao">
+        <td class="hoverable">{{calculos.nomeTerceirizado}}</td>
+        <td class="hoverable">{{calculos.nomeCargo}}</td>
+        <td class="hoverable">{{calculos.calcularRescisaoModel.tipoRestituicao}}</td>
+        <td class="hoverable">{{calculos.calcularRescisaoModel.tipoRescisao}}</td>
+        <td class="hoverable">{{calculos.calcularRescisaoModel.dataDesligamento | date: 'shortDate'}}</td>
+        <td class="hoverable">{{calculos.calcularRescisaoModel.totalDecimoTerceiro | currency:'BRL':true:'1.2-2'}}</td>
+        <td class="hoverable">{{calculos.calcularRescisaoModel.totalIncidenciaDecimoTerceiro | currency:'BRL':true:'1.2-2'}}</td>
+        <td class="hoverable">{{calculos.calcularRescisaoModel.totalMultaFgtsDecimoTerceiro | currency:'BRL':true:'1.2-2'}}</td>
+        <td class="hoverable">{{calculos.calcularRescisaoModel.inicioFeriasIntegrais | date: 'shortDate'}}</td>
+        <td class="hoverable">{{calculos.calcularRescisaoModel.fimFeriasIntegrais | date: 'shortDate'}}</td>
+        <td class="hoverable">{{calculos.calcularRescisaoModel.totalFeriasVencidas | currency:'BRL':true:'1.2-2'}}</td>
+        <td class="hoverable">{{calculos.calcularRescisaoModel.totalTercoConstitucionalvencido | currency:'BRL':true:'1.2-2'}}</td>
+        <td class="hoverable">{{calculos.calcularRescisaoModel.totalIncidenciaFeriasVencidas | currency:'BRL':true:'1.2-2'}}</td>
+        <td class="hoverable">{{calculos.calcularRescisaoModel.totalIncidenciaTercoVencido | currency:'BRL':true:'1.2-2'}}</td>
+        <td class="hoverable">{{calculos.calcularRescisaoModel.totalMultaFgtsFeriasVencidas | currency:'BRL':true:'1.2-2'}}</td>
+        <td class="hoverable">{{calculos.calcularRescisaoModel.totalMultaFgtsTercoVencido | currency:'BRL':true:'1.2-2'}}</td>
+        <td class="hoverable">{{calculos.calcularRescisaoModel.inicioFeriasProporcionais | date: 'shortDate'}}</td>
+        <td class="hoverable">{{calculos.calcularRescisaoModel.fimFeriasProporcionais | date: 'shortDate'}}</td>
+        <td class="hoverable">{{calculos.calcularRescisaoModel.totalFeriasProporcionais | currency:'BRL':true:'1.2-2'}}</td>
+        <td class="hoverable">{{calculos.calcularRescisaoModel.totalTercoProporcional | currency:'BRL':true:'1.2-2'}}</td>
+        <td class="hoverable">{{calculos.calcularRescisaoModel.totalIncidenciaFeriasProporcionais | currency:'BRL':true:'1.2-2'}}</td>
+        <td class="hoverable">{{calculos.calcularRescisaoModel.totalIncidenciaTercoProporcional | currency:'BRL':true:'1.2-2'}}</td>
+        <td class="hoverable">{{calculos.calcularRescisaoModel.totalMultaFgtsFeriasProporcionais | currency:'BRL':true:'1.2-2'}}</td>
+        <td class="hoverable">{{calculos.calcularRescisaoModel.totalMultaFgtsTercoProporcional | currency:'BRL':true:'1.2-2'}}</td>
+        <td class="hoverable">{{calculos.calcularRescisaoModel.totalMultaFgtsSalario | currency:'BRL':true:'1.2-2'}}</td>
+        <td class="hoverable">{{calculos.total | currency:'BRL':true:'1.2-2'}}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
