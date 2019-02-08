@@ -4,6 +4,7 @@ export class TotalMensalPendente {
     private _totaisMensais: ListaTotalMensalData;
     private _status: string;
     private _observacoes: string;
+    private _codigoContrato: number;
 
     constructor(totaisMensais: ListaTotalMensalData, status: string) {
         this._totaisMensais = totaisMensais;
@@ -14,6 +15,9 @@ export class TotalMensalPendente {
     }
     get totaisMensais(): ListaTotalMensalData {
         return this._totaisMensais;
+    }
+    get codigoContrato(): number {
+        return this._codigoContrato;
     }
 
     set observacoes(value: string) {
