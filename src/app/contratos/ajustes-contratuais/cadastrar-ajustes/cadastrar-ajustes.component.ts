@@ -377,7 +377,7 @@ export class CadastrarAjustesComponent {
         if (this.myForm.get('primeiroSubstituto').value !== historico.gestor) {
           create = true;
         }
-      } else {
+      }else {
         create = true;
       }
       if (create) {
@@ -396,7 +396,7 @@ export class CadastrarAjustesComponent {
         if (this.myForm.get('segundoSubstituto').value !== historico.gestor) {
           create = true;
         }
-      } else {
+      }else {
         create = true;
       }
       if (create) {

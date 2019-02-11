@@ -146,7 +146,8 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
             nomeTerceirizado: new FormControl('', [Validators.required]).disable(),
             ativo: new FormControl('', [Validators.required]).disable(),
             funcao: new FormControl(),
-            dataInicio: new FormControl()
+            dataInicio: new FormControl(),
+            codigo: new FormControl(0)
         }));
     }
 
@@ -238,13 +239,11 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
             const data: CargosFuncionarios[] = [];
             for (let i = 0; i < this.gerenciar.length; i++) {
                 const form: FormGroup = this.gerenciaForm.get('gerenciarTerceirizados').get('' + i) as FormGroup;
-                let funcionario = new Funcionario();
+                const funcionario = new Funcionario();
                 let funcao = new Cargo();
-                this.terceirizados.forEach(item => {
-                    if (Number(form.get('terceirizado').value) === item.codigo) {
-                        funcionario = item;
-                    }
-                });
+                funcionario.cpf = form.get('cpfTerceirizado').value;
+                funcionario.nome = form.get('nomeTerceirizado').value;
+                funcionario.codigo = Number(form.get('codigo').value);
                 this.funcoes.forEach(item => {
                     if (Number(form.get('funcao').value) === item.codigo) {
                         funcao = item;
@@ -446,6 +445,7 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
                         control.parent.get('nomeTerceirizado').setValue(terceirizado.nome);
                         // control.parent.get('ativo').enable();
                         control.parent.get('ativo').setValue(terceirizado.ativo);
+                        control.parent.get('codigo').setValue(terceirizado.codigo);
 
                     } else {
                         control.parent.get('ativo').setValue('');

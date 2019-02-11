@@ -229,7 +229,7 @@
     </form>
     <div class="center-align">
       <button class="btn waves-effect" [disabled]="myForm.invalid" (click)="verificaAjusteASerCadastrado()">Cadastrar
-        Contrato
+        Ajuste
       </button>
     </div>
   </div>
@@ -355,8 +355,8 @@
                     <small>{{funcao.trienios | currency:'BRL':true:'1.2-2'}}</small>
                   </h5>
                 </div>
-                <div class=" col s3 offset-s1" *ngIf="funcao.convencao">
-                  <h5>Convencção Coletiva:
+                <div class=" col s6 offset-s1" *ngIf="funcao.convencao">
+                  <h5>Convenção Coletiva:
                     <small>{{funcao.convencao.sigla}}</small>
                   </h5>
                 </div>
