@@ -11,6 +11,7 @@ import {MaterializeAction} from 'angular2-materialize';
 import {Observable} from 'rxjs/Observable';
 import {map} from 'rxjs/operators';
 import {Error} from '../../_shared/error';
+import {Router} from '@angular/router';
 
 @Component({
     selector: 'app-gerenciar-cargos-terceirizados-component',
@@ -34,7 +35,9 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
     modalActions4 = new EventEmitter<string | MaterializeAction>();
     modalActions5 = new EventEmitter<string | MaterializeAction>();
 
-    constructor(private contServ: ContratosService, private funcServ: FuncionariosService, private cargosService: CargoService, private ref: ChangeDetectorRef, private fb: FormBuilder) {
+    constructor(private contServ: ContratosService, private funcServ: FuncionariosService,
+                private cargosService: CargoService, private ref: ChangeDetectorRef, private fb: FormBuilder,
+                private router: Router) {
         this.contServ.getContratosDoUsuario().subscribe(res => {
             this.contratos = res;
         });
@@ -73,7 +76,8 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
             nomeTerceirizado: new FormControl('', [Validators.required]).disable(),
             ativo: new FormControl('', [Validators.required]).disable(),
             funcao: new FormControl('', [Validators.required]),
-            dataInicio: new FormControl('', [Validators.required, this.myDateValidator])
+            dataInicio: new FormControl('', [Validators.required, this.myDateValidator]),
+            codigo: new FormControl(0)
         });
     }
 
@@ -257,7 +261,9 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
                 data.push(ft);
             }
             this.cargosService.alocarFuncao(data, this.codigo).subscribe(res => {
-
+                this.openModal4();
+            }, error2 => {
+              this.openModal5();
             });
         }
     }
@@ -297,10 +303,12 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
 
     closeModal4() {
         this.modalActions4.emit({action: 'modal', params: ['close']});
+        this.router.navigate(['funcoes-dos-terceirizados']);
     }
 
     openModal5() {
         this.modalActions5.emit({action: 'modal', params: ['open']});
+        this.router.navigate(['funcoes-dos-terceirizados']);
     }
 
     closeModal5() {
@@ -420,13 +428,11 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
 
     salvarAlteracoesFuncaoTerceirizado() {
         this.cargosService.alterarFuncaoTerceirizado(this.confirmarAlteracao, this.codigo).subscribe(res => {
-            if (res.success) {
-                this.closeModal2();
-                this.openModal4();
-            } else {
-                this.closeModal2();
-                this.openModal5();
-            }
+            this.closeModal2();
+            this.openModal4();
+        }, error2 => {
+            this.closeModal2();
+            this.openModal5();
         });
     }
 
