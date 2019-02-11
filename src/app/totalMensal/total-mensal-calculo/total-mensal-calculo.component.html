@@ -9,9 +9,8 @@
         <select class="black-text" name="contrato" formControlName="contrato" materialize="material_select"
                 [ngModel]="contratos" (change)="onChange($event.target.value)" required>
           <option disabled>Selecione</option>
-          <option class="black-text" *ngFor="let contrato of contratos" [value]="contrato.codigo">
-            {{contrato.nomeDaEmpresa}} - Contrato nº: {{contrato.numeroDoContrato}}
-          </option>
+          <option class="black-text" *ngFor="let contrato of contratos" [value]="contrato.codigo"
+          >{{contrato.nomeDaEmpresa}} - Contrato nº: {{contrato.numeroDoContrato}}</option>
         </select>
         <label style="font-size: 0.85vw">Selecione um Contrato</label>
       </div>
