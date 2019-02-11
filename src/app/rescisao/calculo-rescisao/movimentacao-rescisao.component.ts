@@ -104,6 +104,10 @@ export  class MovimentacaoRescisaoComponent implements  OnInit {
                     const objeto = new TerceirizadoRescisao(this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('codTerceirizadoContrato').value,
                         this.terceirizados[i].nomeTerceirizado,
                         this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataDesligamento').value,
+                        this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasIntegrais').value,
+                        this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataFimFeriasIntegrais').value,
+                        this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasProporcionais').value,
+                        this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataFimFeriasProporcionais').value,
                         this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('tipoRescisao').value,
                         this.tipoRestituicao);
                     let index = -1;

@@ -12,7 +12,7 @@ export class RescisaoService {
         return this.http.get(url).map(res => res.json());
     }
     calculaRescisaoTerceirizados(terceirizadosRescisao: TerceirizadoRescisao[]) {
-        const url = this.config.myApi + '/rescisao/calculaTerceirizados';
+        const url = this.config.myApi + '/rescisao/calculaRescisaoTerceirizados';
         const data =  [];
         terceirizadosRescisao.forEach(item => {
             let tipoRestituicao = '';
@@ -25,6 +25,10 @@ export class RescisaoService {
                 'codTerceirizadoContrato': item.codTerceirizadoContrato,
                 'nomeTerceirizado': item.nomeTerceirizado,
                 'dataDesligamento': item.dataDesligamento,
+                'dataInicioFeriasIntegrais': item.dataInicioFerciasIntegrais,
+                'dataFimFeriasIntegrais': item.dataFimFeriasIntegrais,
+                'dataInicioFeriasProporcionais': item.dataInicioFeriasProporcionais,
+                'dataFimFeriasProporcionais': item.dataFimFeriasProporcionais,
                 'tipoRescisao': item.tipoRescisao,
                 'tipoRestituicao': tipoRestituicao
             };

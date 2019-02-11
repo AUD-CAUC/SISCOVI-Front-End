@@ -10,8 +10,13 @@
                 <th>Terceirizado</th>
                 <th>Tipo de Rescisão</th>
                 <th>Data de Desligamento</th>
-                <th>Data de Início do Primeiro Período Aquisitivo férias da Rescisão</th>
-                <th>Valor a ser Movimentado</th>
+                <th>Início de férias vencidas</th>
+                <th>Fim de férias vencidas</th>
+                <th>Valor de Féria Vencidas</th>
+                <th>Início de férias proporcionais</th>
+                <th>Fim de férias proporcionais</th>
+                <th>Valor de Féria Proporcionais</th>
+                <th>Valor de Décimo Terceiro</th>
             </tr>
             </thead>
             <tbody>
@@ -28,7 +33,7 @@
                         <div class="row">
                             <div class="input-field col s12 center">
                                 <select class="center-align " materialize="material_select" formControlName="tipoRescisao">
-                                    <option disabled>Selecione uma opção</option>
+                                    <option disabled>Selecione</option>
                                     <option value="A PEDIDO">A Pedido</option>
                                     <option value="COM JUSTA CAUSA">Com Justa Causa</option>
                                     <option value="SEM JUSTA CAUSA">Sem Justa Causa</option>
@@ -78,6 +83,26 @@
                     </div>
                 </td>
                 <td>
+                  <div [formGroupName]="i">
+                    <div class="row">
+                      <div class="input-field col s12">
+                        <input type="text" class="validate" placeholder="Ex: 01/01/2000" appMaskDate formControlName="dataInicio" maxlength="10" required>
+                        <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicio').invalid && (rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicio').dirty ||
+                                  rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicio').touched)">
+                          <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataDesligamento').getError('mensagem')">
+                            <div *ngFor="let msg of rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicio').getError('mensagem')[0]">
+                              <span class="mensagem-erro">{{msg}}</span>
+                            </div>
+                          </div>
+                          <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicio').getError('required')">
+                            <span class="mensagem-erro">Você deve digitar uma data !</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td>
                     <div [formGroupName]="i">
                         <div class="row">
                             <div class="input-field col s12">
@@ -97,6 +122,88 @@
                             </div>
                         </div>
                     </div>
+                </td>
+                <td>
+                  <div [formGroupName]="i">
+                    <div class="row">
+                      <div class="input-field col s12">
+                        <input type="text" class="validate" placeholder="Ex: 01/01/2000" appMaskDate formControlName="dataInicio" maxlength="10" required>
+                        <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicio').invalid && (rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicio').dirty ||
+                                  rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicio').touched)">
+                          <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataDesligamento').getError('mensagem')">
+                            <div *ngFor="let msg of rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicio').getError('mensagem')[0]">
+                              <span class="mensagem-erro">{{msg}}</span>
+                            </div>
+                          </div>
+                          <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicio').getError('required')">
+                            <span class="mensagem-erro">Você deve digitar uma data !</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div [formGroupName]="i">
+                    <div class="row">
+                      <div class="input-field col s12">
+                        <input type="text" class="validate" placeholder="Ex: 01/01/2000" appMaskDate formControlName="dataInicio" maxlength="10" required>
+                        <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicio').invalid && (rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicio').dirty ||
+                                  rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicio').touched)">
+                          <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataDesligamento').getError('mensagem')">
+                            <div *ngFor="let msg of rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicio').getError('mensagem')[0]">
+                              <span class="mensagem-erro">{{msg}}</span>
+                            </div>
+                          </div>
+                          <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicio').getError('required')">
+                            <span class="mensagem-erro">Você deve digitar uma data !</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div [formGroupName]="i">
+                    <div class="row">
+                      <div class="input-field col s12">
+                        <input type="text" class="validate" currencyMask [options]="{prefix: 'R$', thousands: '.', decimal: ',', allowNegative: 'false'}"
+                               formControlName="valorAMovimentar" maxlength="10" required>
+                        <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorAMovimentar').invalid && (rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorAMovimentar').dirty ||
+                                  rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorAMovimentar').touched)">
+                          <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorAMovimentar').getError('mensagem')">
+                            <div *ngFor="let msg of rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorAMovimentar').getError('mensagem')[0]">
+                              <span class="mensagem-erro">{{msg}}</span>
+                            </div>
+                          </div>
+                          <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorAMovimentar').getError('required')">
+                            <span class="mensagem-erro">Você deve digitar um valor a ser movimentado !</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div [formGroupName]="i">
+                    <div class="row">
+                      <div class="input-field col s12">
+                        <input type="text" class="validate" currencyMask [options]="{prefix: 'R$', thousands: '.', decimal: ',', allowNegative: 'false'}"
+                               formControlName="valorAMovimentar" maxlength="10" required>
+                        <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorAMovimentar').invalid && (rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorAMovimentar').dirty ||
+                                  rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorAMovimentar').touched)">
+                          <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorAMovimentar').getError('mensagem')">
+                            <div *ngFor="let msg of rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorAMovimentar').getError('mensagem')[0]">
+                              <span class="mensagem-erro">{{msg}}</span>
+                            </div>
+                          </div>
+                          <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorAMovimentar').getError('required')">
+                            <span class="mensagem-erro">Você deve digitar um valor a ser movimentado !</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </td>
             </tr>
             </tbody>
@@ -144,15 +251,9 @@
                 <th>Tipo de Rescisão</th>
                 <th>Tipo de Restituição</th>
                 <th>Valor Décimo Terceiro</th>
-                <th>Submódulo 4.1 sobre o Décimo Terceiro</th>
-                <th>Multa do FGTS sobnre o Décimo Terceiro</th>
-                <th>Valor de Férias</th>
-                <th>Valor de Terço Consticional</th>
-                <th>Submódulo 4.1 sobre Férias</th>
-                <th>Submódulo 4.1 sobre Terço Constitucional</th>
-                <th>Multa do FGTS sobre Férias</th>
-                <th>Multa do FGTS sobre Terço Constitucional</th>
-                <th>Multa do FGTS sobre Salário</th>
+
+                <th>Valor de Férias Vencidas</th>
+                <th>Valor de Férias Proporcionais</th>
                 <th class="black-text">Total</th>
             </tr>
             </thead>
@@ -162,9 +263,7 @@
                 <td>{{calculo.terceirizadoRescisao.tipoRescisao}}</td>
                 <td>{{calculo.terceirizadoRescisao.tipoRestituicao}}</td>
                 <td>{{calculo.valorRestituicaoRescisao.valorDecimoTerceiro | currency:'BRL':true:'1.2-2'}}</td>
-                <td>{{calculo.valorRestituicaoRescisao.valorIncidenciaDecimoTerceiro | currency:'BRL':true:'1.2-2'}}</td>
-                <td>{{calculo.valorRestituicaoRescisao.valorFGTSDecimoTerceiro | currency:'BRL':true:'1.2-2'}}</td>
-                <td>{{calculo.valorRestituicaoRescisao.valorFerias | currency:'BRL':true:'1.2-2'}}</td>
+                <td>{{calculo.valorRestituicaoRescisao.valorFeriasIntegral | currency:'BRL':true:'1.2-2'}}</td>
                 <td>{{calculo.valorRestituicaoRescisao.valorTerco | currency:'BRL':true:'1.2-2'}}</td>
                 <td>{{calculo.valorRestituicaoRescisao.valorIncidenciaFerias | currency:'BRL':true:'1.2-2'}}</td>
                 <td>{{calculo.valorRestituicaoRescisao.valorIncidenciaTerco | currency:'BRL':true:'1.2-2'}}</td>
