@@ -8,7 +8,7 @@ import {RescisaoCalculosPendentes} from '../rescisoes-pendentes/rescisao-calculo
 @Component({
   selector: 'app-relatorio-restituicoes-rescisao-component',
   templateUrl: './relatorio-restituicoes-rescisao.component.html',
-  styleUrls: ['../rescisao.component.scss']
+  styleUrls: ['../rescisao.component.scss', './relatorio-restituicoes-rescisao.component.scss']
 })
 export class RelatorioRestituicoesRescisaoComponent {
   contratos: Contrato[];

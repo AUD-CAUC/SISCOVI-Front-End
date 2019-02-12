@@ -1,3 +1,5 @@
+import {ValorRestituicaoRescisao} from './valor-restituicao-rescisao';
+
 export class TerceirizadoRescisao {
     private _codTerceirizadoContrato: number;
     private _nomeTerceirizado: string;
@@ -8,6 +10,8 @@ export class TerceirizadoRescisao {
     private _dataFimFeriasProporcionais: Date;
     private _tipoRescisao: string;
     private _tipoRestituicao: string;
+    private _valorRestituicaoRescisao: ValorRestituicaoRescisao;
+    /*
     constructor(codTerceirizadoContrato: number,
                 nomeTerceirizado: string,
                 dataDesligamento: Date,
@@ -26,7 +30,7 @@ export class TerceirizadoRescisao {
         this._dataFimFeriasProporcionais = dataFimFeriasProporcionais;
         this._tipoRescisao = tipoRescisao;
         this._tipoRestituicao = tipoRestituicao;
-    }
+    }*/
     public get nomeTerceirizado() {
         return this._nomeTerceirizado;
     }
@@ -62,4 +66,10 @@ export class TerceirizadoRescisao {
     get tipoRestituicao(): string {
         return this._tipoRestituicao;
     }
+
+    set valorRestituicaoRescisao(valorRestituicaoRescisao: ValorRestituicaoRescisao) {
+      this._valorRestituicaoRescisao = valorRestituicaoRescisao;
+    }
+
+    get valorRestituicaoRescisao(): ValorRestituicaoRescisao { return this._valorRestituicaoRescisao; }
 }

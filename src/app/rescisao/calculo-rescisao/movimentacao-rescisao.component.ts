@@ -93,7 +93,7 @@ export  class MovimentacaoRescisaoComponent implements  OnInit {
                 this.openModal4();
             }
         });
-    }
+    }/*
     verificaDadosFormulario() {
         let aux = 0;
         this.vmsm = false;
@@ -141,21 +141,7 @@ export  class MovimentacaoRescisaoComponent implements  OnInit {
                 }
             });
         }
-    }
-    getDiasConcedidos(inicioFerias, fimFerias, diasVendidos, indice) {
-        let dia = inicioFerias.split('/')[0];
-        let mes = inicioFerias.split('/')[1] - 1;
-        let ano = inicioFerias.split('/')[2];
-        const initDate = new Date(ano, mes , dia);
-        dia = fimFerias.split('/')[0];
-        mes = fimFerias.split('/')[1] - 1;
-        ano = fimFerias.split('/')[2];
-        const finalDate = new Date(ano, mes, dia);
-        const diffTime  = Math.abs(finalDate.getTime() - initDate.getTime());
-        const diffDay = Math.round(diffTime / (1000 * 3600 * 24)) + 1;
-        this.diasConcedidos[indice] = diffDay + diasVendidos;
-        console.log(this.diasConcedidos);
-    }
+    }*/
     /*public valorMovimentadoValidator(control: AbstractControl) {
         const mensagem: string[] = [];
         if (control.value <= 0) {
