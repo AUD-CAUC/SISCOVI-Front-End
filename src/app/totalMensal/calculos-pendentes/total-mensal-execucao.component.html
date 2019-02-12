@@ -1,13 +1,13 @@
 <br>
-<div class="row">
-    <div class="input-field col l7 offset-l2">
-        <select id="selecao_contrato" materialize="material_select" [materializeSelectOptions]="contratos" (change)="defineCodigoContrato($event.target.value)">
-            <option disabled>Selecione um Contrato</option>
-            <option *ngFor="let contrato of contratos" [value]="contrato.codigo" [selected]="codigoContrato == contrato.codigo">{{contrato.nomeDaEmpresa}} - Contrato nº: {{contrato.numeroDoContrato}}</option>
-        </select>
-        <label for="selecao_contrato">Contrato<span class="red-text"> *</span></label>
-    </div>
-</div>
+<!--<div class="row">-->
+    <!--<div class="input-field col l7 offset-l2">-->
+        <!--<select id="selecao_contrato" materialize="material_select" [materializeSelectOptions]="contratos" (change)="defineCodigoContrato($event.target.value)">-->
+            <!--<option disabled>Selecione um Contrato</option>-->
+            <!--<option *ngFor="let contrato of contratos" [value]="contrato.codigo" [selected]="codigoContrato == contrato.codigo">{{contrato.nomeDaEmpresa}} - Contrato nº: {{contrato.numeroDoContrato}}</option>-->
+        <!--</select>-->
+        <!--<label for="selecao_contrato">Contrato<span class="red-text"> *</span></label>-->
+    <!--</div>-->
+<!--</div>-->
 <div class="container" *ngIf="!totais && codigoContrato">
     <div class="row" >
         <div class="col s12 grey lighten-4" style="margin-top: 1em">
@@ -17,9 +17,9 @@
     </div>
 </div>
 <div class="row" *ngIf="codigoContrato && totais">
-    <form [formGroup]="totalMensalForm">
+    <form [formGroup]="totalMensalForm" *ngIf="totais.length > 0">
         <div class="col xl12 l12 s12 l12 m12" formArrayName="avaliacaoDeCalculo">
-            <table class="highlight centered responsive-table hoverable">
+            <table class="highlight centered responsive-table hoverable striped">
                 <thead>
                 <tr>
                     <th *ngIf="config.user.perfil.sigla == 'ADMINISTRADOR'">
@@ -57,6 +57,7 @@
                     <td>
                         <table class="highlight centered responsive-table">
                             <thead>
+                            <th>{{total.nomeEmpresa}} - Contrato nº: {{total.numeroContrato}}</th>
                             <tr>
                                 <th>Função</th>
                                 <th>Número de Terceirizados por Função</th>

@@ -148,7 +148,7 @@ export class TotalMensalPendenteComponent implements OnInit {
           res[i].numeroContrato = contrato.numeroDoContrato;
           this.totais[this.totais.length] = res[i];
         }
-        console.log(this.totais);
+
         this.somaFerias = new Array(res.length).fill(0);
         this.somaTerco = new Array(res.length).fill(0);
         this.somaDecimo = new Array(res.length).fill(0);
@@ -166,8 +166,6 @@ export class TotalMensalPendenteComponent implements OnInit {
             this.somaSaldo[i] = this.somaSaldo[i] + this.totais[i].totaisMensais.totais[j].total;
           }
         }
-
-        console.log(this.totais);
       }
       this.notifications = this.historicoPendente.length;
       this.formInit();
@@ -235,7 +233,6 @@ export class TotalMensalPendenteComponent implements OnInit {
         this.totaisAvaliados.push(objeto);
       }
     }
-    console.log(this.totaisAvaliados);
     if (aux !== 0) {
       this.openModal2();
     } else {
