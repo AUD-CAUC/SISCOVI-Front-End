@@ -18,7 +18,7 @@ export class ResgateRescisaoComponent implements OnInit {
     rescisaoForm: FormGroup;
     isSelected = false;
     selected = false;
-    terceirizadosCalculosRescisao: TerceirizadoRescisao[] = [];
+    /*terceirizadosCalculosRescisao: TerceirizadoRescisao[] = [];*/
     calculosRescisao: RescisaoCalcular[] = [];
     modalActions = new EventEmitter<string | MaterializeAction>();
     modalActions2 = new EventEmitter<string | MaterializeAction>();
@@ -88,7 +88,7 @@ export class ResgateRescisaoComponent implements OnInit {
         this.navegaParaViewDeCalculos.emit(this.codigoContrato);
     }
     efetuarCalculo(): void {
-        this.rescisaoService.registrarCalculoRescisao(this.terceirizadosCalculosRescisao).subscribe(res => {
+        this.rescisaoService.registrarCalculoRescisao(this.terceirizados).subscribe(res => {
             if (res.success) {
                 this.closeModal3();
                 this.openModal4();
@@ -102,26 +102,44 @@ export class ResgateRescisaoComponent implements OnInit {
             if (this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('selected').value) {
                 aux++;
                 if (this.rescisaoForm.get('calcularTerceirizados').get('' + i).status === 'VALID') {
-                    const objeto = new TerceirizadoRescisao(this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('codTerceirizadoContrato').value,
-                        this.terceirizados[i].nomeTerceirizado,
+                    const objeto = new RescisaoCalcular(this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('codTerceirizadoContrato').value,
+                        this.tipoRestituicao,
+                        this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('tipoRescisao').value,
                         this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataDesligamento').value,
                         this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasIntegrais').value,
                         this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataFimFeriasIntegrais').value,
                         this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasProporcionais').value,
-                        this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataFimFeriasProporcionais').value,
-                        this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('tipoRescisao').value,
-                        this.tipoRestituicao);
+                        this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataDesligamento').value,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0);
                     let index = -1;
-                    for (let j = 0; j < this.terceirizadosCalculosRescisao.length; j++) {
-                        if (this.terceirizadosCalculosRescisao[j].codTerceirizadoContrato === this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('codTerceirizadoContrato').value) {
+                    for (let j = 0; j < this.calculosRescisao.length; j++) {
+                        if (this.calculosRescisao[j].codTerceirizadoContrato === this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('codTerceirizadoContrato').value) {
                             index = j;
                         }
                     }
                     if (index === -1) {
-                        this.terceirizadosCalculosRescisao.push(objeto);
+                        this.calculosRescisao.push(objeto);
                     } else {
-                        this.terceirizadosCalculosRescisao.splice(index, 1);
-                        this.terceirizadosCalculosRescisao.push(objeto);
+                        this.calculosRescisao.splice(index, 1);
+                        this.calculosRescisao.push(objeto);
                     }
                 } else {
                     aux = undefined;
@@ -132,9 +150,8 @@ export class ResgateRescisaoComponent implements OnInit {
         if (aux === 0) {
             this.openModal1();
         }
-        if ((this.terceirizadosCalculosRescisao.length > 0) && aux) {
-            this.diasConcedidos = [];
-            this.rescisaoService.calculaRescisaoTerceirizados(this.terceirizadosCalculosRescisao).subscribe(res => {
+        if ((this.calculosRescisao.length > 0) && aux) {
+            this.rescisaoService.calculaRescisaoTerceirizados(this.calculosRescisao).subscribe(res => {
                 if (!res.error) {
                     this.calculosRescisao = res;
                     this.openModal3();
