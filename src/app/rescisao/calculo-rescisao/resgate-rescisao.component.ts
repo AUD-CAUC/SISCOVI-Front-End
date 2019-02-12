@@ -38,7 +38,7 @@ export class ResgateRescisaoComponent implements OnInit {
         this.terceirizados.forEach(item => {
             const addCtrl = this.fb.group({
                 codTerceirizadoContrato: new FormControl(item.codTerceirizadoContrato),
-                tipoRescisao: new FormControl(),
+                tipoRescisao: new FormControl('SEM JUSTA CAUSA', [Validators.required]),
                 selected: new FormControl(this.isSelected),
                 tipoRestituicao: new FormControl(this.tipoRestituicao),
                 dataDesligamento: new FormControl(),
@@ -52,10 +52,10 @@ export class ResgateRescisaoComponent implements OnInit {
             this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('codTerceirizadoContrato').setValidators(Validators.required);
             this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('tipoRescisao').setValidators(Validators.required);
             this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('tipoRestituicao').setValidators(Validators.required);
-            this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataDesligamento');
+            this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataDesligamento').setValidators(Validators.required);
             this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasIntegrais');
             this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataFimFeriasIntegrais');
-            this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasPrpoporcionais');
+            this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasPrpoporcionais').setValidators(Validators.required);
         }
     }
     closeModal1() {
