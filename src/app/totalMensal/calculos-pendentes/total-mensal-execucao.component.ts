@@ -78,27 +78,6 @@ export class TotalMensalExecucaoComponent implements OnInit {
           });
           control.push(addCtrl);
         });
-      }
-    }
-    this.totalMensalFormAfter = this.fb.group({
-      calculosAvaliados: this.fb.array([])
-    });
-  }
-
-  defineCodigoContrato(contrato: Contrato) {
-    this.codigoContrato = contrato.codigo;
-    console.log(contrato);
-    if (this.totais.length > 0) {
-      this.totais = [];
-    }
-    this.totalMensalService.getTotaisPendentesExecucao(contrato.codigo).subscribe(res => {
-      if (res !== null) {
-        for (let i = 0; i < res.length; i++) {
-          res[i].codigoContrato = contrato.codigo;
-          res[i].nomeEmpresa = contrato.nomeDaEmpresa;
-          res[i].numeroContrato = contrato.numeroDoContrato;
-          this.totais[this.totais.length] = res[i];
-        }
 
         this.somaFerias = new Array(this.totais.length).fill(0);
         this.somaTerco = new Array(this.totais.length).fill(0);
@@ -116,6 +95,26 @@ export class TotalMensalExecucaoComponent implements OnInit {
             this.somaMultaFGTS[i] = this.somaMultaFGTS[i] + this.totais[i].totaisMensais.totais[j].multaFGTS;
             this.somaSaldo[i] = this.somaSaldo[i] + this.totais[i].totaisMensais.totais[j].total;
           }
+        }
+      }
+    }
+    this.totalMensalFormAfter = this.fb.group({
+      calculosAvaliados: this.fb.array([])
+    });
+  }
+
+  defineCodigoContrato(contrato: Contrato) {
+    this.codigoContrato = contrato.codigo;
+    if (this.totais.length > 0) {
+      this.totais = [];
+    }
+    this.totalMensalService.getTotaisPendentesExecucao(contrato.codigo).subscribe(res => {
+      if (res !== null) {
+        for (let i = 0; i < res.length; i++) {
+          res[i].codigoContrato = contrato.codigo;
+          res[i].nomeEmpresa = contrato.nomeDaEmpresa;
+          res[i].numeroContrato = contrato.numeroDoContrato;
+          this.totais[this.totais.length] = res[i];
         }
       }
       this.formInit();
