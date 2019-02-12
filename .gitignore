@@ -46,3 +46,4 @@ testem.log
 Thumbs.db
 
 src/app/_shared/config.service.ts
+src/app/_shared/config.service.ts
