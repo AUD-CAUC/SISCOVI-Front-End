@@ -13,16 +13,6 @@
 </div>
 <div class="row">
   <div class="input-field col s4">
-    <select id="selecao_ano" materialize="material_select">
-      <option disabled selected>Selecione o ano que deseja realizar o cálculo</option>
-      <option value="RESGATE">Resgate</option>
-      <option value="MOVIMENTACAO">Movimentação</option>
-    </select>
-    <label for="selecao_ano">Ano<span class="red-text"> *</span></label>
-  </div>
-</div>
-<div class="row">
-  <div class="input-field col s2">
     <select id="selecao_tipo_restituicao" materialize="material_select"
             (change)="defineTipoMovimentacao($event.target.value)">
       <option disabled selected>Selecione o tipo de restituição</option>
@@ -30,6 +20,16 @@
       <option value="MOVIMENTACAO">Movimentação</option>
     </select>
     <label for="selecao_tipo_restituicao">Tipo de Restituição<span class="red-text"> *</span></label>
+  </div>
+</div>
+<div class="row">
+  <div class="input-field col s2">
+    <select id="selecao_ano" materialize="material_select" materialize="material_select"
+            [materializeSelectOptions]="listaAnos" (change)="defineAnoCalculo($event.target.value)">
+      <option disabled selected>Selecione o ano</option>
+      <option *ngFor="let ano of listaAnos" [value]="ano">{{ano}}</option>
+    </select>
+    <label for="selecao_ano">Ano<span class="red-text"> *</span></label>
   </div>
 </div>
 <div *ngIf="terceirizados && (tipoRestituicao == 'MOVIMENTACAO')" class="row">

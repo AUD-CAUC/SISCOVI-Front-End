@@ -1,15 +1,15 @@
-import {EventEmitter, Injectable, Output} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
 import {ConfigService} from '../_shared/config.service';
-import {Observable} from 'rxjs/Observable';
 import {TerceirizadoDecimoTerceiro} from './terceirizado-decimo-terceiro';
 import {DecimoTerceiroPendente} from './decimo-terceiro-pendente/decimo-terceiro-pendente';
 
 @Injectable()
 export class DecimoTerceiroService {
     constructor(private http: Http, private config: ConfigService) {}
-    getFuncionariosDecimoTerceiro(codigoContrato: number, tipoRestituicao: string) {
-        const url = this.config.myApi + '/decimo-terceiro/getTerceirizadosDecimoTerceiro=' + codigoContrato + '/' + tipoRestituicao;
+    getFuncionariosDecimoTerceiro(codigoContrato: number, tipoRestituicao: string, ano: number) {
+        const url = this.config.myApi + '/decimo-terceiro/getTerceirizadosDecimoTerceiro=' +
+          codigoContrato + '/' + tipoRestituicao + '/' + ano;
         return this.http.get(url).map(res => res.json());
     }
     /*calculaFeriasTerceirizados(decimoTerceiro: DecimoTerceiroCalcular[]) {
@@ -125,5 +125,11 @@ export class DecimoTerceiroService {
     getRestituicoesDecimoTerceiro(codigoContrato: number) {
         const url = this.config.myApi + '/decimo-terceiro/getRestituicoes/' + codigoContrato + '/' + this.config.user.id;
         return this.http.get(url).map(res => res.json());
+    }
+
+    public getAnos(codigoContrato: number) {
+      const url = this.config.myApi + '/decimo-terceiro/getAnosCalculoDecimoTerceiro/' +
+        codigoContrato + '/' + this.config.user.username;
+      return this.http.get(url).map(res => res.json());
     }
 }
