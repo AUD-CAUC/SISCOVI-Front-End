@@ -83,18 +83,19 @@
                     <td>{{total.multaFGTS | currency:'BRL':true:'1.2-2'}}</td>
                     <td>{{total.total | currency:'BRL':true:'1.2-2'}}</td>
                 </tr>
+                <tr>
+                  <td ><b>Somatório</b></td>
+                  <td ><b>{{somaFerias| currency:'BRL':true:'1.2-2'}}</b></td>
+                  <td ><b>{{somaTerco| currency:'BRL':true:'1.2-2'}}</b></td>
+                  <td ><b>{{somaDecimo| currency:'BRL':true:'1.2-2'}}</b></td>
+                  <td ><b>{{somaIncidencia| currency:'BRL':true:'1.2-2'}}</b></td>
+                  <td ><b>{{somaMultaFGTS| currency:'BRL':true:'1.2-2'}}</b></td>
+                  <td ><b>{{somaSaldo| currency:'BRL':true:'1.2-2'}}</b></td>
+                </tr>
                 </tbody>
 
                 <tfoot>
-                <tr>
-                  <th >Somatório</th>
-                  <th >{{somaFerias| currency:'BRL':true:'1.2-2'}}</th>
-                  <th >{{somaTerco| currency:'BRL':true:'1.2-2'}}</th>
-                  <th >{{somaDecimo| currency:'BRL':true:'1.2-2'}}</th>
-                  <th >{{somaIncidencia| currency:'BRL':true:'1.2-2'}}</th>
-                  <th >{{somaMultaFGTS| currency:'BRL':true:'1.2-2'}}</th>
-                  <th >{{somaSaldo| currency:'BRL':true:'1.2-2'}}</th>
-                </tr>
+
                 </tfoot>
             </table>
         </div>
