@@ -87,12 +87,7 @@ export  class MovimentacaoRescisaoComponent implements  OnInit {
         this.navegaParaViewDeCalculos.emit(this.codigoContrato);
     }
     efetuarCalculo(): void {
-        this.rescisaoService.registrarCalculoRescisao(this.terceirizadosCalculosRescisao).subscribe(res => {
-            if (res.success) {
-                this.closeModal3();
-                this.openModal4();
-            }
-        });
+
     }/*
     verificaDadosFormulario() {
         let aux = 0;

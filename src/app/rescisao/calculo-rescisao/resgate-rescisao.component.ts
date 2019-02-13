@@ -38,7 +38,7 @@ export class ResgateRescisaoComponent implements OnInit {
         this.terceirizados.forEach(item => {
             const addCtrl = this.fb.group({
                 codTerceirizadoContrato: new FormControl(item.codTerceirizadoContrato),
-                tipoRescisao: new FormControl('SEM JUSTA CAUSA', [Validators.required]),
+                tipoRescisao: new FormControl('SEM JUSTA CAUSA'),
                 selected: new FormControl(this.isSelected),
                 tipoRestituicao: new FormControl(this.tipoRestituicao),
                 dataDesligamento: new FormControl(),
@@ -49,13 +49,13 @@ export class ResgateRescisaoComponent implements OnInit {
             control.push(addCtrl);
         });
         for (let i = 0; i < this.terceirizados.length; i++) {
-            this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('codTerceirizadoContrato').setValidators(Validators.required);
-            this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('tipoRescisao').setValidators(Validators.required);
-            this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('tipoRestituicao').setValidators(Validators.required);
-            this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataDesligamento').setValidators(Validators.required);
+            this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('codTerceirizadoContrato');
+            this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('tipoRescisao');
+            this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('tipoRestituicao');
+            this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataDesligamento');
             this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasIntegrais');
             this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataFimFeriasIntegrais');
-            this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasPrpoporcionais').setValidators(Validators.required);
+            this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasPrpoporcionais');
         }
     }
     closeModal1() {
@@ -84,7 +84,7 @@ export class ResgateRescisaoComponent implements OnInit {
         this.navegaParaViewDeCalculos.emit(this.codigoContrato);
     }
     efetuarCalculo(): void {
-        this.rescisaoService.registrarCalculoRescisao(this.terceirizados).subscribe(res => {
+        this.rescisaoService.registrarCalculoRescisao(this.calculosRescisao).subscribe(res => {
             if (res.success) {
                 this.closeModal3();
                 this.openModal4();
@@ -153,6 +153,7 @@ export class ResgateRescisaoComponent implements OnInit {
                 this.terceirizados.forEach(terceirizado => {
                   if (terceirizado.codTerceirizadoContrato === this.calculosRescisao[i].codTerceirizadoContrato) {
                     terceirizado.valorRestituicaoRescisao = res;
+                    this.calculosRescisao[i].inicioContagemDecimoTerceiro = terceirizado.valorRestituicaoRescisao.inicioContagemDecimoTerceiro;
                     this.calculosRescisao[i].totalDecimoTerceiro = terceirizado.valorRestituicaoRescisao.valorDecimoTerceiro;
                     this.calculosRescisao[i].totalIncidenciaDecimoTerceiro = terceirizado.valorRestituicaoRescisao.valorIncidenciaDecimoTerceiro;
                     this.calculosRescisao[i].totalMultaFgtsDecimoTerceiro = terceirizado.valorRestituicaoRescisao.valorFGTSDecimoTerceiro;

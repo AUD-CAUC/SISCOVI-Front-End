@@ -8,6 +8,7 @@ export class RescisaoCalcular {
   fimFeriasIntegrais: Date;
   inicioFeriasProporcionais: Date;
   fimFeriasProporcionais: Date;
+  inicioContagemDecimoTerceiro: Date;
   valorFeriasVencidasMovimentado: number;
   valorFeriasProporcionaisMovimentado: number;
   valorDecimoTerceiroMovimentado: number;
@@ -102,6 +103,8 @@ export class RescisaoCalcular {
   public getInicioFeriasProporcionais(): Date { return this.inicioFeriasProporcionais; }
 
   public getFimFeriasProporcionais(): Date { return this.fimFeriasProporcionais; }
+
+  public getInicioContagemDecimoTerceiro(): Date { return this.inicioContagemDecimoTerceiro; }
 
   public getValorFeriasVencidasMovimentado(): number { return this.valorFeriasVencidasMovimentado; }
 
