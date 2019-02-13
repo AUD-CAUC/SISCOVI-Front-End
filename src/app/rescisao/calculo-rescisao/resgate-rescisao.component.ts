@@ -41,10 +41,10 @@ export class ResgateRescisaoComponent implements OnInit {
                 tipoRescisao: new FormControl('SEM JUSTA CAUSA'),
                 selected: new FormControl(this.isSelected),
                 tipoRestituicao: new FormControl(this.tipoRestituicao),
-                dataDesligamento: new FormControl(),
-                dataInicioFeriasIntegrais: new FormControl(),
-                dataFimFeriasIntegrais: new FormControl(),
-                dataInicioFeriasProporcionais: new FormControl()
+                dataDesligamento: new FormControl(''),
+                dataInicioFeriasIntegrais: new FormControl(''),
+                dataFimFeriasIntegrais: new FormControl(''),
+                dataInicioFeriasProporcionais: new FormControl('')
             });
             control.push(addCtrl);
         });

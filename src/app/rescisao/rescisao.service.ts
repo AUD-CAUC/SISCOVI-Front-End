@@ -56,7 +56,7 @@ export class RescisaoService {
           'fimFeriasIntegrais': fimFeriasIntegrais.toISOString().split('T')[0],
           'inicioFeriasProporcionais': inicioFeriasProporcionais.toISOString().split('T')[0],
           'fimFeriasProporcionais': dataDesligamento.toISOString().split('T')[0],
-          'inicioContagemDecimoTerceiro': inicioContagemDecimoTerceiro.toISOString().split('T')[0],
+          'inicioContagemDecimoTerceiro': rescisao.getInicioContagemDecimoTerceiro(),
           'valorFeriasVencidasMovimentado': rescisao.getValorFeriasVencidasMovimentado(),
           'valorFeriasProporcionaisMovimentado': rescisao.getValorFeriasProporcionaisMovimentado(),
           'valorDecimoTerceiroMovimentado': rescisao.getValorDecimoTerceiroMovimentado(),
@@ -75,7 +75,8 @@ export class RescisaoService {
           'totalIncidenciaTercoProporcional': rescisao.getTotalIncidenciaTercoProporcional(),
           'totalMultaFgtsFeriasProporcionais': rescisao.getTotalMultaFgtsFeriasProporcionais(),
           'totalMultaFgtsTercoProporcional': rescisao.getTotalMultaFgtsTercoProporcional(),
-          'totalMultaFgtsSalario': rescisao.getTotalMultaFgtsSalario()
+          'totalMultaFgtsSalario': rescisao.getTotalMultaFgtsSalario(),
+          'username': this.config.user.username
         };
         data.push(val);
       });

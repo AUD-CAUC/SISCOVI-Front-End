@@ -43,7 +43,7 @@ export class TerceirizadoRescisao {
         return this._dataDesligamento;
     }
 
-    get dataInicioFerciasIntegrais(): Date {
+    get dataInicioFeriasIntegrais(): Date {
       return this._dataInicioFeriasIntegrais;
     }
 
