@@ -27,12 +27,12 @@ export class TotalMensalService {
         const url = this.configService.myApi + '/total-mensal-a-reter/getValoresPendentesExecucao/' + codigoContrato + '/' + this.configService.user.id;
         return this.http.get(url).map(res => res.json());
     }
-    public enviarAvaliacaoCalculosTotalMensal(codigoContrato: number, totaisMensaisAvaliados: TotalMensalPendente[]) {
-        const val = [];
-        totaisMensaisAvaliados.forEach(item => {
+    public enviarAvaliacaoCalculosTotalMensal(codigoContrato: number, totaisMensaisAvaliados: TotalMensalPendente) {
+      const val = [];
+        // totaisMensaisAvaliados.forEach(item => {
             const valor = [];
             let object2 = {};
-            item.totaisMensais.totais.forEach(total => {
+      totaisMensaisAvaliados.totaisMensais.totais.forEach(total => {
                 object2 = {
                     funcao: total.funcao,
                     ferias: total.ferias,
@@ -46,16 +46,16 @@ export class TotalMensalService {
                 valor.push(object2);
             });
             const totaiMensais = {
-                dataReferencia: item.totaisMensais.dataReferencia,
+                dataReferencia: totaisMensaisAvaliados.totaisMensais.dataReferencia,
                 totais: valor
             };
             const object1 = {
-                observacoes: JSON.parse(JSON.stringify(item.observacoes)),
-                status: JSON.parse(JSON.stringify(item.status)),
+                observacoes: JSON.parse(JSON.stringify(totaisMensaisAvaliados.observacoes)),
+                status: JSON.parse(JSON.stringify(totaisMensaisAvaliados.status)),
                 totaisMensais: JSON.parse(JSON.stringify(totaiMensais))
             };
             val.push(object1);
-        });
+       // });
         const object = {
             totalMensalPendenteModels: val,
             codigoContrato: codigoContrato,
@@ -64,12 +64,12 @@ export class TotalMensalService {
         const url = this.configService.myApi + '/total-mensal-a-reter/enviarAvaliacaoCalculosTotalMensal';
         return this.http.post(url, object).map(res => res.json());
     }
-    public enviarExecucaoCalculosTotalMensal(codigoContrato: number, totaisMensaisAvaliados: TotalMensalPendente[]) {
+    public enviarExecucaoCalculosTotalMensal(codigoContrato: number, totaisMensaisAvaliados: TotalMensalPendente) {
         const val = [];
-        totaisMensaisAvaliados.forEach(item => {
+        // totaisMensaisAvaliados.forEach(item => {
             const valor = [];
             let object2 = {};
-            item.totaisMensais.totais.forEach(total => {
+            totaisMensaisAvaliados.totaisMensais.totais.forEach(total => {
                 object2 = {
                     funcao: total.funcao,
                     ferias: total.ferias,
@@ -83,16 +83,16 @@ export class TotalMensalService {
                 valor.push(object2);
             });
             const totaiMensais = {
-                dataReferencia: item.totaisMensais.dataReferencia,
+                dataReferencia: totaisMensaisAvaliados.totaisMensais.dataReferencia,
                 totais: valor
             };
             const object1 = {
-                observacoes: JSON.parse(JSON.stringify(item.observacoes)),
-                status: JSON.parse(JSON.stringify(item.status)),
+                observacoes: JSON.parse(JSON.stringify(totaisMensaisAvaliados.observacoes)),
+                status: JSON.parse(JSON.stringify(totaisMensaisAvaliados.status)),
                 totaisMensais: JSON.parse(JSON.stringify(totaiMensais))
             };
             val.push(object1);
-        });
+        // });
         const object = {
             totalMensalPendenteModels: val,
             codigoContrato: codigoContrato,

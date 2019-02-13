@@ -175,20 +175,18 @@
                 <td>{{ferias.pTotalIncidenciaTerco | currency:'BRL':true:'1.2-2'}}</td>
                 <td>{{ferias.pTotalFerias + ferias.pTotalIncidenciaFerias + ferias.pTotalTercoConstitucional + ferias.pTotalIncidenciaTerco | currency:'BRL':true:'1.2-2'}}</td>
             </tr>
-            </tbody>
-            <tfoot>
-            <tr>
-              <th >Somatório</th>
-              <th > </th>
-              <th > </th>
-              <th > </th>
-              <th >{{somaFerias| currency:'BRL':true:'1.2-2'}}</th>
-              <th >{{somaTerco| currency:'BRL':true:'1.2-2'}}</th>
-              <th >{{somaIncidenciaFerias| currency:'BRL':true:'1.2-2'}}</th>
-              <th >{{somaIncidenciaTerco| currency:'BRL':true:'1.2-2'}}</th>
-              <th >{{somaFerias + somaTerco + somaIncidenciaFerias + somaIncidenciaTerco| currency:'BRL':true:'1.2-2'}}</th>
+            <tr class="black-text soma">
+              <td><b>Somatório</b></td>
+              <td><b></b></td>
+              <td><b></b></td>
+              <td><b></b></td>
+              <td><b>{{somaFerias| currency:'BRL':true:'1.2-2'}}</b></td>
+              <td><b>{{somaTerco| currency:'BRL':true:'1.2-2'}}</b></td>
+              <td><b>{{somaIncidenciaFerias| currency:'BRL':true:'1.2-2'}}</b></td>
+              <td><b>{{somaIncidenciaTerco| currency:'BRL':true:'1.2-2'}}</b></td>
+              <td><b>{{somaFerias + somaTerco + somaIncidenciaFerias + somaIncidenciaTerco| currency:'BRL':true:'1.2-2'}}</b></td>
             </tr>
-            </tfoot>
+            </tbody>
         </table>
     </div>
     <div class="modal-footer">
