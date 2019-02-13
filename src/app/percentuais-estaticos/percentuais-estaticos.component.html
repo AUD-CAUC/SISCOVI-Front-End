@@ -1,5 +1,19 @@
 <div class="container">
   <h2 class="center">Percentuais Estáticos</h2>
+  <div class="row">
+    <div class="col left">
+      <button class="btn waves-effect" (click)="openModal()">Cadastrar Novo Percentual Estático</button>
+    </div>
+    <div id="modal1" class="modal bottom-sheet" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions">
+      <div class="modal-content">
+        <app-cadastrar-percentual-estatico *ngIf="render"></app-cadastrar-percentual-estatico>
+      </div>
+      <div class="modal-footer">
+        <button class="btn waves-effect left" (click)="closeModal()">Cancelar</button>
+        <button class="btn waves-effect right" (click)="cadastraPercentualEstatico()">Cadastrar</button>
+      </div>
+    </div>
+  </div>
 </div>
 <div class="container">
     <div class="row">

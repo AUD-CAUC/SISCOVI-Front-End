@@ -1,6 +1,7 @@
-import {Component} from '@angular/core';
-import {RubricasService} from '../rubricas/rubricas.service';
-import {PercentualEstatico} from '../rubricas/percentual-estatico';
+import {Component, EventEmitter} from '@angular/core';
+import {PercentualEstaticoService} from './percentual-estatico.service';
+import {PercentualEstatico} from './percentual-estatico';
+import {MaterializeAction} from 'angular2-materialize';
 
 @Component({
   selector: 'app-percent-static',
@@ -9,8 +10,11 @@ import {PercentualEstatico} from '../rubricas/percentual-estatico';
 })
 export class PercentuaisEstaticosComponent {
   staticPercent: PercentualEstatico[] = [];
-  constructor(rubricaSer: RubricasService) {
-    rubricaSer.getPercentuaisEstaticos().subscribe(res => {
+  render = false;
+  percentualEstaticoService: PercentualEstaticoService;
+  modalActions = new EventEmitter<string|MaterializeAction>();
+  constructor(percentualEstaticoService: PercentualEstaticoService) {
+    percentualEstaticoService.getPercentuaisEstaticos().subscribe(res => {
       this.staticPercent = res;
       this.staticPercent.forEach( (percentual) => {
         if (percentual.dataFim === null) {
@@ -23,6 +27,28 @@ export class PercentuaisEstaticosComponent {
           percentual.dataAditamento = '-';
         }
       });
+    });
+  }
+
+  openModal() {
+    this.render = true;
+    this.modalActions.emit({action: 'modal', params: ['open']});
+  }
+  closeModal() {
+    this.render = false;
+    // ???this.rubricaService.setValdity(true);
+    this.modalActions.emit({action: 'modal', params: ['close']});
+  }
+
+  cadastraPercentualEstatico() {
+    this.percentualEstaticoService.cadastrarPercentualEstatico().subscribe(res => {
+      if (res === 'Rubrica Cadastrada Com sucesso !') {
+        this.percentualEstaticoService.getPercentuaisEstaticos().subscribe(res2 => {
+          this.staticPercent.slice();
+          this.staticPercent = res2;
+          this.closeModal();
+        });
+      }
     });
   }
 }
