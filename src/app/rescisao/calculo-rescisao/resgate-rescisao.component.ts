@@ -1,11 +1,15 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MaterializeAction} from 'angular2-materialize';
 import {TerceirizadoRescisao} from '../terceirizado-rescisao';
 import {RescisaoService} from '../rescisao.service';
 import {CalculoRescisao} from '../calculo-rescisao';
 import {RescisaoCalcular} from '../rescisao-calcular';
 import {Contrato} from '../../contratos/contrato';
+import {Funcionario} from '../../funcionarios/funcionario';
+import {Error} from '../../_shared/error';
+import {Observable} from 'rxjs/Observable';
+import {map} from 'rxjs/operators';
 
 @Component({
     selector: 'app-resgate-rescisao-component',
@@ -26,7 +30,7 @@ export class ResgateRescisaoComponent implements OnInit {
     modalActions3 = new EventEmitter<string | MaterializeAction>();
     modalActions4 = new EventEmitter<string | MaterializeAction>();
     @Output() navegaParaViewDeCalculos = new EventEmitter();
-    constructor(private fb: FormBuilder, private rescisaoService: RescisaoService) { }
+    constructor(private fb: FormBuilder, private rescisaoService: RescisaoService, private ref: ChangeDetectorRef) { }
     ngOnInit() {
         this.formInit();
     }
@@ -53,10 +57,16 @@ export class ResgateRescisaoComponent implements OnInit {
             this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('tipoRescisao');
             this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('tipoRestituicao');
             this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataDesligamento');
-            this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasIntegrais');
-            this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataFimFeriasIntegrais');
-            this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasPrpoporcionais');
+          this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasIntegrais').setValue(this.dateToString(this.terceirizados[i].pDataInicioFeriasIntegrais));
+            this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataFimFeriasIntegrais').setValue(this.dateToString(this.terceirizados[i].pDataFimFeriasIntegrais));
+            this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasProporcionais').setValue(this.dateToString(this.terceirizados[i].pDataInicioFeriasProporcionais));
         }
+    }
+    private dateToString(value: any): string {
+      console.log(this.terceirizados);
+      console.log(value);
+      const date: string[] = value.split('-');
+      return date[2] + '/' + date[1] + '/' + date['0'];
     }
     closeModal1() {
         this.modalActions.emit({action: 'modal', params: ['close']});

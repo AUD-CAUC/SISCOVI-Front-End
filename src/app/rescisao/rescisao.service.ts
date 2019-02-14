@@ -22,7 +22,7 @@ export class RescisaoService {
           'codTerceirizadoContrato': rescisaoCalcular.getCodTerceirizadoContrato(),
           'tipoRestituicao': rescisaoCalcular.getTipoRestituicao(),
           'tipoRescisao': rescisaoCalcular.getTipoRescisao(),
-          'dataDesligamento': dataDesligamento.toISOString().split('T')[0],
+          'dataDesligamento': rescisaoCalcular.getDataDesligamento(),
           'inicioFeriasIntegrais': inicioFeriasIntegrais.toISOString().split('T')[0],
           'fimFeriasIntegrais': fimFeriasIntegrais.toISOString().split('T')[0],
           'inicioFeriasProporcionais': inicioFeriasProporcionais.toISOString().split('T')[0],

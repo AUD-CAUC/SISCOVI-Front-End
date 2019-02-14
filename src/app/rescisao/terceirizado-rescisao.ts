@@ -4,10 +4,10 @@ export class TerceirizadoRescisao {
     private _codTerceirizadoContrato: number;
     private _nomeTerceirizado: string;
     private _dataDesligamento: Date;
-    private _dataInicioFeriasIntegrais: Date;
-    private _dataFimFeriasIntegrais: Date;
-    private _dataInicioFeriasProporcionais: Date;
-    private _dataFimFeriasProporcionais: Date;
+    private _pDataInicioFeriasIntegrais: Date;
+    private _pDataFimFeriasIntegrais: Date;
+    private _pDataInicioFeriasProporcionais: Date;
+    private _pDataFimFeriasProporcionais: Date;
     private _tipoRescisao: string;
     private _tipoRestituicao: string;
     private _valorRestituicaoRescisao: ValorRestituicaoRescisao;
@@ -43,20 +43,20 @@ export class TerceirizadoRescisao {
         return this._dataDesligamento;
     }
 
-    get dataInicioFeriasIntegrais(): Date {
-      return this._dataInicioFeriasIntegrais;
+    get pDataInicioFeriasIntegrais(): Date {
+      return this._pDataInicioFeriasIntegrais;
     }
 
-    get dataFimFeriasIntegrais(): Date {
-      return this._dataFimFeriasIntegrais;
+    get pDataFimFeriasIntegrais(): Date {
+      return this._pDataFimFeriasIntegrais;
     }
 
-    get dataInicioFeriasProporcionais(): Date {
-      return this._dataInicioFeriasProporcionais;
+    get pDataInicioFeriasProporcionais(): Date {
+      return this._pDataInicioFeriasProporcionais;
     }
 
-    get dataFimFeriasProporcionais(): Date {
-      return this._dataFimFeriasProporcionais;
+    get pDataFimFeriasProporcionais(): Date {
+      return this._pDataFimFeriasProporcionais;
     }
 
     get tipoRescisao(): string {
