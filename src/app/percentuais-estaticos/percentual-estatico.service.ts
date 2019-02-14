@@ -10,10 +10,9 @@ export class PercentualEstaticoService {
   private headers: Headers;
   disabled = true;
   validity = true;
-  rubrica: string;
+  nome: string;
   percentual: number;
   dataInicio: any;
-  dataFim: any;
   dataAditamento: any;
   constructor(private config: ConfigService, private http: Http) {
     this.headers = new Headers(
@@ -36,13 +35,14 @@ export class PercentualEstaticoService {
   cadastrarPercentualEstatico() {
     const cadastroPercentualEstatico = new CadastroPercentualEstatico();
     cadastroPercentualEstatico.percentualEstatico = new PercentualEstatico();
-    cadastroPercentualEstatico.percentualEstatico.rubrica = this.rubrica;
+    cadastroPercentualEstatico.percentualEstatico.nome = this.nome;
     cadastroPercentualEstatico.percentualEstatico.percentual = this.percentual;
     cadastroPercentualEstatico.percentualEstatico.dataInicio = this.dataInicio;
-    cadastroPercentualEstatico.percentualEstatico.dataFim = this.dataFim;
+    cadastroPercentualEstatico.percentualEstatico.dataFim = null;
     cadastroPercentualEstatico.percentualEstatico.dataAditamento = this.dataAditamento;
     cadastroPercentualEstatico.currentUser = this.config.user.username;
-    const url = this.config.myApi + '/rubricas/criarRubrica';
+    console.log(cadastroPercentualEstatico);
+    const url = this.config.myApi + '/rubricas/criarRubrica2';
     const data = cadastroPercentualEstatico;
     const headers = new Headers({'Content-type': 'application/json'});
     const options = new RequestOptions({headers: headers});

@@ -18,25 +18,24 @@ export class CadastrarPercentualEstaticoComponent {
   percentualEstaticoService: PercentualEstaticoService;
   id: number;
   notValidEdit = true;
+  private codigoRubrica: any;
   constructor(fb: FormBuilder, percentualEstaticoService: PercentualEstaticoService, route: ActivatedRoute, router: Router) {
     this.router = router;
     this.route = route;
     this.percentualEstaticoService = percentualEstaticoService;
     this.percentualEstaticoForm = fb.group({
-      rubrica: new FormControl('', [Validators.required]),
+      nome: new FormControl('', [Validators.required]),
       percentual: new FormControl('', [Validators.required]),
       dataInicio: new FormControl('', Validators.required),
-      dataFim: new FormControl('', Validators.required),
       dataAditamento: new FormControl('', Validators.required),
     });
   }
 
   validateForm() {
     if (this.percentualEstaticoForm.status === 'VALID') {
-      this.percentualEstaticoService.rubrica = this.percentualEstaticoForm.controls.rubrica.value;
+      this.percentualEstaticoService.nome = this.percentualEstaticoForm.controls.nome.value;
       this.percentualEstaticoService.percentual = this.percentualEstaticoForm.controls.percentual.value;
       this.percentualEstaticoService.dataInicio = this.percentualEstaticoForm.controls.dataInicio.value;
-      this.percentualEstaticoService.dataFim = this.percentualEstaticoForm.controls.dataFim.value;
       this.percentualEstaticoService.dataAditamento = this.percentualEstaticoForm.controls.dataAditamento.value;
       this.percentualEstaticoService.setValdity(false);
     }else {
@@ -45,17 +44,15 @@ export class CadastrarPercentualEstaticoComponent {
   }
   activateButton(): void {
     if (this.id) {
-      if ((this.percentualEstaticoService.rubrica !== this.percentualEstatico.nome) ||
+      if ((this.percentualEstaticoService.nome !== this.percentualEstatico.nome) ||
         (this.percentualEstaticoService.percentual !== this.percentualEstatico.percentual) ||
         (this.percentualEstaticoService.dataInicio !== this.percentualEstatico.dataInicio) ||
-        (this.percentualEstaticoService.dataFim !== this.percentualEstatico.dataInicio) ||
         (this.percentualEstaticoService.dataAditamento !== this.percentualEstatico.dataAditamento)
       ) {
         this.notValidEdit = false;
-      }else if ((this.percentualEstaticoService.rubrica === this.percentualEstatico.nome) ||
+      }else if ((this.percentualEstaticoService.nome === this.percentualEstatico.nome) ||
         (this.percentualEstaticoService.percentual === this.percentualEstatico.percentual) ||
         (this.percentualEstaticoService.dataInicio === this.percentualEstatico.dataInicio) ||
-        (this.percentualEstaticoService.dataFim === this.percentualEstatico.dataInicio) ||
         (this.percentualEstaticoService.dataAditamento === this.percentualEstatico.dataAditamento)) {
         this.notValidEdit = true;
       }
@@ -65,7 +62,8 @@ export class CadastrarPercentualEstaticoComponent {
     this.notValidEdit = true;
   }
 
-  salvarAlteracao() {
-
+  onChange(value: any) {
+    console.log(value);
+    this.codigoRubrica = value;
   }
 }

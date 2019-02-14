@@ -2,6 +2,7 @@ import {Component, EventEmitter} from '@angular/core';
 import {PercentualEstaticoService} from './percentual-estatico.service';
 import {PercentualEstatico} from './percentual-estatico';
 import {MaterializeAction} from 'angular2-materialize';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-percent-static',
@@ -14,6 +15,7 @@ export class PercentuaisEstaticosComponent {
   percentualEstaticoService: PercentualEstaticoService;
   modalActions = new EventEmitter<string|MaterializeAction>();
   constructor(percentualEstaticoService: PercentualEstaticoService) {
+    this.percentualEstaticoService = percentualEstaticoService;
     percentualEstaticoService.getPercentuaisEstaticos().subscribe(res => {
       this.staticPercent = res;
       this.staticPercent.forEach( (percentual) => {
