@@ -17,75 +17,80 @@
 </div>
 <div class="row">
   <form [formGroup]="feriasForm" *ngIf="calculosPendentes">
-    <div class="col  l12" formArrayName="avaliacaoCalculoFerias">
-      <table *ngIf="codigoContrato && calculosPendentes" class="highlight centered responsive-table">
-        <thead>
-        <tr>
-          <th *ngIf="config.user.perfil.sigla == 'ADMINISTRADOR'">
-            <input type="checkbox" class="checkbox-black" id="test5" (change)="isSelected = !isSelected"/>
-            <label for="test5"></label>
-          </th>
-          <th *ngIf="config.user.perfil.sigla == 'ADMINISTRADOR'">Avaliação</th>
-          <th *ngIf="config.user.perfil.sigla == 'USUÁRIO'">Status</th>
-          <th>Terceirizado</th>
-          <th>Função</th>
-          <th>Tipo de Restituição</th>
-          <th>Parcela</th>
-          <th>Início do Periodo Aquisitivo</th>
-          <th>Fim do Periodo Aquisitivo</th>
-          <th>Início do Usufruto</th>
-          <th>Fim do Usufruto</th>
-          <th>Dias Vendidos</th>
-          <th>Valor de Férias</th>
-          <th>Valor de 1/3</th>
-          <th>Incidência Sobre Férias</th>
-          <th>Incidência Sobre 1/3</th>
-          <th>Total</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let calculos of calculosPendentes; let k = index">
-          <td *ngIf="config.user.perfil.sigla == 'ADMINISTRADOR'">
-            <div [formGroupName]="k">
-              <input type="checkbox" class="checkbox-black" [checked]="isSelected" [ngModel]="isSelected"
-                     formControlName="selected" id="{{k}}"/>
-              <label for="{{k}}"></label>
-            </div>
-          </td>
-          <td *ngIf="config.user.perfil.sigla == 'ADMINISTRADOR'">
-            <div [formGroupName]="k">
-              <div class="row">
-                <div class="input-field col s12">
-                  <select materialize="material_select" formControlName="avaliacao">
-                    <option value="S">APROVAR</option>
-                    <option value="N">REJEITAR</option>
-                  </select>
+    <div formArrayName="contratos">
+      <div class="col  l12" *ngFor="let calculoPendente of calculosPendentes; let i = index">
+        <h6><b>{{calculoPendente.titulo}}</b></h6>
+        <table *ngIf="calculosPendentes" class="highlight centered responsive-table"
+               [formGroupName]="i">
+          <thead>
+          <tr>
+            <th *ngIf="config.user.perfil.sigla == 'ADMINISTRADOR'">
+              <input type="checkbox" class="checkbox-black" id="test5" (change)="isSelected = !isSelected"/>
+              <label for="test5"></label>
+            </th>
+            <th *ngIf="config.user.perfil.sigla == 'ADMINISTRADOR'">Avaliação</th>
+            <th *ngIf="config.user.perfil.sigla == 'USUÁRIO'">Status</th>
+            <th>Terceirizado</th>
+            <th>Função</th>
+            <th>Tipo de Restituição</th>
+            <th>Parcela</th>
+            <th>Início do Periodo Aquisitivo</th>
+            <th>Fim do Periodo Aquisitivo</th>
+            <th>Início do Usufruto</th>
+            <th>Fim do Usufruto</th>
+            <th>Dias Vendidos</th>
+            <th>Valor de Férias</th>
+            <th>Valor de 1/3</th>
+            <th>Incidência Sobre Férias</th>
+            <th>Incidência Sobre 1/3</th>
+            <th>Total</th>
+          </tr>
+          </thead>
+          <tbody formArrayName="avaliacaoCalculoFerias">
+          <p>{{avaliacaoCalculoFerias | json}}</p>
+          <tr *ngFor="let calculos of calculoPendente.calculos; let k = index">
+            <td *ngIf="config.user.perfil.sigla == 'ADMINISTRADOR'">
+              <div [formGroupName]="k">
+                <input type="checkbox" class="checkbox-black" [checked]="isSelected" [ngModel]="isSelected"
+                       formControlName="selected" id="{{k}}"/>
+                <label for="{{k}}"></label>
+              </div>
+            </td>
+            <td *ngIf="config.user.perfil.sigla == 'ADMINISTRADOR'">
+              <div [formGroupName]="k">
+                <div class="row">
+                  <div class="input-field col s12">
+                    <select materialize="material_select" formControlName="avaliacao">
+                      <option value="S">APROVAR</option>
+                      <option value="N">REJEITAR</option>
+                    </select>
+                  </div>
                 </div>
               </div>
-            </div>
-          </td>
-          <td *ngIf="config.user.perfil.sigla == 'USUÁRIO'">{{calculos.status}}</td>
-          <td class="hoverable">{{calculos.nomeTerceirizado}}</td>
-          <td class="hoverable">{{calculos.nomeCargo}}</td>
-          <td class="hoverable">{{calculos.calcularFeriasModel.tipoRestituicao}}</td>
-          <td class="hoverable">{{calculos.calcularFeriasModel.parcelas | parcelaPipe}}</td>
-          <td class="hoverable">{{calculos.calcularFeriasModel.inicioPeriodoAquisitivo | date: 'shortDate'}}</td>
-          <td class="hoverable">{{calculos.calcularFeriasModel.fimPeriodoAquisitivo | date: 'shortDate'}}</td>
-          <td class="hoverable">{{calculos.calcularFeriasModel.inicioFerias | date: 'shortDate'}}</td>
-          <td class="hoverable">{{calculos.calcularFeriasModel.fimFerias | date: 'shortDate'}}</td>
-          <td class="hoverable">{{calculos.calcularFeriasModel.diasVendidos}}</td>
-          <td class="hoverable">{{calculos.calcularFeriasModel.pTotalFerias | currency:'BRL':true:'1.2-2'}}</td>
-          <td class="hoverable">{{calculos.calcularFeriasModel.pTotalTercoConstitucional |
-            currency:'BRL':true:'1.2-2'}}
-          </td>
-          <td class="hoverable">{{calculos.calcularFeriasModel.pTotalIncidenciaFerias | currency:'BRL':true:'1.2-2'}}
-          </td>
-          <td class="hoverable">{{calculos.calcularFeriasModel.pTotalIncidenciaTerco | currency:'BRL':true:'1.2-2'}}
-          </td>
-          <td class="hoverable"><b>{{calculos.total | currency:'BRL':true:'1.2-2'}}</b></td>
-        </tr>
-        </tbody>
-      </table>
+            </td>
+            <td *ngIf="config.user.perfil.sigla == 'USUÁRIO'">{{calculos.status}}</td>
+            <td class="hoverable">{{calculos.nomeTerceirizado}}</td>
+            <td class="hoverable">{{calculos.nomeCargo}}</td>
+            <td class="hoverable">{{calculos.calcularFeriasModel.tipoRestituicao}}</td>
+            <td class="hoverable">{{calculos.calcularFeriasModel.parcelas | parcelaPipe}}</td>
+            <td class="hoverable">{{calculos.calcularFeriasModel.inicioPeriodoAquisitivo | date: 'shortDate'}}</td>
+            <td class="hoverable">{{calculos.calcularFeriasModel.fimPeriodoAquisitivo | date: 'shortDate'}}</td>
+            <td class="hoverable">{{calculos.calcularFeriasModel.inicioFerias | date: 'shortDate'}}</td>
+            <td class="hoverable">{{calculos.calcularFeriasModel.fimFerias | date: 'shortDate'}}</td>
+            <td class="hoverable">{{calculos.calcularFeriasModel.diasVendidos}}</td>
+            <td class="hoverable">{{calculos.calcularFeriasModel.pTotalFerias | currency:'BRL':true:'1.2-2'}}</td>
+            <td class="hoverable">{{calculos.calcularFeriasModel.pTotalTercoConstitucional |
+              currency:'BRL':true:'1.2-2'}}
+            </td>
+            <td class="hoverable">{{calculos.calcularFeriasModel.pTotalIncidenciaFerias | currency:'BRL':true:'1.2-2'}}
+            </td>
+            <td class="hoverable">{{calculos.calcularFeriasModel.pTotalIncidenciaTerco | currency:'BRL':true:'1.2-2'}}
+            </td>
+            <td class="hoverable"><b>{{calculos.total | currency:'BRL':true:'1.2-2'}}</b></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </form>
 </div>
@@ -107,8 +112,8 @@
     <button class="btn waves-effect center" (click)="closeModal()">Ok</button>
   </div>
 </div>
-<div id="modal2" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]"
-     [materializeActions]="modalActions2">
+<!--<div id="modal2" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]"
+     [materializeActions]="modalActions2" *ngIf="calculosAvaliados && calculosAvaliados.length > 0">
   <div class="modal-content">
     <h4 class="center">Confirma Operação</h4>
     <br>
@@ -172,7 +177,7 @@
     <button class="btn waves-effect left" (click)="closeModal2()">Cancelar</button>
     <button class="btn waves-effect right" (click)="salvarAlteracoes()">Confirmar</button>
   </div>
-</div>
+</div> -->
 <div id="modal3" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]"
      [materializeActions]="modalActions3">
   <div class="modal-content">
@@ -184,8 +189,8 @@
     <button class="btn waves-effect center" (click)="navegaViewExec()">Ok</button>
   </div>
 </div>
-<div id="modal4" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]"
-     [materializeActions]="modalActions4">
+<!--<div id="modal4" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]"
+     [materializeActions]="modalActions4" *ngIf="calculosNegados && calculosNegados.length > 0">
   <div class="modal-content">
     <h4 class="center">Histórico de Cálculos Negados</h4>
     <table class="highlight centered responsive-table">
@@ -235,7 +240,7 @@
   <div class="modal-footer">
     <button class="btn waves-effect center" (click)="closeModal4()">Ok</button>
   </div>
-</div>
+</div> -->
 <div id="modal5" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]"
      [materializeActions]="modalActions5">
   <div class="modal-content">

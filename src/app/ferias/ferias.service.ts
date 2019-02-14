@@ -5,6 +5,7 @@ import {FeriasCalcular} from './ferias-calcular';
 import {Observable} from 'rxjs/Observable';
 import {FeriasCalculosPendentes} from './ferias-pendentes/ferias-calculos-pendentes';
 import {User} from '../users/user';
+import {ListaCalculosPendentes} from './ferias-pendentes/lista-calculos-pendentes';
 
 
 @Injectable()
@@ -71,7 +72,7 @@ export class FeriasService {
   }
 
   getCalculosPendentes() {
-    const url = this.config.myApi + '/ferias' + '/getCalculosPendentes=' + '/' + this.config.user.id;
+    const url = this.config.myApi + '/ferias' + '/getCalculosPendentes' + '/' + this.config.user.id;
     return this.http.get(url).map(res => res.json());
   }
 
@@ -84,7 +85,15 @@ export class FeriasService {
     };
     return this.http.put(url, object).map(res => res.json());
   }
-
+  salvarFeriasAvaliadasLista(codigoContrato: number, lista: ListaCalculosPendentes[]) {
+    const url = this.config.myApi + '/ferias/salvarFeriasAvaliadas';
+    const object = {
+      codContrato: codigoContrato,
+      user: this.config.user,
+      calculosAvaliados: lista
+    };
+    return this.http.put(url, object).map(res => res.json());
+  }
   getCalculosPendentesNegados() {
     const url = this.config.myApi + '/ferias' + '/getCalculosPendentesNegados' + '/' + this.config.user.id;
     return this.http.get(url).map(res => res.json());

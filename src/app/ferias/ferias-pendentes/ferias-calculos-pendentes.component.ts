@@ -6,6 +6,7 @@ import {FeriasCalculosPendentes} from './ferias-calculos-pendentes';
 import {ConfigService} from '../../_shared/config.service';
 import {FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {MaterializeAction} from 'angular2-materialize';
+import {ListaCalculosPendentes} from './lista-calculos-pendentes';
 
 @Component({
   selector: 'app-ferias-calculos-pendentes',
@@ -16,9 +17,9 @@ export class FeriasCalculosPendentesComponent implements OnInit {
   contratos: Contrato[];
   @Input() codigoContrato = 0;
   isSelected = false;
-  calculosPendentes: FeriasCalculosPendentes[];
-  calculosAvaliados: FeriasCalculosPendentes[] = [];
-  calculosNegados: FeriasCalculosPendentes[] = [];
+  calculosPendentes: ListaCalculosPendentes[];
+  calculosAvaliados: ListaCalculosPendentes[] = [];
+  calculosNegados: ListaCalculosPendentes[] = [];
   config: ConfigService;
   feriasForm: FormGroup;
   feriasFormAfter: FormGroup;
@@ -30,6 +31,9 @@ export class FeriasCalculosPendentesComponent implements OnInit {
   notifications: number;
   @Output() nav = new EventEmitter();
 
+  model =  class {
+
+  };
   constructor(private feriasService: FeriasService, private contratoService: ContratosService, config: ConfigService, private fb: FormBuilder, private ref: ChangeDetectorRef) {
     this.config = config;
     this.feriasService.getCalculosPendentes().subscribe(res2 => {
@@ -41,10 +45,12 @@ export class FeriasCalculosPendentesComponent implements OnInit {
       }
     });
     this.feriasService.getCalculosPendentesNegados().subscribe(res3 => {
-      const historico: FeriasCalculosPendentes[] = res3;
+      const historico: ListaCalculosPendentes[] = res3;
       this.calculosNegados = historico;
       this.notifications = this.calculosNegados.length;
       this.ref.markForCheck();
+    }, error2 => {
+      this.calculosNegados = null;
     });
   }
 
@@ -55,23 +61,33 @@ export class FeriasCalculosPendentesComponent implements OnInit {
   formInit() {
     if (this.calculosPendentes) {
       this.feriasForm = this.fb.group({
-        avaliacaoCalculoFerias: this.fb.array([])
+        contratos: this.fb.array([])
       });
       if (this.calculosPendentes) {
-        const control = <FormArray>this.feriasForm.controls.avaliacaoCalculoFerias;
-        this.calculosPendentes.forEach(() => {
-          const addControl = this.fb.group({
-            selected: new FormControl(),
-            avaliacao: new FormControl('S')
+        this.calculosPendentes.forEach(calculoPendente => {
+          const control = <FormArray>this.feriasForm.controls.contratos;
+          const newControl = this.fb.group({
+            titulo: new FormControl(calculoPendente.titulo),
+            codigo: new FormControl(calculoPendente.codigo),
+            avaliacaoCalculoFerias: this.fb.array([])
           });
-          control.push(addControl);
+          calculoPendente.calculos.forEach(() => {
+            const newControl2 = <FormArray>newControl.controls.avaliacaoCalculoFerias;
+            const addControl = this.fb.group({
+              selected: new FormControl(),
+              avaliacao: new FormControl('S')
+            });
+            newControl2.push(addControl);
+          });
+          control.push(newControl);
         });
       }
-      this.ref.markForCheck();
     }
     this.feriasFormAfter = this.fb.group({
       calculosAvaliados: this.fb.array([])
     });
+    this.ref.detectChanges();
+
   }
 
   openModal() {
@@ -118,7 +134,7 @@ export class FeriasCalculosPendentesComponent implements OnInit {
     this.modalActions5.emit({action: 'modal', params: ['close']});
   }
 
-  defineCodigoContrato(codigoContrato: number): void {
+  /*defineCodigoContrato(codigoContrato: number): void {
     this.codigoContrato = codigoContrato;
     if (this.codigoContrato) {
       this.feriasService.getCalculosPendentes().subscribe(res2 => {
@@ -130,23 +146,29 @@ export class FeriasCalculosPendentesComponent implements OnInit {
         }
       });
       this.feriasService.getCalculosPendentesNegados().subscribe(res3 => {
-        const historico: FeriasCalculosPendentes[] = res3;
+        const historico: ListaCalculosPendentes[] = res3;
         this.calculosNegados = historico;
         this.notifications = this.calculosNegados.length;
         this.ref.markForCheck();
       });
     }
-  }
+  }*/
 
   verificaFormulario() {
     let aux = 0;
     for (let i = 0; i < this.calculosPendentes.length; i++) {
-      if (this.feriasForm.get('avaliacaoCalculoFerias').get('' + i).get('selected').value) {
-        aux++;
-        const temp: FeriasCalculosPendentes = this.calculosPendentes[i];
-        temp.status = this.feriasForm.get('avaliacaoCalculoFerias').get('' + i).get('avaliacao').value;
-        this.calculosAvaliados.push(temp);
+      const lista = new ListaCalculosPendentes();
+      for (let j = 0; j < this.calculosPendentes[i].calculos.length; j++) {
+        if (this.feriasForm.get('contratos').get('' + i).get('avaliacaoCalculoFerias').get('' + j).get('selected').value) {
+          aux++;
+          const temp: FeriasCalculosPendentes = this.calculosPendentes[i].calculos[j];
+          temp.status = this.feriasForm.get('avaliacaoCalculoFerias').get('' + i).get('avaliacaoCalculoFerias').get('' + j).get('avaliacao').value;
+          lista.titulo = this.feriasForm.get('contratos').get('' + i).get('titulo').value;
+          lista.codigo = this.feriasForm.get('contratos').get('' + i).get('codigo').value;
+          lista.calculos.push(temp);
+        }
       }
+      this.calculosAvaliados.push(lista);
     }
     if (aux === 0) {
       this.openModal();
@@ -164,9 +186,11 @@ export class FeriasCalculosPendentesComponent implements OnInit {
 
   salvarAlteracoes() {
     for (let i = 0; i < this.calculosAvaliados.length; i++) {
-      this.calculosAvaliados[i].observacoes = this.feriasFormAfter.get('calculosAvaliados').get('' + i).get('observacoes').value;
+      for (let j = 0; j < this.calculosAvaliados[i].calculos.length; j++) {
+        this.calculosAvaliados[i].calculos[j].observacoes = this.feriasFormAfter.get('calculosAvaliados').get('' + i).get('observacoes').value;
+      }
     }
-    this.feriasService.salvarFeriasAvaliadas(this.codigoContrato, this.calculosAvaliados).subscribe(res => {
+    this.feriasService.salvarFeriasAvaliadasLista(this.codigoContrato, this.calculosAvaliados).subscribe(res => {
       if (res.success) {
         this.openModal3();
         this.closeModal2();
