@@ -57,7 +57,7 @@ export class ResgateRescisaoComponent implements OnInit {
             this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('tipoRescisao');
             this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('tipoRestituicao');
             this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataDesligamento');
-          this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasIntegrais').setValue(this.dateToString(this.terceirizados[i].pDataInicioFeriasIntegrais));
+            this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasIntegrais').setValue(this.dateToString(this.terceirizados[i].pDataInicioFeriasIntegrais));
             this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataFimFeriasIntegrais').setValue(this.dateToString(this.terceirizados[i].pDataFimFeriasIntegrais));
             this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasProporcionais').setValue(this.dateToString(this.terceirizados[i].pDataInicioFeriasProporcionais));
         }
@@ -110,11 +110,11 @@ export class ResgateRescisaoComponent implements OnInit {
                     const objeto = new RescisaoCalcular(this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('codTerceirizadoContrato').value,
                         this.tipoRestituicao,
                         this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('tipoRescisao').value,
-                        this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataDesligamento').value,
+                        this.terceirizados[i].dataDesligamento,
                         this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasIntegrais').value,
                         this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataFimFeriasIntegrais').value,
                         this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasProporcionais').value,
-                        this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataDesligamento').value,
+                        this.terceirizados[i].dataDesligamento,
                         0,
                         0,
                         0,

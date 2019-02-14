@@ -17,7 +17,7 @@ export class RescisaoService {
         const inicioFeriasIntegrais = this.encapsulaDatas(rescisaoCalcular.getInicioFeriasIntegrais());
         const fimFeriasIntegrais = this.encapsulaDatas(rescisaoCalcular.getFimFeriasIntegrais());
         const inicioFeriasProporcionais = this.encapsulaDatas(rescisaoCalcular.getInicioFeriasProporcionais());
-        const dataDesligamento = this.encapsulaDatas(rescisaoCalcular.getDataDesligamento());
+        //const dataDesligamento = this.encapsulaDatas(rescisaoCalcular.getDataDesligamento());
         const data = {
           'codTerceirizadoContrato': rescisaoCalcular.getCodTerceirizadoContrato(),
           'tipoRestituicao': rescisaoCalcular.getTipoRestituicao(),
@@ -39,7 +39,7 @@ export class RescisaoService {
         const inicioFeriasIntegrais = this.encapsulaDatas(rescisao.getInicioFeriasIntegrais());
         const fimFeriasIntegrais = this.encapsulaDatas(rescisao.getFimFeriasIntegrais());
         const inicioFeriasProporcionais = this.encapsulaDatas(rescisao.getInicioFeriasProporcionais());
-        const dataDesligamento = this.encapsulaDatas(rescisao.getDataDesligamento());
+        //const dataDesligamento = this.encapsulaDatas(rescisao.getDataDesligamento());
         const inicioContagemDecimoTerceiro = this.encapsulaDatas(rescisao.getInicioContagemDecimoTerceiro());
         let tipoRestituicao = '';
         if (rescisao.getTipoRestituicao() === 'MOVIMENTACAO') {
@@ -51,11 +51,11 @@ export class RescisaoService {
           'codTerceirizadoContrato': rescisao.getCodTerceirizadoContrato(),
           'tipoRestituicao': tipoRestituicao,
           'tipoRescisao': rescisao.getTipoRescisao(),
-          'dataDesligamento': dataDesligamento.toISOString().split('T')[0],
+          'dataDesligamento': rescisao.getDataDesligamento(),
           'inicioFeriasIntegrais': inicioFeriasIntegrais.toISOString().split('T')[0],
           'fimFeriasIntegrais': fimFeriasIntegrais.toISOString().split('T')[0],
           'inicioFeriasProporcionais': inicioFeriasProporcionais.toISOString().split('T')[0],
-          'fimFeriasProporcionais': dataDesligamento.toISOString().split('T')[0],
+          'fimFeriasProporcionais': rescisao.getDataDesligamento(),
           'inicioContagemDecimoTerceiro': rescisao.getInicioContagemDecimoTerceiro(),
           'valorFeriasVencidasMovimentado': rescisao.getValorFeriasVencidasMovimentado(),
           'valorFeriasProporcionaisMovimentado': rescisao.getValorFeriasProporcionaisMovimentado(),
