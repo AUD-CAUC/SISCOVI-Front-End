@@ -48,7 +48,9 @@ export class ResgateRescisaoComponent implements OnInit {
                 dataDesligamento: new FormControl(''),
                 dataInicioFeriasIntegrais: new FormControl(''),
                 dataFimFeriasIntegrais: new FormControl(''),
-                dataInicioFeriasProporcionais: new FormControl('')
+                dataInicioFeriasProporcionais: new FormControl(''),
+                resgateFeriasVencidas: new FormControl('', [Validators.required]),
+                resgateFeriasProporcionais: new FormControl('', [Validators.required])
             });
             control.push(addCtrl);
         });
@@ -60,13 +62,18 @@ export class ResgateRescisaoComponent implements OnInit {
             this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasIntegrais').setValue(this.dateToString(this.terceirizados[i].pDataInicioFeriasIntegrais));
             this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataFimFeriasIntegrais').setValue(this.dateToString(this.terceirizados[i].pDataFimFeriasIntegrais));
             this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasProporcionais').setValue(this.dateToString(this.terceirizados[i].pDataInicioFeriasProporcionais));
+            this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasVencidas').setValidators([Validators.required]);
         }
     }
     private dateToString(value: any): string {
-      console.log(this.terceirizados);
-      console.log(value);
+      //console.log(this.terceirizados);
+      //console.log(value);
       const date: string[] = value.split('-');
       return date[2] + '/' + date[1] + '/' + date['0'];
+    }
+    private stringToDate(value: string): Date {
+      const date: string[] = value.split('/');
+      return new Date(Number(date[2]), Number(date[1]) - 1, Number(date[0]));
     }
     closeModal1() {
         this.modalActions.emit({action: 'modal', params: ['close']});
@@ -111,9 +118,9 @@ export class ResgateRescisaoComponent implements OnInit {
                         this.tipoRestituicao,
                         this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('tipoRescisao').value,
                         this.terceirizados[i].dataDesligamento,
-                        this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasIntegrais').value,
-                        this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataFimFeriasIntegrais').value,
-                        this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasProporcionais').value,
+                        this.stringToDate(this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasIntegrais').value),
+                        this.stringToDate(this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataFimFeriasIntegrais').value),
+                        this.stringToDate(this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasProporcionais').value),
                         this.terceirizados[i].dataDesligamento,
                         0,
                         0,

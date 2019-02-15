@@ -11,65 +11,26 @@ export class TerceirizadoRescisao {
     private _tipoRescisao: string;
     private _tipoRestituicao: string;
     private _valorRestituicaoRescisao: ValorRestituicaoRescisao;
-    /*
-    constructor(codTerceirizadoContrato: number,
-                nomeTerceirizado: string,
-                dataDesligamento: Date,
-                dataInicioFeriasIntegrais: Date,
-                dataFimFeriasIntegrais: Date,
-                dataInicioFeriasProporcionais: Date,
-                dataFimFeriasProporcionais: Date,
-                tipoRestituicao: string,
-                tipoRescisao: string) {
-        this._codTerceirizadoContrato = codTerceirizadoContrato;
-        this._nomeTerceirizado = nomeTerceirizado;
-        this._dataDesligamento = dataDesligamento;
-        this._dataInicioFeriasIntegrais = dataInicioFeriasIntegrais;
-        this._dataFimFeriasIntegrais = dataFimFeriasIntegrais;
-        this._dataInicioFeriasProporcionais = dataInicioFeriasProporcionais;
-        this._dataFimFeriasProporcionais = dataFimFeriasProporcionais;
-        this._tipoRescisao = tipoRescisao;
-        this._tipoRestituicao = tipoRestituicao;
-    }*/
-    public get nomeTerceirizado() {
-        return this._nomeTerceirizado;
-    }
 
-    public get codTerceirizadoContrato() {
-        return this._codTerceirizadoContrato;
-    }
+    public get nomeTerceirizado() { return this._nomeTerceirizado; }
 
-    get dataDesligamento(): Date {
-        return this._dataDesligamento;
-    }
+    public get codTerceirizadoContrato() { return this._codTerceirizadoContrato; }
 
-    get pDataInicioFeriasIntegrais(): Date {
-      return this._pDataInicioFeriasIntegrais;
-    }
+    get dataDesligamento(): Date { return this._dataDesligamento; }
 
-    get pDataFimFeriasIntegrais(): Date {
-      return this._pDataFimFeriasIntegrais;
-    }
+    get pDataInicioFeriasIntegrais(): Date { return this._pDataInicioFeriasIntegrais; }
 
-    get pDataInicioFeriasProporcionais(): Date {
-      return this._pDataInicioFeriasProporcionais;
-    }
+    get pDataFimFeriasIntegrais(): Date { return this._pDataFimFeriasIntegrais; }
 
-    get pDataFimFeriasProporcionais(): Date {
-      return this._pDataFimFeriasProporcionais;
-    }
+    get pDataInicioFeriasProporcionais(): Date { return this._pDataInicioFeriasProporcionais; }
 
-    get tipoRescisao(): string {
-        return this._tipoRescisao;
-    }
+    get pDataFimFeriasProporcionais(): Date { return this._pDataFimFeriasProporcionais; }
 
-    get tipoRestituicao(): string {
-        return this._tipoRestituicao;
-    }
+    get tipoRescisao(): string { return this._tipoRescisao; }
 
-    set valorRestituicaoRescisao(valorRestituicaoRescisao: ValorRestituicaoRescisao) {
-      this._valorRestituicaoRescisao = valorRestituicaoRescisao;
-    }
+    get tipoRestituicao(): string { return this._tipoRestituicao; }
+
+    set valorRestituicaoRescisao(valorRestituicaoRescisao: ValorRestituicaoRescisao) { this._valorRestituicaoRescisao = valorRestituicaoRescisao; }
 
     get valorRestituicaoRescisao(): ValorRestituicaoRescisao { return this._valorRestituicaoRescisao; }
 }

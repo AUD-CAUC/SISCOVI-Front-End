@@ -14,18 +14,14 @@ export class RescisaoService {
     }
     calculaRescisaoTerceirizados(rescisaoCalcular: RescisaoCalcular) {
         const url = this.config.myApi + '/rescisao/calculaRescisaoTerceirizados';
-        const inicioFeriasIntegrais = this.encapsulaDatas(rescisaoCalcular.getInicioFeriasIntegrais());
-        const fimFeriasIntegrais = this.encapsulaDatas(rescisaoCalcular.getFimFeriasIntegrais());
-        const inicioFeriasProporcionais = this.encapsulaDatas(rescisaoCalcular.getInicioFeriasProporcionais());
-        //const dataDesligamento = this.encapsulaDatas(rescisaoCalcular.getDataDesligamento());
         const data = {
           'codTerceirizadoContrato': rescisaoCalcular.getCodTerceirizadoContrato(),
           'tipoRestituicao': rescisaoCalcular.getTipoRestituicao(),
           'tipoRescisao': rescisaoCalcular.getTipoRescisao(),
           'dataDesligamento': rescisaoCalcular.getDataDesligamento(),
-          'inicioFeriasIntegrais': inicioFeriasIntegrais.toISOString().split('T')[0],
-          'fimFeriasIntegrais': fimFeriasIntegrais.toISOString().split('T')[0],
-          'inicioFeriasProporcionais': inicioFeriasProporcionais.toISOString().split('T')[0],
+          'inicioFeriasIntegrais': rescisaoCalcular.getInicioFeriasIntegrais(),
+          'fimFeriasIntegrais': rescisaoCalcular.getFimFeriasIntegrais(),
+          'inicioFeriasProporcionais': rescisaoCalcular.getInicioFeriasProporcionais(),
           'valorFeriasVencidasMovimentado': rescisaoCalcular.getValorFeriasVencidasMovimentado(),
           'valorFeriasProporcionaisMovimentado': rescisaoCalcular.getValorFeriasProporcionaisMovimentado(),
           'valorDecimoTerceiroMovimentado': rescisaoCalcular.getValorDecimoTerceiroMovimentado()
@@ -36,11 +32,6 @@ export class RescisaoService {
       const url = this.config.myApi + '/rescisao/registrarCalculoRescisao';
       const data = [];
       rescisaoCalcular.forEach(rescisao => {
-        const inicioFeriasIntegrais = this.encapsulaDatas(rescisao.getInicioFeriasIntegrais());
-        const fimFeriasIntegrais = this.encapsulaDatas(rescisao.getFimFeriasIntegrais());
-        const inicioFeriasProporcionais = this.encapsulaDatas(rescisao.getInicioFeriasProporcionais());
-        //const dataDesligamento = this.encapsulaDatas(rescisao.getDataDesligamento());
-        const inicioContagemDecimoTerceiro = this.encapsulaDatas(rescisao.getInicioContagemDecimoTerceiro());
         let tipoRestituicao = '';
         if (rescisao.getTipoRestituicao() === 'MOVIMENTACAO') {
           tipoRestituicao = 'MOVIMENTAÇÃO';
@@ -52,9 +43,9 @@ export class RescisaoService {
           'tipoRestituicao': tipoRestituicao,
           'tipoRescisao': rescisao.getTipoRescisao(),
           'dataDesligamento': rescisao.getDataDesligamento(),
-          'inicioFeriasIntegrais': inicioFeriasIntegrais.toISOString().split('T')[0],
-          'fimFeriasIntegrais': fimFeriasIntegrais.toISOString().split('T')[0],
-          'inicioFeriasProporcionais': inicioFeriasProporcionais.toISOString().split('T')[0],
+          'inicioFeriasIntegrais': rescisao.getInicioFeriasIntegrais(),
+          'fimFeriasIntegrais': rescisao.getFimFeriasIntegrais(),
+          'inicioFeriasProporcionais': rescisao.getInicioFeriasProporcionais(),
           'fimFeriasProporcionais': rescisao.getDataDesligamento(),
           'inicioContagemDecimoTerceiro': rescisao.getInicioContagemDecimoTerceiro(),
           'valorFeriasVencidasMovimentado': rescisao.getValorFeriasVencidasMovimentado(),
