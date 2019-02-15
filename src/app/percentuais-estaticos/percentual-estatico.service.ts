@@ -11,6 +11,7 @@ export class PercentualEstaticoService {
   disabled = true;
   validity = true;
   nome: string;
+  codigo: number;
   percentual: number;
   dataInicio: any;
   dataAditamento: any;
@@ -36,13 +37,14 @@ export class PercentualEstaticoService {
     const cadastroPercentualEstatico = new CadastroPercentualEstatico();
     cadastroPercentualEstatico.percentualEstatico = new PercentualEstatico();
     cadastroPercentualEstatico.percentualEstatico.nome = this.nome;
+    cadastroPercentualEstatico.percentualEstatico.codigo = this.codigo;
     cadastroPercentualEstatico.percentualEstatico.percentual = this.percentual;
     cadastroPercentualEstatico.percentualEstatico.dataInicio = this.dataInicio;
     cadastroPercentualEstatico.percentualEstatico.dataFim = null;
     cadastroPercentualEstatico.percentualEstatico.dataAditamento = this.dataAditamento;
     cadastroPercentualEstatico.currentUser = this.config.user.username;
     console.log(cadastroPercentualEstatico);
-    const url = this.config.myApi + '/rubricas/criarRubrica2';
+    const url = this.config.myApi + '/rubricas/cadastrarPercentualEstatico';
     const data = cadastroPercentualEstatico;
     const headers = new Headers({'Content-type': 'application/json'});
     const options = new RequestOptions({headers: headers});

@@ -1,4 +1,4 @@
-import {Component, EventEmitter} from '@angular/core';
+import {Component, EventEmitter, Input} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {PercentualEstaticoService} from '../percentual-estatico.service';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -18,13 +18,14 @@ export class CadastrarPercentualEstaticoComponent {
   percentualEstaticoService: PercentualEstaticoService;
   id: number;
   notValidEdit = true;
+  @Input() percent: PercentualEstatico[];
   private codigoRubrica: any;
   constructor(fb: FormBuilder, percentualEstaticoService: PercentualEstaticoService, route: ActivatedRoute, router: Router) {
     this.router = router;
     this.route = route;
     this.percentualEstaticoService = percentualEstaticoService;
     this.percentualEstaticoForm = fb.group({
-      nome: new FormControl('', [Validators.required]),
+      codigo: new FormControl('', [Validators.required]),
       percentual: new FormControl('', [Validators.required]),
       dataInicio: new FormControl('', Validators.required),
       dataAditamento: new FormControl('', Validators.required),
@@ -33,7 +34,7 @@ export class CadastrarPercentualEstaticoComponent {
 
   validateForm() {
     if (this.percentualEstaticoForm.status === 'VALID') {
-      this.percentualEstaticoService.nome = this.percentualEstaticoForm.controls.nome.value;
+      this.percentualEstaticoService.codigo = this.percentualEstaticoForm.controls.codigo.value;
       this.percentualEstaticoService.percentual = this.percentualEstaticoForm.controls.percentual.value;
       this.percentualEstaticoService.dataInicio = this.percentualEstaticoForm.controls.dataInicio.value;
       this.percentualEstaticoService.dataAditamento = this.percentualEstaticoForm.controls.dataAditamento.value;
@@ -44,13 +45,13 @@ export class CadastrarPercentualEstaticoComponent {
   }
   activateButton(): void {
     if (this.id) {
-      if ((this.percentualEstaticoService.nome !== this.percentualEstatico.nome) ||
+      if ((this.percentualEstaticoService.codigo !== this.percentualEstatico.codigo) ||
         (this.percentualEstaticoService.percentual !== this.percentualEstatico.percentual) ||
         (this.percentualEstaticoService.dataInicio !== this.percentualEstatico.dataInicio) ||
         (this.percentualEstaticoService.dataAditamento !== this.percentualEstatico.dataAditamento)
       ) {
         this.notValidEdit = false;
-      }else if ((this.percentualEstaticoService.nome === this.percentualEstatico.nome) ||
+      }else if ((this.percentualEstaticoService.codigo === this.percentualEstatico.codigo) ||
         (this.percentualEstaticoService.percentual === this.percentualEstatico.percentual) ||
         (this.percentualEstaticoService.dataInicio === this.percentualEstatico.dataInicio) ||
         (this.percentualEstaticoService.dataAditamento === this.percentualEstatico.dataAditamento)) {
@@ -60,10 +61,5 @@ export class CadastrarPercentualEstaticoComponent {
   }
   disableButton() {
     this.notValidEdit = true;
-  }
-
-  onChange(value: any) {
-    console.log(value);
-    this.codigoRubrica = value;
   }
 }

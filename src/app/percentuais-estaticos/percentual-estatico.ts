@@ -2,7 +2,7 @@ export class PercentualEstatico {
   nome: string;
   percentual: number;
   dataInicio: string;
-  codigo;
+  codigo: number;
   dataFim;
   dataAditamento: string;
 }

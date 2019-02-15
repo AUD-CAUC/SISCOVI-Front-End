@@ -5,11 +5,11 @@
       <form #form="ngForm" materialize class="col s12" [formGroup]="percentualEstaticoForm" autocomplete="off">
         <div class="row">
           <div class="input-field col l7 center-align">
-            <select class="black-text" name="nome" formControlName="nome" materialize="material_select">
-                    <!--[ngModel]="staticPercent" (change)="onChange($event.target.value)" required>-->
+            <select class="black-text" name="nome" formControlName="codigo" materialize="material_select"
+                    [ngModel]="percent" (change)="validateForm(); activateButton()" required>
               <option disabled>Selecione</option>
-              <!--<option class="black-text" *ngFor="let contrato of staticPercent" [value]="contrato.codigo"-->
-              <!--&gt;{{contrato.nomeDaEmpresa}} - Contrato nº: {{contrato.numeroDoContrato}}</option>-->
+              <option class="black-text" *ngFor="let rubrica of percent" [value]="rubrica.codigo"
+              >{{rubrica.nome}}</option>
             </select>
             <label style="font-size: 0.85vw">Selecione uma Rubrica</label>
           </div>
