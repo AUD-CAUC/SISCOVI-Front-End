@@ -17,9 +17,9 @@ export class FeriasCalculosPendentesComponent implements OnInit {
   contratos: Contrato[];
   @Input() codigoContrato = 0;
   isSelected = false;
-  calculosPendentes: ListaCalculosPendentes[];
-  calculosAvaliados: ListaCalculosPendentes[] = [];
-  calculosNegados: ListaCalculosPendentes[] = [];
+  @Input() calculosPendentes: ListaCalculosPendentes[];
+  calculosAvaliados: ListaCalculosPendentes[];
+  calculosNegados: ListaCalculosPendentes[];
   config: ConfigService;
   feriasForm: FormGroup;
   feriasFormAfter: FormGroup;
@@ -29,18 +29,45 @@ export class FeriasCalculosPendentesComponent implements OnInit {
   modalActions4 = new EventEmitter<string | MaterializeAction>();
   modalActions5 = new EventEmitter<string | MaterializeAction>();
   notifications: number;
+  somaFerias: number[] = [];
+  somaTerco: number[] = [];
+  somaDecimo: number[] = [];
+  somaIncidenciaFerias: number[] = [];
+  somaIncidenciaTerco: number[] = [];
+  somaSaldo: number[] = [];
   @Output() nav = new EventEmitter();
 
-  model =  class {
+  model = class {
 
   };
+
   constructor(private feriasService: FeriasService, private contratoService: ContratosService, config: ConfigService, private fb: FormBuilder, private ref: ChangeDetectorRef) {
     this.config = config;
     this.feriasService.getCalculosPendentes().subscribe(res2 => {
       this.calculosPendentes = res2;
+      this.somaFerias = new Array(this.calculosPendentes.length).fill(0);
+      this.somaTerco = new Array(this.calculosPendentes.length).fill(0);
+      this.somaDecimo = new Array(this.calculosPendentes.length).fill(0);
+      this.somaIncidenciaFerias = new Array(this.calculosPendentes.length).fill(0);
+      this.somaIncidenciaTerco = new Array(this.calculosPendentes.length).fill(0);
+      this.somaSaldo = new Array(this.calculosPendentes.length).fill(0);
+
       if (this.calculosPendentes.length === 0) {
         this.calculosPendentes = null;
       } else {
+        for (let i = 0; i < this.calculosPendentes.length; i++) {
+          for (let j = 0; j < this.calculosPendentes[i].calculos.length; j++) {
+            this.somaFerias[i] = this.somaFerias[i] +
+              this.calculosPendentes[i].calculos[j].calcularFeriasModel.pTotalFerias;
+            this.somaTerco[i] = this.somaTerco[i] +
+              this.calculosPendentes[i].calculos[j].calcularFeriasModel.pTotalTercoConstitucional;
+            this.somaIncidenciaFerias[i] = this.somaIncidenciaFerias[i] +
+              this.calculosPendentes[i].calculos[j].calcularFeriasModel.pTotalIncidenciaFerias;
+            this.somaIncidenciaTerco[i] = this.somaIncidenciaTerco[i] +
+              this.calculosPendentes[i].calculos[j].calcularFeriasModel.pTotalIncidenciaTerco;
+            this.somaSaldo[i] = this.somaSaldo[i] + this.calculosPendentes[i].calculos[j].total;
+          }
+        }
         this.formInit();
       }
     });
@@ -156,13 +183,15 @@ export class FeriasCalculosPendentesComponent implements OnInit {
 
   verificaFormulario() {
     let aux = 0;
+    this.calculosAvaliados = [];
     for (let i = 0; i < this.calculosPendentes.length; i++) {
       const lista = new ListaCalculosPendentes();
+      lista.calculos = [];
       for (let j = 0; j < this.calculosPendentes[i].calculos.length; j++) {
         if (this.feriasForm.get('contratos').get('' + i).get('avaliacaoCalculoFerias').get('' + j).get('selected').value) {
           aux++;
           const temp: FeriasCalculosPendentes = this.calculosPendentes[i].calculos[j];
-          temp.status = this.feriasForm.get('avaliacaoCalculoFerias').get('' + i).get('avaliacaoCalculoFerias').get('' + j).get('avaliacao').value;
+          temp.status = this.feriasForm.get('contratos').get('' + i).get('avaliacaoCalculoFerias').get('' + j).get('avaliacao').value;
           lista.titulo = this.feriasForm.get('contratos').get('' + i).get('titulo').value;
           lista.codigo = this.feriasForm.get('contratos').get('' + i).get('codigo').value;
           lista.calculos.push(temp);

@@ -12,7 +12,7 @@
         </div>
         <div id="test1" class="col s12" active="testeRetencoes()"><app-relatorio-retencoes-ferias-component *ngIf="testeRetencoes()"></app-relatorio-retencoes-ferias-component></div>
         <div id="test2" class="col s12" active="testeCalculo()"><app-calculo-ferias-component *ngIf="testeCalculo()" (navegaParaViewDeCalculos)="calculosPendentes($event)"></app-calculo-ferias-component></div>
-        <div id="test3" class="col s12" active="testePendentes()"><app-ferias-calculos-pendentes *ngIf="testePendentes()" [codigoContrato]="codigoContrato" (nav)="calculosExecutados($event)"></app-ferias-calculos-pendentes></div>
+        <div id="test3" class="col s12" active="testePendentes()"><app-ferias-calculos-pendentes *ngIf="testePendentes()" [calculosPendentes]="cp" (nav)="calculosExecutados($event)"></app-ferias-calculos-pendentes></div>
         <div id="test4" class="col s12" active="testeExecutados()"><app-ferias-calculos-pendentes-execucao *ngIf="testeExecutados()" [codigoContrato]="codigoContrato" (nav)="retencoes($event)"></app-ferias-calculos-pendentes-execucao></div>
     </div>
 </div>
