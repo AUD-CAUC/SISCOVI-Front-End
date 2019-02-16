@@ -16,7 +16,7 @@ export class ConfigService {
   constructor() {
     this.setHeaders();
     if (window.location.hostname === 'localhost') {
-      this.myApi = 'http://localhost:8080/SISCOVI/rest';
+      this.myApi = 'http://localhost:8081/SISCOVI/rest';
     }
     const user  = localStorage.getItem('auth_user');
     if (!user) {
