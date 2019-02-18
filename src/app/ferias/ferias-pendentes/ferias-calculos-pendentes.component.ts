@@ -16,7 +16,7 @@ import {ListaCalculosPendentes} from './lista-calculos-pendentes';
 export class FeriasCalculosPendentesComponent implements OnInit {
   contratos: Contrato[];
   @Input() codigoContrato = 0;
-  isSelected = false;
+  isSelected: boolean[] = [];
   @Input() calculosPendentes: ListaCalculosPendentes[];
   calculosAvaliados: ListaCalculosPendentes[];
   calculosNegados: ListaCalculosPendentes[];
@@ -37,13 +37,10 @@ export class FeriasCalculosPendentesComponent implements OnInit {
   somaSaldo: number[] = [];
   @Output() nav = new EventEmitter();
 
-  model = class {
-
-  };
-
   constructor(private feriasService: FeriasService, private contratoService: ContratosService, config: ConfigService, private fb: FormBuilder, private ref: ChangeDetectorRef) {
     this.config = config;
     this.feriasService.getCalculosPendentes().subscribe(res2 => {
+      this.isSelected = new Array(this.calculosPendentes.length).fill(false);
       this.calculosPendentes = res2;
       this.somaFerias = new Array(this.calculosPendentes.length).fill(0);
       this.somaTerco = new Array(this.calculosPendentes.length).fill(0);
@@ -69,6 +66,7 @@ export class FeriasCalculosPendentesComponent implements OnInit {
           }
         }
         this.formInit();
+        this.ref.markForCheck();
       }
     });
     this.feriasService.getCalculosPendentesNegados().subscribe(res3 => {
@@ -219,15 +217,14 @@ export class FeriasCalculosPendentesComponent implements OnInit {
         this.calculosAvaliados[i].calculos[j].observacoes = this.feriasFormAfter.get('calculosAvaliados').get('' + i).get('observacoes').value;
       }
     }
-    this.feriasService.salvarFeriasAvaliadasLista(this.codigoContrato, this.calculosAvaliados).subscribe(res => {
-      if (res.success) {
-        this.openModal3();
+    this.feriasService.salvarFeriasAvaliadasLista(this.calculosAvaliados).subscribe(res => {
+      this.closeModal2();
+      this.openModal3();
+    },
+      error1 => {
         this.closeModal2();
-      } else {
         this.openModal5();
-        this.closeModal2();
-      }
-    });
+      });
   }
 
   navegaViewExec() {

@@ -25,8 +25,8 @@
           <thead>
           <tr>
             <th *ngIf="config.user.perfil.sigla == 'ADMINISTRADOR'">
-              <input type="checkbox" class="checkbox-black" id="test5" (change)="isSelected = !isSelected"/>
-              <label for="test5"></label>
+              <input type="checkbox" class="checkbox-black" id="test5{{i}}" (change)="isSelected[i] = !isSelected[i]"/>
+              <label for="test5{{i}}"></label>
             </th>
             <th *ngIf="config.user.perfil.sigla == 'ADMINISTRADOR'">Avaliação</th>
             <th *ngIf="config.user.perfil.sigla == 'USUÁRIO'">Status</th>
@@ -49,10 +49,14 @@
           <tbody formArrayName="avaliacaoCalculoFerias">
           <tr *ngFor="let calculos of calculoPendente.calculos; let k = index">
             <td *ngIf="config.user.perfil.sigla == 'ADMINISTRADOR'">
-              <div [formGroupName]="k">
-                <input type="checkbox" class="checkbox-black"
-                       formControlName="selected" id="{{k}}"/>
-                <label for="{{k}}"></label>
+              <div [formGroupName]="k" [attr.id]="calculoPendente.codigo">
+                <div class="row">
+                  <div clas="input-field">
+                    <input type="checkbox" class="checkbox-black" [checked]="isSelected[i]" [ngModel]="isSelected[i]" formControlName="selected"
+                           id="{{calculoPendente.codigo}}}{{k}}"/>
+                    <label for="{{calculoPendente.codigo}}}{{k}}"></label>
+                  </div>
+                </div>
               </div>
             </td>
             <td *ngIf="config.user.perfil.sigla == 'ADMINISTRADOR'">
@@ -87,49 +91,49 @@
             </td>
             <td class="hoverable"><b>{{calculos.total | currency:'BRL':true:'1.2-2'}}</b></td>
           </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td><b>Subtotal</b></td>
-              <td></td>
-              <td><b>{{somaFerias[i] | currency:'BRL':true:'1.2-2'}}</b></td>
-              <td><b>{{somaTerco[i] | currency:'BRL':true:'1.2-2'}}</b></td>
-              <td><b>{{somaIncidenciaFerias[i] | currency:'BRL':true:'1.2-2'}}</b></td>
-              <td><b>{{somaIncidenciaTerco[i] | currency:'BRL':true:'1.2-2'}}</b></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td><b>Total</b></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td><b>{{somaSaldo[i] | currency:'BRL':true:'1.2-2'}}</b></td>
-            </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><b>Subtotal</b></td>
+            <td></td>
+            <td><b>{{somaFerias[i] | currency:'BRL':true:'1.2-2'}}</b></td>
+            <td><b>{{somaTerco[i] | currency:'BRL':true:'1.2-2'}}</b></td>
+            <td><b>{{somaIncidenciaFerias[i] | currency:'BRL':true:'1.2-2'}}</b></td>
+            <td><b>{{somaIncidenciaTerco[i] | currency:'BRL':true:'1.2-2'}}</b></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><b>Total</b></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><b>{{somaSaldo[i] | currency:'BRL':true:'1.2-2'}}</b></td>
+          </tr>
           </tbody>
         </table>
       </div>
     </div>
   </form>
 </div>
-<div class="row" *ngIf="config.user.perfil.sigla == 'ADMINISTRADOR' && calculosPendentes">
+<div class="row" *ngIf="config.user.perfil.sigla == 'ADMINISTRADOR' && calculosPendentes.length > 0">
   <div class="col">
     <div class="center">
       <button class="btn waves-effect center" (click)="verificaFormulario()">Salvar Alterações</button>
@@ -191,8 +195,10 @@
           <td class="hoverable">{{calculos.calcularFeriasModel.pTotalFerias | currency:'BRL':true:'1.2-2'}}</td>
           <td class="hoverable">{{calculos.calcularFeriasModel.pTotalTercoConstitucional | currency:'BRL':true:'1.2-2'}}
           </td>
-          <td class="hoverable">{{calculos.calcularFeriasModel.pTotalIncidenciaFerias | currency:'BRL':true:'1.2-2'}}</td>
-          <td class="hoverable">{{calculos.calcularFeriasModel.pTotalIncidenciaTerco | currency:'BRL':true:'1.2-2'}}</td>
+          <td class="hoverable">{{calculos.calcularFeriasModel.pTotalIncidenciaFerias | currency:'BRL':true:'1.2-2'}}
+          </td>
+          <td class="hoverable">{{calculos.calcularFeriasModel.pTotalIncidenciaTerco | currency:'BRL':true:'1.2-2'}}
+          </td>
           <td class="hoverable"><b>{{calculos.total | currency:'BRL':true:'1.2-2'}}</b></td>
           <td>
             <div class="row">

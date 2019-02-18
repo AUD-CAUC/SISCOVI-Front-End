@@ -85,27 +85,32 @@ export class FeriasService {
     };
     return this.http.put(url, object).map(res => res.json());
   }
-  salvarFeriasAvaliadasLista(codigoContrato: number, lista: ListaCalculosPendentes[]) {
+  salvarFeriasAvaliadasLista(lista: ListaCalculosPendentes[]) {
     const url = this.config.myApi + '/ferias/salvarFeriasAvaliadas';
-    const object = {
-      codContrato: codigoContrato,
-      user: this.config.user,
-      calculosAvaliados: lista
-    };
-    return this.http.put(url, object).map(res => res.json());
+    const data = [];
+    lista.forEach(item => {
+      const object = {
+        codContrato: item.codigo,
+        user: this.config.user,
+        calculosAvaliados: item.calculos
+      };
+      data.push(object);
+    });
+
+    return this.http.put(url, data).map(res => res.json());
   }
   getCalculosPendentesNegados() {
     const url = this.config.myApi + '/ferias' + '/getCalculosPendentesNegados' + '/' + this.config.user.id;
     return this.http.get(url).map(res => res.json());
   }
 
-  getCalculosPendentesExecucao(codigoContrato: number) {
-    const url = this.config.myApi + '/ferias' + '/getCalculosPendentesExecucao=' + codigoContrato + '/' + this.config.user.id;
+  getCalculosPendentesExecucao() {
+    const url = this.config.myApi + '/ferias' + '/getCalculosPendentesExecucao/' + this.config.user.id;
     return this.http.get(url).map(res => res.json());
   }
 
-  getCalculosNaoPendentesNegados(codigoContrato: number) {
-    const url = this.config.myApi + '/ferias' + '/getCalculosNaoPendentesNegados=' + codigoContrato + '/' + this.config.user.id;
+  getCalculosNaoPendentesNegados() {
+    const url = this.config.myApi + '/ferias' + '/getCalculosNaoPendentesNegados/' + this.config.user.id;
     return this.http.get(url).map(res => res.json());
   }
 
@@ -114,14 +119,18 @@ export class FeriasService {
     return this.http.get(url).map(res => res.json());
   }
 
-  salvarExecucaoFerias(codigoContrato: number, lista: FeriasCalculosPendentes[]) {
+  salvarExecucaoFerias(lista: ListaCalculosPendentes[]) {
     const url = this.config.myApi + '/ferias/salvarExecucaoFerias';
-    const object = {
-      codContrato: codigoContrato,
-      user: this.config.user,
-      calculosAvaliados: lista
-    };
-    return this.http.put(url, object).map(res => res.json());
+    const data = [];
+    lista.forEach(item => {
+      const object = {
+        codContrato: item.codigo,
+        user: this.config.user,
+        calculosAvaliados: item.calculos
+      };
+      data.push(object);
+    });
+    return this.http.put(url, data).map(res => res.json());
   }
 
   protected encapsulaDatas(value: any): Date {
