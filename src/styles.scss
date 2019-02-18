@@ -10,6 +10,7 @@ a {
 nav ul a,
 footer.page-footer a {
 	color: inherit;
+
 }
 .btn {
 	background-color: rgb(65,78,84);
@@ -115,6 +116,10 @@ footer.page-footer a {
 			list-style: disc inside;
 		}
 	}
+}
+
+footer.page-footer {
+  max-height: 1%;
 }
 
 

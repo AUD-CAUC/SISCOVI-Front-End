@@ -98,6 +98,7 @@ import {SaldoService} from './saldo/saldo.service';
 import {SaldoIndividualComponent} from './saldo/individual/saldo-individual-component';
 import {SaldoFuncaoComponent} from './saldo/funcao/saldo-funcao.component';
 import {RelatorioRestituicoesRescisaoComponent} from './rescisao/relatorio-restituicao-rescisao/relatorio-restituicoes-rescisao.component';
+import {FileSizePipe} from './_shared/file-size.pipe';
 
 @NgModule({
   declarations: [
@@ -124,6 +125,7 @@ import {RelatorioRestituicoesRescisaoComponent} from './rescisao/relatorio-resti
     CnpjPipe,
     DatePipe,
     ParcelaPipe,
+    FileSizePipe,
     PendentePipe,
     TitlecaseMaskDirective,
     AfirmativePipe,

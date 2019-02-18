@@ -1,6 +1,7 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {ComumComponent} from './layout/comum/comum.component';
+
 import {LoginComponent} from './users/login.component';
 import {LoggedInGuard} from './users/logged-in.guard';
 import {IndicadoresComponent} from './indicadores/indicadores.component';
@@ -32,6 +33,8 @@ import {CadastroContratoComponent} from './contratos/cadastro-contrato/cadastro.
 import {SaldoIndividualComponent} from './saldo/individual/saldo-individual-component';
 import {CadastrarAjustesComponent} from './contratos/ajustes-contratuais/cadastrar-ajustes/cadastrar-ajustes.component';
 import {SaldoFuncaoComponent} from './saldo/funcao/saldo-funcao.component';
+import {FeriasPendentesResolver} from './ferias/ferias-pendentes.resolver';
+import {FeriasPendentesExecucaoResolver} from './ferias/ferias-pendentes-execucao.resolver';
 
 const routes: Routes = [
   {path: '', pathMatch: 'full', redirectTo: 'home'},
@@ -67,7 +70,15 @@ const routes: Routes = [
       {path: 'funcoes-dos-terceirizados', component: CargosDosFuncionariosComponent, canActivate: [LoggedInGuard]},
       {path: 'vigencias', component: VigenciaDosContratosComponent, canActivate: [LoggedInGuard]},
       {path: 'home', component: InicioComponent, canActivate: [LoggedInGuard]},
-      {path: 'ferias', component: FeriasComponent, canActivate: [LoggedInGuard]},
+      {
+        path: 'ferias',
+        component: FeriasComponent,
+        canActivate: [LoggedInGuard],
+        resolve: {
+          calculosPendentes: FeriasPendentesResolver,
+          calculosPendentesExecucao: FeriasPendentesExecucaoResolver
+        }
+      },
       {path: 'decTer', component: DecimoTerceiroComponent, canActivate: [LoggedInGuard]},
       {path: 'rescisao', component: RescisaoComponent, canActivate: [LoggedInGuard]},
       {path: 'totalMensal', component: TotalMensalComponent, canActivate: [LoggedInGuard]},
@@ -105,7 +116,8 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: [FeriasPendentesResolver, FeriasPendentesExecucaoResolver]
 })
 export class AppRoutingModule {
 }
