@@ -33,7 +33,8 @@ import {CadastroContratoComponent} from './contratos/cadastro-contrato/cadastro.
 import {SaldoIndividualComponent} from './saldo/individual/saldo-individual-component';
 import {CadastrarAjustesComponent} from './contratos/ajustes-contratuais/cadastrar-ajustes/cadastrar-ajustes.component';
 import {SaldoFuncaoComponent} from './saldo/funcao/saldo-funcao.component';
-import {FeriasResolver} from './ferias/ferias.resolver';
+import {FeriasPendentesResolver} from './ferias/ferias-pendentes.resolver';
+import {FeriasPendentesExecucaoResolver} from './ferias/ferias-pendentes-execucao.resolver';
 
 const routes: Routes = [
   {path: '', pathMatch: 'full', redirectTo: 'home'},
@@ -73,7 +74,10 @@ const routes: Routes = [
         path: 'ferias',
         component: FeriasComponent,
         canActivate: [LoggedInGuard],
-        resolve: {calculosPendentes: FeriasResolver}
+        resolve: {
+          calculosPendentes: FeriasPendentesResolver,
+          calculosPendentesExecucao: FeriasPendentesExecucaoResolver
+        }
       },
       {path: 'decTer', component: DecimoTerceiroComponent, canActivate: [LoggedInGuard]},
       {path: 'rescisao', component: RescisaoComponent, canActivate: [LoggedInGuard]},
@@ -113,7 +117,7 @@ const routes: Routes = [
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
-  providers: [FeriasResolver]
+  providers: [FeriasPendentesResolver, FeriasPendentesExecucaoResolver]
 })
 export class AppRoutingModule {
 }

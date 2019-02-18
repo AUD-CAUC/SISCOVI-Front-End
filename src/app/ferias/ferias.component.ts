@@ -17,15 +17,13 @@ export class FeriasComponent {
   }
 
   calculosPendentes() {
-    console.log(this.cp);
     this.cp = this.route.snapshot.data.calculosPendentes;
-    console.log(this.cp);
     this.tabSelectionParams = ['select_tab', 'test3'];
     this.setPendentesActive();
   }
 
-  calculosExecutados(codigoContrato: number) {
-    this.codigoContrato = codigoContrato;
+  calculosExecutados() {
+    this.cp = this.route.snapshot.data.calculosPendentesExecucao;
     this.tabSelectionParams = ['select_tab', 'test4'];
     this.setExecutadosActive();
   }
@@ -81,6 +79,7 @@ export class FeriasComponent {
   }
 
   setExecutadosActive(): void {
+    this.cp = this.route.snapshot.data.calculosPendentesExecucao;
     this.contentAvailable = Content.Executados;
     this.tabSelectionParams = ['select_tab', 'test4'];
   }

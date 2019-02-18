@@ -17,7 +17,7 @@ export class FeriasCalculosPendentesExecucaoComponent implements OnInit {
   contratos: Contrato[];
   @Input() codigoContrato = 0;
   isSelected: boolean[] = [];
-  calculosPendentesExecucao: ListaCalculosPendentes[];
+  @Input() calculosPendentesExecucao: ListaCalculosPendentes[];
   calculosAvaliados: ListaCalculosPendentes[];
   calculosNegados: ListaCalculosPendentes[];
   config: ConfigService;
@@ -30,22 +30,44 @@ export class FeriasCalculosPendentesExecucaoComponent implements OnInit {
   modalActions5 = new EventEmitter<string | MaterializeAction>();
   @Output() nav = new EventEmitter();
   notifications: number;
-  somaFerias: number[] = [];
-  somaTerco: number[] = [];
-  somaDecimo: number[] = [];
-  somaIncidenciaFerias: number[] = [];
-  somaIncidenciaTerco: number[] = [];
-  somaSaldo: number[] = [];
+  somaFerias: number[];
+  somaTerco: number[];
+  somaDecimo: number[];
+  somaIncidenciaFerias: number[];
+  somaIncidenciaTerco: number[];
+  somaSaldo: number[];
 
-  constructor(private feriasService: FeriasService, private contratoService: ContratosService, config: ConfigService, private fb: FormBuilder, private ref: ChangeDetectorRef) {
+  constructor(private feriasService: FeriasService, private contratoService: ContratosService, config: ConfigService,
+              private fb: FormBuilder, private ref: ChangeDetectorRef) {
     this.config = config;
-    this.feriasService.getCalculosPendentesExecucao().subscribe(res2 => {
-      this.calculosPendentesExecucao = res2;
-      if (this.calculosPendentesExecucao.length === 0) {
-        this.calculosPendentesExecucao = null;
-      } else {
-        this.isSelected = new Array(this.calculosPendentesExecucao.length).fill(false);
-        for (let i = 0; i < this.calculosPendentesExecucao.length; i++) {
+    this.feriasService.getCalculosNaoPendentesNegados().subscribe(res3 => {
+      const historico: ListaCalculosPendentes[] = res3;
+      this.calculosNegados = historico;
+      if (this.calculosNegados.length === 0) {
+        this.calculosNegados = null;
+      }else {
+        this.notifications = this.calculosNegados.length;
+      }
+      this.ref.markForCheck();
+    }, error1 => {
+      this.calculosNegados = null;
+    });
+
+  }
+
+  ngOnInit() {
+    if (this.calculosPendentesExecucao.length === 0) {
+      this.calculosPendentesExecucao = null;
+    } else {
+      this.isSelected = new Array(this.calculosPendentesExecucao.length).fill(false);
+      this.somaFerias = new Array(this.calculosPendentesExecucao.length).fill(0);
+      this.somaTerco = new Array(this.calculosPendentesExecucao.length).fill(0);
+      this.somaDecimo = new Array(this.calculosPendentesExecucao.length).fill(0);
+      this.somaIncidenciaFerias = new Array(this.calculosPendentesExecucao.length).fill(0);
+      this.somaIncidenciaTerco = new Array(this.calculosPendentesExecucao.length).fill(0);
+      this.somaSaldo = new Array(this.calculosPendentesExecucao.length).fill(0);
+      for (let i = 0; i < this.calculosPendentesExecucao.length; i++) {
+        if (this.calculosPendentesExecucao[i].calculos.length > 0) {
           for (let j = 0; j < this.calculosPendentesExecucao[i].calculos.length; j++) {
             this.somaFerias[i] = this.somaFerias[i] +
               this.calculosPendentesExecucao[i].calculos[j].calcularFeriasModel.pTotalFerias;
@@ -58,25 +80,10 @@ export class FeriasCalculosPendentesExecucaoComponent implements OnInit {
             this.somaSaldo[i] = this.somaSaldo[i] + this.calculosPendentesExecucao[i].calculos[j].total;
           }
         }
-        this.formInit();
-        this.ref.markForCheck();
       }
-    }, error1 => {
-      this.calculosPendentesExecucao = [];
-    });
-    this.feriasService.getCalculosNaoPendentesNegados().subscribe(res3 => {
-      const historico: ListaCalculosPendentes[] = res3;
-      this.calculosNegados = historico;
-      this.notifications = this.calculosNegados.length;
+      this.formInit();
       this.ref.markForCheck();
-    }, error1 => {
-      this.calculosNegados = [];
-    });
-
-  }
-
-  ngOnInit() {
-    this.formInit();
+    }
   }
 
   formInit() {
@@ -171,6 +178,7 @@ export class FeriasCalculosPendentesExecucaoComponent implements OnInit {
           lista.calculos.push(temp);
         }
       }
+      this.calculosAvaliados.push(lista);
     }
     if (aux === 0) {
       this.openModal();
