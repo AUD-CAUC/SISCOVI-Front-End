@@ -49,8 +49,8 @@ export class ResgateRescisaoComponent implements OnInit {
                 dataInicioFeriasIntegrais: new FormControl(''),
                 dataFimFeriasIntegrais: new FormControl(''),
                 dataInicioFeriasProporcionais: new FormControl(''),
-                resgateFeriasVencidas: new FormControl('', [Validators.required]),
-                resgateFeriasProporcionais: new FormControl('', [Validators.required])
+                resgateFeriasVencidas: new FormControl('T', [Validators.required, this.resgateValidatore]),
+                resgateFeriasProporcionais: new FormControl('T', [Validators.required, this.resgateValidatore])
             });
             control.push(addCtrl);
         });
@@ -62,18 +62,25 @@ export class ResgateRescisaoComponent implements OnInit {
             this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasIntegrais').setValue(this.dateToString(this.terceirizados[i].pDataInicioFeriasIntegrais));
             this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataFimFeriasIntegrais').setValue(this.dateToString(this.terceirizados[i].pDataFimFeriasIntegrais));
             this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasProporcionais').setValue(this.dateToString(this.terceirizados[i].pDataInicioFeriasProporcionais));
-            this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasVencidas').setValidators([Validators.required]);
+            this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasVencidas').setValidators([Validators.required, this.resgateValidatore]);
+            this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasProporcionais').setValidators([Validators.required, this.resgateValidatore]);
         }
     }
     private dateToString(value: any): string {
       //console.log(this.terceirizados);
-      //console.log(value);
       const date: string[] = value.split('-');
       return date[2] + '/' + date[1] + '/' + date['0'];
     }
     private stringToDate(value: string): Date {
       const date: string[] = value.split('/');
       return new Date(Number(date[2]), Number(date[1]) - 1, Number(date[0]));
+    }
+    public resgateValidatore(control: AbstractControl): {[key: string]: any} {
+      const mensagem = [];
+      if (control.value === 'T') {
+        mensagem.push('Selecione uma opção.');
+      }
+      return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
     }
     closeModal1() {
         this.modalActions.emit({action: 'modal', params: ['close']});
@@ -155,6 +162,11 @@ export class ResgateRescisaoComponent implements OnInit {
                         this.calculosRescisao.push(objeto);
                     }
                 } else {
+                  console.log(this.rescisaoForm);
+                    this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasVencidas').markAsDirty();
+                    this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasVencidas').markAsTouched();
+                    this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasProporcionais').markAsDirty();
+                    this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasProporcionais').markAsTouched();
                     aux = null;
                     this.openModal2();
                 }
