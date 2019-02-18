@@ -6,9 +6,9 @@
         <div class="row">
           <div class="input-field col l7 center-align">
             <select class="black-text" name="nome" formControlName="codigo" materialize="material_select"
-                    [ngModel]="percent" (change)="validateForm(); activateButton()" required>
+                    [ngModel]="percentList" (change)="validateForm(); activateButton()" required>
               <option disabled>Selecione</option>
-              <option class="black-text" *ngFor="let rubrica of percent" [value]="rubrica.codigo"
+              <option class="black-text" *ngFor="let rubrica of percentList" [value]="rubrica.codigo"
               >{{rubrica.nome}}</option>
             </select>
             <label style="font-size: 0.85vw">Selecione uma Rubrica</label>
@@ -25,7 +25,7 @@
           <div class="col input-field s6 m6 l4">
             <label for="sigla">Data de Início</label>
             <input id="dataInicio" placeholder="Digite a data de início" type="text"
-                   (keyup)="validateForm(); activateButton()" formControlName="dataInicio" class="validate">
+                   (keyup)="validateForm(); activateButton();" formControlName="dataInicio" class="validate">
           </div>
         </div>
         <div class="row">

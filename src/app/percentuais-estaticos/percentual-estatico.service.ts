@@ -13,8 +13,8 @@ export class PercentualEstaticoService {
   nome: string;
   codigo: number;
   percentual: number;
-  dataInicio: any;
-  dataAditamento: any;
+  dataInicio: String;
+  dataAditamento: String;
   constructor(private config: ConfigService, private http: Http) {
     this.headers = new Headers(
       {
@@ -39,9 +39,9 @@ export class PercentualEstaticoService {
     cadastroPercentualEstatico.percentualEstatico.nome = this.nome;
     cadastroPercentualEstatico.percentualEstatico.codigo = this.codigo;
     cadastroPercentualEstatico.percentualEstatico.percentual = this.percentual;
-    cadastroPercentualEstatico.percentualEstatico.dataInicio = this.dataInicio;
+    cadastroPercentualEstatico.percentualEstatico.dataInicio = this.encapsulaDatas(this.dataInicio).toISOString().split('T')[0];
     cadastroPercentualEstatico.percentualEstatico.dataFim = null;
-    cadastroPercentualEstatico.percentualEstatico.dataAditamento = this.dataAditamento;
+    cadastroPercentualEstatico.percentualEstatico.dataAditamento = this.encapsulaDatas(this.dataAditamento).toISOString().split('T')[0];
     cadastroPercentualEstatico.currentUser = this.config.user.username;
     console.log(cadastroPercentualEstatico);
     const url = this.config.myApi + '/rubricas/cadastrarPercentualEstatico';
@@ -49,5 +49,12 @@ export class PercentualEstaticoService {
     const headers = new Headers({'Content-type': 'application/json'});
     const options = new RequestOptions({headers: headers});
     return this.http.post(url, data, options).map(res => res.json());
+  }
+  protected encapsulaDatas(value: any): Date {
+    const a = value.split('/');
+    const dia = Number(a[0]);
+    const mes = Number(a[1]) - 1;
+    const ano = Number(a[2]);
+    return new Date(ano, mes, dia);
   }
 }

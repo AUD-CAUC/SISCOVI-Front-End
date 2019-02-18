@@ -38,13 +38,13 @@ export class PercentuaisEstaticosComponent {
   }
   closeModal() {
     this.render = false;
-    // ???this.rubricaService.setValdity(true);
+    this.percentualEstaticoService.setValdity(true);
     this.modalActions.emit({action: 'modal', params: ['close']});
   }
 
   cadastraPercentualEstatico() {
     this.percentualEstaticoService.cadastrarPercentualEstatico().subscribe(res => {
-      if (res === 'Rubrica Cadastrada Com sucesso !') {
+      if (res === 'Percentual Estático cadastrado com sucesso!') {
         this.percentualEstaticoService.getPercentuaisEstaticos().subscribe(res2 => {
           this.staticPercent.slice();
           this.staticPercent = res2;
