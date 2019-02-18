@@ -37,38 +37,9 @@ export class FeriasCalculosPendentesComponent implements OnInit {
   somaSaldo: number[] = [];
   @Output() nav = new EventEmitter();
 
-  constructor(private feriasService: FeriasService, private contratoService: ContratosService, config: ConfigService, private fb: FormBuilder, private ref: ChangeDetectorRef) {
+  constructor(private feriasService: FeriasService, private contratoService: ContratosService, config: ConfigService,
+              private fb: FormBuilder, private ref: ChangeDetectorRef) {
     this.config = config;
-    this.feriasService.getCalculosPendentes().subscribe(res2 => {
-
-      if (this.calculosPendentes.length === 0) {
-        this.calculosPendentes = null;
-      } else {
-        this.isSelected = new Array(this.calculosPendentes.length).fill(false);
-        this.calculosPendentes = res2;
-        this.somaFerias = new Array(this.calculosPendentes.length).fill(0);
-        this.somaTerco = new Array(this.calculosPendentes.length).fill(0);
-        this.somaDecimo = new Array(this.calculosPendentes.length).fill(0);
-        this.somaIncidenciaFerias = new Array(this.calculosPendentes.length).fill(0);
-        this.somaIncidenciaTerco = new Array(this.calculosPendentes.length).fill(0);
-        this.somaSaldo = new Array(this.calculosPendentes.length).fill(0);
-        for (let i = 0; i < this.calculosPendentes.length; i++) {
-          for (let j = 0; j < this.calculosPendentes[i].calculos.length; j++) {
-            this.somaFerias[i] = this.somaFerias[i] +
-              this.calculosPendentes[i].calculos[j].calcularFeriasModel.pTotalFerias;
-            this.somaTerco[i] = this.somaTerco[i] +
-              this.calculosPendentes[i].calculos[j].calcularFeriasModel.pTotalTercoConstitucional;
-            this.somaIncidenciaFerias[i] = this.somaIncidenciaFerias[i] +
-              this.calculosPendentes[i].calculos[j].calcularFeriasModel.pTotalIncidenciaFerias;
-            this.somaIncidenciaTerco[i] = this.somaIncidenciaTerco[i] +
-              this.calculosPendentes[i].calculos[j].calcularFeriasModel.pTotalIncidenciaTerco;
-            this.somaSaldo[i] = this.somaSaldo[i] + this.calculosPendentes[i].calculos[j].total;
-          }
-        }
-        this.formInit();
-        this.ref.markForCheck();
-      }
-    });
     this.feriasService.getCalculosPendentesNegados().subscribe(res3 => {
       const historico: ListaCalculosPendentes[] = res3;
       this.calculosNegados = historico;
@@ -80,6 +51,31 @@ export class FeriasCalculosPendentesComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.calculosPendentes.length === 0) {
+      this.calculosPendentes = null;
+    } else {
+      this.isSelected = new Array(this.calculosPendentes.length).fill(false);
+      this.somaFerias = new Array(this.calculosPendentes.length).fill(0);
+      this.somaTerco = new Array(this.calculosPendentes.length).fill(0);
+      this.somaDecimo = new Array(this.calculosPendentes.length).fill(0);
+      this.somaIncidenciaFerias = new Array(this.calculosPendentes.length).fill(0);
+      this.somaIncidenciaTerco = new Array(this.calculosPendentes.length).fill(0);
+      this.somaSaldo = new Array(this.calculosPendentes.length).fill(0);
+      for (let i = 0; i < this.calculosPendentes.length; i++) {
+        for (let j = 0; j < this.calculosPendentes[i].calculos.length; j++) {
+          this.somaFerias[i] = this.somaFerias[i] +
+            this.calculosPendentes[i].calculos[j].calcularFeriasModel.pTotalFerias;
+          this.somaTerco[i] = this.somaTerco[i] +
+            this.calculosPendentes[i].calculos[j].calcularFeriasModel.pTotalTercoConstitucional;
+          this.somaIncidenciaFerias[i] = this.somaIncidenciaFerias[i] +
+            this.calculosPendentes[i].calculos[j].calcularFeriasModel.pTotalIncidenciaFerias;
+          this.somaIncidenciaTerco[i] = this.somaIncidenciaTerco[i] +
+            this.calculosPendentes[i].calculos[j].calcularFeriasModel.pTotalIncidenciaTerco;
+          this.somaSaldo[i] = this.somaSaldo[i] + this.calculosPendentes[i].calculos[j].total;
+        }
+      }
+      this.ref.markForCheck();
+    }
     this.formInit();
   }
 

@@ -41,8 +41,7 @@ export class FeriasCalculosPendentesExecucaoComponent implements OnInit {
               private fb: FormBuilder, private ref: ChangeDetectorRef) {
     this.config = config;
     this.feriasService.getCalculosNaoPendentesNegados().subscribe(res3 => {
-      const historico: ListaCalculosPendentes[] = res3;
-      this.calculosNegados = historico;
+      this.calculosNegados = res3;
       if (this.calculosNegados.length === 0) {
         this.calculosNegados = null;
       }else {

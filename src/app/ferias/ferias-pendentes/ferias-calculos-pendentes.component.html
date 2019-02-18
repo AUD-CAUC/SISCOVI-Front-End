@@ -15,8 +15,8 @@
     </div>
   </div>
 </div>
-<div class="row">
-  <form [formGroup]="feriasForm" *ngIf="calculosPendentes">
+<div class="row" *ngIf="calculosPendentes">
+  <form [formGroup]="feriasForm">
     <div formArrayName="contratos">
       <div class="col  l12" *ngFor="let calculoPendente of calculosPendentes; let i = index">
         <h6><b>{{calculoPendente.titulo}}</b></h6>
@@ -134,7 +134,7 @@
     </div>
   </form>
 </div>
-<div class="row" *ngIf="config.user.perfil.sigla == 'ADMINISTRADOR' && calculosPendentes.length > 0">
+<div class="row" *ngIf="config.user.perfil.sigla == 'ADMINISTRADOR' && calculosPendentes">
   <div class="col">
     <div class="center">
       <button class="btn waves-effect center" (click)="verificaFormulario()">Salvar Alterações</button>

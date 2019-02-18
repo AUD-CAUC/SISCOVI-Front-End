@@ -12,7 +12,7 @@ export class FeriasComponent {
   tabSelectionParams = ['select_tab', 'test2'];
   codigoContrato: number;
   cp: ListaCalculosPendentes[];
-
+  cpe: ListaCalculosPendentes[];
   constructor(private route: ActivatedRoute) {
   }
 
@@ -79,7 +79,7 @@ export class FeriasComponent {
   }
 
   setExecutadosActive(): void {
-    this.cp = this.route.snapshot.data.calculosPendentesExecucao;
+    this.cpe = this.route.snapshot.data.calculosPendentesExecucao;
     this.contentAvailable = Content.Executados;
     this.tabSelectionParams = ['select_tab', 'test4'];
   }
