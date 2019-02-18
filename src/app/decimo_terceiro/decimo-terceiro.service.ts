@@ -85,8 +85,8 @@ export class DecimoTerceiroService {
         return this.http.get(url).map(res => res.json());
     }
 
-    getCalculosPendentesNegados(codigoContrato: number) {
-        const url = this.config.myApi + '/decimo-terceiro/getCalculosPendentesNegados/' + codigoContrato + '/' + this.config.user.id;
+    getCalculosPendentesNegados() {
+        const url = this.config.myApi + '/decimo-terceiro/getCalculosPendentesNegados/' + this.config.user.id;
         return this.http.get(url).map(res => res.json());
     }
 

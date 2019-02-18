@@ -15,7 +15,6 @@ import {ListaCalculosPendentes} from './lista-calculos-pendentes';
 })
 export class FeriasCalculosPendentesComponent implements OnInit {
   contratos: Contrato[];
-  @Input() codigoContrato = 0;
   isSelected: boolean[] = [];
   @Input() calculosPendentes: ListaCalculosPendentes[];
   calculosAvaliados: ListaCalculosPendentes[];
@@ -225,6 +224,6 @@ export class FeriasCalculosPendentesComponent implements OnInit {
 
   navegaViewExec() {
     this.closeModal3();
-    this.nav.emit(this.codigoContrato);
+    this.nav.emit();
   }
 }
