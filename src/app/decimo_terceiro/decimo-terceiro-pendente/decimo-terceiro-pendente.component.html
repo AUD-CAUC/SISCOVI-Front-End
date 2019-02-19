@@ -20,7 +20,7 @@
     <div formArrayName="contratos">
       <div class="col  l12" *ngFor="let calculoPendente of calculosPendentes; let i = index">
         <h6><b>{{calculoPendente.titulo}}</b></h6>
-        <table *ngIf="calculosPendentes" class="highlight centered responsive-table" [formGroupName]="i">
+        <table class="highlight centered responsive-table" [formGroupName]="i">
           <thead>
           <tr>
             <th *ngIf="config.user.perfil.sigla == 'ADMINISTRADOR'">
@@ -83,16 +83,10 @@
             <td></td>
             <td></td>
             <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
             <td><b>Subtotal</b></td>
             <td></td>
-            <td><b>{{somaFerias[i] | currency:'BRL':true:'1.2-2'}}</b></td>
-            <td><b>{{somaTerco[i] | currency:'BRL':true:'1.2-2'}}</b></td>
-            <td><b>{{somaIncidenciaFerias[i] | currency:'BRL':true:'1.2-2'}}</b></td>
-            <td><b>{{somaIncidenciaTerco[i] | currency:'BRL':true:'1.2-2'}}</b></td>
+            <td><b>{{somaDecimo[i] | currency:'BRL':true:'1.2-2'}}</b></td>
+            <td><b>{{somaIncidencia[i] | currency:'BRL':true:'1.2-2'}}</b></td>
             <td></td>
           </tr>
           <tr>
@@ -101,13 +95,7 @@
             <td></td>
             <td></td>
             <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
             <td><b>Total</b></td>
-            <td></td>
-            <td></td>
             <td></td>
             <td></td>
             <td></td>
@@ -240,9 +228,14 @@
           <td class="hoverable">{{calculos.terceirizadoDecTer.tipoRestituicao}}</td>
           <td class="hoverable">{{calculos.terceirizadoDecTer.parcelas | parcelaPipe}}</td>
           <td class="hoverable">{{calculos.terceirizadoDecTer.inicioContagem| date: 'shortDate'}}</td>
-          <td class="hoverable">{{calculos.terceirizadoDecTer.valoresDecimoTerceiro.valorDecimoTerceiro | currency:'BRL':true:'1.2-2'}}</td>
-          <td class="hoverable">{{calculos.terceirizadoDecTer.valoresDecimoTerceiro.valorIncidenciaDecimoTerceiro | currency:'BRL':true:'1.2-2'}}</td>
-          <td class="hoverable"><b>{{calculos.terceirizadoDecTer.valoresDecimoTerceiro.valorDecimoTerceiro + calculos.terceirizadoDecTer.valoresDecimoTerceiro.valorIncidenciaDecimoTerceiro
+          <td class="hoverable">{{calculos.terceirizadoDecTer.valoresDecimoTerceiro.valorDecimoTerceiro |
+            currency:'BRL':true:'1.2-2'}}
+          </td>
+          <td class="hoverable">{{calculos.terceirizadoDecTer.valoresDecimoTerceiro.valorIncidenciaDecimoTerceiro |
+            currency:'BRL':true:'1.2-2'}}
+          </td>
+          <td class="hoverable"><b>{{calculos.terceirizadoDecTer.valoresDecimoTerceiro.valorDecimoTerceiro +
+            calculos.terceirizadoDecTer.valoresDecimoTerceiro.valorIncidenciaDecimoTerceiro
             | currency:'BRL':true:'1.2-2'}}</b></td>
           <td class="hoverable">{{calculos.observacoes}}</td>
         </tr>

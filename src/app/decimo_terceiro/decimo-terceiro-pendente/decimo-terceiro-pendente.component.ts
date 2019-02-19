@@ -27,11 +27,8 @@ export class DecimoTerceiroPendenteComponent implements OnInit {
     modalActions4 = new EventEmitter<string | MaterializeAction>();
     modalActions5 = new EventEmitter<string | MaterializeAction>();
     notifications: number;
-    somaFerias: number[] = [];
-    somaTerco: number[] = [];
     somaDecimo: number[] = [];
-    somaIncidenciaFerias: number[] = [];
-    somaIncidenciaTerco: number[] = [];
+    somaIncidencia: number[] = [];
     somaSaldo: number[] = [];
     @Output() nav = new EventEmitter();
     constructor(config: ConfigService, private  fb: FormBuilder, private  ref: ChangeDetectorRef,
@@ -45,54 +42,65 @@ export class DecimoTerceiroPendenteComponent implements OnInit {
         });
     }
     ngOnInit() {
-      if (this.calculosPendentes) {
-        if (this.calculosPendentes.length === 0) {
-          this.calculosPendentes = null;
-        }else {
-          this.isSelected = new Array(this.calculosPendentes.length).fill(false);
-          this.somaFerias = new Array(this.calculosPendentes.length).fill(0);
-          this.somaTerco = new Array(this.calculosPendentes.length).fill(0);
-          this.somaDecimo = new Array(this.calculosPendentes.length).fill(0);
-          this.somaIncidenciaFerias = new Array(this.calculosPendentes.length).fill(0);
-          this.somaIncidenciaTerco = new Array(this.calculosPendentes.length).fill(0);
-          this.somaSaldo = new Array(this.calculosPendentes.length).fill(0);
-          for (let i = 0; i < this.calculosPendentes.length; i++) {
-            for (let j = 0; j < this.calculosPendentes[i].calculos.length; j++) {
-              /*this.somaDecimo[i] = this.somaFerias[i] +
-                this.calculosPendentes[i].calculos[j].terceirizadoDecTer.;
-              this.somaIncidenciaFerias[i] = this.somaIncidenciaFerias[i] +
-                this.calculosPendentes[i].calculos[j].calcularFeriasModel.pTotalIncidenciaFerias;
-              this.somaIncidenciaTerco[i] = this.somaIncidenciaTerco[i] +
-                this.calculosPendentes[i].calculos[j].calcularFeriasModel.pTotalIncidenciaTerco;
-              this.somaSaldo[i] = this.somaSaldo[i] + this.calculosPendentes[i].calculos[j].total;
-              */
+      this.decimoTerceiroService.getCalculosPendentes().subscribe(res => {
+        this.calculosPendentes = res;
+        if (this.calculosPendentes) {
+          if (this.calculosPendentes.length === 0) {
+            this.calculosPendentes = null;
+          }else {
+            this.isSelected = new Array(this.calculosPendentes.length).fill(false);
+            this.somaDecimo = new Array(this.calculosPendentes.length).fill(0);
+            this.somaIncidencia = new Array(this.calculosPendentes.length).fill(0);
+            this.somaSaldo = new Array(this.calculosPendentes.length).fill(0);
+            for (let i = 0; i < this.calculosPendentes.length; i++) {
+              for (let j = 0; j < this.calculosPendentes[i].calculos.length; j++) {
+                this.somaSaldo[i] = this.somaSaldo[i] +
+                  this.calculosPendentes[i].calculos[j].terceirizadoDecTer.valoresDecimoTerceiro.valorDecimoTerceiro +
+                this.calculosPendentes[i].calculos[j].terceirizadoDecTer.valoresDecimoTerceiro.valorIncidenciaDecimoTerceiro;
+                this.somaDecimo[i] = this.somaDecimo[i] + this.calculosPendentes[i].calculos[j]
+                  .terceirizadoDecTer.valoresDecimoTerceiro.valorDecimoTerceiro;
+                this.somaIncidencia[i] = this.somaIncidencia[i] + this.calculosPendentes[i].calculos[j]
+                  .terceirizadoDecTer.valoresDecimoTerceiro.valorIncidenciaDecimoTerceiro;
+              }
             }
+            this.ref.markForCheck();
+            this.formInit();
           }
-          this.ref.markForCheck();
-          this.formInit();
         }
-      }
+      }, error2 => {
+        this.calculosPendentes = null;
+      });
     }
     formInit() {
         if (this.calculosPendentes ) {
             this.decimoTerceiroForm = this.fb.group({
-                avaliacaoCalculoFerias: this.fb.array([])
+                contratos: this.fb.array([])
             });
-            if (this.calculosPendentes) {
-                const control = <FormArray>this.decimoTerceiroForm.controls.avaliacaoCalculoFerias;
-                this.calculosPendentes.forEach(() => {
-                    const addControl = this.fb.group({
-                        selected: new FormControl(),
-                        avaliacao: new FormControl('S')
-                    });
-                    control.push(addControl);
+          if (this.calculosPendentes) {
+            this.calculosPendentes.forEach(calculoPendente => {
+              const control = <FormArray>this.decimoTerceiroForm.controls.contratos;
+              const newControl = this.fb.group({
+                titulo: new FormControl(calculoPendente.titulo),
+                codigo: new FormControl(calculoPendente.codigo),
+                avaliacaoCalculoDecimoTerceiro: this.fb.array([])
+              });
+              calculoPendente.calculos.forEach(() => {
+                const newControl2 = <FormArray>newControl.controls.avaliacaoCalculoDecimoTerceiro;
+                const addControl = this.fb.group({
+                  selected: new FormControl(),
+                  avaliacao: new FormControl('S')
                 });
-            }
-            this.ref.markForCheck();
+                newControl2.push(addControl);
+              });
+              control.push(newControl);
+            });
+          }
         }
+        this.ref.markForCheck();
         this.decimoTerceiroFormAfter = this.fb.group({
             calculosAvaliados: this.fb.array([])
         });
+        this.ref.detectChanges();
     }
     openModal() {
         this.modalActions.emit({action: 'modal', params: ['open']});
