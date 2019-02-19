@@ -37,9 +37,11 @@ export class CadastrarPercentualEstaticoComponent implements OnInit {
     // });
   }
   ngOnInit(): void {
+    console.log(this.percent);
     let i = 0;
     this.percent.forEach( (percentual) => {
-      if (percentual.dataFim === '-') {
+      console.log(percentual);
+      if (percentual.dataFim === '-' || percentual.dataFim === null) {
         this.ultimaData[percentual.codigo] = percentual.dataInicio;
         this.percentList[i++] = percentual;
       }
@@ -55,10 +57,35 @@ export class CadastrarPercentualEstaticoComponent implements OnInit {
 
   dataInicioValidator(control: AbstractControl): { [key: string]: any } | null {
     const mensagem = [];
+    const otherRegex = new RegExp(/^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[1,3-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$/);
 
     if (control.parent) {
       if (this.ultimaData) {
         console.log(this.ultimaData[control.parent.get('codigo').value]);
+        console.log(control.value.toString().length);
+        if (control.value.toString().length === 10) {
+          let dia = 0;
+          let mes = 0;
+          let ano = 0;
+          dia = Number(this.ultimaData[control.parent.get('codigo').value].split('/')[0]);
+          mes = Number(this.ultimaData[control.parent.get('codigo').value].split('/')[1]) - 1;
+          ano = Number(this.ultimaData[control.parent.get('codigo').value].split('/')[2]);
+          const ultimaData: Date = new Date(ano, mes, dia);
+          dia = Number(control.value.split('/')[0]);
+          mes = Number(control.value.split('/')[1]) - 1;
+          ano = Number(control.value.split('/')[2]);
+          const dataInicio: Date = new Date(ano, mes, dia);
+          const diff = dataInicio.getTime() - ultimaData.getTime();
+          const diffDay: number = Math.round(diff / (1000 * 3600 * 24)) + 1;
+
+          if (diffDay <= 0) {
+            mensagem.push('A data de Início do novo Percentual deve ser maior que a data de Início do antigo Percentual');
+          }
+          if (!otherRegex.test(control.value)) {
+            mensagem.push('A data digitada é inválida');
+            console.log('entrou');
+          }
+        }
       }
 
       // if (control.value <= this.ultimaData[control.parent.get('codigo').value]) {
