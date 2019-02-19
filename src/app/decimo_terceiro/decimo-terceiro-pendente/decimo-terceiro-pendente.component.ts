@@ -45,31 +45,33 @@ export class DecimoTerceiroPendenteComponent implements OnInit {
         });
     }
     ngOnInit() {
-      if (this.calculosPendentes.length === 0) {
-        this.calculosPendentes = null;
-      } else {
-        this.isSelected = new Array(this.calculosPendentes.length).fill(false);
-        this.somaFerias = new Array(this.calculosPendentes.length).fill(0);
-        this.somaTerco = new Array(this.calculosPendentes.length).fill(0);
-        this.somaDecimo = new Array(this.calculosPendentes.length).fill(0);
-        this.somaIncidenciaFerias = new Array(this.calculosPendentes.length).fill(0);
-        this.somaIncidenciaTerco = new Array(this.calculosPendentes.length).fill(0);
-        this.somaSaldo = new Array(this.calculosPendentes.length).fill(0);
-        for (let i = 0; i < this.calculosPendentes.length; i++) {
-          for (let j = 0; j < this.calculosPendentes[i].calculos.length; j++) {
-            /*this.somaDecimo[i] = this.somaFerias[i] +
-              this.calculosPendentes[i].calculos[j].terceirizadoDecTer.;
-            this.somaIncidenciaFerias[i] = this.somaIncidenciaFerias[i] +
-              this.calculosPendentes[i].calculos[j].calcularFeriasModel.pTotalIncidenciaFerias;
-            this.somaIncidenciaTerco[i] = this.somaIncidenciaTerco[i] +
-              this.calculosPendentes[i].calculos[j].calcularFeriasModel.pTotalIncidenciaTerco;
-            this.somaSaldo[i] = this.somaSaldo[i] + this.calculosPendentes[i].calculos[j].total;
-            */
+      if (this.calculosPendentes) {
+        if (this.calculosPendentes.length === 0) {
+          this.calculosPendentes = null;
+        }else {
+          this.isSelected = new Array(this.calculosPendentes.length).fill(false);
+          this.somaFerias = new Array(this.calculosPendentes.length).fill(0);
+          this.somaTerco = new Array(this.calculosPendentes.length).fill(0);
+          this.somaDecimo = new Array(this.calculosPendentes.length).fill(0);
+          this.somaIncidenciaFerias = new Array(this.calculosPendentes.length).fill(0);
+          this.somaIncidenciaTerco = new Array(this.calculosPendentes.length).fill(0);
+          this.somaSaldo = new Array(this.calculosPendentes.length).fill(0);
+          for (let i = 0; i < this.calculosPendentes.length; i++) {
+            for (let j = 0; j < this.calculosPendentes[i].calculos.length; j++) {
+              /*this.somaDecimo[i] = this.somaFerias[i] +
+                this.calculosPendentes[i].calculos[j].terceirizadoDecTer.;
+              this.somaIncidenciaFerias[i] = this.somaIncidenciaFerias[i] +
+                this.calculosPendentes[i].calculos[j].calcularFeriasModel.pTotalIncidenciaFerias;
+              this.somaIncidenciaTerco[i] = this.somaIncidenciaTerco[i] +
+                this.calculosPendentes[i].calculos[j].calcularFeriasModel.pTotalIncidenciaTerco;
+              this.somaSaldo[i] = this.somaSaldo[i] + this.calculosPendentes[i].calculos[j].total;
+              */
+            }
           }
+          this.ref.markForCheck();
+          this.formInit();
         }
-        this.ref.markForCheck();
       }
-        this.formInit();
     }
     formInit() {
         if (this.calculosPendentes ) {

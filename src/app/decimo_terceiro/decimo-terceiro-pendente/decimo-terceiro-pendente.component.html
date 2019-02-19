@@ -1,5 +1,5 @@
 <br>
-<div class="row" *ngIf="(calculosNegados.length > 0) && config.user.perfil.sigla == 'ADMINISTRADOR'">
+<div class="row" *ngIf="calculosNegados && config.user.perfil.sigla == 'ADMINISTRADOR'">
   <div class="col tooltip" *ngIf="calculosNegados.length > 0">
     <span class="tooltiptext">Cálculos Negados</span>
     <a (click)="openModal4()" class="left badge1" [attr.data-badge]="notifications">
@@ -142,52 +142,58 @@
   <div class="modal-content">
     <h4 class="center">Confirma Operação</h4>
     <br>
-    <table class="highlight centered responsive-table">
-      <thead>
-      <tr>
-        <th>Status</th>
-        <th>Terceirizado</th>
-        <th>Função</th>
-        <th>Tipo de Restituição</th>
-        <th>Parcela</th>
-        <th>Data para Início da Contagem</th>
-        <th>Valor de Décimo Terceiro</th>
-        <th>Valor de Incidência</th>
-        <th>Total</th>
-        <th>Observações</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let calculos of calculosAvaliados; let k = index">
-        <td>{{calculos.status | pendentePipe}}</td>
-        <td>{{calculos.terceirizadoDecTer.nomeTerceirizado}}</td>
-        <td>{{calculos.terceirizadoDecTer.nomeCargo}}</td>
-        <td>{{calculos.terceirizadoDecTer.tipoRestituicao}}</td>
-        <td>{{calculos.terceirizadoDecTer.parcelas | parcelaPipe}}</td>
-        <td>{{calculos.terceirizadoDecTer.inicioContagem | date: 'shortDate'}}</td>
-        <td>{{calculos.terceirizadoDecTer.valoresDecimoTerceiro.valorDecimoTerceiro | currency:'BRL':true:'1.2-2'}}</td>
-        <td>{{calculos.terceirizadoDecTer.valoresDecimoTerceiro.valorIncidenciaDecimoTerceiro |
-          currency:'BRL':true:'1.2-2'}}
-        </td>
-        <td>{{calculos.terceirizadoDecTer.valoresDecimoTerceiro.valorDecimoTerceiro +
-          calculos.terceirizadoDecTer.valoresDecimoTerceiro.valorIncidenciaDecimoTerceiro
-          | currency:'BRL':true:'1.2-2'}}
-        </td>
-        <td>
-          <div class="row">
-            <form [formGroup]="decimoTerceiroFormAfter" class="col">
-              <div class="row" formArrayName="calculosAvaliados">
-                <div class="input-field col s12" [formGroupName]="k">
-                  <textarea id="textarea1" class="materialize-textarea" formControlName="observacoes"></textarea>
-                  <label for="textarea1">Observações</label>
+    <div *ngFor="let calcAval of calculosAvaliados">
+      <h6><b>{{calcAval.titulo}}</b></h6>
+      <table class="highlight centered responsive-table" *ngIf="calcAval.calculos.length">
+        <thead>
+        <tr>
+          <th>Status</th>
+          <th>Terceirizado</th>
+          <th>Função</th>
+          <th>Tipo de Restituição</th>
+          <th>Parcela</th>
+          <th>Data para Início da Contagem</th>
+          <th>Valor de Décimo Terceiro</th>
+          <th>Valor de Incidência</th>
+          <th>Total</th>
+          <th>Observações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let calculos of calcAval.calculos; let k = index">
+          <td>{{calculos.status | pendentePipe}}</td>
+          <td *ngIf="config.user.perfil.sigla == 'USUÁRIO'">{{calculos.status}}</td>
+          <td>{{calculos.terceirizadoDecTer.nomeTerceirizado}}</td>
+          <td>{{calculos.terceirizadoDecTer.nomeCargo}}</td>
+          <td>{{calculos.terceirizadoDecTer.tipoRestituicao}}</td>
+          <td>{{calculos.terceirizadoDecTer.parcelas | parcelaPipe}}</td>
+          <td>{{calculos.terceirizadoDecTer.inicioContagem | date: 'shortDate'}}</td>
+          <td>{{calculos.terceirizadoDecTer.valoresDecimoTerceiro.valorDecimoTerceiro |
+            currency:'BRL':true:'1.2-2'}}
+          </td>
+          <td>{{calculos.terceirizadoDecTer.valoresDecimoTerceiro.valorIncidenciaDecimoTerceiro |
+            currency:'BRL':true:'1.2-2'}}
+          </td>
+          <td>{{calculos.terceirizadoDecTer.valoresDecimoTerceiro.valorDecimoTerceiro +
+            calculos.terceirizadoDecTer.valoresDecimoTerceiro.valorIncidenciaDecimoTerceiro
+            | currency:'BRL':true:'1.2-2'}}
+          </td>
+          <td>
+            <div class="row">
+              <form [formGroup]="decimoTerceiroFormAfter" class="col">
+                <div class="row" formArrayName="calculosAvaliados">
+                  <div class="input-field col s12" [formGroupName]="k">
+                    <textarea id="textarea1" class="materialize-textarea" formControlName="observacoes"></textarea>
+                    <label for="textarea1">Observações</label>
+                  </div>
                 </div>
-              </div>
-            </form>
-          </div>
-        </td>
-      </tr>
-      </tbody>
-    </table>
+              </form>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
   <div class="modal-footer">
     <button class="btn waves-effect left" (click)="closeModal2()">Cancelar</button>
@@ -206,45 +212,43 @@
   </div>
 </div>
 <div id="modal4" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]"
-     [materializeActions]="modalActions4">
+     [materializeActions]="modalActions4" *ngIf="calculosNegados && calculosNegados.length > 0">
   <div class="modal-content">
     <h4 class="center">Histórico de Cálculos Negados</h4>
-    <table class="highlight centered responsive-table">
-      <thead>
-      <tr>
-        <th>Status</th>
-        <th>Terceirizado</th>
-        <th>Função</th>
-        <th>Tipo de Restituição</th>
-        <th>Parcela</th>
-        <th>Data para Início da Contagem</th>
-        <th>Valor de Décimo Terceiro</th>
-        <th>Valor de Incidência</th>
-        <th>Total</th>
-        <th>Observações</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let calculos of calculosNegados">
-        <td>{{calculos.status}}</td>
-        <td class="hoverable">{{calculos.terceirizadoDecTer.nomeTerceirizado}}</td>
-        <td class="hoverable">{{calculos.terceirizadoDecTer.nomeCargo}}</td>
-        <td class="hoverable">{{calculos.terceirizadoDecTer.tipoRestituicao}}</td>
-        <td class="hoverable">{{calculos.terceirizadoDecTer.parcelas | parcelaPipe}}</td>
-        <td class="hoverable">{{calculos.terceirizadoDecTer.inicioContagem| date: 'shortDate'}}</td>
-        <td class="hoverable">{{calculos.terceirizadoDecTer.valoresDecimoTerceiro.valorDecimoTerceiro |
-          currency:'BRL':true:'1.2-2'}}
-        </td>
-        <td class="hoverable">{{calculos.terceirizadoDecTer.valoresDecimoTerceiro.valorIncidenciaDecimoTerceiro |
-          currency:'BRL':true:'1.2-2'}}
-        </td>
-        <td class="hoverable"><b>{{calculos.terceirizadoDecTer.valoresDecimoTerceiro.valorDecimoTerceiro +
-          calculos.terceirizadoDecTer.valoresDecimoTerceiro.valorIncidenciaDecimoTerceiro
-          | currency:'BRL':true:'1.2-2'}}</b></td>
-        <td class="hoverable">{{calculos.observacoes}}</td>
-      </tr>
-      </tbody>
-    </table>
+    <div *ngFor="let calculoNegado of calculosNegados">
+      <h6><b>{{calculoNegado.titulo}}</b></h6>
+      <table class="highlight centered responsive-table">
+        <thead>
+        <tr>
+          <th>Status</th>
+          <th>Terceirizado</th>
+          <th>Função</th>
+          <th>Tipo de Restituição</th>
+          <th>Parcela</th>
+          <th>Data para Início da Contagem</th>
+          <th>Valor de Décimo Terceiro</th>
+          <th>Valor de Incidência</th>
+          <th>Total</th>
+          <th>Observações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let calculos of calculoNegado.calculos">
+          <td>{{calculos.status}}</td>
+          <td class="hoverable">{{calculos.terceirizadoDecTer.nomeTerceirizado}}</td>
+          <td class="hoverable">{{calculos.terceirizadoDecTer.nomeCargo}}</td>
+          <td class="hoverable">{{calculos.terceirizadoDecTer.tipoRestituicao}}</td>
+          <td class="hoverable">{{calculos.terceirizadoDecTer.parcelas | parcelaPipe}}</td>
+          <td class="hoverable">{{calculos.terceirizadoDecTer.inicioContagem| date: 'shortDate'}}</td>
+          <td class="hoverable">{{calculos.terceirizadoDecTer.valoresDecimoTerceiro.valorDecimoTerceiro | currency:'BRL':true:'1.2-2'}}</td>
+          <td class="hoverable">{{calculos.terceirizadoDecTer.valoresDecimoTerceiro.valorIncidenciaDecimoTerceiro | currency:'BRL':true:'1.2-2'}}</td>
+          <td class="hoverable"><b>{{calculos.terceirizadoDecTer.valoresDecimoTerceiro.valorDecimoTerceiro + calculos.terceirizadoDecTer.valoresDecimoTerceiro.valorIncidenciaDecimoTerceiro
+            | currency:'BRL':true:'1.2-2'}}</b></td>
+          <td class="hoverable">{{calculos.observacoes}}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
   <div class="modal-footer">
     <button class="btn waves-effect center" (click)="closeModal4()">Ok</button>
