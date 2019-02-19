@@ -8,15 +8,16 @@
                     <label for="test5"></label>
                 </th>
                 <th>Terceirizado</th>
-                <th>Tipo de Rescisão</th>
-                <th>Data de Desligamento</th>
+                <th>Tipo de rescisão</th>
+                <th>Data de desligamento</th>
                 <th>Início de férias vencidas</th>
                 <th>Fim de férias vencidas</th>
-                <th>Valor de Féria Vencidas</th>
+                <th>Resgatar férias vencidas</th>
+                <th>Valor de féria Vencidas</th>
                 <th>Início de férias proporcionais</th>
-                <th>Fim de férias proporcionais</th>
-                <th>Valor de Féria Proporcionais</th>
-                <th>Valor de Décimo Terceiro</th>
+                <th>Resgatar férias proporcionais</th>
+                <th>Valor de féria proporcionais</th>
+                <th>Valor de décimo terceiro</th>
             </tr>
             </thead>
             <tbody>
@@ -33,49 +34,30 @@
                         <div class="row">
                             <div class="input-field col s12 center">
                                 <select class="center-align " materialize="material_select" formControlName="tipoRescisao">
-                                    <option disabled>Selecione</option>
-                                    <option value="A PEDIDO">A Pedido</option>
-                                    <option value="COM JUSTA CAUSA">Com Justa Causa</option>
-                                    <option value="SEM JUSTA CAUSA">Sem Justa Causa</option>
+                                  <!--<option disabled>Selecione</option>-->
+                                  <option value="A PEDIDO">A Pedido</option>
+                                  <option value="COM JUSTA CAUSA">Com Justa Causa</option>
+                                  <option value="SEM JUSTA CAUSA">Sem Justa Causa</option>
                                 </select>
                             </div>
                         </div>
                     </div>
                 </td>
+                <td>{{terceirizado.dataDesligamento | date: 'shortDate'}}</td>
                 <td>
                     <div [formGroupName]="i">
                         <div class="row">
                             <div class="input-field col s12">
-                                <input type="text" class="validate" placeholder="Ex: 01/01/2000" appMaskDate formControlName="dataDesligamento" maxlength="10" required>
-                                <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataDesligamento').invalid && (rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataDesligamento').dirty ||
-                                rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataDesligamento').touched)">
-                                    <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataDesligamento').getError('mensagem')">
-                                        <div *ngFor="let msg of rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataDesligamento').getError('mensagem')[0]">
+                                <input type="text" class="validate" placeholder="Ex: 01/01/2000" appMaskDate formControlName="dataInicioFeriasIntegrais" maxlength="10" required>
+                                <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasIntegrais').invalid && (rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasIntegrais').dirty ||
+                                rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasIntegrais').touched)">
+                                    <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasIntegrais').getError('mensagem')">
+                                        <div *ngFor="let msg of rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasIntegrais').getError('mensagem')[0]">
                                             <span class="mensagem-erro">{{msg}}</span>
                                         </div>
                                     </div>
-                                    <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataDesligamento').getError('required')">
-                                        <span class="mensagem-erro">Você deve digitar uma data !</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </td>
-                <td>
-                    <div [formGroupName]="i">
-                        <div class="row">
-                            <div class="input-field col s12">
-                                <input type="text" class="validate" placeholder="Ex: 01/01/2000" appMaskDate formControlName="dataInicio" maxlength="10" required>
-                                <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicio').invalid && (rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicio').dirty ||
-                                rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicio').touched)">
-                                    <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataDesligamento').getError('mensagem')">
-                                        <div *ngFor="let msg of rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicio').getError('mensagem')[0]">
-                                            <span class="mensagem-erro">{{msg}}</span>
-                                        </div>
-                                    </div>
-                                    <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicio').getError('required')">
-                                        <span class="mensagem-erro">Você deve digitar uma data !</span>
+                                    <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasIntegrais').getError('required')">
+                                        <span class="mensagem-erro">Você deve digitar uma data!</span>
                                     </div>
                                 </div>
                             </div>
@@ -86,16 +68,41 @@
                   <div [formGroupName]="i">
                     <div class="row">
                       <div class="input-field col s12">
-                        <input type="text" class="validate" placeholder="Ex: 01/01/2000" appMaskDate formControlName="dataInicio" maxlength="10" required>
-                        <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicio').invalid && (rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicio').dirty ||
-                                  rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicio').touched)">
-                          <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataDesligamento').getError('mensagem')">
-                            <div *ngFor="let msg of rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicio').getError('mensagem')[0]">
+                        <input type="text" class="validate" placeholder="Ex: 01/01/2000" appMaskDate formControlName="dataFimFeriasIntegrais" maxlength="10" required>
+                        <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataFimFeriasIntegrais').invalid && (rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataFimFeriasIntegrais').dirty ||
+                                  rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataFimFeriasIntegrais').touched)">
+                          <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataFimFeriasIntegrais').getError('mensagem')">
+                            <div *ngFor="let msg of rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataFimFeriasIntegrais').getError('mensagem')[0]">
                               <span class="mensagem-erro">{{msg}}</span>
                             </div>
                           </div>
-                          <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicio').getError('required')">
-                            <span class="mensagem-erro">Você deve digitar uma data !</span>
+                          <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataFimFeriasIntegrais').getError('required')">
+                            <span class="mensagem-erro">Você deve digitar uma data!</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div [formGroupName]="i">
+                    <div class="row">
+                      <div class="input-field col m11 center center-align centered">
+                        <select class="validate"  materialize="material_select"
+                                formControlName="resgateFeriasVencidas" required>
+                          <option value="T">Selecione</option>
+                          <option value="S">Sim</option>
+                          <option value="N">Não</option>
+                        </select>
+                        <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasVencidas').invalid && (rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasVencidas').dirty ||
+                                  rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasVencidas').touched)">
+                          <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasVencidas').getError('mensagem')">
+                            <div *ngFor="let msg of rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasVencidas').getError('mensagem')[0]">
+                              <span class="mensagem-erro">{{msg}}</span>
+                            </div>
+                          </div>
+                          <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasVencidas').getError('required')">
+                            <span class="mensagem-erro">Você deve selecionar uma opção.</span>
                           </div>
                         </div>
                       </div>
@@ -107,16 +114,16 @@
                         <div class="row">
                             <div class="input-field col s12">
                                 <input type="text" class="validate" currencyMask [options]="{prefix: 'R$', thousands: '.', decimal: ',', allowNegative: 'false'}"
-                                       formControlName="valorAMovimentar" maxlength="10" required>
-                                <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorAMovimentar').invalid && (rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorAMovimentar').dirty ||
-                                rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorAMovimentar').touched)">
-                                    <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorAMovimentar').getError('mensagem')">
-                                        <div *ngFor="let msg of rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorAMovimentar').getError('mensagem')[0]">
+                                       formControlName="valorFeriasVencidasMovimentado" maxlength="10" required>
+                                <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorFeriasVencidasMovimentado').invalid && (rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorFeriasVencidasMovimentado').dirty ||
+                                rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorFeriasVencidasMovimentado').touched)">
+                                    <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorFeriasVencidasMovimentado').getError('mensagem')">
+                                        <div *ngFor="let msg of rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorFeriasVencidasMovimentado').getError('mensagem')[0]">
                                             <span class="mensagem-erro">{{msg}}</span>
                                         </div>
                                     </div>
-                                    <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorAMovimentar').getError('required')">
-                                        <span class="mensagem-erro">Você deve digitar um valor a ser movimentado !</span>
+                                    <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorFeriasVencidasMovimentado').getError('required')">
+                                        <span class="mensagem-erro">Você deve digitar um valor a ser movimentado!</span>
                                     </div>
                                 </div>
                             </div>
@@ -127,15 +134,15 @@
                   <div [formGroupName]="i">
                     <div class="row">
                       <div class="input-field col s12">
-                        <input type="text" class="validate" placeholder="Ex: 01/01/2000" appMaskDate formControlName="dataInicio" maxlength="10" required>
-                        <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicio').invalid && (rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicio').dirty ||
-                                  rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicio').touched)">
-                          <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataDesligamento').getError('mensagem')">
-                            <div *ngFor="let msg of rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicio').getError('mensagem')[0]">
+                        <input type="text" class="validate" placeholder="Ex: 01/01/2000" appMaskDate formControlName="dataInicioFeriasProporcionais" maxlength="10" required>
+                        <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasProporcionais').invalid && (rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasProporcionais').dirty ||
+                                  rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasProporcionais').touched)">
+                          <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasProporcionais').getError('mensagem')">
+                            <div *ngFor="let msg of rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasProporcionais').getError('mensagem')[0]">
                               <span class="mensagem-erro">{{msg}}</span>
                             </div>
                           </div>
-                          <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicio').getError('required')">
+                          <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasProporcionais').getError('required')">
                             <span class="mensagem-erro">Você deve digitar uma data !</span>
                           </div>
                         </div>
@@ -144,19 +151,45 @@
                   </div>
                 </td>
                 <td>
+                <div [formGroupName]="i">
+                  <div class="row">
+                    <div class="input-field col m11 center center-align centered">
+                      <select class="center center-align centered" materialize="material_select"
+                              formControlName="resgateFeriasProporcionais">
+                        <option value="T">Selecione</option>
+                        <option value="S">Sim</option>
+                        <option value="N">Não</option>
+                      </select>
+                      <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasProporcionais').invalid && (rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasProporcionais').dirty ||
+                                  rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasProporcionais').touched)">
+                        <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasProporcionais').getError('mensagem')">
+                          <div *ngFor="let msg of rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasProporcionais').getError('mensagem')[0]">
+                            <span class="mensagem-erro">{{msg}}</span>
+                          </div>
+                        </div>
+                        <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasProporcionais').getError('required')">
+                          <span class="mensagem-erro">Você deve selecionar uma opção.</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                </td>
+                <td>
                   <div [formGroupName]="i">
                     <div class="row">
                       <div class="input-field col s12">
-                        <input type="text" class="validate" placeholder="Ex: 01/01/2000" appMaskDate formControlName="dataInicio" maxlength="10" required>
-                        <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicio').invalid && (rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicio').dirty ||
-                                  rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicio').touched)">
-                          <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataDesligamento').getError('mensagem')">
-                            <div *ngFor="let msg of rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicio').getError('mensagem')[0]">
+                        <input type="text" class="validate" currencyMask [options]="{prefix: 'R$', thousands: '.', decimal: ',', allowNegative: 'false'}"
+                               formControlName="valorFeriasProporcionaisMovimentado" maxlength="10" required>
+                        <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorFeriasProporcionaisMovimentado').invalid && (rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorFeriasProporcionaisMovimentado').dirty ||
+                                  rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorFeriasProporcionaisMovimentado').touched)">
+                          <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorFeriasProporcionaisMovimentado').getError('mensagem')">
+                            <div *ngFor="let msg of rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorFeriasProporcionaisMovimentado').getError('mensagem')[0]">
                               <span class="mensagem-erro">{{msg}}</span>
                             </div>
                           </div>
-                          <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicio').getError('required')">
-                            <span class="mensagem-erro">Você deve digitar uma data !</span>
+                          <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorFeriasProporcionaisMovimentado').getError('required')">
+                            <span class="mensagem-erro">Você deve digitar um valor a ser movimentado!</span>
                           </div>
                         </div>
                       </div>
@@ -168,36 +201,15 @@
                     <div class="row">
                       <div class="input-field col s12">
                         <input type="text" class="validate" currencyMask [options]="{prefix: 'R$', thousands: '.', decimal: ',', allowNegative: 'false'}"
-                               formControlName="valorAMovimentar" maxlength="10" required>
-                        <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorAMovimentar').invalid && (rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorAMovimentar').dirty ||
-                                  rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorAMovimentar').touched)">
-                          <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorAMovimentar').getError('mensagem')">
-                            <div *ngFor="let msg of rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorAMovimentar').getError('mensagem')[0]">
+                               formControlName="valorDecimoTerceiroMovimentado" maxlength="10" required>
+                        <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorDecimoTerceiroMovimentado').invalid && (rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorDecimoTerceiroMovimentado').dirty ||
+                                  rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorDecimoTerceiroMovimentado').touched)">
+                          <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorDecimoTerceiroMovimentado').getError('mensagem')">
+                            <div *ngFor="let msg of rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorDecimoTerceiroMovimentado').getError('mensagem')[0]">
                               <span class="mensagem-erro">{{msg}}</span>
                             </div>
                           </div>
-                          <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorAMovimentar').getError('required')">
-                            <span class="mensagem-erro">Você deve digitar um valor a ser movimentado !</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <div [formGroupName]="i">
-                    <div class="row">
-                      <div class="input-field col s12">
-                        <input type="text" class="validate" currencyMask [options]="{prefix: 'R$', thousands: '.', decimal: ',', allowNegative: 'false'}"
-                               formControlName="valorAMovimentar" maxlength="10" required>
-                        <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorAMovimentar').invalid && (rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorAMovimentar').dirty ||
-                                  rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorAMovimentar').touched)">
-                          <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorAMovimentar').getError('mensagem')">
-                            <div *ngFor="let msg of rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorAMovimentar').getError('mensagem')[0]">
-                              <span class="mensagem-erro">{{msg}}</span>
-                            </div>
-                          </div>
-                          <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorAMovimentar').getError('required')">
+                          <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorDecimoTerceiroMovimentado').getError('required')">
                             <span class="mensagem-erro">Você deve digitar um valor a ser movimentado !</span>
                           </div>
                         </div>
@@ -239,45 +251,46 @@
         </div>
     </div>
 </div>
-<div id="modal3" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions3">
-    <div class="modal-content">
-        <h4 class="center">Atenção</h4>
-        <h5 class="center">Deseja Confirmar o cálculo realizado ?</h5>
-        <p>Obs.: Esta ação não poderá ser desfeita futuramente *</p>
-        <table *ngIf="calculosRescisao && vmsm"  class="highlight centered responsive-table hoverable">
-            <thead>
-            <tr>
-                <th>Terceirizado</th>
-                <th>Tipo de Rescisão</th>
-                <th>Tipo de Restituição</th>
-                <th>Valor Décimo Terceiro</th>
-
-                <th>Valor de Férias Vencidas</th>
-                <th>Valor de Férias Proporcionais</th>
-                <th class="black-text">Total</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr *ngFor="let calculo of calculosRescisao">
-                <td>{{calculo.terceirizadoRescisao.nomeTerceirizado}}</td>
-                <td>{{calculo.terceirizadoRescisao.tipoRescisao}}</td>
-                <td>{{calculo.terceirizadoRescisao.tipoRestituicao}}</td>
-                <td>{{calculo.valorRestituicaoRescisao.valorDecimoTerceiro | currency:'BRL':true:'1.2-2'}}</td>
-                <td>{{calculo.valorRestituicaoRescisao.valorFeriasIntegral | currency:'BRL':true:'1.2-2'}}</td>
-                <td>{{calculo.valorRestituicaoRescisao.valorTerco | currency:'BRL':true:'1.2-2'}}</td>
-                <td>{{calculo.valorRestituicaoRescisao.valorIncidenciaFerias | currency:'BRL':true:'1.2-2'}}</td>
-                <td>{{calculo.valorRestituicaoRescisao.valorIncidenciaTerco | currency:'BRL':true:'1.2-2'}}</td>
-                <td>{{calculo.valorRestituicaoRescisao.valorFGTSFerias | currency:'BRL':true:'1.2-2'}}</td>
-                <td>{{calculo.valorRestituicaoRescisao.valorFGTSTerco | currency:'BRL':true:'1.2-2'}}</td>
-                <td>{{calculo.valorRestituicaoRescisao.valorFGTSSalario | currency:'BRL':true:'1.2-2'}}</td>
-                <td>{{calculo.valorRestituicaoRescisao.valorDecimoTerceiro + calculo.valorRestituicaoRescisao.valorIncidenciaDecimoTerceiro + calculo.valorRestituicaoRescisao.valorFGTSDecimoTerceiro +
-                    calculo.valorRestituicaoRescisao.valorFerias + calculo.valorRestituicaoRescisao.valorTerco + calculo.valorRestituicaoRescisao.valorIncidenciaFerias + calculo.valorRestituicaoRescisao.valorIncidenciaTerco
-                    + calculo.valorRestituicaoRescisao.valorFGTSFerias + calculo.valorRestituicaoRescisao.valorFGTSTerco + calculo.valorRestituicaoRescisao.valorFGTSSalario +
-                    calculo.valorRestituicaoRescisao.valorDecimoTerceiro}}</td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+<div id="modal3" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]"
+     [materializeActions]="modalActions3">
+  <div class="modal-content">
+    <h4 class="center">Atenção</h4>
+    <h5 class="center">Deseja Confirmar o cálculo realizado ?</h5>
+    <p>Obs.: Esta ação não poderá ser desfeita futuramente *</p>
+    <table *ngIf="calculosRescisao" class="highlight centered responsive-table hoverable">
+      <thead>
+      <tr>
+        <th>Terceirizado</th>
+        <th>Tipo restituição</th>
+        <th>Tipo rescisão</th>
+        <th>Desligamento</th >
+        <th>Décimo Terceiro</th>
+        <th>Início de férias vencidas</th>
+        <th>Fim de férias vencidas</th>
+        <th>Férias + 1/3 Integral</th>
+        <th>Início de férias proporcionais</th>
+        <th>Fim de férias proporcionais</th>
+        <th>Férias + 1/3 Proporcional</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let calculo of calculosRescisao">
+        <!--<p>{{calculo|json}}</p>-->
+        <td>{{calculo.nomeTerceirizado}}</td>
+        <td>{{calculo.tipoRestituicao}}</td>
+        <td>{{calculo.tipoRescisao}}</td>
+        <td>{{calculo.dataDesligamento | date:'shortDate'}}</td>
+        <td>{{calculo.valorDecimoTerceiroMovimentado | currency:'BRL':true:'1.2-2'}}</td>
+        <td>{{calculo.inicioFeriasIntegrais | date:'shortDate'}}</td>
+        <td>{{calculo.fimFeriasIntegrais | date:'shortDate'}}</td>
+        <td>{{calculo.valorFeriasVencidasMovimentado | currency:'BRL':true:'1.2-2'}}</td>
+        <td>{{calculo.inicioFeriasProporcionais | date:'shortDate'}}</td>
+        <td>{{calculo.fimFeriasProporcionais | date:'shortDate'}}</td>
+        <td>{{calculo.valorFeriasProporcionaisMovimentado | currency:'BRL':true:'1.2-2'}}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
     <div class="modal-footer">
         <div class="center-align">
             <button class="btn waves-effect right" (click)="efetuarCalculo()">Confirmar</button>

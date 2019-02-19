@@ -30,7 +30,7 @@ export class ResgateRescisaoComponent implements OnInit {
     modalActions3 = new EventEmitter<string | MaterializeAction>();
     modalActions4 = new EventEmitter<string | MaterializeAction>();
     @Output() navegaParaViewDeCalculos = new EventEmitter();
-    constructor(private fb: FormBuilder, private rescisaoService: RescisaoService, private ref: ChangeDetectorRef) { }
+    constructor(private fb: FormBuilder, private rescisaoService: RescisaoService) { }
     ngOnInit() {
         this.formInit();
     }
@@ -125,10 +125,10 @@ export class ResgateRescisaoComponent implements OnInit {
                         this.tipoRestituicao,
                         this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('tipoRescisao').value,
                         this.terceirizados[i].dataDesligamento,
-                        this.stringToDate(this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasIntegrais').value),
-                        this.stringToDate(this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataFimFeriasIntegrais').value),
-                        this.stringToDate(this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasProporcionais').value),
-                        this.terceirizados[i].dataDesligamento,
+                        null,
+                        null,
+                        null,
+                        null,
                         0,
                         0,
                         0,
@@ -155,6 +155,14 @@ export class ResgateRescisaoComponent implements OnInit {
                         }
                     }
                     objeto.setNomeTerceirizado(this.terceirizados[i].nomeTerceirizado);
+                    if (this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasVencidas').value === 'S') {
+                        objeto.setInicioFeriasIntegrais(this.stringToDate(this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasIntegrais').value));
+                        objeto.setFimFeriasIntegrais(this.stringToDate(this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataFimFeriasIntegrais').value));
+                    }
+                    if (this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasProporcionais').value === 'S') {
+                        objeto.setInicioFeriasProporcionais(this.stringToDate(this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasProporcionais').value));
+                        objeto.setFimFeriasProporcionais(this.terceirizados[i].dataDesligamento);
+                    }
                     if (index === -1) {
                         this.calculosRescisao.push(objeto);
                     } else {

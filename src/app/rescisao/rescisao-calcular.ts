@@ -146,4 +146,12 @@ export class RescisaoCalcular {
 
   public setNomeTerceirizado(nomeTerceirizado: string): void { this.nomeTerceirizado = nomeTerceirizado; }
 
+  public setInicioFeriasIntegrais(inicioFeriasIntegrais: Date): void { this.inicioFeriasIntegrais = inicioFeriasIntegrais; }
+
+  public setFimFeriasIntegrais(fimFeriasIntegrais: Date): void { this.fimFeriasIntegrais = fimFeriasIntegrais; }
+
+  public setInicioFeriasProporcionais(inicioFeriasProporcionais: Date): void { this.inicioFeriasProporcionais = inicioFeriasProporcionais; }
+
+  public setFimFeriasProporcionais(fimFeriasProporcionais: Date): void { this.fimFeriasProporcionais = fimFeriasProporcionais; }
+
 }
