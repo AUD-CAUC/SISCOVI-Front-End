@@ -43,7 +43,6 @@ export class PercentualEstaticoService {
     cadastroPercentualEstatico.percentualEstatico.dataFim = null;
     cadastroPercentualEstatico.percentualEstatico.dataAditamento = this.encapsulaDatas(this.dataAditamento).toISOString().split('T')[0];
     cadastroPercentualEstatico.currentUser = this.config.user.username;
-    console.log(cadastroPercentualEstatico);
     const url = this.config.myApi + '/rubricas/cadastrarPercentualEstatico';
     const data = cadastroPercentualEstatico;
     const headers = new Headers({'Content-type': 'application/json'});

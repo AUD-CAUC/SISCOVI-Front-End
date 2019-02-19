@@ -37,10 +37,8 @@ export class CadastrarPercentualEstaticoComponent implements OnInit {
     // });
   }
   ngOnInit(): void {
-    console.log(this.percent);
     let i = 0;
     this.percent.forEach( (percentual) => {
-      console.log(percentual);
       if (percentual.dataFim === '-' || percentual.dataFim === null) {
         this.ultimaData[percentual.codigo] = percentual.dataInicio;
         this.percentList[i++] = percentual;
@@ -61,8 +59,6 @@ export class CadastrarPercentualEstaticoComponent implements OnInit {
 
     if (control.parent) {
       if (this.ultimaData) {
-        console.log(this.ultimaData[control.parent.get('codigo').value]);
-        console.log(control.value.toString().length);
         if (control.value.toString().length === 10) {
           let dia = 0;
           let mes = 0;
@@ -83,7 +79,6 @@ export class CadastrarPercentualEstaticoComponent implements OnInit {
           }
           if (!otherRegex.test(control.value)) {
             mensagem.push('A data digitada é inválida');
-            console.log('entrou');
           }
         }
       }
