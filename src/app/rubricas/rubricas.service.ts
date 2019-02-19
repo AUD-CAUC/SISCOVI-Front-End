@@ -31,10 +31,6 @@ export class RubricasService {
     const url = this.config.myApi + '/rubricas/getAll';
     return this.http.get(url).map(res => res.json());
   }
-  getPercentuaisEstaticos() {
-    const url = this.config.myApi + '/rubricas/getStaticPercent';
-    return this.http.get(url).map(res => res.json());
-  }
   cadastrarRubrica() {
       const cadastroRubrica = new CadastroRubrica();
       cadastroRubrica.rubrica = new Rubrica();

@@ -99,6 +99,8 @@ import {SaldoIndividualComponent} from './saldo/individual/saldo-individual-comp
 import {SaldoFuncaoComponent} from './saldo/funcao/saldo-funcao.component';
 import {RelatorioRestituicoesRescisaoComponent} from './rescisao/relatorio-restituicao-rescisao/relatorio-restituicoes-rescisao.component';
 import {FileSizePipe} from './_shared/file-size.pipe';
+import {CadastrarPercentualEstaticoComponent} from './percentuais-estaticos/cadastrar-percentual-estatico/cadastrar-percentual-estatico.component';
+import {PercentualEstaticoService} from './percentuais-estaticos/percentual-estatico.service';
 
 @NgModule({
   declarations: [
@@ -176,6 +178,7 @@ import {FileSizePipe} from './_shared/file-size.pipe';
     SaldoFuncaoComponent,
     SaldoIndividualComponent,
     RelatorioRestituicoesRescisaoComponent,
+    CadastrarPercentualEstaticoComponent,
   ],
   imports: [
     BrowserModule,
@@ -206,6 +209,7 @@ import {FileSizePipe} from './_shared/file-size.pipe';
     DecimoTerceiroService,
     RescisaoService,
     SaldoService,
+    PercentualEstaticoService,
     {provide: LOCALE_ID, useValue: 'pt'},
   ],
   bootstrap: [AppComponent]
