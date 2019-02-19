@@ -148,37 +148,37 @@
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let calculos of calcAval.calculos; let k = index">
-          <td>{{calculos.status | pendentePipe}}</td>
-          <td *ngIf="config.user.perfil.sigla == 'USUÁRIO'">{{calculos.status}}</td>
-          <td>{{calculos.terceirizadoDecTer.nomeTerceirizado}}</td>
-          <td>{{calculos.terceirizadoDecTer.nomeCargo}}</td>
-          <td>{{calculos.terceirizadoDecTer.tipoRestituicao}}</td>
-          <td>{{calculos.terceirizadoDecTer.parcelas | parcelaPipe}}</td>
-          <td>{{calculos.terceirizadoDecTer.inicioContagem | date: 'shortDate'}}</td>
-          <td>{{calculos.terceirizadoDecTer.valoresDecimoTerceiro.valorDecimoTerceiro |
-            currency:'BRL':true:'1.2-2'}}
-          </td>
-          <td>{{calculos.terceirizadoDecTer.valoresDecimoTerceiro.valorIncidenciaDecimoTerceiro |
-            currency:'BRL':true:'1.2-2'}}
-          </td>
-          <td>{{calculos.terceirizadoDecTer.valoresDecimoTerceiro.valorDecimoTerceiro +
-            calculos.terceirizadoDecTer.valoresDecimoTerceiro.valorIncidenciaDecimoTerceiro
-            | currency:'BRL':true:'1.2-2'}}
-          </td>
-          <td>
-            <div class="row">
-              <form [formGroup]="decimoTerceiroFormAfter" class="col">
-                <div class="row" formArrayName="calculosAvaliados">
-                  <div class="input-field col s12" [formGroupName]="k">
-                    <textarea id="textarea1" class="materialize-textarea" formControlName="observacoes"></textarea>
-                    <label for="textarea1">Observações</label>
+          <tr *ngFor="let calculos of calcAval.calculos; let k = index">
+            <td>{{calculos.status | pendentePipe}}</td>
+            <td *ngIf="config.user.perfil.sigla == 'USUÁRIO'">{{calculos.status}}</td>
+            <td>{{calculos.terceirizadoDecTer.nomeTerceirizado}}</td>
+            <td>{{calculos.terceirizadoDecTer.nomeCargo}}</td>
+            <td>{{calculos.terceirizadoDecTer.tipoRestituicao}}</td>
+            <td>{{calculos.terceirizadoDecTer.parcelas | parcelaPipe}}</td>
+            <td>{{calculos.terceirizadoDecTer.inicioContagem | date: 'shortDate'}}</td>
+            <td>{{calculos.terceirizadoDecTer.valoresDecimoTerceiro.valorDecimoTerceiro |
+              currency:'BRL':true:'1.2-2'}}
+            </td>
+            <td>{{calculos.terceirizadoDecTer.valoresDecimoTerceiro.valorIncidenciaDecimoTerceiro |
+              currency:'BRL':true:'1.2-2'}}
+            </td>
+            <td>{{calculos.terceirizadoDecTer.valoresDecimoTerceiro.valorDecimoTerceiro +
+              calculos.terceirizadoDecTer.valoresDecimoTerceiro.valorIncidenciaDecimoTerceiro
+              | currency:'BRL':true:'1.2-2'}}
+            </td>
+            <td>
+              <div class="row">
+                <form [formGroup]="decimoTerceiroFormAfter" class="col">
+                  <div class="row" formArrayName="calculosAvaliados">
+                    <div class="input-field col s12" [formGroupName]="k">
+                      <textarea id="textarea1" class="materialize-textarea" formControlName="observacoes"></textarea>
+                      <label for="textarea1">Observações</label>
+                    </div>
                   </div>
-                </div>
-              </form>
-            </div>
-          </td>
-        </tr>
+                </form>
+              </div>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
