@@ -51,7 +51,6 @@ export  class MovimentacaoRescisaoComponent implements  OnInit {
                 dataFimFeriasIntegrais: new FormControl(''),
                 dataInicioFeriasProporcionais: new FormControl(''),
                 resgateFeriasVencidas: new FormControl('T', [Validators.required, this.resgateValidatore]),
-                resgateFeriasProporcionais: new FormControl('T', [Validators.required, this.resgateValidatore]),
                 valorFeriasVencidasMovimentado: new FormControl(0),
                 valorFeriasProporcionaisMovimentado: new FormControl(0),
                 valorDecimoTerceiroMovimentado: new FormControl(0)
@@ -67,8 +66,6 @@ export  class MovimentacaoRescisaoComponent implements  OnInit {
             this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataFimFeriasIntegrais').setValue(this.dateToString(this.terceirizados[i].pDataFimFeriasIntegrais));
             this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasProporcionais').setValue(this.dateToString(this.terceirizados[i].pDataInicioFeriasProporcionais));
             this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasVencidas').setValidators([Validators.required, this.resgateValidatore]);
-            this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasProporcionais').setValidators([Validators.required, this.resgateValidatore]);
-
         }
     }
     private dateToString(value: any): string {
@@ -132,8 +129,8 @@ export  class MovimentacaoRescisaoComponent implements  OnInit {
                         this.terceirizados[i].dataDesligamento,
                         null,
                         null,
-                        null,
-                        null,
+                        this.stringToDate(this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasProporcionais').value),
+                        this.terceirizados[i].dataDesligamento,
                         this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorFeriasVencidasMovimentado').value,
                         this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorFeriasProporcionaisMovimentado').value,
                         this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorDecimoTerceiroMovimentado').value,
@@ -164,10 +161,6 @@ export  class MovimentacaoRescisaoComponent implements  OnInit {
                         objeto.setInicioFeriasIntegrais(this.stringToDate(this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasIntegrais').value));
                         objeto.setFimFeriasIntegrais(this.stringToDate(this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataFimFeriasIntegrais').value));
                     }
-                    if (this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasProporcionais').value === 'S') {
-                        objeto.setInicioFeriasProporcionais(this.stringToDate(this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasProporcionais').value));
-                        objeto.setFimFeriasProporcionais(this.terceirizados[i].dataDesligamento);
-                    }
                     if (index === -1) {
                         this.calculosRescisao.push(objeto);
                     } else {
@@ -178,8 +171,6 @@ export  class MovimentacaoRescisaoComponent implements  OnInit {
                   console.log(this.rescisaoForm);
                     this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasVencidas').markAsDirty();
                     this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasVencidas').markAsTouched();
-                    this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasProporcionais').markAsDirty();
-                    this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasProporcionais').markAsTouched();
                     aux = null;
                     this.openModal2();
                 }
@@ -212,7 +203,6 @@ export  class MovimentacaoRescisaoComponent implements  OnInit {
                     this.calculosRescisao[i].totalMultaFgtsFeriasProporcionais = terceirizado.valorRestituicaoRescisao.valorFGTSFeriasProporcional;
                     this.calculosRescisao[i].totalIncidenciaTercoProporcional = terceirizado.valorRestituicaoRescisao.valorFGTSTercoProporcional;
                     this.calculosRescisao[i].totalMultaFgtsSalario = terceirizado.valorRestituicaoRescisao.valorFGTSSalario;
-
                     if (i === (this.calculosRescisao.length - 1)) {
                       this.openModal3();
                     }
@@ -223,57 +213,4 @@ export  class MovimentacaoRescisaoComponent implements  OnInit {
           }
         }
     }
-    /*public valorMovimentadoValidator(control: AbstractControl) {
-        const mensagem: string[] = [];
-        if (control.value <= 0) {
-            mensagem.push('O valor a ser movimentado deve ser maior que zero !');
-        }
-        if (control.parent) {
-            let dia = 0;
-            let mes = 0;
-            let ano = 0;
-            dia = Number(control.parent.get('fimFerias').value.split('/')[0]);
-            mes = Number(control.parent.get('fimFerias').value.split('/')[1]) - 1;
-            ano = Number(control.parent.get('fimFerias').value.split('/')[2]);
-            const fimUsufruto: Date = new Date(ano, mes, dia);
-            dia = Number(control.parent.get('inicioFerias').value.split('/')[0]);
-            mes = Number(control.parent.get('inicioFerias').value.split('/')[1]) - 1;
-            ano = Number(control.parent.get('inicioFerias').value.split('/')[2]);
-            const inicioUsufruto: Date = new Date(ano, mes, dia);
-            if (fimUsufruto && inicioUsufruto) {
-                if (control.parent.get('fimFerias').valid && control.parent.get('inicioFerias').valid) {
-                    const feriasTemp = new TerceirizadoRescisao(control.parent.get('codTerceirizadoContrato').value,
-                        control.parent.get('nomeTerceirizado').value,
-                        control.parent.get('dataDesligamento').value,
-                        control.parent.get('tipoRescisao').value,
-                        control.parent.get('tipoRestituicao').value)
-                    const index = this.terceirizados.findIndex( x => x.codTerceirizadoContrato === Number(control.parent.get('codTerceirizadoContrato').value) );
-                    this.rescisaoService.getValores(feriasTemp).subscribe(res => {
-                        if (!res.error) {
-                            this.terceirizados.forEach(terceirizado => {
-                                if (terceirizado.codigoTerceirizadoContrato === control.parent.get('codTerceirizadoContrato').value) {
-                                    terceirizado.valorRestituicaoFerias = res;
-                                    control.parent.get('valorMaximoASerMovimentado').setValue(terceirizado.valorRestituicaoFerias.valorFerias + terceirizado.valorRestituicaoFerias.valorTercoConstitucional);
-                                    this.vmsm = true;
-                                }
-                            });
-                        } else {
-                            const error: string = res.error;
-                            mensagem.push(error);
-                        }
-                    });
-                }
-            }
-            if (control.value && this.vmsm && control.parent.get('valorMaximoASerMovimentado').value ) {
-                if (control.value > (control.parent.get('valorMaximoASerMovimentado').value)) {
-                    mensagem.push('O valor disponível para movimentação é : R$' + String(control.parent.get('valorMaximoASerMovimentado').value).replace('.', ',') + ' !');
-                }
-            }
-        }
-        // return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
-        return Observable.of((mensagem.length > 0 ) ? mensagem : null).pipe(
-            map(result => (mensagem.length > 0) ? {'mensagem': mensagem} : null)
-        );
-    }
-    */
 }

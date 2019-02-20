@@ -49,8 +49,7 @@ export class ResgateRescisaoComponent implements OnInit {
                 dataInicioFeriasIntegrais: new FormControl(''),
                 dataFimFeriasIntegrais: new FormControl(''),
                 dataInicioFeriasProporcionais: new FormControl(''),
-                resgateFeriasVencidas: new FormControl('T', [Validators.required, this.resgateValidatore]),
-                resgateFeriasProporcionais: new FormControl('T', [Validators.required, this.resgateValidatore])
+                resgateFeriasVencidas: new FormControl('T', [Validators.required, this.resgateValidatore])
             });
             control.push(addCtrl);
         });
@@ -63,7 +62,6 @@ export class ResgateRescisaoComponent implements OnInit {
             this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataFimFeriasIntegrais').setValue(this.dateToString(this.terceirizados[i].pDataFimFeriasIntegrais));
             this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasProporcionais').setValue(this.dateToString(this.terceirizados[i].pDataInicioFeriasProporcionais));
             this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasVencidas').setValidators([Validators.required, this.resgateValidatore]);
-            this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasProporcionais').setValidators([Validators.required, this.resgateValidatore]);
         }
     }
     private dateToString(value: any): string {
@@ -127,8 +125,8 @@ export class ResgateRescisaoComponent implements OnInit {
                         this.terceirizados[i].dataDesligamento,
                         null,
                         null,
-                        null,
-                        null,
+                        this.stringToDate(this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasProporcionais').value),
+                        this.terceirizados[i].dataDesligamento,
                         0,
                         0,
                         0,
@@ -159,10 +157,6 @@ export class ResgateRescisaoComponent implements OnInit {
                         objeto.setInicioFeriasIntegrais(this.stringToDate(this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasIntegrais').value));
                         objeto.setFimFeriasIntegrais(this.stringToDate(this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataFimFeriasIntegrais').value));
                     }
-                    if (this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasProporcionais').value === 'S') {
-                        objeto.setInicioFeriasProporcionais(this.stringToDate(this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasProporcionais').value));
-                        objeto.setFimFeriasProporcionais(this.terceirizados[i].dataDesligamento);
-                    }
                     if (index === -1) {
                         this.calculosRescisao.push(objeto);
                     } else {
@@ -173,8 +167,6 @@ export class ResgateRescisaoComponent implements OnInit {
                   console.log(this.rescisaoForm);
                     this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasVencidas').markAsDirty();
                     this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasVencidas').markAsTouched();
-                    this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasProporcionais').markAsDirty();
-                    this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasProporcionais').markAsTouched();
                     aux = null;
                     this.openModal2();
                 }
