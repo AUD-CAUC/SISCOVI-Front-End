@@ -8,6 +8,7 @@ export class RescisaoCalcular {
   fimFeriasIntegrais: Date;
   inicioFeriasProporcionais: Date;
   fimFeriasProporcionais: Date;
+  inicioContagemDecimoTerceiro: Date;
   valorFeriasVencidasMovimentado: number;
   valorFeriasProporcionaisMovimentado: number;
   valorDecimoTerceiroMovimentado: number;
@@ -103,6 +104,8 @@ export class RescisaoCalcular {
 
   public getFimFeriasProporcionais(): Date { return this.fimFeriasProporcionais; }
 
+  public getInicioContagemDecimoTerceiro(): Date { return this.inicioContagemDecimoTerceiro; }
+
   public getValorFeriasVencidasMovimentado(): number { return this.valorFeriasVencidasMovimentado; }
 
   public getValorFeriasProporcionaisMovimentado(): number { return this.valorFeriasProporcionaisMovimentado; }
@@ -142,5 +145,13 @@ export class RescisaoCalcular {
   public getTotalMultaFgtsSalario(): number { return this.totalMultaFgtsSalario; }
 
   public setNomeTerceirizado(nomeTerceirizado: string): void { this.nomeTerceirizado = nomeTerceirizado; }
+
+  public setInicioFeriasIntegrais(inicioFeriasIntegrais: Date): void { this.inicioFeriasIntegrais = inicioFeriasIntegrais; }
+
+  public setFimFeriasIntegrais(fimFeriasIntegrais: Date): void { this.fimFeriasIntegrais = fimFeriasIntegrais; }
+
+  public setInicioFeriasProporcionais(inicioFeriasProporcionais: Date): void { this.inicioFeriasProporcionais = inicioFeriasProporcionais; }
+
+  public setFimFeriasProporcionais(fimFeriasProporcionais: Date): void { this.fimFeriasProporcionais = fimFeriasProporcionais; }
 
 }

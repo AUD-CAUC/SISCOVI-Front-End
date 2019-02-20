@@ -1,12 +1,15 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {TerceirizadoRescisao} from '../terceirizado-rescisao';
+import {ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MaterializeAction} from 'angular2-materialize';
+import {TerceirizadoRescisao} from '../terceirizado-rescisao';
 import {RescisaoService} from '../rescisao.service';
 import {CalculoRescisao} from '../calculo-rescisao';
+import {RescisaoCalcular} from '../rescisao-calcular';
+import {Contrato} from '../../contratos/contrato';
+import {Funcionario} from '../../funcionarios/funcionario';
+import {Error} from '../../_shared/error';
 import {Observable} from 'rxjs/Observable';
 import {map} from 'rxjs/operators';
-import 'rxjs/add/observable/of';
 
 @Component({
     selector: 'app-movimentacao-rescisao-component',
@@ -14,20 +17,18 @@ import 'rxjs/add/observable/of';
     styleUrls: ['./calculo-rescisao.component.scss']
 })
 export  class MovimentacaoRescisaoComponent implements  OnInit {
+    protected contratos: Contrato[];
     @Input() protected terceirizados: TerceirizadoRescisao[];
     @Input() codigoContrato: number;
     @Input() tipoRestituicao: string;
     rescisaoForm: FormGroup;
     isSelected = false;
     selected = false;
-    terceirizadosCalculosRescisao: TerceirizadoRescisao[] = [];
-    calculosRescisao: CalculoRescisao[] = [];
+    calculosRescisao: RescisaoCalcular[] = [];
     modalActions = new EventEmitter<string | MaterializeAction>();
     modalActions2 = new EventEmitter<string | MaterializeAction>();
     modalActions3 = new EventEmitter<string | MaterializeAction>();
     modalActions4 = new EventEmitter<string | MaterializeAction>();
-    vmsm = false;
-    protected diasConcedidos: number[] = [];
     @Output() navegaParaViewDeCalculos = new EventEmitter();
     constructor(private fb: FormBuilder, private rescisaoService: RescisaoService) { }
     ngOnInit() {
@@ -42,23 +43,46 @@ export  class MovimentacaoRescisaoComponent implements  OnInit {
             const addCtrl = this.fb.group({
                 codTerceirizadoContrato: new FormControl(item.codTerceirizadoContrato),
                 nomeTerceirizado: new FormControl(item.nomeTerceirizado),
-                tipoRescisao: new FormControl(),
+                tipoRescisao: new FormControl('SEM JUSTA CAUSA'),
                 selected: new FormControl(this.isSelected),
                 tipoRestituicao: new FormControl(this.tipoRestituicao),
-                dataDesligamento: new FormControl(),
-                dataInicio: new FormControl(),
-                dataFim: new FormControl(),
-                valorAMovimentar: new FormControl(0)
+                dataDesligamento: new FormControl(''),
+                dataInicioFeriasIntegrais: new FormControl(''),
+                dataFimFeriasIntegrais: new FormControl(''),
+                dataInicioFeriasProporcionais: new FormControl(''),
+                resgateFeriasVencidas: new FormControl('T', [Validators.required, this.resgateValidatore]),
+                valorFeriasVencidasMovimentado: new FormControl(0),
+                valorFeriasProporcionaisMovimentado: new FormControl(0),
+                valorDecimoTerceiroMovimentado: new FormControl(0)
             });
             control.push(addCtrl);
         });
         for (let i = 0; i < this.terceirizados.length; i++) {
-            this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('codTerceirizadoContrato').setValidators(Validators.required);
-            this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('tipoRescisao').setValidators(Validators.required);
-            this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('tipoRescisao').setValue(0);
-            this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('tipoRestituicao').setValidators(Validators.required);
+            this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('codTerceirizadoContrato');
+            this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('tipoRescisao');
+            this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('tipoRestituicao');
             this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataDesligamento');
+            this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasIntegrais').setValue(this.dateToString(this.terceirizados[i].pDataInicioFeriasIntegrais));
+            this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataFimFeriasIntegrais').setValue(this.dateToString(this.terceirizados[i].pDataFimFeriasIntegrais));
+            this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasProporcionais').setValue(this.dateToString(this.terceirizados[i].pDataInicioFeriasProporcionais));
+            this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasVencidas').setValidators([Validators.required, this.resgateValidatore]);
         }
+    }
+    private dateToString(value: any): string {
+      //console.log(this.terceirizados);
+      const date: string[] = value.split('-');
+      return date[2] + '/' + date[1] + '/' + date['0'];
+    }
+    private stringToDate(value: string): Date {
+      const date: string[] = value.split('/');
+      return new Date(Number(date[2]), Number(date[1]) - 1, Number(date[0]));
+    }
+    public resgateValidatore(control: AbstractControl): {[key: string]: any} {
+      const mensagem = [];
+      if (control.value === 'T') {
+        mensagem.push('Selecione uma opção.');
+      }
+      return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
     }
     closeModal1() {
         this.modalActions.emit({action: 'modal', params: ['close']});
@@ -73,7 +97,6 @@ export  class MovimentacaoRescisaoComponent implements  OnInit {
         this.modalActions2.emit({action: 'modal', params: ['close']});
     }
     openModal3() {
-        this.vmsm = false;
         this.modalActions3.emit({action: 'modal', params: ['open']});
     }
     closeModal3() {
@@ -87,43 +110,68 @@ export  class MovimentacaoRescisaoComponent implements  OnInit {
         this.navegaParaViewDeCalculos.emit(this.codigoContrato);
     }
     efetuarCalculo(): void {
-        this.rescisaoService.registrarCalculoRescisao(this.terceirizadosCalculosRescisao).subscribe(res => {
-            if (res.success) {
-                this.closeModal3();
-                this.openModal4();
-            }
-        });
-    }/*
+      this.rescisaoService.registrarCalculoRescisao(this.calculosRescisao).subscribe(res => {
+        if (res.success) {
+          this.closeModal3();
+          this.openModal4();
+        }
+      });
+    }
     verificaDadosFormulario() {
         let aux = 0;
-        this.vmsm = false;
         for (let i = 0; i < this.terceirizados.length; i++) {
             if (this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('selected').value) {
                 aux++;
                 if (this.rescisaoForm.get('calcularTerceirizados').get('' + i).status === 'VALID') {
-                    const objeto = new TerceirizadoRescisao(this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('codTerceirizadoContrato').value,
-                        this.terceirizados[i].nomeTerceirizado,
-                        this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataDesligamento').value,
-                        this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasIntegrais').value,
-                        this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataFimFeriasIntegrais').value,
-                        this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasProporcionais').value,
-                        this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataFimFeriasProporcionais').value,
+                    const objeto = new RescisaoCalcular(this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('codTerceirizadoContrato').value,
+                        this.tipoRestituicao,
                         this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('tipoRescisao').value,
-                        this.tipoRestituicao);
+                        this.terceirizados[i].dataDesligamento,
+                        null,
+                        null,
+                        this.stringToDate(this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasProporcionais').value),
+                        this.terceirizados[i].dataDesligamento,
+                        this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorFeriasVencidasMovimentado').value,
+                        this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorFeriasProporcionaisMovimentado').value,
+                        this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorDecimoTerceiroMovimentado').value,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0);
                     let index = -1;
-                    for (let j = 0; j < this.terceirizadosCalculosRescisao.length; j++) {
-                        if (this.terceirizadosCalculosRescisao[j].codTerceirizadoContrato === this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('codTerceirizadoContrato').value) {
+                    for (let j = 0; j < this.calculosRescisao.length; j++) {
+                        if (this.calculosRescisao[j].codTerceirizadoContrato === this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('codTerceirizadoContrato').value) {
                             index = j;
                         }
                     }
-                    if (index === -1) {
-                        this.terceirizadosCalculosRescisao.push(objeto);
-                    } else {
-                        this.terceirizadosCalculosRescisao.splice(index, 1);
-                        this.terceirizadosCalculosRescisao.push(objeto);
+                    objeto.setNomeTerceirizado(this.terceirizados[i].nomeTerceirizado);
+                    if (this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasVencidas').value === 'S') {
+                        objeto.setInicioFeriasIntegrais(this.stringToDate(this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasIntegrais').value));
+                        objeto.setFimFeriasIntegrais(this.stringToDate(this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataFimFeriasIntegrais').value));
                     }
-                }else {
-                    aux = undefined;
+                    if (index === -1) {
+                        this.calculosRescisao.push(objeto);
+                    } else {
+                        this.calculosRescisao.splice(index, 1);
+                        this.calculosRescisao.push(objeto);
+                    }
+                } else {
+                  console.log(this.rescisaoForm);
+                    this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasVencidas').markAsDirty();
+                    this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasVencidas').markAsTouched();
+                    aux = null;
                     this.openModal2();
                 }
             }
@@ -131,68 +179,38 @@ export  class MovimentacaoRescisaoComponent implements  OnInit {
         if (aux === 0) {
             this.openModal1();
         }
-        if ((this.terceirizadosCalculosRescisao.length > 0) && aux) {
-            this.diasConcedidos = [];
-            this.rescisaoService.calculaRescisaoTerceirizados(this.terceirizadosCalculosRescisao).subscribe(res => {
-                if (!res.error) {
-                    this.calculosRescisao = res;
-                    this.openModal3();
-                    this.vmsm = true;
-                }
+        if ((this.calculosRescisao.length > 0) && aux) {
+          for (let i = 0; i < this.calculosRescisao.length; i++) {
+            this.rescisaoService.calculaRescisaoTerceirizados(this.calculosRescisao[i]).subscribe(res => {
+              if (!res.error) {
+                this.terceirizados.forEach(terceirizado => {
+                  if (terceirizado.codTerceirizadoContrato === this.calculosRescisao[i].codTerceirizadoContrato) {
+                    terceirizado.valorRestituicaoRescisao = res;
+                    this.calculosRescisao[i].inicioContagemDecimoTerceiro = terceirizado.valorRestituicaoRescisao.inicioContagemDecimoTerceiro;
+                    this.calculosRescisao[i].totalDecimoTerceiro = terceirizado.valorRestituicaoRescisao.valorDecimoTerceiro;
+                    this.calculosRescisao[i].totalIncidenciaDecimoTerceiro = terceirizado.valorRestituicaoRescisao.valorIncidenciaDecimoTerceiro;
+                    this.calculosRescisao[i].totalMultaFgtsDecimoTerceiro = terceirizado.valorRestituicaoRescisao.valorFGTSDecimoTerceiro;
+                    this.calculosRescisao[i].totalFeriasVencidas = terceirizado.valorRestituicaoRescisao.valorFeriasIntegral;
+                    this.calculosRescisao[i].totalTercoConstitucionalvencido = terceirizado.valorRestituicaoRescisao.valorTercoIntegral;
+                    this.calculosRescisao[i].totalIncidenciaFeriasVencidas = terceirizado.valorRestituicaoRescisao.valorIncidenciaFeriasIntegral;
+                    this.calculosRescisao[i].totalIncidenciaTercoVencido = terceirizado.valorRestituicaoRescisao.valorIncidenciaTercoIntegral;
+                    this.calculosRescisao[i].totalMultaFgtsFeriasVencidas = terceirizado.valorRestituicaoRescisao.valorFGTSFeriasIntegral;
+                    this.calculosRescisao[i].totalMultaFgtsTercoVencido = terceirizado.valorRestituicaoRescisao.valorFGTSTercoIntegral;
+                    this.calculosRescisao[i].totalFeriasProporcionais = terceirizado.valorRestituicaoRescisao.valorFeriasProporcional;
+                    this.calculosRescisao[i].totalTercoProporcional = terceirizado.valorRestituicaoRescisao.valorTercoProporcional;
+                    this.calculosRescisao[i].totalIncidenciaFeriasProporcionais = terceirizado.valorRestituicaoRescisao.valorIncidenciaFeriasProporcional;
+                    this.calculosRescisao[i].totalIncidenciaTercoProporcional = terceirizado.valorRestituicaoRescisao.valorIncidenciaTercoProporcional;
+                    this.calculosRescisao[i].totalMultaFgtsFeriasProporcionais = terceirizado.valorRestituicaoRescisao.valorFGTSFeriasProporcional;
+                    this.calculosRescisao[i].totalIncidenciaTercoProporcional = terceirizado.valorRestituicaoRescisao.valorFGTSTercoProporcional;
+                    this.calculosRescisao[i].totalMultaFgtsSalario = terceirizado.valorRestituicaoRescisao.valorFGTSSalario;
+                    if (i === (this.calculosRescisao.length - 1)) {
+                      this.openModal3();
+                    }
+                  }
+                  });
+              }
             });
+          }
         }
-    }*/
-    /*public valorMovimentadoValidator(control: AbstractControl) {
-        const mensagem: string[] = [];
-        if (control.value <= 0) {
-            mensagem.push('O valor a ser movimentado deve ser maior que zero !');
-        }
-        if (control.parent) {
-            let dia = 0;
-            let mes = 0;
-            let ano = 0;
-            dia = Number(control.parent.get('fimFerias').value.split('/')[0]);
-            mes = Number(control.parent.get('fimFerias').value.split('/')[1]) - 1;
-            ano = Number(control.parent.get('fimFerias').value.split('/')[2]);
-            const fimUsufruto: Date = new Date(ano, mes, dia);
-            dia = Number(control.parent.get('inicioFerias').value.split('/')[0]);
-            mes = Number(control.parent.get('inicioFerias').value.split('/')[1]) - 1;
-            ano = Number(control.parent.get('inicioFerias').value.split('/')[2]);
-            const inicioUsufruto: Date = new Date(ano, mes, dia);
-            if (fimUsufruto && inicioUsufruto) {
-                if (control.parent.get('fimFerias').valid && control.parent.get('inicioFerias').valid) {
-                    const feriasTemp = new TerceirizadoRescisao(control.parent.get('codTerceirizadoContrato').value,
-                        control.parent.get('nomeTerceirizado').value,
-                        control.parent.get('dataDesligamento').value,
-                        control.parent.get('tipoRescisao').value,
-                        control.parent.get('tipoRestituicao').value)
-                    const index = this.terceirizados.findIndex( x => x.codTerceirizadoContrato === Number(control.parent.get('codTerceirizadoContrato').value) );
-                    this.rescisaoService.getValores(feriasTemp).subscribe(res => {
-                        if (!res.error) {
-                            this.terceirizados.forEach(terceirizado => {
-                                if (terceirizado.codigoTerceirizadoContrato === control.parent.get('codTerceirizadoContrato').value) {
-                                    terceirizado.valorRestituicaoFerias = res;
-                                    control.parent.get('valorMaximoASerMovimentado').setValue(terceirizado.valorRestituicaoFerias.valorFerias + terceirizado.valorRestituicaoFerias.valorTercoConstitucional);
-                                    this.vmsm = true;
-                                }
-                            });
-                        } else {
-                            const error: string = res.error;
-                            mensagem.push(error);
-                        }
-                    });
-                }
-            }
-            if (control.value && this.vmsm && control.parent.get('valorMaximoASerMovimentado').value ) {
-                if (control.value > (control.parent.get('valorMaximoASerMovimentado').value)) {
-                    mensagem.push('O valor disponível para movimentação é : R$' + String(control.parent.get('valorMaximoASerMovimentado').value).replace('.', ',') + ' !');
-                }
-            }
-        }
-        // return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
-        return Observable.of((mensagem.length > 0 ) ? mensagem : null).pipe(
-            map(result => (mensagem.length > 0) ? {'mensagem': mensagem} : null)
-        );
     }
-    */
 }

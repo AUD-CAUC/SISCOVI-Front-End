@@ -6,8 +6,8 @@ export class ValorRestituicaoRescisao {
     inicioFeriasIntegrais: Date;
     fimFeriasIntegrais: Date;
     inicioFeriasProporcionais: Date;
-    fimFeriasProporcionais: Date;
-    inicioContagemDecimoTerceiro: Date;*/
+    fimFeriasProporcionais: Date;*/
+    inicioContagemDecimoTerceiro: Date;
     valorDecimoTerceiro: number;
     valorIncidenciaDecimoTerceiro: number;
     valorFGTSDecimoTerceiro: number;
