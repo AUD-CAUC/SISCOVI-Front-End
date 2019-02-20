@@ -3,6 +3,7 @@ import {Http} from '@angular/http';
 import {ConfigService} from '../_shared/config.service';
 import {TerceirizadoDecimoTerceiro} from './terceirizado-decimo-terceiro';
 import {DecimoTerceiroPendente} from './decimo-terceiro-pendente/decimo-terceiro-pendente';
+import {ListaCalculosPendentes} from './decimo-terceiro-pendente/lista-calculos-pendentes';
 
 @Injectable()
 export class DecimoTerceiroService {
@@ -90,15 +91,19 @@ export class DecimoTerceiroService {
         return this.http.get(url).map(res => res.json());
     }
 
-    salvarDecimoTerceiroAvaliados(codigoContrato: number, calculosAvaliados: DecimoTerceiroPendente[]) {
+    salvarDecimoTerceiroAvaliados(calculosAvaliados: ListaCalculosPendentes[]) {
         const url = this.config.myApi + '/decimo-terceiro/avaliarCalculosPendentes';
-        const object = {
-           decimosTerceirosPendentes: calculosAvaliados,
-           user: this.config.user,
-           codigoContrato: codigoContrato
+        const data = [];
+        calculosAvaliados.forEach(item => {
+          const object = {
+            decimosTerceirosPendentes: item.calculos,
+            user: this.config.user,
+            codigoContrato: item.codigo
 
-        };
-        return this.http.put(url, object).map(res => res.json());
+          };
+          data.push(object);
+        });
+        return this.http.put(url, data).map(res => res.json());
     }
 
     executarDecimoTerceiroAvaliados(codigoContrato: number, calculosAvaliados: DecimoTerceiroPendente[]) {

@@ -1,29 +1,43 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {ListaCalculosPendentes} from './ferias-pendentes/lista-calculos-pendentes';
+import {FeriasService} from './ferias.service';
 
 @Component({
   selector: 'app-ferias-component',
   templateUrl: './ferias.component.html',
   styleUrls: ['./ferias.component.scss']
 })
-export class FeriasComponent {
+export class FeriasComponent implements OnInit {
   contentAvailable: Content = Content.Calculos;
   tabSelectionParams = ['select_tab', 'test2'];
   codigoContrato: number;
   cp: ListaCalculosPendentes[];
   cpe: ListaCalculosPendentes[];
-  constructor(private route: ActivatedRoute) {
+  constructor(private route: ActivatedRoute, private feriasService: FeriasService) {
+  }
+
+  ngOnInit() {
+    this.cp = this.route.snapshot.data.calculosPendentes;
+    this.cpe = this.route.snapshot.data.calculosPendentesExecucao;
   }
 
   calculosPendentes() {
-    this.cp = this.route.snapshot.data.calculosPendentes;
+    this.feriasService.getCalculosPendentes().subscribe(res => {
+      this.cp = res;
+    }, error2 => {
+      this.cp = this.route.snapshot.data.calculosPendentes;
+    });
     this.tabSelectionParams = ['select_tab', 'test3'];
     this.setPendentesActive();
   }
 
   calculosExecutados() {
-    this.cp = this.route.snapshot.data.calculosPendentesExecucao;
+    this.feriasService.getCalculosPendentesExecucao().subscribe(res => {
+      this.cpe = res;
+    }, error2 => {
+      this.cpe = this.route.snapshot.data.calculosPendentesExecucao;
+    });
     this.tabSelectionParams = ['select_tab', 'test4'];
     this.setExecutadosActive();
   }
@@ -73,13 +87,11 @@ export class FeriasComponent {
   }
 
   setPendentesActive(): void {
-    this.cp = this.route.snapshot.data.calculosPendentes;
     this.contentAvailable = Content.Pendentes;
     this.tabSelectionParams = ['select_tab', 'test3'];
   }
 
   setExecutadosActive(): void {
-    this.cpe = this.route.snapshot.data.calculosPendentesExecucao;
     this.contentAvailable = Content.Executados;
     this.tabSelectionParams = ['select_tab', 'test4'];
   }

@@ -6,6 +6,7 @@ import {ConfigService} from '../../_shared/config.service';
 import {DecimoTerceiroService} from '../decimo-terceiro.service';
 import {ContratosService} from '../../contratos/contratos.service';
 import {ListaCalculosPendentes} from './lista-calculos-pendentes';
+import {DecimoTerceiroPendente} from './decimo-terceiro-pendente';
 
 @Component({
     selector: 'app-decimo-terceiro-pendente-component',
@@ -138,41 +139,50 @@ export class DecimoTerceiroPendenteComponent implements OnInit {
     }
 
     verificaFormulario() {
-        let aux = 0;
-        for (let i = 0; i < this.calculosPendentes.length; i ++) {
-            if (this.decimoTerceiroForm.get('avaliacaoCalculoFerias').get('' + i).get('selected').value) {
-                aux++;
-                const temp: ListaCalculosPendentes = this.calculosPendentes[i];
-                // temp.status = this.decimoTerceiroForm.get('avaliacaoCalculoFerias').get('' + i).get('avaliacao').value;
-                this.calculosAvaliados.push(temp);
-            }
+      let aux = 0;
+      this.calculosAvaliados = [];
+      for (let i = 0; i < this.calculosPendentes.length; i++) {
+        const lista = new ListaCalculosPendentes();
+        lista.calculos = [];
+        for (let j = 0; j < this.calculosPendentes[i].calculos.length; j++) {
+          if (this.decimoTerceiroForm.get('contratos').get('' + i).get('avaliacaoCalculoDecimoTerceiro').get('' + j).get('selected').value) {
+            aux++;
+            const temp: DecimoTerceiroPendente = this.calculosPendentes[i].calculos[j];
+            temp.status = this.decimoTerceiroForm.get('contratos').get('' + i).get('avaliacaoCalculoDecimoTerceiro').get('' + j).get('avaliacao').value;
+            lista.titulo = this.decimoTerceiroForm.get('contratos').get('' + i).get('titulo').value;
+            lista.codigo = this.decimoTerceiroForm.get('contratos').get('' + i).get('codigo').value;
+            lista.calculos.push(temp);
+          }
         }
-        if (aux === 0) {
-            this.openModal();
-        }else {
-            const control = <FormArray>this.decimoTerceiroFormAfter.controls.calculosAvaliados;
-            this.calculosAvaliados.forEach(() => {
-                const addControl = this.fb.group({
-                    observacoes: new FormControl(),
-                });
-                control.push(addControl);
-            });
-            this.openModal2();
-        }
+        this.calculosAvaliados.push(lista);
+      }
+      if (aux === 0) {
+        this.openModal();
+      } else {
+        const control = <FormArray>this.decimoTerceiroFormAfter.controls.calculosAvaliados;
+        this.calculosAvaliados.forEach(() => {
+          const addControl = this.fb.group({
+            observacoes: new FormControl(),
+          });
+          control.push(addControl);
+        });
+        this.openModal2();
+      }
     }
     salvarAlteracoes() {
-       /* for (let i = 0; i < this.calculosAvaliados.length; i++) {
-            this.calculosAvaliados[i].observacoes = this.decimoTerceiroFormAfter.get('calculosAvaliados').get('' + i).get('observacoes').value;
+      for (let i = 0; i < this.calculosAvaliados.length; i++) {
+        for (let j = 0; j < this.calculosAvaliados[i].calculos.length; j++) {
+          this.calculosAvaliados[i].calculos[j].observacoes = this.decimoTerceiroFormAfter.get('calculosAvaliados').get('' + i).get('observacoes').value;
         }
-        this.decimoTerceiroService.salvarDecimoTerceiroAvaliados(this.codigoContrato, this.calculosAvaliados).subscribe(res => {
-            if (res.success) {
-                this.openModal3();
-                this.closeModal2();
-            }else {
-                this.openModal5();
-                this.closeModal2();
-            }
-        });*/
+      }
+      this.decimoTerceiroService.salvarDecimoTerceiroAvaliados(this.calculosAvaliados).subscribe(res => {
+          this.closeModal2();
+          this.openModal3();
+        },
+        error1 => {
+          this.closeModal2();
+          this.openModal5();
+        });
     }
     navegaViewExec() {
         this.closeModal3();

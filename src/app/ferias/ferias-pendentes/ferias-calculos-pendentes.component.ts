@@ -196,11 +196,13 @@ export class FeriasCalculosPendentesComponent implements OnInit {
       this.openModal();
     } else {
       const control = <FormArray>this.feriasFormAfter.controls.calculosAvaliados;
-      this.calculosAvaliados.forEach(() => {
-        const addControl = this.fb.group({
-          observacoes: new FormControl(),
+      this.calculosAvaliados.forEach(item => {
+        item.calculos.forEach(calculo => {
+          const addControl = this.fb.group({
+            observacoes: new FormControl(),
+          });
+          control.push(addControl);
         });
-        control.push(addControl);
       });
       this.openModal2();
     }
