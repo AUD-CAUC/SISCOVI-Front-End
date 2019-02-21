@@ -33,7 +33,7 @@ export class DecimoTerceiroPendenteComponent implements OnInit {
     somaSaldo: number[] = [];
     @Output() nav = new EventEmitter();
     constructor(config: ConfigService, private  fb: FormBuilder, private  ref: ChangeDetectorRef,
-                private decimoTerceiroService: DecimoTerceiroService, private contratoService: ContratosService) {
+                private decimoTerceiroService: DecimoTerceiroService) {
         this.config = config;
         this.decimoTerceiroService.getCalculosPendentesNegados().subscribe(res3 => {
             const historico: ListaCalculosPendentes[] = res3;
@@ -160,11 +160,18 @@ export class DecimoTerceiroPendenteComponent implements OnInit {
         this.openModal();
       } else {
         const control = <FormArray>this.decimoTerceiroFormAfter.controls.calculosAvaliados;
-        this.calculosAvaliados.forEach(() => {
-          const addControl = this.fb.group({
-            observacoes: new FormControl(),
+        this.calculosAvaliados.forEach(item => {
+          const newControl = this.fb.group({
+            calculos: this.fb.array([])
           });
-          control.push(addControl);
+          item.calculos.forEach(() => {
+            const newControl2 = <FormArray>newControl.controls.calculos;
+            const addControl = this.fb.group({
+              observacoes: new FormControl(),
+            });
+            newControl2.push(addControl);
+          });
+          control.push(newControl);
         });
         this.openModal2();
       }
@@ -172,7 +179,11 @@ export class DecimoTerceiroPendenteComponent implements OnInit {
     salvarAlteracoes() {
       for (let i = 0; i < this.calculosAvaliados.length; i++) {
         for (let j = 0; j < this.calculosAvaliados[i].calculos.length; j++) {
-          this.calculosAvaliados[i].calculos[j].observacoes = this.decimoTerceiroFormAfter.get('calculosAvaliados').get('' + i).get('observacoes').value;
+          this.calculosAvaliados[i].calculos[j].observacoes = this.decimoTerceiroFormAfter
+            .get('calculosAvaliados')
+            .get('' + i)
+            .get('calculos').get('' + j)
+            .get('observacoes').value;
         }
       }
       this.decimoTerceiroService.salvarDecimoTerceiroAvaliados(this.calculosAvaliados).subscribe(res => {
