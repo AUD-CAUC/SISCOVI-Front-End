@@ -180,7 +180,6 @@ import {AppHttpInterceptor} from './app-http.interceptor';
     SaldoFuncaoComponent,
     SaldoIndividualComponent,
     RelatorioRestituicoesRescisaoComponent,
-
     CadastrarPercentualEstaticoComponent
   ],
   imports: [
