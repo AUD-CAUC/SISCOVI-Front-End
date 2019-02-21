@@ -1,9 +1,6 @@
 import {Injectable} from '@angular/core';
 import {ConfigService} from '../_shared/config.service';
 import {Headers, Http, RequestOptions} from '@angular/http';
-import {CadastroPercentualEstatico} from '../percentuais-estaticos/cadastrar-percentual-estatico/cadastro-percentual-estatico';
-import {PercentualEstatico} from '../percentuais-estaticos/percentual-estatico';
-import {PercentualDinamico} from './percentual-dinamico';
 import {CadastroPercentualDinamico} from './cadastrar-percentual-dinamico/cadastro-percentual-dinamico';
 
 @Injectable()

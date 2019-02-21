@@ -17,7 +17,6 @@ export class PercentualDinamicoComponent {
     this.percentualDinamicoService = percentualDinamicoService;
     this.percentualDinamicoService.getPercentuaisDinamicos().subscribe( res => {
       this.dinamicPercent = res;
-      console.log(res);
     });
   }
 

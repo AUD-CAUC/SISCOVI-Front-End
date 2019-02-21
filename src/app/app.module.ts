@@ -103,6 +103,10 @@ import {CadastrarPercentualEstaticoComponent} from './percentuais-estaticos/cada
 import {PercentualEstaticoService} from './percentuais-estaticos/percentual-estatico.service';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import {AppHttpInterceptor} from './app-http.interceptor';
+import {PercentualDinamico} from './percentuais-dinamicos/percentual-dinamico';
+import {PercentualDinamicoComponent} from './percentuais-dinamicos/percentual-dinamico.component';
+import {CadastrarPercentualDinamicoComponent} from './percentuais-dinamicos/cadastrar-percentual-dinamico/cadastrar-percentual-dinamico.component';
+import {PercentualDinamicoService} from './percentuais-dinamicos/percentual-dinamico.service';
 
 @NgModule({
   declarations: [
@@ -180,7 +184,9 @@ import {AppHttpInterceptor} from './app-http.interceptor';
     SaldoFuncaoComponent,
     SaldoIndividualComponent,
     RelatorioRestituicoesRescisaoComponent,
-    CadastrarPercentualEstaticoComponent
+    CadastrarPercentualEstaticoComponent,
+    PercentualDinamicoComponent,
+    CadastrarPercentualDinamicoComponent,
   ],
   imports: [
     BrowserModule,
@@ -212,6 +218,7 @@ import {AppHttpInterceptor} from './app-http.interceptor';
     RescisaoService,
     SaldoService,
     PercentualEstaticoService,
+    PercentualDinamicoService,
     {provide: LOCALE_ID, useValue: 'pt'},
     {
       provide: HTTP_INTERCEPTORS,
