@@ -101,6 +101,9 @@ import {RelatorioRestituicoesRescisaoComponent} from './rescisao/relatorio-resti
 import {FileSizePipe} from './_shared/file-size.pipe';
 import {CadastrarPercentualEstaticoComponent} from './percentuais-estaticos/cadastrar-percentual-estatico/cadastrar-percentual-estatico.component';
 import {PercentualEstaticoService} from './percentuais-estaticos/percentual-estatico.service';
+import {PercentualDinamicoComponent} from './percentuais-dinamicos/percentual-dinamico.component';
+import {PercentualDinamicoService} from './percentuais-dinamicos/percentual-dinamico.service';
+import {CadastrarPercentualDinamicoComponent} from './percentuais-dinamicos/cadastrar-percentual-dinamico/cadastrar-percentual-dinamico.component';
 
 @NgModule({
   declarations: [
@@ -179,6 +182,8 @@ import {PercentualEstaticoService} from './percentuais-estaticos/percentual-esta
     SaldoIndividualComponent,
     RelatorioRestituicoesRescisaoComponent,
     CadastrarPercentualEstaticoComponent,
+    PercentualDinamicoComponent,
+    CadastrarPercentualDinamicoComponent,
   ],
   imports: [
     BrowserModule,
@@ -210,6 +215,7 @@ import {PercentualEstaticoService} from './percentuais-estaticos/percentual-esta
     RescisaoService,
     SaldoService,
     PercentualEstaticoService,
+    PercentualDinamicoService,
     {provide: LOCALE_ID, useValue: 'pt'},
   ],
   bootstrap: [AppComponent]
