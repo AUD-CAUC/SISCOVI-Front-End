@@ -103,6 +103,7 @@ import {CadastrarPercentualEstaticoComponent} from './percentuais-estaticos/cada
 import {PercentualEstaticoService} from './percentuais-estaticos/percentual-estatico.service';
 import {PercentualDinamicoComponent} from './percentuais-dinamicos/percentual-dinamico.component';
 import {PercentualDinamicoService} from './percentuais-dinamicos/percentual-dinamico.service';
+import {CadastrarPercentualDinamicoComponent} from './percentuais-dinamicos/cadastrar-percentual-dinamico/cadastrar-percentual-dinamico.component';
 
 @NgModule({
   declarations: [
@@ -182,6 +183,7 @@ import {PercentualDinamicoService} from './percentuais-dinamicos/percentual-dina
     RelatorioRestituicoesRescisaoComponent,
     CadastrarPercentualEstaticoComponent,
     PercentualDinamicoComponent,
+    CadastrarPercentualDinamicoComponent,
   ],
   imports: [
     BrowserModule,

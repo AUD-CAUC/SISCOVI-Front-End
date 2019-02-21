@@ -26,15 +26,6 @@ export class CadastrarPercentualEstaticoComponent implements OnInit {
     this.router = router;
     this.route = route;
     this.percentualEstaticoService = percentualEstaticoService;
-
-
-
-
-    // this.percent.forEach( (percentual) => {
-    //   if (percentual.dataFim === null) {
-    //     this.ultimaData[percentual.nome] = percentual.dataInicio;
-    //   }
-    // });
   }
   ngOnInit(): void {
     let i = 0;

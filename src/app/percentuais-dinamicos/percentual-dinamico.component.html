@@ -4,10 +4,10 @@
     <div class="col left">
       <button class="btn waves-effect" (click)="openModal()">Cadastrar Novo Percentual Dinâmico</button>
     </div>
-    <div id="modal1" class="modal bottom-sheet" materialize="modal" [materializeParams]="[{dismissible: false}]"
+    <div id="modal1" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]"
          [materializeActions]="modalActions">
       <div class="modal-content">
-        <app-cadastrar-percentual-estatico *ngIf="render" [percent]="dinamicPercent"></app-cadastrar-percentual-estatico>
+        <app-cadastrar-percentual-dinamico *ngIf="render"></app-cadastrar-percentual-dinamico>
       </div>
       <div class="modal-footer">
         <button class="btn waves-effect left" (click)="closeModal()">Cancelar</button>
@@ -30,7 +30,7 @@
     <tr *ngFor="let percentual of dinamicPercent">
       <td>{{percentual.percentual}}%</td>
       <td>{{percentual.dataAlteracao | datePipe}}</td>
-      <td>{{percentual.loginUsuario}}</td>
+      <td>{{percentual.currentUser}}</td>
     </tr>
     </tbody>
   </table>
