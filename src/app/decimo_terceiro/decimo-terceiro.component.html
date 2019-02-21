@@ -13,9 +13,9 @@
         <div id="test1" class="col s12" active="testeRetencoes()"><app-relatorio-retencoes-decimo-terceiro-component *ngIf="testeRetencoes()"></app-relatorio-retencoes-decimo-terceiro-component></div>
         <div id="test2" class="col s12" active="testeCalculo()"><app-calculo-decimo-terceiro-component *ngIf="testeCalculo()" (navegaParaViewDeCalculos)="calculosPendentes($event)">
         </app-calculo-decimo-terceiro-component></div>
-        <div id="test3" class="col s12" active="testePendentes()"><app-decimo-terceiro-pendente-component *ngIf="testePendentes()" [codigoContrato]="codigoContrato" (nav)="navegaExecucao($event)">
+        <div id="test3" class="col s12" active="testePendentes()"><app-decimo-terceiro-pendente-component *ngIf="testePendentes()"  (nav)="navegaExecucao()">
         </app-decimo-terceiro-pendente-component></div>
-        <div id="test4" class="col s12" active="testeExeucao()"><app-decimo-terceiro-execucao-component *ngIf="testeExecutados()" [codigoContrato]="codigoContrato" (nav)="navegaRetencoes($event)">
+        <div id="test4" class="col s12" active="testeExeucao()"><app-decimo-terceiro-execucao-component *ngIf="testeExecutados()" (nav)="navegaRetencoes()">
         </app-decimo-terceiro-execucao-component></div>
     </div>
 </div>

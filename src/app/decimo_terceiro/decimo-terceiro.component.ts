@@ -17,9 +17,8 @@ export class DecimoTerceiroComponent {
         this.tabSelectionParams = ['select_tab', 'test3'];
         this.setPendentesActive();
     }
-    navegaExecucao(codigoContrato: number) {
+    navegaExecucao() {
         this.contentAvailable = Content.Executados;
-        this.codigoContrato = codigoContrato;
         this.tabSelectionParams = ['select_tab', 'test4'];
         this.setExecutadosActive();
     }

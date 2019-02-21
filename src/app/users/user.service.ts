@@ -51,6 +51,7 @@ export class UserService {
       .map((res) => {
       if (res.success) {
         localStorage.setItem('auth_token', res.data.token);
+        localStorage.setItem('Token', res.data.token);
         this.config.user = res.data.user;
         // this.config.area = res.data.user.Area;
         // this.config.user.areas_pai = res.data.areas_pai;

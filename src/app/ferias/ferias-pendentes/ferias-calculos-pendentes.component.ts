@@ -15,7 +15,6 @@ import {ListaCalculosPendentes} from './lista-calculos-pendentes';
 })
 export class FeriasCalculosPendentesComponent implements OnInit {
   contratos: Contrato[];
-  @Input() codigoContrato = 0;
   isSelected: boolean[] = [];
   @Input() calculosPendentes: ListaCalculosPendentes[];
   calculosAvaliados: ListaCalculosPendentes[];
@@ -37,15 +36,25 @@ export class FeriasCalculosPendentesComponent implements OnInit {
   somaSaldo: number[] = [];
   @Output() nav = new EventEmitter();
 
-  constructor(private feriasService: FeriasService, private contratoService: ContratosService, config: ConfigService, private fb: FormBuilder, private ref: ChangeDetectorRef) {
+  constructor(private feriasService: FeriasService, private contratoService: ContratosService, config: ConfigService,
+              private fb: FormBuilder, private ref: ChangeDetectorRef) {
     this.config = config;
-    this.feriasService.getCalculosPendentes().subscribe(res2 => {
+    this.feriasService.getCalculosPendentesNegados().subscribe(res3 => {
+      const historico: ListaCalculosPendentes[] = res3;
+      this.calculosNegados = historico;
+      this.notifications = this.calculosNegados.length;
+      this.ref.markForCheck();
+    }, error2 => {
+      this.calculosNegados = null;
+    });
+  }
 
+  ngOnInit() {
+    if (this.calculosPendentes) {
       if (this.calculosPendentes.length === 0) {
         this.calculosPendentes = null;
       } else {
         this.isSelected = new Array(this.calculosPendentes.length).fill(false);
-        this.calculosPendentes = res2;
         this.somaFerias = new Array(this.calculosPendentes.length).fill(0);
         this.somaTerco = new Array(this.calculosPendentes.length).fill(0);
         this.somaDecimo = new Array(this.calculosPendentes.length).fill(0);
@@ -65,22 +74,10 @@ export class FeriasCalculosPendentesComponent implements OnInit {
             this.somaSaldo[i] = this.somaSaldo[i] + this.calculosPendentes[i].calculos[j].total;
           }
         }
-        this.formInit();
         this.ref.markForCheck();
       }
-    });
-    this.feriasService.getCalculosPendentesNegados().subscribe(res3 => {
-      const historico: ListaCalculosPendentes[] = res3;
-      this.calculosNegados = historico;
-      this.notifications = this.calculosNegados.length;
-      this.ref.markForCheck();
-    }, error2 => {
-      this.calculosNegados = null;
-    });
-  }
-
-  ngOnInit() {
-    this.formInit();
+      this.formInit();
+    }
   }
 
   formInit() {
@@ -201,11 +198,18 @@ export class FeriasCalculosPendentesComponent implements OnInit {
       this.openModal();
     } else {
       const control = <FormArray>this.feriasFormAfter.controls.calculosAvaliados;
-      this.calculosAvaliados.forEach(() => {
-        const addControl = this.fb.group({
-          observacoes: new FormControl(),
+      this.calculosAvaliados.forEach(item => {
+        const newControl = this.fb.group({
+          calculos: this.fb.array([])
         });
-        control.push(addControl);
+        item.calculos.forEach(() => {
+          const newControl2 = <FormArray>newControl.controls.calculos;
+          const addControl = this.fb.group({
+            observacoes: new FormControl(),
+          });
+          newControl2.push(addControl);
+        });
+        control.push(newControl);
       });
       this.openModal2();
     }
@@ -214,7 +218,11 @@ export class FeriasCalculosPendentesComponent implements OnInit {
   salvarAlteracoes() {
     for (let i = 0; i < this.calculosAvaliados.length; i++) {
       for (let j = 0; j < this.calculosAvaliados[i].calculos.length; j++) {
-        this.calculosAvaliados[i].calculos[j].observacoes = this.feriasFormAfter.get('calculosAvaliados').get('' + i).get('observacoes').value;
+        this.calculosAvaliados[i].calculos[j].observacoes = this.feriasFormAfter
+          .get('calculosAvaliados')
+          .get('' + i)
+          .get('calculos').get('' + j)
+          .get('observacoes').value;
       }
     }
     this.feriasService.salvarFeriasAvaliadasLista(this.calculosAvaliados).subscribe(res => {
@@ -229,6 +237,6 @@ export class FeriasCalculosPendentesComponent implements OnInit {
 
   navegaViewExec() {
     this.closeModal3();
-    this.nav.emit(this.codigoContrato);
+    this.nav.emit();
   }
 }
