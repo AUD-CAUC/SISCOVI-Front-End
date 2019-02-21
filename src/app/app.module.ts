@@ -90,7 +90,7 @@ import {FeriasCalculosPendentesExecucaoComponent} from './ferias/ferias-pendente
 import {DecimoTerceiroPendenteComponent} from './decimo_terceiro/decimo-terceiro-pendente/decimo-terceiro-pendente.component';
 import {DecimoTerceiroPendenteExecucaoComponent} from './decimo_terceiro/decimo-terceiro-pendente/decimo-terceiro-pendente-execucao.component';
 import {RetencoesDecimoTerceiroComponent} from './decimo_terceiro/relatorio-retencoes-decimo-terceiro/retencoes-decimo-terceiro.component';
-import {RescisaoPendenteComponent} from './rescisao/rescisoes-pendentes/rescisao-pendente.component';
+import {RescisaoCalculosPendentesComponent} from './rescisao/rescisoes-pendentes/rescisao-calculos-pendentes.component';
 import {CadastrarTerceirizadoComponent} from './funcionarios/cadastrar-terceirizado/cadastrar-terceirizado.component';
 import {CadastrarGestorContratoComponent} from './historico/cadastrar-gestor/cadastrar-gestor-contrato.component';
 import {GerenciarCargosTerceirizadosComponent} from './cargos/gerenciar-cargos-terceirizados/gerenciar-cargos-terceirizados.component';
@@ -171,7 +171,7 @@ import {PercentualEstaticoService} from './percentuais-estaticos/percentual-esta
     DecimoTerceiroPendenteComponent,
     DecimoTerceiroPendenteExecucaoComponent,
     RetencoesDecimoTerceiroComponent,
-    RescisaoPendenteComponent,
+    RescisaoCalculosPendentesComponent,
     CadastrarTerceirizadoComponent,
     CadastrarGestorContratoComponent,
     GerenciarCargosTerceirizadosComponent,

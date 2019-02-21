@@ -1,0 +1,304 @@
+<br>
+<div class="row" *ngIf="(calculosNegados) && config.user.perfil.sigla == 'ADMINISTRADOR'">
+  <div class="col tooltip" *ngIf="calculosNegados.length > 0">
+    <span class="tooltiptext">Cálculos Negados</span>
+    <a (click)="openModal4()" class="left badge1" [attr.data-badge]="notifications">
+      <i class="material-icons left small">announcement</i>
+    </a>
+  </div>
+</div>
+<div class="container" *ngIf="!calculosPendentes">
+  <div class="row">
+    <div class="col s12 grey lighten-4" style="margin-top: 1em">
+      <br>
+      <h5 class="center-align">Nada pendente aqui.<i class="small material-icons">mood</i></h5>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <form [formGroup]="rescisaoForm" *ngIf="calculosPendentes">
+    <div formArrayName="contratos">
+      <div class="col  l12" *ngFor="let calculoPendente of calculosPendentes; let i = index">
+        <h6><b>{{calculoPendente.titulo}}</b></h6>
+        <table *ngIf="calculosPendentes" class="highlight centered responsive-table"
+               [formGroupName]="i">
+          <thead>
+          <tr>
+            <th *ngIf="config.user.perfil.sigla == 'ADMINISTRADOR'">
+              <input type="checkbox" class="checkbox-black" id="test5{{i}}" (change)="isSelected[i] = !isSelected[i]"/>
+              <label for="test5{{i}}"></label>
+            </th>
+            <th *ngIf="config.user.perfil.sigla == 'ADMINISTRADOR'">Avaliação</th>
+            <th *ngIf="config.user.perfil.sigla == 'USUÁRIO'">Status</th>
+            <th>Terceirizado</th>
+            <th>Função</th>
+            <th>Tipo de Restituição</th>
+            <th>Parcela</th>
+            <th>Início do Periodo Aquisitivo</th>
+            <th>Fim do Periodo Aquisitivo</th>
+            <th>Início do Usufruto</th>
+            <th>Fim do Usufruto</th>
+            <th>Dias Vendidos</th>
+            <th>Valor de Férias</th>
+            <th>Valor de 1/3</th>
+            <th>Incidência Sobre Férias</th>
+            <th>Incidência Sobre 1/3</th>
+            <th>Total</th>
+          </tr>
+          </thead>
+          <tbody formArrayName="avaliacaoCalculoFerias">
+          <tr *ngFor="let calculos of calculoPendente.calculos; let k = index">
+            <td *ngIf="config.user.perfil.sigla == 'ADMINISTRADOR'">
+              <div [formGroupName]="k" [attr.id]="calculoPendente.codigo">
+                <div class="row">
+                  <div clas="input-field">
+                    <input type="checkbox" class="checkbox-black" [checked]="isSelected[i]" [ngModel]="isSelected[i]"
+                           formControlName="selected"
+                           id="{{calculoPendente.codigo}}}{{k}}"/>
+                    <label for="{{calculoPendente.codigo}}}{{k}}"></label>
+                  </div>
+                </div>
+              </div>
+            </td>
+            <td *ngIf="config.user.perfil.sigla == 'ADMINISTRADOR'">
+              <div [formGroupName]="k">
+                <div class="row">
+                  <div class="input-field col s12">
+                    <select materialize="material_select" formControlName="avaliacao">
+                      <option value="S">APROVAR</option>
+                      <option value="N">REJEITAR</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </td>
+            <td *ngIf="config.user.perfil.sigla == 'USUÁRIO'">{{calculos.status}}</td>
+            <td class="hoverable">{{calculos.nomeTerceirizado}}</td>
+            <td class="hoverable">{{calculos.nomeCargo}}</td>
+            <td class="hoverable">{{calculos.calcularRescisaoModel.tipoRestituicao}}</td>
+            <td class="hoverable">{{calculos.calcularRescisaoModel.parcelas | parcelaPipe}}</td>
+            <td class="hoverable">{{calculos.calcularRescisaoModel.inicioPeriodoAquisitivo | date: 'shortDate'}}</td>
+            <td class="hoverable">{{calculos.calcularRescisaoModel.fimPeriodoAquisitivo | date: 'shortDate'}}</td>
+            <td class="hoverable">{{calculos.calcularRescisaoModel.inicioFerias | date: 'shortDate'}}</td>
+            <td class="hoverable">{{calculos.calcularRescisaoModel.fimFerias | date: 'shortDate'}}</td>
+            <td class="hoverable">{{calculos.calcularRescisaoModel.diasVendidos}}</td>
+            <td class="hoverable">{{calculos.calcularRescisaoModel.pTotalFerias | currency:'BRL':true:'1.2-2'}}</td>
+            <td class="hoverable">{{calculos.calcularRescisaoModel.pTotalTercoConstitucional |
+              currency:'BRL':true:'1.2-2'}}
+            </td>
+            <td class="hoverable">{{calculos.calcularRescisaoModel.pTotalIncidenciaFerias | currency:'BRL':true:'1.2-2'}}
+            </td>
+            <td class="hoverable">{{calculos.calcularRescisaoModel.pTotalIncidenciaTerco | currency:'BRL':true:'1.2-2'}}
+            </td>
+            <td class="hoverable"><b>{{calculos.total | currency:'BRL':true:'1.2-2'}}</b></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><b>Subtotal</b></td>
+            <td></td>
+            <td><b>{{somaFerias[i] | currency:'BRL':true:'1.2-2'}}</b></td>
+            <td><b>{{somaTerco[i] | currency:'BRL':true:'1.2-2'}}</b></td>
+            <td><b>{{somaIncidenciaFerias[i] | currency:'BRL':true:'1.2-2'}}</b></td>
+            <td><b>{{somaIncidenciaTerco[i] | currency:'BRL':true:'1.2-2'}}</b></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><b>Total</b></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><b>{{somaSaldo[i] | currency:'BRL':true:'1.2-2'}}</b></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="row" *ngIf="config.user.perfil.sigla == 'ADMINISTRADOR' && calculosPendentes.length > 0">
+  <div class="col">
+    <div class="center">
+      <button class="btn waves-effect center" (click)="verificaFormulario()">Salvar Alterações</button>
+    </div>
+  </div>
+</div>
+<div id="modal1" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]"
+     [materializeActions]="modalActions">
+  <div class="modal-content">
+    <h4 class="center">Atenção</h4>
+    <br>
+    <h5 class=" center">No mínimo uma pessoa deve ser selecionada !</h5>
+  </div>
+  <div class="modal-footer">
+    <button class="btn waves-effect center" (click)="closeModal()">Ok</button>
+  </div>
+</div>
+<div id="modal2" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]"
+     [materializeActions]="modalActions2">
+  <div class="modal-content">
+    <h4 class="center">Confirma Operação</h4>
+    <br>
+    <div *ngFor="let calcAval of calculosAvaliados">
+      <h6><b>{{calcAval.titulo}}</b></h6>
+      <table class="highlight centered responsive-table" *ngIf="calcAval.calculos.length">
+        <thead>
+        <tr>
+          <th>Status</th>
+          <th>Terceirizado</th>
+          <th>Cargo</th>
+          <th>Tipo de Restituição</th>
+          <th>Parcela</th>
+          <th>Início do Periodo Aquisitivo</th>
+          <th>Fim do Periodo Aquisitivo</th>
+          <th>Início do Usufruto</th>
+          <th>Fim do Usufruto</th>
+          <th>Dias Vendidos</th>
+          <th>Valor de Férias</th>
+          <th>Valor de 1/3</th>
+          <th>Incidência Sobre Férias</th>
+          <th>Incidência Sobre 1/3</th>
+          <th>Total</th>
+          <th>Observações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let calculos of calcAval.calculos; let k = index">
+          <td>{{calculos.status | pendentePipe}}</td>
+          <td *ngIf="config.user.perfil.sigla == 'USUÁRIO'">{{calculos.status}}</td>
+          <td class="hoverable">{{calculos.nomeTerceirizado}}</td>
+          <td class="hoverable">{{calculos.nomeCargo}}</td>
+          <td class="hoverable">{{calculos.calcularRescisaoModel.tipoRestituicao}}</td>
+          <td class="hoverable">{{calculos.calcularRescisaoModel.parcelas | parcelaPipe}}</td>
+          <td class="hoverable">{{calculos.calcularRescisaoModel.inicioPeriodoAquisitivo | date: 'shortDate'}}</td>
+          <td class="hoverable">{{calculos.calcularRescisaoModel.fimPeriodoAquisitivo | date: 'shortDate'}}</td>
+          <td class="hoverable">{{calculos.calcularRescisaoModel.inicioFerias | date: 'shortDate'}}</td>
+          <td class="hoverable">{{calculos.calcularRescisaoModel.fimFerias | date: 'shortDate'}}</td>
+          <td class="hoverable">{{calculos.calcularRescisaoModel.diasVendidos}}</td>
+          <td class="hoverable">{{calculos.calcularRescisaoModel.pTotalFerias | currency:'BRL':true:'1.2-2'}}</td>
+          <td class="hoverable">{{calculos.calcularRescisaoModel.pTotalTercoConstitucional | currency:'BRL':true:'1.2-2'}}
+          </td>
+          <td class="hoverable">{{calculos.calcularRescisaoModel.pTotalIncidenciaFerias | currency:'BRL':true:'1.2-2'}}
+          </td>
+          <td class="hoverable">{{calculos.calcularRescisaoModel.pTotalIncidenciaTerco | currency:'BRL':true:'1.2-2'}}
+          </td>
+          <td class="hoverable"><b>{{calculos.total | currency:'BRL':true:'1.2-2'}}</b></td>
+          <td>
+            <div class="row">
+              <form [formGroup]="rescisaoFormAfter" class="col">
+                <div class="row" formArrayName="calculosAvaliados">
+                  <div class="input-field col s12" [formGroupName]="k">
+                    <textarea id="textarea1" class="materialize-textarea" formControlName="observacoes"></textarea>
+                    <label for="textarea1">Observações</label>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn waves-effect left" (click)="closeModal2()">Cancelar</button>
+    <button class="btn waves-effect right" (click)="salvarAlteracoes()">Confirmar</button>
+  </div>
+</div>
+<div id="modal3" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]"
+     [materializeActions]="modalActions3">
+  <div class="modal-content">
+    <h4 class="center">Atenção</h4>
+    <br>
+    <h5 class=" center">As alterações foram feitas com sucesso !</h5>
+  </div>
+  <div class="modal-footer">
+    <button class="btn waves-effect center" (click)="navegaViewExec()">Ok</button>
+  </div>
+</div>
+<div id="modal4" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]"
+     [materializeActions]="modalActions4" *ngIf="calculosNegados && calculosNegados.length > 0">
+  <div class="modal-content">
+    <h4 class="center">Histórico de Cálculos Negados</h4>
+    <div *ngFor="let calculoNegado of calculosNegados">
+      <h6><b>{{calculoNegado.titulo}}</b></h6>
+      <table class="highlight centered responsive-table">
+        <thead>
+        <tr>
+          <th>Status</th>
+          <th>Terceirizado</th>
+          <th>Cargo</th>
+          <th>Tipo de Restituição</th>
+          <th>Parcela</th>
+          <th>Início do Periodo Aquisitivo</th>
+          <th>Fim do Periodo Aquisitivo</th>
+          <th>Início do Usufruto</th>
+          <th>Fim do Usufruto</th>
+          <th>Dias Vendidos</th>
+          <th>Valor de Férias</th>
+          <th>Valor de 1/3</th>
+          <th>Incidência Sobre Férias</th>
+          <th>Incidência Sobre 1/3</th>
+          <th>Total</th>
+          <th>Observações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let calculos of calculoNegado.calculos">
+          <td>{{calculos.status}}</td>
+          <td class="hoverable">{{calculos.nomeTerceirizado}}</td>
+          <td class="hoverable">{{calculos.nomeCargo}}</td>
+          <td class="hoverable">{{calculos.calcularRescisaoModel.tipoRestituicao}}</td>
+          <td class="hoverable">{{calculos.calcularRescisaoModel.parcelas | parcelaPipe}}</td>
+          <td class="hoverable">{{calculos.calcularRescisaoModel.inicioPeriodoAquisitivo | date: 'shortDate'}}</td>
+          <td class="hoverable">{{calculos.calcularRescisaoModel.fimPeriodoAquisitivo | date: 'shortDate'}}</td>
+          <td class="hoverable">{{calculos.calcularRescisaoModel.inicioFerias | date: 'shortDate'}}</td>
+          <td class="hoverable">{{calculos.calcularRescisaoModel.fimFerias | date: 'shortDate'}}</td>
+          <td class="hoverable">{{calculos.calcularRescisaoModel.diasVendidos}}</td>
+          <td class="hoverable">{{calculos.calcularRescisaoModel.pTotalFerias | currency:'BRL':true:'1.2-2'}}</td>
+          <td class="hoverable">{{calculos.calcularRescisaoModel.pTotalTercoConstitucional | currency:'BRL':true:'1.2-2'}}
+          </td>
+          <td class="hoverable">{{calculos.calcularRescisaoModel.pTotalIncidenciaFerias | currency:'BRL':true:'1.2-2'}}
+          </td>
+          <td class="hoverable">{{calculos.calcularRescisaoModel.pTotalIncidenciaTerco | currency:'BRL':true:'1.2-2'}}
+          </td>
+          <td class="hoverable"><b>{{calculos.total | currency:'BRL':true:'1.2-2'}}</b></td>
+          <td class="hoverable">{{calculos.observacoes}}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn waves-effect center" (click)="closeModal4()">Ok</button>
+  </div>
+</div>
+<div id="modal5" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]"
+     [materializeActions]="modalActions5">
+  <div class="modal-content">
+    <h4 class="center">Atenção</h4>
+    <br>
+    <h5 class=" center">Houve um erro ao tentar avaliar os cálculos !</h5>
+  </div>
+  <div class="modal-footer">
+    <button class="btn waves-effect center" (click)="closeModal5()">Ok</button>
+  </div>
+</div>

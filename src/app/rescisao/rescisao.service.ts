@@ -4,6 +4,7 @@ import {ConfigService} from '../_shared/config.service';
 import {TerceirizadoRescisao} from './terceirizado-rescisao';
 import {RescisaoPendente} from '../decimo_terceiro/decimo-terceiro-pendente/rescisao-pendente';
 import {RescisaoCalcular} from './rescisao-calcular';
+import {ListaCalculosPendentes} from '../rescisao/rescisoes-pendentes/lista-calculos-pendentes';
 
 @Injectable()
 export class RescisaoService {
@@ -78,11 +79,11 @@ export class RescisaoService {
       const url = this.config.myApi + '/rescisao/getRestituicoesRescisao/' + codigoContrato + '/' + this.config.user.id;
       return this.http.get(url).map(res => res.json());
     }
-    getCalculosPendentes(codigoContrato: number) {
+    getCalculosPendentes() {
         const url = '';
         return this.http.get(url).map(res => res.json());
     }
-    getCalculosPendentesNegados(codigoContrato: number) {
+    getCalculosPendentesNegados() {
         const url = '';
         return this.http.get(url).map(res => res.json());
     }
@@ -90,6 +91,20 @@ export class RescisaoService {
     salvarRescisoesAvaliadas(codigoContrato: number, calculosAvaliados: RescisaoPendente[]) {
         const url = '';
         return this.http.get(url).map(res => res.json());
+    }
+    salvarRescisoesAvaliadasLista(lista: ListaCalculosPendentes[]) {
+      const url = this.config.myApi + '';
+      const data = [];
+      lista.forEach(item => {
+        const object = {
+          codContrato: item.codigo,
+          user: this.config.user,
+          calculosAvaliados: item.calculos
+        };
+        data.push(object);
+      });
+
+      return this.http.put(url, data).map(res => res.json());
     }
     protected encapsulaDatas(value: any): Date {
       const a = value.split('/');

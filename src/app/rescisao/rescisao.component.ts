@@ -1,4 +1,6 @@
 import {Component} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
+import {ListaCalculosPendentes} from './rescisoes-pendentes/lista-calculos-pendentes';
 
 @Component({
     selector: 'app-rescisao-component',
@@ -9,20 +11,36 @@ export class RescisaoComponent {
     contentAvailable: Content = Content.Calculos;
     tabSelectionParams = ['select_tab', 'test2'];
     codigoContrato: number;
+    cp: ListaCalculosPendentes[];
 
-    constructor() {    }
+    constructor(private route: ActivatedRoute) {
+    }
 
-    calculosPendentes(codigoContrato: number) {
-        this.codigoContrato = codigoContrato;
+    calculosPendentes() {
+        this.cp = this.route.snapshot.data.calculosPendentes;
         this.tabSelectionParams = ['select_tab', 'test3'];
         this.setPendentesActive();
     }
+
+    calculosExecutados() {
+      this.cp = this.route.snapshot.data.calculosPendentesExecucao;
+      this.tabSelectionParams = ['select_tab', 'test4'];
+      this.setExecutadosActive();
+    }
+
+    retencoes(codigoContrato: number) {
+      this.codigoContrato = codigoContrato;
+      this.tabSelectionParams = ['select_tab', 'test1'];
+      this.setRetencoesActive();
+    }
+
     testeCalculo(): boolean {
         if (this.contentAvailable === Content.Calculos) {
             return true;
         }
         return false;
     }
+
     testePendentes(): boolean {
         if (this.contentAvailable === Content.Pendentes) {
             return true;
