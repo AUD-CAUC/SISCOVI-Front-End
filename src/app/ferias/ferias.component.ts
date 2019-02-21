@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {ListaCalculosPendentes} from './ferias-pendentes/lista-calculos-pendentes';
 import {FeriasService} from './ferias.service';
@@ -14,7 +14,7 @@ export class FeriasComponent implements OnInit {
   codigoContrato: number;
   cp: ListaCalculosPendentes[];
   cpe: ListaCalculosPendentes[];
-  constructor(private route: ActivatedRoute, private feriasService: FeriasService) {
+  constructor(private route: ActivatedRoute, private feriasService: FeriasService, private ref: ChangeDetectorRef) {
   }
 
   ngOnInit() {
@@ -25,21 +25,31 @@ export class FeriasComponent implements OnInit {
   calculosPendentes() {
     this.feriasService.getCalculosPendentes().subscribe(res => {
       this.cp = res;
+      this.ref.markForCheck();
+      this.tabSelectionParams = ['select_tab', 'test3'];
+      this.setPendentesActive();
     }, error2 => {
       this.cp = this.route.snapshot.data.calculosPendentes;
+      this.ref.markForCheck();
+      this.tabSelectionParams = ['select_tab', 'test3'];
+      this.setPendentesActive();
     });
-    this.tabSelectionParams = ['select_tab', 'test3'];
-    this.setPendentesActive();
+    window.scroll(0, 0);
   }
 
   calculosExecutados() {
     this.feriasService.getCalculosPendentesExecucao().subscribe(res => {
       this.cpe = res;
+      this.ref.markForCheck();
+      this.tabSelectionParams = ['select_tab', 'test4'];
+      this.setExecutadosActive();
     }, error2 => {
       this.cpe = this.route.snapshot.data.calculosPendentesExecucao;
+      this.ref.markForCheck();
+      this.tabSelectionParams = ['select_tab', 'test4'];
+      this.setExecutadosActive();
     });
-    this.tabSelectionParams = ['select_tab', 'test4'];
-    this.setExecutadosActive();
+    window.scroll(0,0);
   }
 
   retencoes(codigoContrato: number) {

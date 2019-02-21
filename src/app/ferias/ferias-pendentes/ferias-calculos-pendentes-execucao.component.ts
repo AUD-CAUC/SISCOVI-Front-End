@@ -183,11 +183,18 @@ export class FeriasCalculosPendentesExecucaoComponent implements OnInit {
       this.openModal();
     } else {
       const control = <FormArray>this.feriasFormAfter.controls.calculosAvaliados;
-      this.calculosAvaliados.forEach(() => {
-        const addControl = this.fb.group({
-          observacoes: new FormControl(),
+      this.calculosAvaliados.forEach(item => {
+        const newControl = this.fb.group({
+          calculos: this.fb.array([])
         });
-        control.push(addControl);
+        item.calculos.forEach(() => {
+          const newControl2 = <FormArray>newControl.controls.calculos;
+          const addControl = this.fb.group({
+            observacoes: new FormControl(),
+          });
+          newControl2.push(addControl);
+        });
+        control.push(newControl);
       });
       this.openModal2();
     }
@@ -196,15 +203,20 @@ export class FeriasCalculosPendentesExecucaoComponent implements OnInit {
   salvarAlteracoes() {
     for (let i = 0; i < this.calculosAvaliados.length; i++) {
       for (let j = 0; j < this.calculosAvaliados[i].calculos.length; j++) {
-        this.calculosAvaliados[i].calculos[j].observacoes = this.feriasFormAfter.get('calculosAvaliados').get('' + i).get('observacoes').value;
+        this.calculosAvaliados[i].calculos[j].observacoes = this.feriasFormAfter
+          .get('calculosAvaliados')
+          .get('' + i)
+          .get('calculos').get('' + j)
+          .get('observacoes').value;
       }
     }
     this.feriasService.salvarExecucaoFerias(this.calculosAvaliados).subscribe(res => {
         this.closeModal2();
         this.openModal3();
-    }, error1 => {
-      this.closeModal2();
-      this.openModal5();
-    });
+      },
+      error1 => {
+        this.closeModal2();
+        this.openModal5();
+      });
   }
 }

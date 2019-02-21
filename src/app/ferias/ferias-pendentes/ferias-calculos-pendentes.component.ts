@@ -50,32 +50,34 @@ export class FeriasCalculosPendentesComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.calculosPendentes.length === 0) {
-      this.calculosPendentes = null;
-    } else {
-      this.isSelected = new Array(this.calculosPendentes.length).fill(false);
-      this.somaFerias = new Array(this.calculosPendentes.length).fill(0);
-      this.somaTerco = new Array(this.calculosPendentes.length).fill(0);
-      this.somaDecimo = new Array(this.calculosPendentes.length).fill(0);
-      this.somaIncidenciaFerias = new Array(this.calculosPendentes.length).fill(0);
-      this.somaIncidenciaTerco = new Array(this.calculosPendentes.length).fill(0);
-      this.somaSaldo = new Array(this.calculosPendentes.length).fill(0);
-      for (let i = 0; i < this.calculosPendentes.length; i++) {
-        for (let j = 0; j < this.calculosPendentes[i].calculos.length; j++) {
-          this.somaFerias[i] = this.somaFerias[i] +
-            this.calculosPendentes[i].calculos[j].calcularFeriasModel.pTotalFerias;
-          this.somaTerco[i] = this.somaTerco[i] +
-            this.calculosPendentes[i].calculos[j].calcularFeriasModel.pTotalTercoConstitucional;
-          this.somaIncidenciaFerias[i] = this.somaIncidenciaFerias[i] +
-            this.calculosPendentes[i].calculos[j].calcularFeriasModel.pTotalIncidenciaFerias;
-          this.somaIncidenciaTerco[i] = this.somaIncidenciaTerco[i] +
-            this.calculosPendentes[i].calculos[j].calcularFeriasModel.pTotalIncidenciaTerco;
-          this.somaSaldo[i] = this.somaSaldo[i] + this.calculosPendentes[i].calculos[j].total;
+    if (this.calculosPendentes) {
+      if (this.calculosPendentes.length === 0) {
+        this.calculosPendentes = null;
+      } else {
+        this.isSelected = new Array(this.calculosPendentes.length).fill(false);
+        this.somaFerias = new Array(this.calculosPendentes.length).fill(0);
+        this.somaTerco = new Array(this.calculosPendentes.length).fill(0);
+        this.somaDecimo = new Array(this.calculosPendentes.length).fill(0);
+        this.somaIncidenciaFerias = new Array(this.calculosPendentes.length).fill(0);
+        this.somaIncidenciaTerco = new Array(this.calculosPendentes.length).fill(0);
+        this.somaSaldo = new Array(this.calculosPendentes.length).fill(0);
+        for (let i = 0; i < this.calculosPendentes.length; i++) {
+          for (let j = 0; j < this.calculosPendentes[i].calculos.length; j++) {
+            this.somaFerias[i] = this.somaFerias[i] +
+              this.calculosPendentes[i].calculos[j].calcularFeriasModel.pTotalFerias;
+            this.somaTerco[i] = this.somaTerco[i] +
+              this.calculosPendentes[i].calculos[j].calcularFeriasModel.pTotalTercoConstitucional;
+            this.somaIncidenciaFerias[i] = this.somaIncidenciaFerias[i] +
+              this.calculosPendentes[i].calculos[j].calcularFeriasModel.pTotalIncidenciaFerias;
+            this.somaIncidenciaTerco[i] = this.somaIncidenciaTerco[i] +
+              this.calculosPendentes[i].calculos[j].calcularFeriasModel.pTotalIncidenciaTerco;
+            this.somaSaldo[i] = this.somaSaldo[i] + this.calculosPendentes[i].calculos[j].total;
+          }
         }
+        this.ref.markForCheck();
       }
-      this.ref.markForCheck();
+      this.formInit();
     }
-    this.formInit();
   }
 
   formInit() {
@@ -197,12 +199,17 @@ export class FeriasCalculosPendentesComponent implements OnInit {
     } else {
       const control = <FormArray>this.feriasFormAfter.controls.calculosAvaliados;
       this.calculosAvaliados.forEach(item => {
-        item.calculos.forEach(calculo => {
+        const newControl = this.fb.group({
+          calculos: this.fb.array([])
+        });
+        item.calculos.forEach(() => {
+          const newControl2 = <FormArray>newControl.controls.calculos;
           const addControl = this.fb.group({
             observacoes: new FormControl(),
           });
-          control.push(addControl);
+          newControl2.push(addControl);
         });
+        control.push(newControl);
       });
       this.openModal2();
     }
@@ -211,7 +218,11 @@ export class FeriasCalculosPendentesComponent implements OnInit {
   salvarAlteracoes() {
     for (let i = 0; i < this.calculosAvaliados.length; i++) {
       for (let j = 0; j < this.calculosAvaliados[i].calculos.length; j++) {
-        this.calculosAvaliados[i].calculos[j].observacoes = this.feriasFormAfter.get('calculosAvaliados').get('' + i).get('observacoes').value;
+        this.calculosAvaliados[i].calculos[j].observacoes = this.feriasFormAfter
+          .get('calculosAvaliados')
+          .get('' + i)
+          .get('calculos').get('' + j)
+          .get('observacoes').value;
       }
     }
     this.feriasService.salvarFeriasAvaliadasLista(this.calculosAvaliados).subscribe(res => {

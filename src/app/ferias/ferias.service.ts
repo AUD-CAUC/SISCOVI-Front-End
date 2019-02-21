@@ -97,7 +97,7 @@ export class FeriasService {
       data.push(object);
     });
     console.log(data);
-    return this.http.put(url, {}).map(res => res.json());
+    return this.http.put(url, data).map(res => res.json());
   }
   getCalculosPendentesNegados() {
     const url = this.config.myApi + '/ferias' + '/getCalculosPendentesNegados' + '/' + this.config.user.id;

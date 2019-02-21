@@ -99,6 +99,8 @@ import {SaldoIndividualComponent} from './saldo/individual/saldo-individual-comp
 import {SaldoFuncaoComponent} from './saldo/funcao/saldo-funcao.component';
 import {RelatorioRestituicoesRescisaoComponent} from './rescisao/relatorio-restituicao-rescisao/relatorio-restituicoes-rescisao.component';
 import {FileSizePipe} from './_shared/file-size.pipe';
+import {HTTP_INTERCEPTORS} from '@angular/common/http';
+import {AppHttpInterceptor} from './app-http.interceptor';
 
 @NgModule({
   declarations: [
@@ -207,6 +209,11 @@ import {FileSizePipe} from './_shared/file-size.pipe';
     RescisaoService,
     SaldoService,
     {provide: LOCALE_ID, useValue: 'pt'},
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AppHttpInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })
