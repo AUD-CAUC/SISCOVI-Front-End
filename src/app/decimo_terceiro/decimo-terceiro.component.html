@@ -15,7 +15,7 @@
         </app-calculo-decimo-terceiro-component></div>
         <div id="test3" class="col s12" active="testePendentes()"><app-decimo-terceiro-pendente-component *ngIf="testePendentes()"  (nav)="navegaExecucao()">
         </app-decimo-terceiro-pendente-component></div>
-        <div id="test4" class="col s12" active="testeExeucao()"><app-decimo-terceiro-execucao-component *ngIf="testeExecutados()" [codigoContrato]="codigoContrato" (nav)="navegaRetencoes($event)">
+        <div id="test4" class="col s12" active="testeExeucao()"><app-decimo-terceiro-execucao-component *ngIf="testeExecutados()" (nav)="navegaRetencoes()">
         </app-decimo-terceiro-execucao-component></div>
     </div>
 </div>
