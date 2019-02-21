@@ -74,7 +74,17 @@ export class MovimentacaoFeriasComponent implements OnInit {
       this.feriasForm.get('calcularTerceirizados').get('' + i).get('valorMovimentado').setValidators(Validators.required);
       this.feriasForm.get('calcularTerceirizados').get('' + i).get('valorMovimentado').setAsyncValidators(this.valorMovimentadoValidator.bind(this));
       this.feriasForm.get('calcularTerceirizados').get('' + i).get('parcelas').setValidators([Validators.required, this.parcelaValidator]);
-      this.feriasForm.get('calcularTerceirizados').get('' + i).get('parcelas').setValue('0');
+      let ultimaParcela = this.feriasForm.get('calcularTerceirizados').get('' + i).get('parcelaAnterior').value;
+
+      if (ultimaParcela === null) {
+        ultimaParcela = 0;
+      } else if (ultimaParcela === 3) {
+        // faz nada;
+      } else {
+        ultimaParcela++;
+      }
+
+      this.feriasForm.get('calcularTerceirizados').get('' + i).get('parcelas').setValue(ultimaParcela);
       this.feriasForm.get('calcularTerceirizados').get('' + i).get('tipoRestituicao').setValidators(Validators.required);
       this.feriasForm.get('calcularTerceirizados').get('' + i).get('diasVendidos').setValidators([this.diasVendidosValidator, Validators.required]);
       this.feriasForm.get('calcularTerceirizados').get('' + i).get('diasVendidos').setValue(0);
