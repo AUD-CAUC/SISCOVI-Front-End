@@ -1,31 +1,55 @@
-import {Component} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {ListaCalculosPendentes} from './ferias-pendentes/lista-calculos-pendentes';
+import {FeriasService} from './ferias.service';
 
 @Component({
   selector: 'app-ferias-component',
   templateUrl: './ferias.component.html',
   styleUrls: ['./ferias.component.scss']
 })
-export class FeriasComponent {
+export class FeriasComponent implements OnInit {
   contentAvailable: Content = Content.Calculos;
   tabSelectionParams = ['select_tab', 'test2'];
   codigoContrato: number;
   cp: ListaCalculosPendentes[];
+  cpe: ListaCalculosPendentes[];
+  constructor(private route: ActivatedRoute, private feriasService: FeriasService, private ref: ChangeDetectorRef) {
+  }
 
-  constructor(private route: ActivatedRoute) {
+  ngOnInit() {
+    this.cp = this.route.snapshot.data.calculosPendentes;
+    this.cpe = this.route.snapshot.data.calculosPendentesExecucao;
   }
 
   calculosPendentes() {
-    this.cp = this.route.snapshot.data.calculosPendentes;
-    this.tabSelectionParams = ['select_tab', 'test3'];
-    this.setPendentesActive();
+    this.feriasService.getCalculosPendentes().subscribe(res => {
+      this.cp = res;
+      this.ref.markForCheck();
+      this.tabSelectionParams = ['select_tab', 'test3'];
+      this.setPendentesActive();
+    }, error2 => {
+      this.cp = this.route.snapshot.data.calculosPendentes;
+      this.ref.markForCheck();
+      this.tabSelectionParams = ['select_tab', 'test3'];
+      this.setPendentesActive();
+    });
+    window.scroll(0, 0);
   }
 
   calculosExecutados() {
-    this.cp = this.route.snapshot.data.calculosPendentesExecucao;
-    this.tabSelectionParams = ['select_tab', 'test4'];
-    this.setExecutadosActive();
+    this.feriasService.getCalculosPendentesExecucao().subscribe(res => {
+      this.cpe = res;
+      this.ref.markForCheck();
+      this.tabSelectionParams = ['select_tab', 'test4'];
+      this.setExecutadosActive();
+    }, error2 => {
+      this.cpe = this.route.snapshot.data.calculosPendentesExecucao;
+      this.ref.markForCheck();
+      this.tabSelectionParams = ['select_tab', 'test4'];
+      this.setExecutadosActive();
+    });
+    window.scroll(0,0);
   }
 
   retencoes(codigoContrato: number) {
@@ -73,13 +97,11 @@ export class FeriasComponent {
   }
 
   setPendentesActive(): void {
-    this.cp = this.route.snapshot.data.calculosPendentes;
     this.contentAvailable = Content.Pendentes;
     this.tabSelectionParams = ['select_tab', 'test3'];
   }
 
   setExecutadosActive(): void {
-    this.cp = this.route.snapshot.data.calculosPendentesExecucao;
     this.contentAvailable = Content.Executados;
     this.tabSelectionParams = ['select_tab', 'test4'];
   }

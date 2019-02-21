@@ -15,8 +15,8 @@
     </div>
   </div>
 </div>
-<div class="row">
-  <form [formGroup]="feriasForm" *ngIf="calculosPendentes">
+<div class="row" *ngIf="calculosPendentes">
+  <form [formGroup]="feriasForm">
     <div formArrayName="contratos">
       <div class="col  l12" *ngFor="let calculoPendente of calculosPendentes; let i = index">
         <h6><b>{{calculoPendente.titulo}}</b></h6>
@@ -134,7 +134,7 @@
     </div>
   </form>
 </div>
-<div class="row" *ngIf="config.user.perfil.sigla == 'ADMINISTRADOR' && calculosPendentes.length > 0">
+<div class="row" *ngIf="config.user.perfil.sigla == 'ADMINISTRADOR' && calculosPendentes">
   <div class="col">
     <div class="center">
       <button class="btn waves-effect center" (click)="verificaFormulario()">Salvar Alterações</button>
@@ -157,7 +157,7 @@
   <div class="modal-content">
     <h4 class="center">Confirma Operação</h4>
     <br>
-    <div *ngFor="let calcAval of calculosAvaliados">
+    <div *ngFor="let calcAval of calculosAvaliados; let i = index">
       <h6><b>{{calcAval.titulo}}</b></h6>
       <table class="highlight centered responsive-table" *ngIf="calcAval.calculos.length">
         <thead>
@@ -202,16 +202,18 @@
           </td>
           <td class="hoverable"><b>{{calculos.total | currency:'BRL':true:'1.2-2'}}</b></td>
           <td>
-            <div class="row">
-              <form [formGroup]="feriasFormAfter" class="col">
-                <div class="row" formArrayName="calculosAvaliados">
-                  <div class="input-field col s12" [formGroupName]="k">
-                    <textarea id="textarea1" class="materialize-textarea" formControlName="observacoes"></textarea>
-                    <label for="textarea1">Observações</label>
+            <form [formGroup]="feriasFormAfter" class="col">
+              <div formArrayName="calculosAvaliados">
+                <div class="row" [formGroupName]="i">
+                  <div formArrayName="calculos">
+                    <div class="input-field col s12" [formGroupName]="k">
+                      <textarea id="textarea1" class="materialize-textarea" formControlName="observacoes"></textarea>
+                      <label for="textarea1">Observações</label>
+                    </div>
                   </div>
                 </div>
-              </form>
-            </div>
+              </div>
+            </form>
           </td>
         </tr>
         </tbody>

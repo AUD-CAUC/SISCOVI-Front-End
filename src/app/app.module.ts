@@ -101,6 +101,8 @@ import {RelatorioRestituicoesRescisaoComponent} from './rescisao/relatorio-resti
 import {FileSizePipe} from './_shared/file-size.pipe';
 import {CadastrarPercentualEstaticoComponent} from './percentuais-estaticos/cadastrar-percentual-estatico/cadastrar-percentual-estatico.component';
 import {PercentualEstaticoService} from './percentuais-estaticos/percentual-estatico.service';
+import {HTTP_INTERCEPTORS} from '@angular/common/http';
+import {AppHttpInterceptor} from './app-http.interceptor';
 
 @NgModule({
   declarations: [
@@ -178,7 +180,8 @@ import {PercentualEstaticoService} from './percentuais-estaticos/percentual-esta
     SaldoFuncaoComponent,
     SaldoIndividualComponent,
     RelatorioRestituicoesRescisaoComponent,
-    CadastrarPercentualEstaticoComponent,
+
+    CadastrarPercentualEstaticoComponent
   ],
   imports: [
     BrowserModule,
@@ -211,6 +214,11 @@ import {PercentualEstaticoService} from './percentuais-estaticos/percentual-esta
     SaldoService,
     PercentualEstaticoService,
     {provide: LOCALE_ID, useValue: 'pt'},
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AppHttpInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })

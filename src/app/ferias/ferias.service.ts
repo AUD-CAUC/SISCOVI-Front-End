@@ -96,7 +96,7 @@ export class FeriasService {
       };
       data.push(object);
     });
-
+    console.log(data);
     return this.http.put(url, data).map(res => res.json());
   }
   getCalculosPendentesNegados() {
