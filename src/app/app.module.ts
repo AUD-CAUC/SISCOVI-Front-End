@@ -177,7 +177,7 @@ import {AppHttpInterceptor} from './app-http.interceptor';
     GerenciarCargosTerceirizadosComponent,
     SaldoFuncaoComponent,
     SaldoIndividualComponent,
-    RelatorioRestituicoesRescisaoComponent,
+    RelatorioRestituicoesRescisaoComponent
   ],
   imports: [
     BrowserModule,
