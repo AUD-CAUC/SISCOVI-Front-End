@@ -40,6 +40,17 @@ export class FeriasCalculosPendentesExecucaoComponent implements OnInit {
   constructor(private feriasService: FeriasService, private contratoService: ContratosService, config: ConfigService,
               private fb: FormBuilder, private ref: ChangeDetectorRef) {
     this.config = config;
+
+    this.feriasService.getCalculosPendentesExecucao().subscribe(res => {
+      this.calculosPendentesExecucao = res;
+
+      if (this.calculosPendentesExecucao.length === 0) {
+        this.calculosPendentesExecucao = null;
+      }
+
+      this.ref.markForCheck();
+    });
+
     this.feriasService.getCalculosNaoPendentesNegados().subscribe(res3 => {
       this.calculosNegados = res3;
       if (this.calculosNegados.length === 0) {

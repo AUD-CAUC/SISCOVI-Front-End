@@ -70,11 +70,12 @@ export class ResgateFeriasComponent implements OnInit {
       let ultimaParcela = this.feriasResgate.get('calcularTerceirizados').get('' + i).get('parcelaAnterior').value;
 
       if (ultimaParcela === null) {
-        ultimaParcela = 0;
-      } else if (ultimaParcela === 3) {
+        ultimaParcela = '0';
+      } else if (ultimaParcela === '3') {
         // faz nada;
       } else {
         ultimaParcela++;
+        ultimaParcela.toString();
       }
 
       this.feriasResgate.get('calcularTerceirizados').get('' + i).get('parcelas').setValue(ultimaParcela);
@@ -98,11 +99,8 @@ export class ResgateFeriasComponent implements OnInit {
   public parcelaValidator(control: AbstractControl): { [key: string]: any } {
     const mensagem = [];
     let error = false;
-    let parcelaSelecionada: string = control.value;
+    const parcelaSelecionada: string = control.value;
     const parcelaAnt: string = control.parent.get('parcelaAnterior').value;
-    if (control.value === 0) {
-      parcelaSelecionada = '0';
-    }
     if (parcelaAnt === null) {
       if (parcelaSelecionada === '2' || parcelaSelecionada === '3') {
         mensagem.push('Deve realizar a Primeira parcela');
@@ -158,17 +156,26 @@ export class ResgateFeriasComponent implements OnInit {
       }
     }
 
-    if (error === true) {
+    if (error) {
       control.parent.get('inicioFerias').setValue('');
       control.parent.get('inicioFerias').disable();
+      control.parent.get('inicioFerias').markAsUntouched();
       control.parent.get('fimFerias').setValue('');
       control.parent.get('fimFerias').disable();
-      control.parent.get('diasVendidos').setValue('');
+      control.parent.get('fimFerias').markAsUntouched();
+      control.parent.get('diasVendidos').setValue(0);
       control.parent.get('diasVendidos').disable();
-    } else {
+      control.parent.get('diasVendidos').markAsUntouched();
+    } else if (control.dirty) {
+      control.parent.get('inicioFerias').setValue('');
       control.parent.get('inicioFerias').enable();
+      control.parent.get('inicioFerias').markAsUntouched();
+      control.parent.get('fimFerias').setValue('');
       control.parent.get('fimFerias').enable();
+      control.parent.get('fimFerias').markAsUntouched();
       control.parent.get('diasVendidos').enable();
+      control.parent.get('diasVendidos').setValue(0);
+      control.parent.get('diasVendidos').markAsUntouched();
     }
 
     return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
@@ -258,21 +265,21 @@ export class ResgateFeriasComponent implements OnInit {
       const inicioUsufruto: Date = new Date(ano, mes, dia);
       let diff = fimUsufruto.getTime() - inicioUsufruto.getTime();
       diasDeFerias = Math.round(diff / (1000 * 3600 * 24)) + 1;
-      console.log('dias de ferias:' + diasDeFerias);
 
-      dia = Number(control.parent.get('fimPeriodoAquisitivo').value.split('-')[0]);
+      ano = Number(control.parent.get('fimPeriodoAquisitivo').value.split('-')[0]);
       mes = Number(control.parent.get('fimPeriodoAquisitivo').value.split('-')[1]) - 1;
-      ano = Number(control.parent.get('fimPeriodoAquisitivo').value.split('-')[2]);
+      dia = Number(control.parent.get('fimPeriodoAquisitivo').value.split('-')[2]);
       const fimPeriodoAquisitivo: Date = new Date(ano, mes, dia);
-      dia = Number(control.parent.get('inicioPeriodoAquisitivo').value.split('-')[0]);
+      ano = Number(control.parent.get('inicioPeriodoAquisitivo').value.split('-')[0]);
       mes = Number(control.parent.get('inicioPeriodoAquisitivo').value.split('-')[1]) - 1;
-      ano = Number(control.parent.get('inicioPeriodoAquisitivo').value.split('-')[2]);
+      dia = Number(control.parent.get('inicioPeriodoAquisitivo').value.split('-')[2]);
       const inicioPeriodoAquisitivo: Date = new Date(ano, mes, dia);
       diff = Math.abs(fimPeriodoAquisitivo.getTime() - inicioPeriodoAquisitivo.getTime());
       saldo = (Math.round(((diff / (1000 * 3600 * 24)) + 1) / 12)) - control.parent.get('diasUsufruidos').value;
 
-      console.log(control.parent.get('inicioPeriodoAquisitivo').value);
-      console.log(control.parent.get('fimPeriodoAquisitivo').value);
+      console.log(control.parent.get('diasUsufruidos').value);
+      console.log(diasDeFerias);
+
 
       if (diasDeFerias + diasVendidos > saldo) {
         mensagem.push('A quantidade de dias de férias mais os dias vendido não pode ser superior ao saldo total.');
