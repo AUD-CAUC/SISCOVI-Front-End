@@ -28,6 +28,7 @@ export class RescisaoCalcular {
   totalMultaFgtsFeriasProporcionais: number;
   totalMultaFgtsTercoProporcional: number;
   totalMultaFgtsSalario: number;
+  totalRescisao: number;
 
   constructor(codTerceirizadoContrato: number,
               tipoRestituicao: string,
@@ -153,5 +154,7 @@ export class RescisaoCalcular {
   public setInicioFeriasProporcionais(inicioFeriasProporcionais: Date): void { this.inicioFeriasProporcionais = inicioFeriasProporcionais; }
 
   public setFimFeriasProporcionais(fimFeriasProporcionais: Date): void { this.fimFeriasProporcionais = fimFeriasProporcionais; }
+
+  public setTotalRescisao(totalRescisao: number): void { this.totalRescisao = totalRescisao; }
 
 }

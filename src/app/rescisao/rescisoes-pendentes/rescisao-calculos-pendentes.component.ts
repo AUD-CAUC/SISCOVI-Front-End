@@ -29,39 +29,83 @@ export class RescisaoCalculosPendentesComponent implements OnInit {
   modalActions4 = new EventEmitter<string | MaterializeAction>();
   modalActions5 = new EventEmitter<string | MaterializeAction>();
   notifications: number;
-  somaFerias: number[] = [];
-  somaTerco: number[] = [];
-  somaDecimo: number[] = [];
-  somaIncidenciaFerias: number[] = [];
-  somaIncidenciaTerco: number[] = [];
+  somaFeriasVencidas: number[] = [];
+  somaTercoVencido: number[] = [];
+  somaIncidenciaFeriasVencidas: number[] = [];
+  somaIncidenciaTercoVencido: number[] = [];
+  somaFgtsFeriasVencidas: number[] = [];
+  somaFgtsTercoVencido: number[] = [];
+  somaFeriasProporcionais: number[] = [];
+  somaTercoProporcional: number[] = [];
+  somaIncidenciaFeriasProporcionais: number[] = [];
+  somaIncidenciaTercoProporcional: number[] = [];
+  somaFgtsFeriasProporcionais: number[] = [];
+  somaFgtsTercoProporcional: number[] = [];
+  somaDecimoTerceiro: number[] = [];
+  somaIncidenciaDecimoTerceiro: number[] = [];
+  somaMultaFgtsDecimoTerceiro: number[] = [];
+  somaMultaFgtsSalario: number[] = [];
   somaSaldo: number[] = [];
   @Output() nav = new EventEmitter();
 
   constructor(private rescisaoService: RescisaoService, private contratoService: ContratosService, config: ConfigService, private fb: FormBuilder, private ref: ChangeDetectorRef) {
     this.config = config;
     this.rescisaoService.getCalculosPendentes().subscribe(res2 => {
-
       if (this.calculosPendentes.length === 0) {
         this.calculosPendentes = null;
       } else {
         this.isSelected = new Array(this.calculosPendentes.length).fill(false);
         this.calculosPendentes = res2;
-        this.somaFerias = new Array(this.calculosPendentes.length).fill(0);
-        this.somaTerco = new Array(this.calculosPendentes.length).fill(0);
-        this.somaDecimo = new Array(this.calculosPendentes.length).fill(0);
-        this.somaIncidenciaFerias = new Array(this.calculosPendentes.length).fill(0);
-        this.somaIncidenciaTerco = new Array(this.calculosPendentes.length).fill(0);
+        this.somaFeriasVencidas = new Array(this.calculosPendentes.length).fill(0);
+        this.somaTercoVencido = new Array(this.calculosPendentes.length).fill(0);
+        this.somaIncidenciaFeriasVencidas = new Array(this.calculosPendentes.length).fill(0);
+        this.somaIncidenciaTercoVencido = new Array(this.calculosPendentes.length).fill(0);
+        this.somaFgtsFeriasVencidas = new Array(this.calculosPendentes.length).fill(0);
+        this.somaFgtsTercoVencido = new Array(this.calculosPendentes.length).fill(0);
+        this.somaFeriasProporcionais = new Array(this.calculosPendentes.length).fill(0);
+        this.somaTercoProporcional = new Array(this.calculosPendentes.length).fill(0);
+        this.somaIncidenciaFeriasProporcionais = new Array(this.calculosPendentes.length).fill(0);
+        this.somaIncidenciaTercoProporcional = new Array(this.calculosPendentes.length).fill(0);
+        this.somaFgtsFeriasProporcionais = new Array(this.calculosPendentes.length).fill(0);
+        this.somaFgtsTercoProporcional = new Array(this.calculosPendentes.length).fill(0);
+        this.somaDecimoTerceiro = new Array(this.calculosPendentes.length).fill(0);
+        this.somaIncidenciaDecimoTerceiro = new Array(this.calculosPendentes.length).fill(0);
+        this.somaMultaFgtsDecimoTerceiro = new Array(this.calculosPendentes.length).fill(0);
         this.somaSaldo = new Array(this.calculosPendentes.length).fill(0);
         for (let i = 0; i < this.calculosPendentes.length; i++) {
           for (let j = 0; j < this.calculosPendentes[i].calculos.length; j++) {
-            this.somaFerias[i] = this.somaFerias[i] +
-              this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalMultaFgtsSalario;
-            this.somaTerco[i] = this.somaTerco[i] +
-              this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalMultaFgtsSalario;
-            this.somaIncidenciaFerias[i] = this.somaIncidenciaFerias[i] +
-              this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalMultaFgtsFeriasProporcionais;
-            this.somaIncidenciaTerco[i] = this.somaIncidenciaTerco[i] +
+            this.somaFeriasVencidas[i] = this.somaFeriasVencidas[i] +
+              this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalFeriasVencidas;
+            this.somaTercoVencido[i] = this.somaTercoVencido[i] +
+              this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalTercoConstitucionalvencido;
+            this.somaIncidenciaFeriasVencidas[i] = this.somaIncidenciaFeriasVencidas[i] +
+              this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalIncidenciaFeriasVencidas;
+            this.somaIncidenciaTercoVencido[i] = this.somaIncidenciaTercoVencido[i] +
+              this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalIncidenciaTercoVencido;
+            this.somaFgtsFeriasVencidas[i] = this.somaFgtsFeriasVencidas[i] +
+              this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalMultaFgtsFeriasVencidas;
+            this.somaFgtsTercoVencido[i] = this.somaFgtsTercoVencido[i] +
+              this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalMultaFgtsTercoVencido;
+            this.somaFeriasProporcionais[i] = this.somaFeriasProporcionais[i] +
+              this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalFeriasProporcionais;
+            this.somaTercoProporcional[i] = this.somaTercoProporcional[i] +
+              this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalTercoProporcional;
+            this.somaIncidenciaFeriasProporcionais[i] = this.somaIncidenciaFeriasProporcionais[i] +
+              this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalIncidenciaFeriasProporcionais;
+            this.somaIncidenciaTercoProporcional[i] = this.somaIncidenciaTercoProporcional[i] +
               this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalIncidenciaTercoProporcional;
+            this.somaFgtsFeriasProporcionais[i] = this.somaFgtsFeriasProporcionais[i] +
+              this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalMultaFgtsFeriasProporcionais;
+            this.somaFgtsTercoProporcional[i] = this.somaFgtsTercoProporcional[i] +
+              this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalMultaFgtsTercoProporcional;
+            this.somaDecimoTerceiro[i] = this.somaDecimoTerceiro[i] +
+              this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalDecimoTerceiro;
+            this.somaIncidenciaDecimoTerceiro[i] = this.somaIncidenciaDecimoTerceiro[i] +
+              this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalIncidenciaDecimoTerceiro;
+            this.somaMultaFgtsDecimoTerceiro[i] = this.somaMultaFgtsDecimoTerceiro[i] +
+              this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalMultaFgtsDecimoTerceiro;
+            this.somaMultaFgtsSalario[i] = this.somaMultaFgtsSalario[i] +
+              this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalMultaFgtsSalario;
             this.somaSaldo[i] = this.somaSaldo[i] + this.calculosPendentes[i].calculos[j].total;
           }
         }
@@ -97,7 +141,7 @@ export class RescisaoCalculosPendentesComponent implements OnInit {
             avaliacaoCalculoFerias: this.fb.array([])
           });
           calculoPendente.calculos.forEach(() => {
-            const newControl2 = <FormArray>newControl.controls.avaliacaoCalculoFerias;
+            const newControl2 = <FormArray>newControl.controls.avaliacaoCalculoRescisao;
             const addControl = this.fb.group({
               selected: new FormControl(),
               avaliacao: new FormControl('S')

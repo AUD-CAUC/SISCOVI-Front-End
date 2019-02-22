@@ -32,21 +32,34 @@
             <th *ngIf="config.user.perfil.sigla == 'USUÁRIO'">Status</th>
             <th>Terceirizado</th>
             <th>Função</th>
-            <th>Tipo de Restituição</th>
-            <th>Parcela</th>
-            <th>Início do Periodo Aquisitivo</th>
-            <th>Fim do Periodo Aquisitivo</th>
-            <th>Início do Usufruto</th>
-            <th>Fim do Usufruto</th>
-            <th>Dias Vendidos</th>
-            <th>Valor de Férias</th>
-            <th>Valor de 1/3</th>
-            <th>Incidência Sobre Férias</th>
-            <th>Incidência Sobre 1/3</th>
+            <th>Tipo de restituição</th>
+            <th>Tipo de rescisão</th>
+            <th>Desligamento</th >
+            <th>Inicio contagem do décimo terceiro</th>
+            <th>Décimo terceiro</th>
+            <th>Incidência sobre décimo terceiro</th>
+            <th>Multa do FGTS sobre décimo terceiro</th>
+            <th>Início de férias vencidas</th>
+            <th>Fim de férias vencidas</th>
+            <th>Férias vencidas</th>
+            <th>Terço de férias vencido</th>
+            <th>Incidência sobre férias vencidas</th>
+            <th>Incidência sobre 1/3 de férias vencido</th>
+            <th>Multa do FGTS sobre Férias vencidas</th>
+            <th>Multa do FGTS sobre 1/3 de férias vencido</th>
+            <th>Início de férias proporcionais</th>
+            <th>Fim de férias proporcionais</th>
+            <th>Férias proporcionais</th>
+            <th>Terço de férias proporcional</th>
+            <th>Incidência sobre férias proporcionais</th>
+            <th>Incidência sobre 1/3 de férias proporcional</th>
+            <th>Multa do FGTS sobre férias proporcionais</th>
+            <th>Multa do FGTS sobre 1/3 de férias proporcional</th>
+            <th>Multa do FGTS sobre o salário</th>
             <th>Total</th>
           </tr>
           </thead>
-          <tbody formArrayName="avaliacaoCalculoFerias">
+          <tbody formArrayName="avaliacaoCalculoRescisao">
           <tr *ngFor="let calculos of calculoPendente.calculos; let k = index">
             <td *ngIf="config.user.perfil.sigla == 'ADMINISTRADOR'">
               <div [formGroupName]="k" [attr.id]="calculoPendente.codigo">
@@ -76,20 +89,29 @@
             <td class="hoverable">{{calculos.nomeTerceirizado}}</td>
             <td class="hoverable">{{calculos.nomeCargo}}</td>
             <td class="hoverable">{{calculos.calcularRescisaoModel.tipoRestituicao}}</td>
-            <td class="hoverable">{{calculos.calcularRescisaoModel.parcelas | parcelaPipe}}</td>
-            <td class="hoverable">{{calculos.calcularRescisaoModel.inicioPeriodoAquisitivo | date: 'shortDate'}}</td>
-            <td class="hoverable">{{calculos.calcularRescisaoModel.fimPeriodoAquisitivo | date: 'shortDate'}}</td>
-            <td class="hoverable">{{calculos.calcularRescisaoModel.inicioFerias | date: 'shortDate'}}</td>
-            <td class="hoverable">{{calculos.calcularRescisaoModel.fimFerias | date: 'shortDate'}}</td>
-            <td class="hoverable">{{calculos.calcularRescisaoModel.diasVendidos}}</td>
-            <td class="hoverable">{{calculos.calcularRescisaoModel.pTotalFerias | currency:'BRL':true:'1.2-2'}}</td>
-            <td class="hoverable">{{calculos.calcularRescisaoModel.pTotalTercoConstitucional |
-              currency:'BRL':true:'1.2-2'}}
-            </td>
-            <td class="hoverable">{{calculos.calcularRescisaoModel.pTotalIncidenciaFerias | currency:'BRL':true:'1.2-2'}}
-            </td>
-            <td class="hoverable">{{calculos.calcularRescisaoModel.pTotalIncidenciaTerco | currency:'BRL':true:'1.2-2'}}
-            </td>
+            <td class="hoverable">{{calculos.calcularRescisaoModel.tipoRescisao}}</td>
+            <td class="hoverable">{{calculos.calcularRescisaoModel.dataDesligamento | date: 'shortDate'}}</td>
+            <td class="hoverable">{{calculos.calcularRescisaoModel.inicioContagemDecimoTerceiro | date: 'shortDate'}}</td>
+            <td class="hoverable">{{calculos.calcularRescisaoModel.totalDecimoTerceiro | currency:'BRL':true:'1.2-2'}}</td>
+            <td class="hoverable">{{calculos.calcularRescisaoModel.totalIncidenciaDecimoTerceiro | currency:'BRL':true:'1.2-2'}}</td>
+            <td class="hoverable">{{calculos.calcularRescisaoModel.totalMultaFgtsDecimoTerceiro | currency:'BRL':true:'1.2-2'}}</td>
+            <td class="hoverable">{{calculos.calcularRescisaoModel.inicioFeriasIntegrais | date: 'shortDate'}}</td>
+            <td class="hoverable">{{calculos.calcularRescisaoModel.fimFeriasIntegrais | date: 'shortDate'}}</td>
+            <td class="hoverable">{{calculos.calcularRescisaoModel.totalFeriasVencidas | currency:'BRL':true:'1.2-2'}}</td>
+            <td class="hoverable">{{calculos.calcularRescisaoModel.totalTercoConstitucionalvencido | currency:'BRL':true:'1.2-2'}}</td>
+            <td class="hoverable">{{calculos.calcularRescisaoModel.totalIncidenciaFeriasVencidas | currency:'BRL':true:'1.2-2'}}</td>
+            <td class="hoverable">{{calculos.calcularRescisaoModel.totalIncidenciaTercoVencido | currency:'BRL':true:'1.2-2'}}</td>
+            <td class="hoverable">{{calculos.calcularRescisaoModel.totalMultaFgtsFeriasVencidas | currency:'BRL':true:'1.2-2'}}</td>
+            <td class="hoverable">{{calculos.calcularRescisaoModel.totalMultaFgtsTercoVencido | currency:'BRL':true:'1.2-2'}}</td>
+            <td class="hoverable">{{calculos.calcularRescisaoModel.inicioFeriasProporcionais | date: 'shortDate'}}</td>
+            <td class="hoverable">{{calculos.calcularRescisaoModel.fimFeriasProporcionais | date: 'shortDate'}}</td>
+            <td class="hoverable">{{calculos.calcularRescisaoModel.totalFeriasProporcionais | currency:'BRL':true:'1.2-2'}}</td>
+            <td class="hoverable">{{calculos.calcularRescisaoModel.totalTercoProporcional | currency:'BRL':true:'1.2-2'}}</td>
+            <td class="hoverable">{{calculos.calcularRescisaoModel.totalIncidenciaFeriasProporcionais | currency:'BRL':true:'1.2-2'}}</td>
+            <td class="hoverable">{{calculos.calcularRescisaoModel.totalIncidenciaTercoProporcional | currency:'BRL':true:'1.2-2'}}</td>
+            <td class="hoverable">{{calculos.calcularRescisaoModel.totalMultaFgtsFeriasProporcionais | currency:'BRL':true:'1.2-2'}}</td>
+            <td class="hoverable">{{calculos.calcularRescisaoModel.totalMultaFgtsTercoProporcional | currency:'BRL':true:'1.2-2'}}</td>
+            <td class="hoverable">{{calculos.calcularRescisaoModel.totalMultaFgtsSalario | currency:'BRL':true:'1.2-2'}}</td>
             <td class="hoverable"><b>{{calculos.total | currency:'BRL':true:'1.2-2'}}</b></td>
           </tr>
           <tr>
@@ -98,19 +120,41 @@
             <td></td>
             <td></td>
             <td></td>
+            <td><b>Subtotais</b></td>
+            <td></td>
+            <td><b>{{somaDecimoTerceiro[i] | currency:'BRL':true:'1.2-2'}}</b></td>
+            <td><b>{{somaIncidenciaDecimoTerceiro[i] | currency:'BRL':true:'1.2-2'}}</b></td>
+            <td><b>{{somaMultaFgtsDecimoTerceiro[i] | currency:'BRL':true:'1.2-2'}}</b></td>
             <td></td>
             <td></td>
+            <td><b>{{somaFeriasVencidas[i] | currency:'BRL':true:'1.2-2'}}</b></td>
+            <td><b>{{somaTercoVencido[i] | currency:'BRL':true:'1.2-2'}}</b></td>
+            <td><b>{{somaIncidenciaFeriasVencidas[i] | currency:'BRL':true:'1.2-2'}}</b></td>
+            <td><b>{{somaIncidenciaTercoVencido[i] | currency:'BRL':true:'1.2-2'}}</b></td>
+            <td><b>{{somaFgtsFeriasVencidas[i] | currency:'BRL':true:'1.2-2'}}</b></td>
+            <td><b>{{somaFgtsTercoVencido[i] | currency:'BRL':true:'1.2-2'}}</b></td>
             <td></td>
             <td></td>
-            <td><b>Subtotal</b></td>
-            <td></td>
-            <td><b>{{somaFerias[i] | currency:'BRL':true:'1.2-2'}}</b></td>
-            <td><b>{{somaTerco[i] | currency:'BRL':true:'1.2-2'}}</b></td>
-            <td><b>{{somaIncidenciaFerias[i] | currency:'BRL':true:'1.2-2'}}</b></td>
-            <td><b>{{somaIncidenciaTerco[i] | currency:'BRL':true:'1.2-2'}}</b></td>
-            <td></td>
+            <td><b>{{somaFeriasProporcionais[i] | currency:'BRL':true:'1.2-2'}}</b></td>
+            <td><b>{{somaTercoProporcional[i] | currency:'BRL':true:'1.2-2'}}</b></td>
+            <td><b>{{somaIncidenciaFeriasProporcionais[i] | currency:'BRL':true:'1.2-2'}}</b></td>
+            <td><b>{{somaIncidenciaTercoProporcional[i] | currency:'BRL':true:'1.2-2'}}</b></td>
+            <td><b>{{somaFgtsFeriasProporcionais[i] | currency:'BRL':true:'1.2-2'}}</b></td>
+            <td><b>{{somaFgtsTercoProporcional[i] | currency:'BRL':true:'1.2-2'}}</b></td>
+            <td><b>{{somaMultaFgtsSalario[i] | currency:'BRL':true:'1.2-2'}}</b></td>
           </tr>
           <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>
