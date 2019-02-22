@@ -166,3 +166,12 @@ input[type="text"][disabled] {
   text-decoration: solid !important;
   font-weight: bold !important;
 }
+
+.modal-footer {
+  text-align:center;
+}
+.modal-footer button {
+  display:inline-block;
+  margin:0 15px;
+  float:none; /*if you set float already */
+}

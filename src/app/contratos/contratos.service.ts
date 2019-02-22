@@ -116,7 +116,6 @@ export class ContratosService {
             historico.push(hist);
         });
         contrato.percentuais.forEach(item => {
-            console.log(item.percentual);
             const perc = {
                 percentual: item.percentual,
                 dataInicio: this.convertDate(item.dataInicio),
@@ -126,6 +125,22 @@ export class ContratosService {
             percentuais.push(perc);
         });
         contrato.funcoes.forEach(funcao => {
+          let convencaoColetiva = {
+            codigo: null,
+            nome: null,
+            dataBase: null,
+            descricao: null,
+            sigla: null
+          };
+          if (funcao.convencao) {
+            convencaoColetiva = {
+              codigo: funcao.convencao.codigo,
+              nome: funcao.convencao.nome,
+              dataBase: funcao.convencao.dataBase,
+              descricao: funcao.convencao.descricao,
+              sigla: funcao.convencao.sigla
+            };
+          }
             const func = {
                 codigo: funcao.codigo,
                 nome: funcao.nome,
@@ -133,13 +148,7 @@ export class ContratosService {
                 remuneracao: funcao.remuneracao,
                 adicionais: funcao.adicionais,
                 trienios: funcao.trienios,
-                convencao: {
-                    codigo: funcao.convencao.codigo,
-                    nome: funcao.convencao.nome,
-                    dataBase: this.convertDate(funcao.convencao.dataBase),
-                    descricao: funcao.convencao.descricao,
-                    sigla: funcao.convencao.sigla
-                }
+                convencao: convencaoColetiva
             };
             funcoes.push(func);
         });

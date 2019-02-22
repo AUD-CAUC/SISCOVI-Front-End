@@ -183,9 +183,11 @@ export class CadastrarAjustesComponent {
             this.percentualFerias = percentual.percentual;
             this.myForm.controls.percentualFerias.setValue(percentual.percentual);
           }
-          if (percentual.nome.includes('Décimo terceiro')) {
-            this.percentualDecimoTerceiro = percentual.percentual;
+          if (percentual.nome.includes('Décimo')) {
             this.myForm.controls.percentualDecimoTerceiro.setValue(percentual.percentual);
+            this.ref.detectChanges();
+            this.percentualDecimoTerceiro = percentual.percentual;
+            console.log(this.percentualDecimoTerceiro === this.myForm.controls.percentualDecimoTerceiro.value);
           }
           if (percentual.nome.includes('Incidência')) {
             this.percentualIncidencia = percentual.percentual;

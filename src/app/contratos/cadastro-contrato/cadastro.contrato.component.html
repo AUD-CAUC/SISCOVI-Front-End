@@ -239,29 +239,29 @@
           <div class="input-field col form-group">
             <input id="trienios" formControlName="trienios" type="text" currencyMask
                    [options]="{prefix: 'R$', thousands: '.', decimal: ',', allowNegative: 'false'}"
-                   (change)="isValid()" (blur)="isValid()" required>
-            <label for="trienios">Triênios<span class="mensagem-erro">*</span></label>
+                   (change)="isValid()" (blur)="isValid()">
+            <label for="trienios">Triênios</label>
           </div>
           <div class="col s12">
             <div class="row">
               <div class="input-field col s8 form-group">
                 <select [materializeSelectOptions]="convencoesColetivas" formControlName="convencao"
                         materialize="material_select" class="cargos validate" [ngModel]="cargosCadastrados"
-                        (change)="isValid()" (blur)="isValid()">
+                        (change)="isValid()" (blur)="isValid()" (change)="selectConvencao($event.target.value, i)">
                   <option disabled>Selecione uma convenção</option>
                   <option *ngFor="let convencao of convencoesColetivas" [value]="convencao.codigo">{{convencao.nome}} -
                     {{convencao.sigla}}
                   </option>
                 </select>
-                <label>Convenção Coletiva<span class="mensagem-erro">*</span></label>
+                <label>Convenção Coletiva</label>
               </div>
             </div>
           </div>
           <div class="input-field col form-group">
-            <input id="dataBase" placeholder="Ex.: 01/01/2000" formControlName="dataBase" class="validate" type="text"
-                   appMaskDate (change)="isValid()" (blur)="isValid()" required minlength="10"
+            <input id="dataBase" placeholder="Selecione a convenção" formControlName="dataBase" class="validate" type="text"
+                   appMaskDate (change)="isValid()" (blur)="isValid()" disabled minlength="10"
                    maxlength="10">
-            <label for="dataBase">Data Base da Convenção<span class="mensagem-erro">*</span></label>
+            <label for="dataBase">Data Base da Convenção</label>
           </div>
           <!-- <div class="row">
              <h5 class="col m2 l3 convencao offset-l1">Convenção Coletiva: </h5>
@@ -295,5 +295,29 @@
         Cadastrar
       </button>
     </div>
+  </div>
+</div>
+
+<div id="modal1" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]"
+     [materializeActions]="modalActions">
+  <div class="modal-content">
+    <h4 class="center">Sucesso</h4>
+    <br>
+    <h5 class=" center">Cadastro do contrato efetuado com sucesso !</h5>
+  </div>
+  <div class="modal-footer">
+    <button id="button-footer" class="btn waves-effect" (click)="closeModal()">Ok</button>
+  </div>
+</div>
+<div id="modal2" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]"
+     [materializeActions]="modalActions2">
+  <div class="modal-content">
+    <h4 class="center">Erro</h4>
+    <br>
+    <h5 class=" center"><span class="mensagem-erro">Houve uma falha ao tentar cadastrar o contrato ! Tente novamente mais tarde ou entre em contato
+      com o administrador do sistema</span></h5>
+  </div>
+  <div class="modal-footer">
+    <button class="button-footer" class="btn waves-effect" (click)="closeModal2()">Ok</button>
   </div>
 </div>

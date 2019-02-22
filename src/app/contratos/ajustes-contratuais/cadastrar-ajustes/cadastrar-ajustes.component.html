@@ -183,16 +183,16 @@
               <label for="remuneracao_field">Salário Base<span class="mensagem-erro">*</span></label>
             </div>
             <div class="input-field col form-group">
-              <input id="trienios_field" formControlName="trienios" type="text" currencyMask
-                     [options]="{prefix: 'R$', thousands: '.', decimal: ',', allowNegative: 'false'}"
-              >
-              <label for="trienios_field">Triênios</label>
-            </div>
-            <div class="input-field col form-group">
               <input id="adicionais_field" formControlName="adicionais" type="text" currencyMask
                      [options]="{prefix: 'R$', thousands: '.', decimal: ',', allowNegative: 'false'}"
                      required>
               <label for="adicionais_field">Adicionais<span class="mensagem-erro">*</span></label>
+            </div>
+            <div class="input-field col form-group">
+              <input id="trienios_field" formControlName="trienios" type="text" currencyMask
+                     [options]="{prefix: 'R$', thousands: '.', decimal: ',', allowNegative: 'false'}"
+              >
+              <label for="trienios_field">Triênios</label>
             </div>
             <div class="col s12">
               <div class="row">
