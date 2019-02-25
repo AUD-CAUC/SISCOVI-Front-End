@@ -85,8 +85,16 @@ export class RescisaoService {
       return this.http.get(url).map(res => res.json());
     }
     getCalculosPendentesNegados() {
-        const url = '';
-        return this.http.get(url).map(res => res.json());
+      const url = this.config.myApi + '/rescisao' + '/getCalculosPendentesNegados' + '/' + this.config.user.id;
+      return this.http.get(url).map(res => res.json());
+    }
+    getCalculosPendentesExecucao() {
+      const url = this.config.myApi + '/rescisao' + '/getCalculosPendentesExecucao/' + this.config.user.id;
+      return this.http.get(url).map(res => res.json());
+    }
+    getCalculosNaoPendentesNegados() {
+      const url = this.config.myApi + '/rescisao' + '/getCalculosNaoPendentesNegados/' + this.config.user.id;
+      return this.http.get(url).map(res => res.json());
     }
     salvarRescisoesAvaliadasLista(lista: ListaCalculosPendentes[]) {
       const url = this.config.myApi + '';

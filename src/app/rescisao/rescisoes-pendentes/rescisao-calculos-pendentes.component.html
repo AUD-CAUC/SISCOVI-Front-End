@@ -178,7 +178,7 @@
     </div>
   </form>
 </div>
-<div class="row" *ngIf="config.user.perfil.sigla == 'ADMINISTRADOR' && calculosPendentes.length > 0">
+<div class="row" *ngIf="config.user.perfil.sigla == 'ADMINISTRADOR' && calculosPendentes">
   <div class="col">
     <div class="center">
       <button class="btn waves-effect center" (click)="verificaFormulario()">Salvar Alterações</button>

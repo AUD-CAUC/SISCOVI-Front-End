@@ -50,12 +50,22 @@ export class RescisaoCalculosPendentesComponent implements OnInit {
 
   constructor(private rescisaoService: RescisaoService, private contratoService: ContratosService, config: ConfigService, private fb: FormBuilder, private ref: ChangeDetectorRef) {
     this.config = config;
-    this.rescisaoService.getCalculosPendentes().subscribe(res2 => {
+    this.rescisaoService.getCalculosPendentesNegados().subscribe(res3 => {
+      const historico: ListaCalculosPendentes[] = res3;
+      this.calculosNegados = historico;
+      this.notifications = this.calculosNegados.length;
+      this.ref.markForCheck();
+    }, error2 => {
+      this.calculosNegados = null;
+    });
+  }
+
+  ngOnInit() {
+    if (this.calculosPendentes) {
       if (this.calculosPendentes.length === 0) {
         this.calculosPendentes = null;
       } else {
         this.isSelected = new Array(this.calculosPendentes.length).fill(false);
-        this.calculosPendentes = res2;
         this.somaFeriasVencidas = new Array(this.calculosPendentes.length).fill(0);
         this.somaTercoVencido = new Array(this.calculosPendentes.length).fill(0);
         this.somaIncidenciaFeriasVencidas = new Array(this.calculosPendentes.length).fill(0);
@@ -109,22 +119,10 @@ export class RescisaoCalculosPendentesComponent implements OnInit {
             this.somaSaldo[i] = this.somaSaldo[i] + this.calculosPendentes[i].calculos[j].total;
           }
         }
-        this.formInit();
         this.ref.markForCheck();
       }
-    });
-    this.rescisaoService.getCalculosPendentesNegados().subscribe(res3 => {
-      const historico: ListaCalculosPendentes[] = res3;
-      this.calculosNegados = historico;
-      this.notifications = this.calculosNegados.length;
-      this.ref.markForCheck();
-    }, error2 => {
-      this.calculosNegados = null;
-    });
-  }
-
-  ngOnInit() {
-    this.formInit();
+      this.formInit();
+    }
   }
 
   formInit() {
@@ -138,7 +136,7 @@ export class RescisaoCalculosPendentesComponent implements OnInit {
           const newControl = this.fb.group({
             titulo: new FormControl(calculoPendente.titulo),
             codigo: new FormControl(calculoPendente.codigo),
-            avaliacaoCalculoFerias: this.fb.array([])
+            avaliacaoCalculoRescisao: this.fb.array([])
           });
           calculoPendente.calculos.forEach(() => {
             const newControl2 = <FormArray>newControl.controls.avaliacaoCalculoRescisao;
@@ -202,7 +200,7 @@ export class RescisaoCalculosPendentesComponent implements OnInit {
   closeModal5() {
     this.modalActions5.emit({action: 'modal', params: ['close']});
   }
-
+/*
   defineCodigoContrato(codigoContrato: number): void {
     this.codigoContrato = codigoContrato;
     if (this.codigoContrato) {
@@ -222,6 +220,7 @@ export class RescisaoCalculosPendentesComponent implements OnInit {
       });
     }
   }
+  */
   verificaFormulario() {
     let aux = 0;
     this.calculosAvaliados = [];
