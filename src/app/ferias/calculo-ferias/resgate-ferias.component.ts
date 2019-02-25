@@ -391,8 +391,7 @@ export class ResgateFeriasComponent implements OnInit {
 
       if (inicioUsufruto <= fimPeriodoAquisitivo) {
         mensagem.push('A data de início do usufruto deve ser maior que a data fim do período aquisitivo !');
-      }
-      if (control.parent.get('ultimoFimUsufruto').value) {
+      } else if (control.parent.get('ultimoFimUsufruto').value) {
         ano = Number(control.parent.get('ultimoFimUsufruto').value.split('-')[0]);
         mes = Number(control.parent.get('ultimoFimUsufruto').value.split('-')[1]) - 1;
         dia = Number(control.parent.get('ultimoFimUsufruto').value.split('-')[2]);
