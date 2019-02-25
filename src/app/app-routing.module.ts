@@ -1,7 +1,6 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {ComumComponent} from './layout/comum/comum.component';
-
 import {LoginComponent} from './users/login.component';
 import {LoggedInGuard} from './users/logged-in.guard';
 import {IndicadoresComponent} from './indicadores/indicadores.component';
@@ -25,6 +24,8 @@ import {TotalMensalComponent} from './totalMensal/total-mensal.component';
 import {FeriasComponent} from './ferias/ferias.component';
 import {DecimoTerceiroComponent} from './decimo_terceiro/decimo-terceiro.component';
 import {RescisaoComponent} from './rescisao/rescisao.component';
+import {RescisaoPendenteResolver} from './rescisao/rescisao-pendente.resolver';
+import {RescisaoPendenteExecucaoResolver} from './rescisao/rescisao-pendente-execucao.resolver';
 import {RecalculoTotalMensalComponent} from './totalMensal/recalculo-total-mensal/recalculo-total-mensal.component';
 import {CadastrarTerceirizadoComponent} from './funcionarios/cadastrar-terceirizado/cadastrar-terceirizado.component';
 import {CadastrarGestorContratoComponent} from './historico/cadastrar-gestor/cadastrar-gestor-contrato.component';
@@ -81,7 +82,15 @@ const routes: Routes = [
         }
       },
       {path: 'decTer', component: DecimoTerceiroComponent, canActivate: [LoggedInGuard]},
-      {path: 'rescisao', component: RescisaoComponent, canActivate: [LoggedInGuard]},
+      {
+        path: 'rescisao',
+        component: RescisaoComponent,
+        canActivate: [LoggedInGuard],
+        resolve: {
+          calculosPendentes: RescisaoPendenteResolver,
+          calculosPendentesExecucao: RescisaoPendenteExecucaoResolver
+        }
+      },
       {path: 'totalMensal', component: TotalMensalComponent, canActivate: [LoggedInGuard]},
       {path: 'totalMensal/:id/:dataReferencia', component: RecalculoTotalMensalComponent, canActivate: [LoggedInGuard]},
       {path: 'saldoConta', component: InicioComponent, canActivate: [LoggedInGuard]},
@@ -119,7 +128,7 @@ const routes: Routes = [
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
-  providers: [FeriasPendentesResolver, FeriasPendentesExecucaoResolver]
+  providers: [FeriasPendentesResolver, FeriasPendentesExecucaoResolver, RescisaoPendenteResolver, RescisaoPendenteExecucaoResolver]
 })
 export class AppRoutingModule {
 }

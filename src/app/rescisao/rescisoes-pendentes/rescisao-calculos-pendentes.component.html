@@ -15,8 +15,8 @@
     </div>
   </div>
 </div>
-<div class="row">
-  <form [formGroup]="rescisaoForm" *ngIf="calculosPendentes">
+<div class="row" *ngIf="calculosPendentes">
+  <form [formGroup]="rescisaoForm">
     <div formArrayName="contratos">
       <div class="col  l12" *ngFor="let calculoPendente of calculosPendentes; let i = index">
         <h6><b>{{calculoPendente.titulo}}</b></h6>
@@ -120,6 +120,7 @@
             <td></td>
             <td></td>
             <td></td>
+            <td></td>
             <td><b>Subtotais</b></td>
             <td></td>
             <td><b>{{somaDecimoTerceiro[i] | currency:'BRL':true:'1.2-2'}}</b></td>
@@ -142,6 +143,7 @@
             <td><b>{{somaFgtsFeriasProporcionais[i] | currency:'BRL':true:'1.2-2'}}</b></td>
             <td><b>{{somaFgtsTercoProporcional[i] | currency:'BRL':true:'1.2-2'}}</b></td>
             <td><b>{{somaMultaFgtsSalario[i] | currency:'BRL':true:'1.2-2'}}</b></td>
+            <td></td>
           </tr>
           <tr>
             <td></td>
@@ -150,21 +152,21 @@
             <td></td>
             <td></td>
             <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
             <td><b>Total</b></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>

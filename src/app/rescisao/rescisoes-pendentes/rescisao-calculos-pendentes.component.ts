@@ -50,6 +50,16 @@ export class RescisaoCalculosPendentesComponent implements OnInit {
 
   constructor(private rescisaoService: RescisaoService, private contratoService: ContratosService, config: ConfigService, private fb: FormBuilder, private ref: ChangeDetectorRef) {
     this.config = config;
+
+    this.rescisaoService.getCalculosPendentes().subscribe(res => {
+      console.log(res);
+      this.calculosPendentes = res;
+      if (this.calculosPendentes.length === 0) {
+        this.calculosPendentes = null;
+      }
+
+      this.ref.markForCheck();
+    });
     this.rescisaoService.getCalculosPendentesNegados().subscribe(res3 => {
       const historico: ListaCalculosPendentes[] = res3;
       this.calculosNegados = historico;
@@ -64,7 +74,7 @@ export class RescisaoCalculosPendentesComponent implements OnInit {
     if (this.calculosPendentes) {
       if (this.calculosPendentes.length === 0) {
         this.calculosPendentes = null;
-      } else {
+      } else {console.log(this.calculosPendentes);
         this.isSelected = new Array(this.calculosPendentes.length).fill(false);
         this.somaFeriasVencidas = new Array(this.calculosPendentes.length).fill(0);
         this.somaTercoVencido = new Array(this.calculosPendentes.length).fill(0);
@@ -81,6 +91,7 @@ export class RescisaoCalculosPendentesComponent implements OnInit {
         this.somaDecimoTerceiro = new Array(this.calculosPendentes.length).fill(0);
         this.somaIncidenciaDecimoTerceiro = new Array(this.calculosPendentes.length).fill(0);
         this.somaMultaFgtsDecimoTerceiro = new Array(this.calculosPendentes.length).fill(0);
+        this.somaMultaFgtsSalario = new Array(this.calculosPendentes.length).fill(0);
         this.somaSaldo = new Array(this.calculosPendentes.length).fill(0);
         for (let i = 0; i < this.calculosPendentes.length; i++) {
           for (let j = 0; j < this.calculosPendentes[i].calculos.length; j++) {
