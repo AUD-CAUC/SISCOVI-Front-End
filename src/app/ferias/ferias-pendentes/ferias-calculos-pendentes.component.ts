@@ -39,6 +39,18 @@ export class FeriasCalculosPendentesComponent implements OnInit {
   constructor(private feriasService: FeriasService, private contratoService: ContratosService, config: ConfigService,
               private fb: FormBuilder, private ref: ChangeDetectorRef) {
     this.config = config;
+
+    this.feriasService.getCalculosPendentes().subscribe(res => {
+      console.log(res);
+      this.calculosPendentes = res;
+
+      if (this.calculosPendentes.length === 0) {
+        this.calculosPendentes = null;
+      }
+
+      this.ref.markForCheck();
+    });
+
     this.feriasService.getCalculosPendentesNegados().subscribe(res3 => {
       const historico: ListaCalculosPendentes[] = res3;
       this.calculosNegados = historico;
