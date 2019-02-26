@@ -7,7 +7,7 @@
     </a>
   </div>
 </div>
-<div class="container" *ngIf="!calculosPendentes">
+<div class="container" *ngIf="!calculosPendentesExecucao">
   <div class="row">
     <div class="col s12 grey lighten-4" style="margin-top: 1em">
       <br>
@@ -15,12 +15,12 @@
     </div>
   </div>
 </div>
-<div class="row" *ngIf="calculosPendentes">
+<div class="row" *ngIf="calculosPendentesExecucao">
   <form [formGroup]="rescisaoForm">
     <div formArrayName="contratos">
-      <div class="col  l12" *ngFor="let calculoPendente of calculosPendentes; let i = index">
+      <div class="col  l12" *ngFor="let calculoPendente of calculosPendentesExecucao; let i = index">
         <h6><b>{{calculoPendente.titulo}}</b></h6>
-        <table *ngIf="calculosPendentes" class="highlight centered responsive-table"
+        <table *ngIf="calculosPendentesExecucao" class="highlight centered responsive-table"
                [formGroupName]="i">
           <thead>
           <tr>
@@ -182,7 +182,7 @@
     </div>
   </form>
 </div>
-<div class="row" *ngIf="config.user.perfil.sigla == 'ADMINISTRADOR' && calculosPendentes">
+<div class="row" *ngIf="config.user.perfil.sigla == 'ADMINISTRADOR' && calculosPendentesExecucao">
   <div class="col">
     <div class="center">
       <button class="btn waves-effect center" (click)="verificaFormulario()">Salvar Alterações</button>

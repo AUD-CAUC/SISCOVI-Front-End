@@ -91,7 +91,7 @@ import {DecimoTerceiroPendenteComponent} from './decimo_terceiro/decimo-terceiro
 import {DecimoTerceiroPendenteExecucaoComponent} from './decimo_terceiro/decimo-terceiro-pendente/decimo-terceiro-pendente-execucao.component';
 import {RetencoesDecimoTerceiroComponent} from './decimo_terceiro/relatorio-retencoes-decimo-terceiro/retencoes-decimo-terceiro.component';
 import {RescisaoCalculosPendentesComponent} from './rescisao/rescisoes-pendentes/rescisao-calculos-pendentes.component';
-//import {RescisaoCalculosPendentesExecucaoComponent} from './rescisao/rescisoes-pendentes/rescisao-calculos-pendentes-execucao.component';
+import {RescisaoCalculosPendentesExecucaoComponent} from './rescisao/rescisoes-pendentes/rescisao-calculos-pendentes-execucao.component';
 import {CadastrarTerceirizadoComponent} from './funcionarios/cadastrar-terceirizado/cadastrar-terceirizado.component';
 import {CadastrarGestorContratoComponent} from './historico/cadastrar-gestor/cadastrar-gestor-contrato.component';
 import {GerenciarCargosTerceirizadosComponent} from './cargos/gerenciar-cargos-terceirizados/gerenciar-cargos-terceirizados.component';
@@ -179,7 +179,7 @@ import {PercentualDinamicoService} from './percentuais-dinamicos/percentual-dina
     DecimoTerceiroPendenteExecucaoComponent,
     RetencoesDecimoTerceiroComponent,
     RescisaoCalculosPendentesComponent,
-    //RescisaoCalculosPendentesExecucaoComponent,
+    RescisaoCalculosPendentesExecucaoComponent,
     CadastrarTerceirizadoComponent,
     CadastrarGestorContratoComponent,
     GerenciarCargosTerceirizadosComponent,

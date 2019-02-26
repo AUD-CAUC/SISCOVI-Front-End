@@ -97,7 +97,20 @@ export class RescisaoService {
       return this.http.get(url).map(res => res.json());
     }
     salvarRescisoesAvaliadasLista(lista: ListaCalculosPendentes[]) {
-      const url = this.config.myApi + '';
+      const url = this.config.myApi + '/rescisao/salvarRescisoesAvaliadas';
+      const data = [];
+      lista.forEach(item => {
+        const object = {
+          codContrato: item.codigo,
+          user: this.config.user,
+          calculosAvaliados: item.calculos
+        };
+        data.push(object);
+      });
+      return this.http.put(url, data).map(res => res.json());
+    }
+    salvarExecucaoRescisao(lista: ListaCalculosPendentes[]) {
+      const url = this.config.myApi + '/rescisao/salvarExecucaoRescisao';
       const data = [];
       lista.forEach(item => {
         const object = {

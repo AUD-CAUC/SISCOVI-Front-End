@@ -9,15 +9,15 @@ import {MaterializeAction} from 'angular2-materialize';
 import {ListaCalculosPendentes} from './lista-calculos-pendentes';
 
 @Component({
-  selector: 'app-rescisao-calculos-pendentes',
-  templateUrl: './rescisao-calculos-pendentes.component.html',
+  selector: 'app-rescisao-calculos-pendentes-execucao',
+  templateUrl: './rescisao-calculos-pendentes-execucao.component.html',
   styleUrls: ['./rescisao-calculos-pendentes.component.scss']
 })
-export class RescisaoCalculosPendentesComponent implements OnInit {
+export class RescisaoCalculosPendentesExecucaoComponent implements OnInit {
   contratos: Contrato[];
   @Input() codigoContrato = 0;
   isSelected: boolean[] = [];
-  @Input() calculosPendentes: ListaCalculosPendentes[];
+  @Input() calculosPendentesExecucao: ListaCalculosPendentes[];
   calculosAvaliados: ListaCalculosPendentes[];
   calculosNegados: ListaCalculosPendentes[];
   config: ConfigService;
@@ -50,17 +50,15 @@ export class RescisaoCalculosPendentesComponent implements OnInit {
 
   constructor(private rescisaoService: RescisaoService, private contratoService: ContratosService, config: ConfigService, private fb: FormBuilder, private ref: ChangeDetectorRef) {
     this.config = config;
-
-    this.rescisaoService.getCalculosPendentes().subscribe(res => {
+    this.rescisaoService.getCalculosPendentesExecucao().subscribe(res => {
       console.log(res);
-      this.calculosPendentes = res;
-      if (this.calculosPendentes.length === 0) {
-        this.calculosPendentes = null;
+      this.calculosPendentesExecucao = res;
+      if (this.calculosPendentesExecucao.length === 0) {
+        this.calculosPendentesExecucao = null;
       }
-
       this.ref.markForCheck();
     });
-    this.rescisaoService.getCalculosPendentesNegados().subscribe(res3 => {
+    this.rescisaoService.getCalculosNaoPendentesNegados().subscribe(res3 => {
       const historico: ListaCalculosPendentes[] = res3;
       this.calculosNegados = historico;
       this.notifications = this.calculosNegados.length;
@@ -71,63 +69,63 @@ export class RescisaoCalculosPendentesComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.calculosPendentes) {
-      if (this.calculosPendentes.length === 0) {
-        this.calculosPendentes = null;
-      } else {console.log(this.calculosPendentes);
-        this.isSelected = new Array(this.calculosPendentes.length).fill(false);
-        this.somaFeriasVencidas = new Array(this.calculosPendentes.length).fill(0);
-        this.somaTercoVencido = new Array(this.calculosPendentes.length).fill(0);
-        this.somaIncidenciaFeriasVencidas = new Array(this.calculosPendentes.length).fill(0);
-        this.somaIncidenciaTercoVencido = new Array(this.calculosPendentes.length).fill(0);
-        this.somaFgtsFeriasVencidas = new Array(this.calculosPendentes.length).fill(0);
-        this.somaFgtsTercoVencido = new Array(this.calculosPendentes.length).fill(0);
-        this.somaFeriasProporcionais = new Array(this.calculosPendentes.length).fill(0);
-        this.somaTercoProporcional = new Array(this.calculosPendentes.length).fill(0);
-        this.somaIncidenciaFeriasProporcionais = new Array(this.calculosPendentes.length).fill(0);
-        this.somaIncidenciaTercoProporcional = new Array(this.calculosPendentes.length).fill(0);
-        this.somaFgtsFeriasProporcionais = new Array(this.calculosPendentes.length).fill(0);
-        this.somaFgtsTercoProporcional = new Array(this.calculosPendentes.length).fill(0);
-        this.somaDecimoTerceiro = new Array(this.calculosPendentes.length).fill(0);
-        this.somaIncidenciaDecimoTerceiro = new Array(this.calculosPendentes.length).fill(0);
-        this.somaMultaFgtsDecimoTerceiro = new Array(this.calculosPendentes.length).fill(0);
-        this.somaMultaFgtsSalario = new Array(this.calculosPendentes.length).fill(0);
-        this.somaSaldo = new Array(this.calculosPendentes.length).fill(0);
-        for (let i = 0; i < this.calculosPendentes.length; i++) {
-          for (let j = 0; j < this.calculosPendentes[i].calculos.length; j++) {
+    if (this.calculosPendentesExecucao) {
+      if (this.calculosPendentesExecucao.length === 0) {
+        this.calculosPendentesExecucao = null;
+      } else {console.log(this.calculosPendentesExecucao);
+        this.isSelected = new Array(this.calculosPendentesExecucao.length).fill(false);
+        this.somaFeriasVencidas = new Array(this.calculosPendentesExecucao.length).fill(0);
+        this.somaTercoVencido = new Array(this.calculosPendentesExecucao.length).fill(0);
+        this.somaIncidenciaFeriasVencidas = new Array(this.calculosPendentesExecucao.length).fill(0);
+        this.somaIncidenciaTercoVencido = new Array(this.calculosPendentesExecucao.length).fill(0);
+        this.somaFgtsFeriasVencidas = new Array(this.calculosPendentesExecucao.length).fill(0);
+        this.somaFgtsTercoVencido = new Array(this.calculosPendentesExecucao.length).fill(0);
+        this.somaFeriasProporcionais = new Array(this.calculosPendentesExecucao.length).fill(0);
+        this.somaTercoProporcional = new Array(this.calculosPendentesExecucao.length).fill(0);
+        this.somaIncidenciaFeriasProporcionais = new Array(this.calculosPendentesExecucao.length).fill(0);
+        this.somaIncidenciaTercoProporcional = new Array(this.calculosPendentesExecucao.length).fill(0);
+        this.somaFgtsFeriasProporcionais = new Array(this.calculosPendentesExecucao.length).fill(0);
+        this.somaFgtsTercoProporcional = new Array(this.calculosPendentesExecucao.length).fill(0);
+        this.somaDecimoTerceiro = new Array(this.calculosPendentesExecucao.length).fill(0);
+        this.somaIncidenciaDecimoTerceiro = new Array(this.calculosPendentesExecucao.length).fill(0);
+        this.somaMultaFgtsDecimoTerceiro = new Array(this.calculosPendentesExecucao.length).fill(0);
+        this.somaMultaFgtsSalario = new Array(this.calculosPendentesExecucao.length).fill(0);
+        this.somaSaldo = new Array(this.calculosPendentesExecucao.length).fill(0);
+        for (let i = 0; i < this.calculosPendentesExecucao.length; i++) {
+          for (let j = 0; j < this.calculosPendentesExecucao[i].calculos.length; j++) {
             this.somaFeriasVencidas[i] = this.somaFeriasVencidas[i] +
-              this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalFeriasVencidas;
+              this.calculosPendentesExecucao[i].calculos[j].calcularRescisaoModel.totalFeriasVencidas;
             this.somaTercoVencido[i] = this.somaTercoVencido[i] +
-              this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalTercoConstitucionalvencido;
+              this.calculosPendentesExecucao[i].calculos[j].calcularRescisaoModel.totalTercoConstitucionalvencido;
             this.somaIncidenciaFeriasVencidas[i] = this.somaIncidenciaFeriasVencidas[i] +
-              this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalIncidenciaFeriasVencidas;
+              this.calculosPendentesExecucao[i].calculos[j].calcularRescisaoModel.totalIncidenciaFeriasVencidas;
             this.somaIncidenciaTercoVencido[i] = this.somaIncidenciaTercoVencido[i] +
-              this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalIncidenciaTercoVencido;
+              this.calculosPendentesExecucao[i].calculos[j].calcularRescisaoModel.totalIncidenciaTercoVencido;
             this.somaFgtsFeriasVencidas[i] = this.somaFgtsFeriasVencidas[i] +
-              this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalMultaFgtsFeriasVencidas;
+              this.calculosPendentesExecucao[i].calculos[j].calcularRescisaoModel.totalMultaFgtsFeriasVencidas;
             this.somaFgtsTercoVencido[i] = this.somaFgtsTercoVencido[i] +
-              this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalMultaFgtsTercoVencido;
+              this.calculosPendentesExecucao[i].calculos[j].calcularRescisaoModel.totalMultaFgtsTercoVencido;
             this.somaFeriasProporcionais[i] = this.somaFeriasProporcionais[i] +
-              this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalFeriasProporcionais;
+              this.calculosPendentesExecucao[i].calculos[j].calcularRescisaoModel.totalFeriasProporcionais;
             this.somaTercoProporcional[i] = this.somaTercoProporcional[i] +
-              this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalTercoProporcional;
+              this.calculosPendentesExecucao[i].calculos[j].calcularRescisaoModel.totalTercoProporcional;
             this.somaIncidenciaFeriasProporcionais[i] = this.somaIncidenciaFeriasProporcionais[i] +
-              this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalIncidenciaFeriasProporcionais;
+              this.calculosPendentesExecucao[i].calculos[j].calcularRescisaoModel.totalIncidenciaFeriasProporcionais;
             this.somaIncidenciaTercoProporcional[i] = this.somaIncidenciaTercoProporcional[i] +
-              this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalIncidenciaTercoProporcional;
+              this.calculosPendentesExecucao[i].calculos[j].calcularRescisaoModel.totalIncidenciaTercoProporcional;
             this.somaFgtsFeriasProporcionais[i] = this.somaFgtsFeriasProporcionais[i] +
-              this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalMultaFgtsFeriasProporcionais;
+              this.calculosPendentesExecucao[i].calculos[j].calcularRescisaoModel.totalMultaFgtsFeriasProporcionais;
             this.somaFgtsTercoProporcional[i] = this.somaFgtsTercoProporcional[i] +
-              this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalMultaFgtsTercoProporcional;
+              this.calculosPendentesExecucao[i].calculos[j].calcularRescisaoModel.totalMultaFgtsTercoProporcional;
             this.somaDecimoTerceiro[i] = this.somaDecimoTerceiro[i] +
-              this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalDecimoTerceiro;
+              this.calculosPendentesExecucao[i].calculos[j].calcularRescisaoModel.totalDecimoTerceiro;
             this.somaIncidenciaDecimoTerceiro[i] = this.somaIncidenciaDecimoTerceiro[i] +
-              this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalIncidenciaDecimoTerceiro;
+              this.calculosPendentesExecucao[i].calculos[j].calcularRescisaoModel.totalIncidenciaDecimoTerceiro;
             this.somaMultaFgtsDecimoTerceiro[i] = this.somaMultaFgtsDecimoTerceiro[i] +
-              this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalMultaFgtsDecimoTerceiro;
+              this.calculosPendentesExecucao[i].calculos[j].calcularRescisaoModel.totalMultaFgtsDecimoTerceiro;
             this.somaMultaFgtsSalario[i] = this.somaMultaFgtsSalario[i] +
-              this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalMultaFgtsSalario;
-            this.somaSaldo[i] = this.somaSaldo[i] + this.calculosPendentes[i].calculos[j].total;
+              this.calculosPendentesExecucao[i].calculos[j].calcularRescisaoModel.totalMultaFgtsSalario;
+            this.somaSaldo[i] = this.somaSaldo[i] + this.calculosPendentesExecucao[i].calculos[j].total;
           }
         }
         this.ref.markForCheck();
@@ -137,12 +135,12 @@ export class RescisaoCalculosPendentesComponent implements OnInit {
   }
 
   formInit() {
-    if (this.calculosPendentes) {
+    if (this.calculosPendentesExecucao) {
       this.rescisaoForm = this.fb.group({
         contratos: this.fb.array([])
       });
-      if (this.calculosPendentes) {
-        this.calculosPendentes.forEach(calculoPendente => {
+      if (this.calculosPendentesExecucao) {
+        this.calculosPendentesExecucao.forEach(calculoPendente => {
           const control = <FormArray>this.rescisaoForm.controls.contratos;
           const newControl = this.fb.group({
             titulo: new FormControl(calculoPendente.titulo),
@@ -211,37 +209,16 @@ export class RescisaoCalculosPendentesComponent implements OnInit {
   closeModal5() {
     this.modalActions5.emit({action: 'modal', params: ['close']});
   }
-/*
-  defineCodigoContrato(codigoContrato: number): void {
-    this.codigoContrato = codigoContrato;
-    if (this.codigoContrato) {
-      this.rescisaoService.getCalculosPendentes().subscribe(res2 => {
-        this.calculosPendentes = res2;
-        if (this.calculosPendentes.length === 0) {
-          this.calculosPendentes = null;
-        } else {
-          this.formInit();
-        }
-      });
-      this.rescisaoService.getCalculosPendentesNegados().subscribe(res3 => {
-        const historico: ListaCalculosPendentes[] = res3;
-        this.calculosNegados = historico;
-        this.notifications = this.calculosNegados.length;
-        this.ref.markForCheck();
-      });
-    }
-  }
-  */
   verificaFormulario() {
     let aux = 0;
     this.calculosAvaliados = [];
-    for (let i = 0; i < this.calculosPendentes.length; i++) {
+    for (let i = 0; i < this.calculosPendentesExecucao.length; i++) {
       const lista = new ListaCalculosPendentes();
       lista.calculos = [];
-      for (let j = 0; j < this.calculosPendentes[i].calculos.length; j++) {
+      for (let j = 0; j < this.calculosPendentesExecucao[i].calculos.length; j++) {
         if (this.rescisaoForm.get('contratos').get('' + i).get('avaliacaoCalculoRescisao').get('' + j).get('selected').value) {
           aux++;
-          const temp: RescisaoCalculosPendentes = this.calculosPendentes[i].calculos[j];
+          const temp: RescisaoCalculosPendentes = this.calculosPendentesExecucao[i].calculos[j];
           temp.status = this.rescisaoForm.get('contratos').get('' + i).get('avaliacaoCalculoRescisao').get('' + j).get('avaliacao').value;
           lista.titulo = this.rescisaoForm.get('contratos').get('' + i).get('titulo').value;
           lista.codigo = this.rescisaoForm.get('contratos').get('' + i).get('codigo').value;
@@ -269,7 +246,7 @@ export class RescisaoCalculosPendentesComponent implements OnInit {
         this.calculosAvaliados[i].calculos[j].observacoes = this.rescisaoFormAfter.get('calculosAvaliados').get('' + i).get('observacoes').value;
       }
     }
-    this.rescisaoService.salvarRescisoesAvaliadasLista(this.calculosAvaliados).subscribe(res => {
+    this.rescisaoService.salvarExecucaoRescisao(this.calculosAvaliados).subscribe(res => {
         this.closeModal2();
         this.openModal3();
       },
