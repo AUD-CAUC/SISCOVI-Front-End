@@ -26,14 +26,17 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
     funcoes: Cargo[];
     gerenciaForm: FormGroup;
     alteracaoForm: FormGroup;
+    desativacaoForm: FormGroup;
     listaCargosFuncionarios: CargosFuncionarios[];
     isSelected = false;
     confirmarAlteracao: CargosFuncionarios[];
+    confirmarDesligamento: CargosFuncionarios[];
     modalActions = new EventEmitter<string | MaterializeAction>();
     modalActions2 = new EventEmitter<string | MaterializeAction>();
     modalActions3 = new EventEmitter<string | MaterializeAction>();
     modalActions4 = new EventEmitter<string | MaterializeAction>();
     modalActions5 = new EventEmitter<string | MaterializeAction>();
+    modalActions6 = new EventEmitter<string | MaterializeAction>();
 
     constructor(private contServ: ContratosService, private funcServ: FuncionariosService,
                 private cargosService: CargoService, private ref: ChangeDetectorRef, private fb: FormBuilder,
@@ -51,6 +54,9 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
         this.gerenciaForm.get('gerenciarTerceirizados').get('0').get('ativo').disable();
         this.alteracaoForm = this.fb.group({
             alterarFuncoesTerceirizados: this.fb.array([])
+        });
+        this.desativacaoForm = this.fb.group({
+            desativaTerceirizado: this.fb.array([])
         });
         if (this.listaCargosFuncionarios) {
             for (let i = 0; i < this.listaCargosFuncionarios.length; i++) {
@@ -136,6 +142,10 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
         return this.alteracaoForm.get('alterarFuncoesTerceirizados') as FormArray;
     }
 
+    get desativacao(): FormArray {
+        return this.desativacaoForm.get('desativaTerceirizado') as FormArray;
+    }
+
     removerGerenciar() {
         if (this.gerenciar.length > 1) {
             const control = <FormArray>this.gerenciaForm.get('gerenciarTerceirizados');
@@ -155,9 +165,14 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
         }));
     }
 
-    defineCodigoContrato(codigoContrato: number): void {
-        this.codigo = codigoContrato;
-        if (this.modoOperacao) {
+    defineValor(value: any): void {
+        if (value === 'ALOCAÇÃO' || value === 'ALTERAÇÃO' || value === 'DESATIVAÇÃO') {
+          this.modoOperacao = value;
+        } else {
+          this.codigo = value;
+        }
+
+        if (this.modoOperacao && this.codigo) {
             if (this.modoOperacao === 'ALOCAÇÃO') {
                 this.funcServ.getTerceirizadosNaoAlocados().subscribe(res => {
                     this.terceirizados = res;
@@ -190,6 +205,32 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
                     }
                 });
             }
+            if (this.modoOperacao === 'DESATIVAÇÃO') {
+                this.cargosService.getTerceirizadosFuncao(this.codigo).subscribe(res => {
+                    this.listaCargosFuncionarios = res;
+                    console.log(res);
+                    this.ref.markForCheck();
+                    if (this.listaCargosFuncionarios) {
+                          this.desativacaoForm = this.fb.group({
+                              desativaTerceirizado: this.fb.array([])
+                        });
+                        for (let i = 0; i < this.listaCargosFuncionarios.length; i++) {
+                          const formGroup = this.fb.group({
+                            selected: new FormControl(this.isSelected),
+                            terceirizado: new FormControl(this.listaCargosFuncionarios[i].funcionario),
+                            funcao: new FormControl(this.listaCargosFuncionarios[i].funcao.codigo),
+                            dataDesligamento: new FormControl('', [Validators.required, this.myDateValidator])
+                          });
+                          this.desativacao.push(formGroup);
+                          this.ref.markForCheck();
+                        }
+                        this.ref.markForCheck();
+                        for (let i = 0; i < this.listaCargosFuncionarios.length; i++) {
+                          this.desativacao.get('' + i).get('dataDesligamento').setValidators([this.validateDataInicioFuncao.bind(this), this.myDateValidator]);
+                        }
+                      }
+                });
+            }
             this.cargosService.getFuncoesContrato(this.codigo).subscribe(res => {
                 this.funcoes = res;
                 this.ref.markForCheck();
@@ -197,46 +238,74 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
         }
     }
 
-    selecionaModo(modoOperacao: string) {
-        this.modoOperacao = modoOperacao;
-        if (this.codigo) {
-            if (this.modoOperacao) {
-                if (this.modoOperacao === 'ALOCAÇÃO') {
-                    this.funcServ.getTerceirizadosNaoAlocados().subscribe(res => {
-                        this.terceirizados = res;
-                        this.ref.markForCheck();
-                    });
-                }
-                if (this.modoOperacao === 'ALTERAÇÃO') {
-                    this.cargosService.getTerceirizadosFuncao(this.codigo).subscribe(res => {
-                        this.listaCargosFuncionarios = res;
-                        if (this.listaCargosFuncionarios) {
-                            this.alteracaoForm = this.fb.group({
-                                alterarFuncoesTerceirizados: this.fb.array([])
-                            });
-                            for (let i = 0; i < this.listaCargosFuncionarios.length; i++) {
-                                const formGroup = this.fb.group({
-                                    selected: new FormControl(this.isSelected),
-                                    terceirizado: new FormControl(this.listaCargosFuncionarios[i].funcionario),
-                                    funcao: new FormControl(this.listaCargosFuncionarios[i].funcao.codigo, [Validators.required]),
-                                    dataInicio: new FormControl('', [Validators.required, this.myDateValidator])
-                                });
-                                this.alteracao.push(formGroup);
-                            }
-                            for (let i = 0; i < this.listaCargosFuncionarios.length; i++) {
-                                this.alteracao.get('' + i).get('funcao').setValidators([this.alterarFuncaoTerceirizadoValidator.bind(this)]);
-                                this.alteracao.get('' + i).get('dataInicio').setValidators([this.validateDataInicioFuncao.bind(this), this.myDateValidator]);
-                            }
-                        }
-                    });
-                }
-                this.cargosService.getFuncoesContrato(this.codigo).subscribe(res => {
-                    this.funcoes = res;
-                    this.ref.markForCheck();
-                });
-            }
-        }
-    }
+    // selecionaModo(modoOperacao: string) {
+    //     this.modoOperacao = modoOperacao;
+    //     if (this.codigo) {
+    //         if (this.modoOperacao) {
+    //             if (this.modoOperacao === 'ALOCAÇÃO') {
+    //                 this.funcServ.getTerceirizadosNaoAlocados().subscribe(res => {
+    //                     this.terceirizados = res;
+    //                     this.ref.markForCheck();
+    //                 });
+    //             }
+    //             if (this.modoOperacao === 'ALTERAÇÃO') {
+    //                 this.cargosService.getTerceirizadosFuncao(this.codigo).subscribe(res => {
+    //                     this.listaCargosFuncionarios = res;
+    //                     this.ref.markForCheck();
+    //                     if (this.listaCargosFuncionarios) {
+    //                         this.alteracaoForm = this.fb.group({
+    //                             alterarFuncoesTerceirizados: this.fb.array([])
+    //                         });
+    //                         for (let i = 0; i < this.listaCargosFuncionarios.length; i++) {
+    //                             const formGroup = this.fb.group({
+    //                                 selected: new FormControl(this.isSelected),
+    //                                 terceirizado: new FormControl(this.listaCargosFuncionarios[i].funcionario),
+    //                                 funcao: new FormControl(this.listaCargosFuncionarios[i].funcao.codigo, [Validators.required]),
+    //                                 dataInicio: new FormControl('', [Validators.required, this.myDateValidator])
+    //                             });
+    //                             this.alteracao.push(formGroup);
+    //                             this.ref.markForCheck();
+    //                         }
+    //                         this.ref.markForCheck();
+    //                         for (let i = 0; i < this.listaCargosFuncionarios.length; i++) {
+    //                             this.alteracao.get('' + i).get('funcao').setValidators([this.alterarFuncaoTerceirizadoValidator.bind(this)]);
+    //                             this.alteracao.get('' + i).get('dataInicio').setValidators([this.validateDataInicioFuncao.bind(this), this.myDateValidator]);
+    //                         }
+    //                     }
+    //                 });
+    //             }
+    //             if (this.modoOperacao === 'DESATIVAÇÃO') {
+    //                 this.cargosService.getTerceirizadosFuncao(this.codigo).subscribe(res => {
+    //                     this.listaCargosFuncionarios = res;
+    //                     this.ref.markForCheck();
+    //                     if (this.listaCargosFuncionarios) {
+    //                           this.desativacaoForm = this.fb.group({
+    //                             desativaTerceirizado: this.fb.array([])
+    //                         });
+    //                         for (let i = 0; i < this.listaCargosFuncionarios.length; i++) {
+    //                           const formGroup = this.fb.group({
+    //                               selected: new FormControl(this.isSelected),
+    //                               terceirizado: new FormControl(this.listaCargosFuncionarios[i].funcionario),
+    //                               funcao: new FormControl(this.listaCargosFuncionarios[i].funcao.codigo),
+    //                               dataDesligamento: new FormControl('', [Validators.required, this.myDateValidator])
+    //                           });
+    //                           this.desativacao.push(formGroup);
+    //                           this.ref.markForCheck();
+    //                         }
+    //                         this.ref.markForCheck();
+    //                         for (let i = 0; i < this.listaCargosFuncionarios.length; i++) {
+    //                           this.desativacao.get('' + i).get('dataDesligamento').setValidators([this.validateDataInicioFuncao.bind(this), this.myDateValidator]);
+    //                         }
+    //                     }
+    //                 });
+    //             }
+    //             this.cargosService.getFuncoesContrato(this.codigo).subscribe(res => {
+    //                 this.funcoes = res;
+    //                 this.ref.markForCheck();
+    //             });
+    //         }
+    //     }
+    // }
 
     verificarFormularioGerencia(): void {
         if (this.gerenciaForm.valid) {
@@ -313,6 +382,14 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
 
     closeModal5() {
         this.modalActions5.emit({action: 'modal', params: ['close']});
+    }
+
+    openModal6() {
+        this.modalActions6.emit({action: 'modal', params: ['open']});
+    }
+
+    closeModal6() {
+        this.modalActions6.emit({action: 'modal', params: ['close']});
     }
 
     public myDateValidator(control: AbstractControl): { [key: string]: any } {
@@ -490,4 +567,53 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
             map(result => (mensagem.length > 0) ? {'mensagem': mensagem} : null)
         );
     }
+
+  verificaFormularioDesativacao() {
+    this.confirmarDesligamento = null;
+    let aux = 0;
+    const lista: CargosFuncionarios[] = [];
+    for (let i = 0; i < this.desativacao.length; i++) {
+      if (this.desativacaoForm.get('desativaTerceirizado').get('' + i).get('selected').value) {
+        if (this.desativacaoForm.get('desativaTerceirizado').get('' + i).valid) {
+          aux++;
+          const funcionario: Funcionario = this.desativacaoForm.get('desativaTerceirizado').get('' + i).get('terceirizado').value as Funcionario;
+          let funcao = new Cargo();
+          this.funcoes.forEach(item => {
+            if (Number(this.desativacaoForm.get('desativaTerceirizado').get('' + i).get('funcao').value) === item.codigo) {
+              funcao = item;
+            }
+          });
+          const dataDesligamento = this.convertDate(this.desativacaoForm.get('desativaTerceirizado').get('' + i).get('dataDesligamento').value);
+          const ft = new CargosFuncionarios();
+          ft.funcionario = funcionario;
+          ft.funcao = funcao;
+          ft.dataDesligamento = dataDesligamento;
+          lista.push(ft);
+        } else {
+          aux = undefined;
+          this.desativacaoForm.get('desativaTerceirizado').get('' + i).get('dataDesligamento').markAsTouched();
+          this.desativacaoForm.get('desativaTerceirizado').get('' + i).get('dataDesligamento').markAsDirty();
+          this.ref.markForCheck();
+          this.openModal3();
+        }
+      }
+    }
+    if (aux === 0) {
+      this.openModal();
+    }
+    if ((aux > 0) && lista.length > 0) {
+      this.openModal6();
+      this.confirmarDesligamento = lista;
+    }
+  }
+
+  salvarDesligamentoTerceirizado() {
+    this.cargosService.desligarTerceirizado(this.confirmarDesligamento, this.codigo).subscribe(res => {
+      this.closeModal6();
+      this.openModal4();
+    }, error2 => {
+      this.closeModal2();
+      this.openModal5();
+    });
+  }
 }
