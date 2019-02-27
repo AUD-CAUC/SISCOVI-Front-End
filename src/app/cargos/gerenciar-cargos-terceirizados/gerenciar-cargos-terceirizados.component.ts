@@ -30,11 +30,13 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
     listaCargosFuncionarios: CargosFuncionarios[];
     isSelected = false;
     confirmarAlteracao: CargosFuncionarios[];
+    confirmarDesligamento: CargosFuncionarios[];
     modalActions = new EventEmitter<string | MaterializeAction>();
     modalActions2 = new EventEmitter<string | MaterializeAction>();
     modalActions3 = new EventEmitter<string | MaterializeAction>();
     modalActions4 = new EventEmitter<string | MaterializeAction>();
     modalActions5 = new EventEmitter<string | MaterializeAction>();
+    modalActions6 = new EventEmitter<string | MaterializeAction>();
 
     constructor(private contServ: ContratosService, private funcServ: FuncionariosService,
                 private cargosService: CargoService, private ref: ChangeDetectorRef, private fb: FormBuilder,
@@ -170,7 +172,7 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
           this.codigo = value;
         }
 
-        if (this.modoOperacao || this.codigo) {
+        if (this.modoOperacao && this.codigo) {
             if (this.modoOperacao === 'ALOCAÇÃO') {
                 this.funcServ.getTerceirizadosNaoAlocados().subscribe(res => {
                     this.terceirizados = res;
@@ -382,6 +384,14 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
         this.modalActions5.emit({action: 'modal', params: ['close']});
     }
 
+    openModal6() {
+        this.modalActions6.emit({action: 'modal', params: ['open']});
+    }
+
+    closeModal6() {
+        this.modalActions6.emit({action: 'modal', params: ['close']});
+    }
+
     public myDateValidator(control: AbstractControl): { [key: string]: any } {
         const val = control.value;
         const mensagem = [];
@@ -559,7 +569,7 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
     }
 
   verificaFormularioDesativacao() {
-    this.confirmarAlteracao = null;
+    this.confirmarDesligamento = null;
     let aux = 0;
     const lista: CargosFuncionarios[] = [];
     for (let i = 0; i < this.desativacao.length; i++) {
@@ -592,12 +602,18 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
       this.openModal();
     }
     if ((aux > 0) && lista.length > 0) {
-      this.openModal2();
-      this.confirmarAlteracao = lista;
+      this.openModal6();
+      this.confirmarDesligamento = lista;
     }
   }
 
   salvarDesligamentoTerceirizado() {
-
+    this.cargosService.desligarTerceirizado(this.confirmarDesligamento, this.codigo).subscribe(res => {
+      this.closeModal6();
+      this.openModal4();
+    }, error2 => {
+      this.closeModal2();
+      this.openModal5();
+    });
   }
 }

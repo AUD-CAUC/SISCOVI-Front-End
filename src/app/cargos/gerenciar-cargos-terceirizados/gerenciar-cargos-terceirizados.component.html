@@ -376,34 +376,60 @@
           <tr>
             <th>Terceirizado</th>
             <th>Função</th>
-            <div *ngIf="modoOperacao == 'ALOCAÇÃO'">
-              <th>Data de Início</th>
-            </div>
-            <div *ngIf="modoOperacao == 'DESATIVAÇÃO'">
-              <th>Data de Desativação</th>
-            </div>
+            <th>Data de Início</th>
           </tr>
           </thead>
           <tbody>
           <tr *ngFor="let funcaoTerceirirzado of confirmarAlteracao">
             <td>{{funcaoTerceirirzado.funcionario.nome}}</td>
             <td>{{funcaoTerceirirzado.funcao.nome}}</td>
-            <td>{{funcaoTerceirirzado.dataDesligamento | date: 'shortDate'}}</td>
+            <td>{{funcaoTerceirirzado.dataDisponibilizacao | date: 'shortDate'}}</td>
           </tr>
           </tbody>
         </table>
-
       </div>
     </div>
   </div>
   <div class="modal-footer">
     <button class="btn waves-effect left" (click)="closeModal2()">Cancelar</button>
-    <div *ngIf="modoOperacao == 'ALOCAÇÃO'">
-      <button class="btn waves-effect right" (click)="salvarAlteracoesFuncaoTerceirizado()">Confirmar Alterações</button>
+    <button class="btn waves-effect right" (click)="salvarAlteracoesFuncaoTerceirizado()">Confirmar Alterações
+    </button>
+  </div>
+</div>
+<div id="modal6" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]"
+     [materializeActions]="modalActions6">
+  <div class="modal-content">
+    <h4 class="center">Confirmar</h4>
+    <div class="center-align">
+      <p>Deseja realizar as alterações ?</p>
     </div>
-    <div *ngIf="modoOperacao == 'DESATIVAÇÃO'">
-      <button class="btn waves-effect right" (click)="salvarDesligamentoTerceirizado()">Confirmar Desligamento</button>
+    <div class="left-align">
+      <p>As alterações não poderão ser desfeitas*</p>
     </div>
+    <div class="center-align">
+      <div class="row">
+        <table class="highlight centered hoverable responsive-table">
+          <thead>
+          <tr>
+            <th>Terceirizado</th>
+            <th>Função</th>
+            <th>Data de Desligamento</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let funcaoTerceirirzado of confirmarDesligamento">
+            <td>{{funcaoTerceirirzado.funcionario.nome}}</td>
+            <td>{{funcaoTerceirirzado.funcao.nome}}</td>
+            <td>{{funcaoTerceirirzado.dataDesligamento | date: 'shortDate'}}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn waves-effect left" (click)="closeModal6()">Cancelar</button>
+    <button class="btn waves-effect right" (click)="salvarDesligamentoTerceirizado()">Confirmar Desligamento</button>
   </div>
 </div>
 <div id="modal3" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]"
