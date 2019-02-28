@@ -66,8 +66,12 @@ export class ResgateRescisaoComponent implements OnInit {
     }
     private dateToString(value: any): string {
       //console.log(this.terceirizados);
-      const date: string[] = value.split('-');
-      return date[2] + '/' + date[1] + '/' + date['0'];
+      if (value) {
+        const date: string[] = value.split('-');
+        return date[2] + '/' + date[1] + '/' + date['0'];
+      } else {
+        return '';
+      }
     }
     private stringToDate(value: string): Date {
       const date: string[] = value.split('/');

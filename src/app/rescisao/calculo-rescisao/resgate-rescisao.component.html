@@ -57,7 +57,7 @@
                               <span class="mensagem-erro">{{msg}}</span>
                             </div>
                           </div>
-                          <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasIntegrais').getError('required')">
+                          <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasIntegrais').getError('required') && rescisaoForm.get('calcularTerceirizados').get(''+ i).get('resgateFeriasVencidas').value == 'S'">
                             <span class="mensagem-erro">Você deve digitar uma data !</span>
                           </div>
                         </div>
