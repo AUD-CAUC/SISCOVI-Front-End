@@ -62,6 +62,9 @@ export class ResgateRescisaoComponent implements OnInit {
             this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataFimFeriasIntegrais').setValue(this.dateToString(this.terceirizados[i].pDataFimFeriasIntegrais));
             this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasProporcionais').setValue(this.dateToString(this.terceirizados[i].pDataInicioFeriasProporcionais));
             this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasVencidas').setValidators([Validators.required, this.resgateValidatore]);
+            if (!this.terceirizados[i].pDataInicioFeriasIntegrais) {
+              this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasVencidas').setValue('N');
+            }
         }
     }
     private dateToString(value: any): string {
