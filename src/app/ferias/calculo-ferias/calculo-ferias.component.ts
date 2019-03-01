@@ -36,6 +36,7 @@ export class CalculoFeriasComponent {
         this.tipoRestituicao = tipoMovimentacao;
         if (this.codigo && this.tipoRestituicao) {
             this.feriasService.getFuncionariosFerias(this.codigo, this.tipoRestituicao).subscribe(res => {
+              console.log(res);
                 this.terceirizados = res;
             });
         }

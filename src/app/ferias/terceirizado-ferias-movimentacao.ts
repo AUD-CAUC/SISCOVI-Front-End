@@ -7,6 +7,7 @@ export class TerceirizadoFeriasMovimentacao {
     private _fimPeriodoAquisitivo: Date;
     private _existeCalculoAnterior: boolean;
     private _valorRestituicaoFerias: ValorRestituicaoFerias;
+    private _somaDiasVendidos: number;
     private _diasUsufruidos: number;
     private _parcela14Dias: boolean;
     private _parcelaAnterior: string;
@@ -45,6 +46,10 @@ export class TerceirizadoFeriasMovimentacao {
 
     get valorRestituicaoFerias(): ValorRestituicaoFerias {
         return this._valorRestituicaoFerias;
+    }
+
+    get somaDiasVendidos(): number {
+      return this._somaDiasVendidos;
     }
 
     get diasUsufruidos(): number {
