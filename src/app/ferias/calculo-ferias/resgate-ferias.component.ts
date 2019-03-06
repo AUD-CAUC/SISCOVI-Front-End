@@ -57,6 +57,7 @@ export class ResgateFeriasComponent implements OnInit {
         inicioFerias: new FormControl('', [this.inicioUsufrutoValidator, Validators.required, this.myDateValidator]),
         fimFerias: new FormControl('', [this.fimUsufrutoValidator, Validators.required, this.myDateValidator]),
         parcela14dias: new FormControl(item.parcela14Dias),
+        somaDiasVendidos: new FormControl(item.somaDiasVendidos),
         diasUsufruidos: new FormControl(item.diasUsufruidos),
         parcelaAnterior: new FormControl(item.parcelaAnterior),
         ultimoFimUsufruto: new FormControl(item.ultimoFimUsufruto),
@@ -213,9 +214,12 @@ export class ResgateFeriasComponent implements OnInit {
     if (control.value) {
       if (control.value < 0) {
         mensagem.push('O valor de dias vendidos não pode ser menor que zero !');
+      } else if (control.value > 10) {
+        mensagem.push('O máximo de dias a serem vendidos são 10');
       }
     }
     if (control.parent) {
+      const somaDiasVendidos = control.parent.get('somaDiasVendidos').value;
       let dia = 0;
       let mes = 0;
       let ano = 0;
@@ -230,19 +234,21 @@ export class ResgateFeriasComponent implements OnInit {
       const diff = Math.abs(fimUsufruto.getTime() - inicioUsufruto.getTime());
       const diffDay: number = Math.round(diff / (1000 * 3600 * 24)) + 1;
       if ((diffDay + Number(control.value)) > 30) {
-        mensagem.push('A quantidade de dias vendidos com o período de usufruto de férias não pode ser maior que trinta dias !');
+        mensagem.push('A quantidade de dias vendidos mais o período de usufruto de férias não pode ser maior que trinta dias !');
       }
-      if (control.value > 10) {
-        mensagem.push('O máximo de dias a serem vendidos são 10');
+      if (somaDiasVendidos + control.value > 10) {
+        mensagem.push('A soma dos dias vendidios neste período não deve ultrapassar 10 dias' + '\n' + 'Dias vendidos utilizados: ' + somaDiasVendidos);
       }
       if (control.touched || control.dirty) {
-        control.parent.updateValueAndValidity();
+        control.parent.get('inicioFerias').updateValueAndValidity();
+        control.parent.get('fimFerias').updateValueAndValidity();
       }
     }
     return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
   }
 
   public operacaoValidator(control: AbstractControl): { [key: string]: any } | null {
+    console.log(control.parent.value);
     const mensagem = [];
     let saldo: number;
     let diasDeFerias: number;
@@ -254,99 +260,102 @@ export class ResgateFeriasComponent implements OnInit {
     let mes: number;
     let ano: number;
 
-    if (control.parent.get('inicioFerias').value.toString().length === 10 && control.parent.get('fimFerias').value.toString().length === 10) {
-      dia = Number(control.parent.get('fimFerias').value.split('/')[0]);
-      mes = Number(control.parent.get('fimFerias').value.split('/')[1]) - 1;
-      ano = Number(control.parent.get('fimFerias').value.split('/')[2]);
-      const fimUsufruto: Date = new Date(ano, mes, dia);
-      dia = Number(control.parent.get('inicioFerias').value.split('/')[0]);
-      mes = Number(control.parent.get('inicioFerias').value.split('/')[1]) - 1;
-      ano = Number(control.parent.get('inicioFerias').value.split('/')[2]);
-      const inicioUsufruto: Date = new Date(ano, mes, dia);
-      let diff = fimUsufruto.getTime() - inicioUsufruto.getTime();
-      diasDeFerias = Math.round(diff / (1000 * 3600 * 24)) + 1;
+    if (control.parent) {
+      if (control.parent.get('inicioFerias').value.toString().length === 10 && control.parent.get('fimFerias').value.toString().length === 10) {
+        dia = Number(control.parent.get('fimFerias').value.split('/')[0]);
+        mes = Number(control.parent.get('fimFerias').value.split('/')[1]) - 1;
+        ano = Number(control.parent.get('fimFerias').value.split('/')[2]);
+        const fimUsufruto: Date = new Date(ano, mes, dia);
+        dia = Number(control.parent.get('inicioFerias').value.split('/')[0]);
+        mes = Number(control.parent.get('inicioFerias').value.split('/')[1]) - 1;
+        ano = Number(control.parent.get('inicioFerias').value.split('/')[2]);
+        const inicioUsufruto: Date = new Date(ano, mes, dia);
+        let diff = fimUsufruto.getTime() - inicioUsufruto.getTime();
+        diasDeFerias = Math.round(diff / (1000 * 3600 * 24)) + 1;
 
-      ano = Number(control.parent.get('fimPeriodoAquisitivo').value.split('-')[0]);
-      mes = Number(control.parent.get('fimPeriodoAquisitivo').value.split('-')[1]) - 1;
-      dia = Number(control.parent.get('fimPeriodoAquisitivo').value.split('-')[2]);
-      const fimPeriodoAquisitivo: Date = new Date(ano, mes, dia);
-      ano = Number(control.parent.get('inicioPeriodoAquisitivo').value.split('-')[0]);
-      mes = Number(control.parent.get('inicioPeriodoAquisitivo').value.split('-')[1]) - 1;
-      dia = Number(control.parent.get('inicioPeriodoAquisitivo').value.split('-')[2]);
-      const inicioPeriodoAquisitivo: Date = new Date(ano, mes, dia);
-      diff = Math.abs(fimPeriodoAquisitivo.getTime() - inicioPeriodoAquisitivo.getTime());
-      saldo = (Math.round(((diff / (1000 * 3600 * 24)) + 1) / 12)) - control.parent.get('diasUsufruidos').value;
+        ano = Number(control.parent.get('fimPeriodoAquisitivo').value.split('-')[0]);
+        mes = Number(control.parent.get('fimPeriodoAquisitivo').value.split('-')[1]) - 1;
+        dia = Number(control.parent.get('fimPeriodoAquisitivo').value.split('-')[2]);
+        const fimPeriodoAquisitivo: Date = new Date(ano, mes, dia);
+        ano = Number(control.parent.get('inicioPeriodoAquisitivo').value.split('-')[0]);
+        mes = Number(control.parent.get('inicioPeriodoAquisitivo').value.split('-')[1]) - 1;
+        dia = Number(control.parent.get('inicioPeriodoAquisitivo').value.split('-')[2]);
+        const inicioPeriodoAquisitivo: Date = new Date(ano, mes, dia);
+        diff = Math.abs(fimPeriodoAquisitivo.getTime() - inicioPeriodoAquisitivo.getTime());
+        saldo = (Math.round(((diff / (1000 * 3600 * 24)) + 1) / 12)) - control.parent.get('diasUsufruidos').value;
 
-      console.log(control.parent.value);
-      console.log(diasDeFerias);
-
-
-      if (diasDeFerias + diasVendidos > saldo) {
-        mensagem.push('A quantidade de dias de férias mais os dias vendido não pode ser superior ao saldo total.');
-        error = true;
-      }
-      if (diasDeFerias <= 0 && !error) {
-        mensagem.push('A data de início do usufruto deve ser maior que a data final do usufruto.');
-        error = true;
-      }
-      if (parcelaSelecionada !== '0' && diasDeFerias < 5 && !error) {
-        mensagem.push('A quantidade mínima de dias deve ser 5');
-        error = true;
-      }
-      if (parcelaSelecionada === '0' && !error) {
-        if (saldo !== (diasDeFerias + diasVendidos)) {
-          mensagem.push('Em parcelas únicas deve utilizar todo o saldo');
+        if (diasDeFerias + diasVendidos > saldo) {
+          mensagem.push('A quantidade de dias de férias mais os dias vendido não pode ser superior ao saldo total.' + '\n' + 'Saldo: ' + saldo + ' dias');
           error = true;
         }
-      } else if (parcelaSelecionada === '1' && !error) {
-        if (saldo < 19) { // Deve ter mais de 19 dias de saldo para poder parcelar.
-          mensagem.push('Saldo total insuficiente para o parcelamento');
+        if (diasDeFerias <= 0 && !error) {
+          mensagem.push('A data de início do usufruto deve ser maior que a data final do usufruto.');
           error = true;
-        } else { // Caso tenha saldo.
-          if (diasDeFerias < 14 && diasDeFerias >= 5) { // Caso for tirar menos de 14 dias e mais de 5 dias.
-            if (saldo - (diasDeFerias + diasVendidos) < 14) {
-              // Deve ter mais de 14 dias para tirar na próxima parcela.
-              mensagem.push('Só é possível tirar no mínimo 5 dias e no máximo ' + (saldo - diasVendidos - 14) + ' dias de férias vendendo ' + diasVendidos + ' dias');
-              error = true;
-            }
-          } else { // Caso for tirar mais de 14 dias.
-            if (saldo - (diasDeFerias - diasVendidos) < 5) {
-              // Deve ter pelo menos 5 dias para tirar na próxima parcela.
-              mensagem.push('Só é possível tirar no máximo ' + (saldo - diasVendidos - 5) + ' dias de férias vendendo ' + diasVendidos + ' dias');
-              error = true;
+        }
+        if (parcelaSelecionada !== '0' && diasDeFerias < 5 && !error) {
+          mensagem.push('A quantidade mínima de dias deve ser 5');
+          error = true;
+        }
+        if (parcelaSelecionada === '0' && !error) {
+          if (saldo !== (diasDeFerias + diasVendidos)) {
+            mensagem.push('Em parcelas únicas deve utilizar todo o saldo' + '\n' + 'Saldo: ' + saldo + ' dias');
+            error = true;
+          }
+        } else if (parcelaSelecionada === '1' && !error) {
+          if (saldo < 19) { // Deve ter mais de 19 dias de saldo para poder parcelar.
+            mensagem.push('Saldo total insuficiente para o parcelamento' + '\n' + 'Saldo: ' + saldo + ' dias');
+            error = true;
+          } else { // Caso tenha saldo.
+            if (diasDeFerias < 14) { // Caso for tirar menos de 14 dias
+              if (saldo - (diasDeFerias + diasVendidos) < 14) {
+                // Deve ter mais de 14 dias para tirar na próxima parcela.
+                mensagem.push('Só é possível tirar no mínimo 5 dias e no máximo ' + (saldo - diasVendidos - 14) + ' dias de férias vendendo ' + diasVendidos + ' dias');
+                error = true;
+              }
+            } else { // Caso for tirar mais de 14 dias.
+              if (saldo - (diasDeFerias + diasVendidos) < 5) {
+                // Deve ter pelo menos 5 dias para tirar na próxima parcela.
+                mensagem.push('Só é possível tirar no máximo ' + (saldo - diasVendidos - 5) + ' dias de férias vendendo ' + diasVendidos + ' dias');
+                error = true;
+              }
             }
           }
-        }
-      } else if (parcelaSelecionada === '2' && !error) {
-        if ((jaTirou14Dias === false) && (diasDeFerias < 14) && (saldo - diasDeFerias < 14)) {
-          // Caso não tenha tirado os 14 dias.
-          // E não for tirar nesta parcela.
-          // DEVE ter saldo maior que 14 para tirar na próxima.
-          mensagem.push('Só é possível tirar no mínimo 5 dias e no máximo ' + (saldo - 14) + ' dias de férias');
-          error = true;
-        }
-      } else if (parcelaSelecionada === '3' && !error) {
-        if (saldo < 5) {
-          // Deve ter mais de 5 dias de saldo disponível.
-          mensagem.push('Para realizar esta parcela é preciso ter um saldo de no mínimo 5 dias');
-          error = true;
-        } else {
-          if (jaTirou14Dias === false && diasDeFerias < 14) { // Caso não tenha tirado os 14 dias
-            // Deve tirar os 14 dias nesta parcela.
-            mensagem.push('Só é possível tirar no mínimo 14 dias de férias');
+        } else if (parcelaSelecionada === '2' && !error) {
+          if ((jaTirou14Dias === false) && (diasDeFerias < 14) && (saldo - (diasDeFerias + diasVendidos) < 14)) {
+            if ((saldo - diasVendidos - 14) < 5) {
+              mensagem.push('Deve tirar no mínimo 14 dias');
+              error = true;
+            } else {
+              // Caso não tenha tirado os 14 dias.
+              // E não for tirar nesta parcela.
+              // DEVE ter saldo maior que 14 para tirar na próxima.
+              mensagem.push('Para período menor que 14 dias: máximo de ' + (saldo - diasVendidos - 14) + ' dias de férias');
+              error = true;
+            }
+
+          }
+        } else if (parcelaSelecionada === '3' && !error) {
+          if (saldo < 5) {
+            // Deve ter mais de 5 dias de saldo disponível.
+            mensagem.push('Para realizar esta parcela é preciso ter um saldo de no mínimo 5 dias');
             error = true;
+          } else {
+            if (jaTirou14Dias === false && diasDeFerias < 14) { // Caso não tenha tirado os 14 dias
+              // Deve tirar os 14 dias nesta parcela.
+              mensagem.push('Só é possível tirar no mínimo 14 dias de férias');
+              error = true;
+            }
           }
         }
       }
     }
-
     return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
   }
 
   public fimUsufrutoValidator(control: AbstractControl): { [key: string]: any } | null {
     const mensagem = [];
     if (control.parent) {
-      if (control.parent.get('inicioFerias').valid && (control.value.length === 10)) {
+      if ((control.value.length === 10)) {
         let dia = 0;
         let mes = 0;
         let ano = 0;
@@ -367,12 +376,14 @@ export class ResgateFeriasComponent implements OnInit {
           mensagem.push('O período de férias não pode ser maior que 30 dias !');
         }
       }
-      if ((control.touched || control.dirty) && (control.value.length === 10)) {
+      if ((control.touched || control.dirty) && (control.value.length === 10) && !control.pristine) {
         if ((control.parent.get('inicioFerias').touched || control.parent.get('inicioFerias').dirty) && control.parent.get('inicioFerias').valid) {
-          control.parent.get('diasVendidos').updateValueAndValidity();
+          // control.parent.get('diasVendidos').updateValueAndValidity();
         }
         if (control.valid && control.parent.get('inicioFerias')) {
+          control.markAsPristine();
           control.parent.get('diasVendidos').updateValueAndValidity();
+          control.parent.get('inicioFerias').updateValueAndValidity();
         }
       }
     }
@@ -381,33 +392,36 @@ export class ResgateFeriasComponent implements OnInit {
 
   public inicioUsufrutoValidator(control: AbstractControl): { [key: string]: any } | null {
     const mensagem = [];
-    if (control.parent && control.value.toString().length === 10) {
-      let dia = Number(control.value.split('/')[0]);
-      let mes = Number(control.value.split('/')[1]) - 1;
-      let ano = Number(control.value.split('/')[2]);
-      const inicioUsufruto: Date = new Date(ano, mes, dia);
-      const val: Number[] = control.parent.get('fimPeriodoAquisitivo').value.split('-');
-      const fimPeriodoAquisitivo: Date = new Date(Number(val[0]), Number(val[1]) - 1, Number(val[2]));
+    if (control.parent) {
+      if ((control.value.length === 10)) {
+        let dia = Number(control.value.split('/')[0]);
+        let mes = Number(control.value.split('/')[1]) - 1;
+        let ano = Number(control.value.split('/')[2]);
+        const inicioUsufruto: Date = new Date(ano, mes, dia);
+        const val: Number[] = control.parent.get('fimPeriodoAquisitivo').value.split('-');
+        const fimPeriodoAquisitivo: Date = new Date(Number(val[0]), Number(val[1]) - 1, Number(val[2]));
 
-      if (inicioUsufruto <= fimPeriodoAquisitivo) {
-        mensagem.push('A data de início do usufruto deve ser maior que a data fim do período aquisitivo !');
-      } else if (control.parent.get('ultimoFimUsufruto').value) {
-        ano = Number(control.parent.get('ultimoFimUsufruto').value.split('-')[0]);
-        mes = Number(control.parent.get('ultimoFimUsufruto').value.split('-')[1]) - 1;
-        dia = Number(control.parent.get('ultimoFimUsufruto').value.split('-')[2]);
-        const ultimoFimUsufruto: Date = new Date(ano, mes, dia);
-        if (inicioUsufruto <= ultimoFimUsufruto) {
-          mensagem.push('A data de início do usufruto deve ser maior que a última data final do usufruto que é ' + ultimoFimUsufruto.getDate() + '/' + (ultimoFimUsufruto.getMonth() + 1) + '/' +
-            ultimoFimUsufruto.getFullYear() + ' !');
+        if (inicioUsufruto <= fimPeriodoAquisitivo) {
+          mensagem.push('A data de início do usufruto deve ser maior que a data fim do período aquisitivo !');
+        } else if (control.parent.get('ultimoFimUsufruto').value) {
+          ano = Number(control.parent.get('ultimoFimUsufruto').value.split('-')[0]);
+          mes = Number(control.parent.get('ultimoFimUsufruto').value.split('-')[1]) - 1;
+          dia = Number(control.parent.get('ultimoFimUsufruto').value.split('-')[2]);
+          const ultimoFimUsufruto: Date = new Date(ano, mes, dia);
+          if (inicioUsufruto <= ultimoFimUsufruto) {
+            mensagem.push('A data de início do usufruto deve ser maior que a última data final do usufruto que é ' + ultimoFimUsufruto.getDate() + '/' + (ultimoFimUsufruto.getMonth() + 1) + '/' +
+              ultimoFimUsufruto.getFullYear() + ' !');
+          }
         }
-      }
-
-      if (control.touched || control.dirty) {
-        if (control.parent.get('fimFerias').touched || control.parent.get('fimFerias').dirty) {
-          control.parent.get('diasVendidos').updateValueAndValidity();
-        }
-        if (control.valid && control.parent.get('fimFerias')) {
-          control.parent.get('diasVendidos').updateValueAndValidity();
+        if ((control.touched || control.dirty) && (control.value.length === 10) && !control.pristine) {
+          if (control.parent.get('fimFerias').touched || control.parent.get('fimFerias').dirty) {
+            // control.parent.get('diasVendidos').updateValueAndValidity();
+          }
+          if (control.valid && control.parent.get('fimFerias')) {
+            control.markAsPristine();
+            control.parent.get('diasVendidos').updateValueAndValidity();
+            control.parent.get('fimFerias').updateValueAndValidity();
+          }
         }
       }
     }
