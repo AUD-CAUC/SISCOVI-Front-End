@@ -248,7 +248,6 @@ export class ResgateFeriasComponent implements OnInit {
   }
 
   public operacaoValidator(control: AbstractControl): { [key: string]: any } | null {
-    console.log(control.parent.value);
     const mensagem = [];
     let saldo: number;
     let diasDeFerias: number;
@@ -484,6 +483,7 @@ export class ResgateFeriasComponent implements OnInit {
   }
 
   verificaDadosFormularioResgate() {
+    this.feriasCalcular = [];
     let aux = 0;
     for (let i = 0; i < this.terceirizados.length; i++) {
       if (this.feriasResgate.get('calcularTerceirizados').get('' + i).get('selected').value) {
@@ -589,6 +589,5 @@ export class ResgateFeriasComponent implements OnInit {
     const diffTime = Math.abs(finalDate.getTime() - initDate.getTime());
     const diffDay = Math.round(diffTime / (1000 * 3600 * 24)) + 1;
     this.diasConcedidos[indice] = diffDay + diasVendidos;
-    console.log(this.diasConcedidos);
   }
 }

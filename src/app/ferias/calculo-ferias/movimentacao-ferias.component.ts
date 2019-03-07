@@ -553,6 +553,7 @@ export class MovimentacaoFeriasComponent implements OnInit {
   }
 
   verificaDadosFormulario() {
+    this.feriasCalcular = [];
     let aux = 0;
     for (let i = 0; i < this.terceirizados.length; i++) {
       if (this.feriasForm.get('calcularTerceirizados').get('' + i).get('selected').value) {
