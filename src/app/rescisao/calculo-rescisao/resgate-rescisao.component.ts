@@ -144,6 +144,7 @@ export class ResgateRescisaoComponent implements OnInit {
   }
 
   verificaDadosFormulario() {
+    this.calculosRescisao = [];
     let aux = 0;
     for (let i = 0; i < this.terceirizados.length; i++) {
       if (this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('selected').value) {
