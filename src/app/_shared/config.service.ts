@@ -8,7 +8,7 @@ export class ConfigService {
   subtitle = 'Sistema Conta Vinculada';
   user: User;
   headers: Headers = new Headers();
-  public myApi = 'http://10.18.27.69:8080/SISCOVI/rest';
+  public myApi = 'http://10.22.28.165:8080/SISCOVI/rest';
   public mask = {
     processo_adm: [/\d/, /\d/, /\d/, /\d/, /\d/, /\d/, '/', /[2]/, /[0]/, /\d/, /\d/],
     os: [/\d/, /\d/, /\d/, '/', /[2]/, /[0]/, /\d/, /\d/]
