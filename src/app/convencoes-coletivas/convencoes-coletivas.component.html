@@ -14,30 +14,45 @@
     </div>
 </div> -->
 <div class="container ">
-    <div class="row">
-        <div class="center">
-            <table class="centered hoverable highlight">
-                <thead>
-                    <tr>
-                        <th>Nome</th>
-                        <th>Sigla</th>
-                        <th>Data Base</th>
-                        <th>Descrição</th>
-                        <th>Login Atualização</th>
-                        <th>Data Atualização</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let convencao of convencoes">
-                        <td>{{convencao.nome}}</td>
-                        <td>{{convencao.sigla}}</td>
-                        <td>{{convencao.dataBase | date: 'shortDate'}}</td>
-                        <td>{{(convencao.descricao !== null) ? (convencao.descricao | afirimativePipe) : "-"}}</td>
-                        <td>{{convencao.loginAtualizacao | uppercase}}</td>
-                        <td>{{convencao.dataAtualizacao | date: 'shortDate'}}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+  <div class="row">
+    <div class="left" style="margin-bottom: 20px">
+      <button class="btn waves-effect" (click)="openModal()" >Cadastrar Nova Convenção Coletiva</button>
     </div>
+    <div id="modal1" class="modal bottom-sheet" materialize="modal" [materializeParams]="[{dismissible: false}]"
+         [materializeActions]="modalActions">
+      <div class="modal-content">
+        <app-cadastrar-convencao *ngIf="render"></app-cadastrar-convencao>
+      </div>
+      <div class="modal-footer">
+        <button class="btn waves-effect left" (click)="closeModal()">Cancelar</button>
+        <button class="btn waves-effect right" [disabled]="convencaoService.getValidity()" (click)="cadastraConvencao()">
+          Cadastrar
+        </button>
+      </div>
+    </div>
+    <div class="center">
+      <table class="centered hoverable highlight">
+        <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Sigla</th>
+          <th>Data Base</th>
+          <th>Descrição</th>
+          <th>Login Atualização</th>
+          <th>Data Atualização</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let convencao of convencoes">
+          <td>{{convencao.nome}}</td>
+          <td>{{convencao.sigla}}</td>
+          <td>{{convencao.dataBase | date: 'shortDate'}}</td>
+          <td>{{(convencao.descricao !== null) ? (convencao.descricao | afirimativePipe) : "-"}}</td>
+          <td>{{convencao.loginAtualizacao | uppercase}}</td>
+          <td>{{convencao.dataAtualizacao | date: 'shortDate'}}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>

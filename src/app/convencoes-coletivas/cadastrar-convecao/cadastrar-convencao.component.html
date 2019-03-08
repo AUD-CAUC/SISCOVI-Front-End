@@ -1,0 +1,59 @@
+<div class="container">
+  <h2 class="center">Cadastrar Convenção Coletiva</h2>
+</div>
+<div class="container">
+  <div class="row">
+    <form #form="ngForm" materialize class="col s12" [formGroup]="convencaoForm" autocomplete="off">
+      <div class="row">
+        <div class="col input-field s6 m6 l4">
+          <label for="nome">Nome da Convenção Coletiva</label>
+          <input placeholder="Digite um Nome" id="nome" (keyup)="validateForm()" formControlName="nome" type="text"
+                 class="validate">
+          <div
+            *ngIf="convencaoForm.get('nome').invalid && (convencaoForm.get('nome').dirty || convencaoForm.get('nome').touched)">
+            <div *ngIf="convencaoForm.get('nome').getError('required')">
+              <span class="mensagem-erro">Você deve digitar um nome!</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col input-field s6 m6 l4">
+          <label for="sigla">Sigla da Convenção</label>
+          <input id="sigla" placeholder="Digite uma Sigla" type="text" (keyup)="validateForm()" formControlName="sigla"
+                 class="validate">
+          <div
+            *ngIf="convencaoForm.get('sigla').invalid && (convencaoForm.get('sigla').dirty || convencaoForm.get('sigla').touched)">
+            <div *ngIf="convencaoForm.get('sigla').getError('required')">
+              <span class="mensagem-erro">Você deve digitar uma sigla!</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col input-field s6 m6 l4">
+          <label for="sigla">Data Base da Convenção</label>
+          <input id="dataBase" placeholder="Digite a Data Base" appMaskDate type="text" (keyup)="validateForm()"
+                 formControlName="dataBase" class="validate" maxlength="10" minlength="10" required>
+          <div
+            *ngIf="convencaoForm.get('dataBase').invalid && (convencaoForm.get('dataBase').dirty || convencaoForm.get('dataBase').touched)">
+            <div *ngIf="convencaoForm.get('dataBase').getError('mensagem')">
+              <div *ngFor="let msg of convencaoForm.get('dataBase').getError('mensagem')[0]">
+                <span class="mensagem-erro">{{msg}}</span>
+              </div>
+            </div>
+            <div *ngIf="convencaoForm.get('dataBase').getError('required')">
+              <span class="mensagem-erro">Você deve digitar uma data!</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col input-field s12 m12 l12">
+          <textarea materialize class="materialize-textarea" data-length="200" id="textarea1"(keyup)="validateForm()" formControlName="descricao"></textarea>
+          <label for="textarea1">Descrição</label>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

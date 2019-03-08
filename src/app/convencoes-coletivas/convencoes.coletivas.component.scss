@@ -2,8 +2,22 @@ table.highlight tbody tr:hover {
   background-color: #9e9e9e;
   cursor: context-menu;
 }
+div#modal1.modal.open {
+  position: absolute;
+  background-color: white;
+  display: block;
+  opacity: 1;
+  transform: scaleX(1);
+  top: 10ch !important;
+  left: 25ch !important;
+  width: 180ch !important;
+  max-height: fit-content;
+}
 .row .col{
   float: none !important;
   margin-left: auto;
   margin-right: auto;
+}
+div .modal-footer {
+  background-color: white;
 }
