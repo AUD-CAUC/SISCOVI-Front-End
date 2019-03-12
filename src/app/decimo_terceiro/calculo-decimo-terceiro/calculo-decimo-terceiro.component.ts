@@ -31,11 +31,7 @@ export class CalculoDecimoTerceiroComponent {
         this.listaAnos = res;
       });
     }
-    if (this.codigo && this.tipoRestituicao && this.anoCalculo) {
-      this.decimoTerceiroService.getFuncionariosDecimoTerceiro(this.codigo, this.tipoRestituicao, this.anoCalculo).subscribe(res => {
-        this.terceirizados = res;
-      });
-    }
+    this.defineTerceirizados();
   }
 
   defineTipoMovimentacao(tipoMovimentacao: string): void {
@@ -45,15 +41,15 @@ export class CalculoDecimoTerceiroComponent {
         this.listaAnos = res;
       });
     }
-    if (this.codigo && this.tipoRestituicao && this.anoCalculo) {
-      this.decimoTerceiroService.getFuncionariosDecimoTerceiro(this.codigo, this.tipoRestituicao, this.anoCalculo).subscribe(res => {
-        this.terceirizados = res;
-      });
-    }
+    this.defineTerceirizados();
   }
 
   defineAnoCalculo(ano: number): void {
     this.anoCalculo = ano;
+    this.defineTerceirizados();
+  }
+
+  defineTerceirizados(): void {
     if (this.codigo && this.tipoRestituicao && this.anoCalculo) {
       this.decimoTerceiroService.getFuncionariosDecimoTerceiro(this.codigo, this.tipoRestituicao, this.anoCalculo).subscribe(res => {
         this.terceirizados = res;
