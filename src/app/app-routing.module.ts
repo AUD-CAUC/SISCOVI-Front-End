@@ -37,6 +37,7 @@ import {SaldoFuncaoComponent} from './saldo/funcao/saldo-funcao.component';
 import {FeriasPendentesResolver} from './ferias/ferias-pendentes.resolver';
 import {FeriasPendentesExecucaoResolver} from './ferias/ferias-pendentes-execucao.resolver';
 import {PercentualDinamicoComponent} from './percentuais-dinamicos/percentual-dinamico.component';
+import {CadastrarConvencaoComponent} from './convencoes-coletivas/cadastrar-convecao/cadastrar-convencao.component';
 
 const routes: Routes = [
   {path: '', pathMatch: 'full', redirectTo: 'home'},
@@ -58,6 +59,7 @@ const routes: Routes = [
       {path: 'percentuais', component: PercentuaisComponent, canActivate: [LoggedInGuard]},
       {path: 'cargosContrato', component: CargosDoContratoComponent, canActivate: [LoggedInGuard]},
       {path: 'convencoes', component: ConvencoesColetivasComponent, canActivate: [LoggedInGuard]},
+      {path: 'convencoes/:id', component: CadastrarConvencaoComponent, canActivate: [LoggedInGuard]},
       {path: 'terceirizados', component: FuncionariosComponent, canActivate: [LoggedInGuard, ProfileGuard]},
       {
         path: 'terceirizados/:id',

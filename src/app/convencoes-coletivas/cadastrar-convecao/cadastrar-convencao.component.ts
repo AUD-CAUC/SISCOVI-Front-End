@@ -1,8 +1,10 @@
-import {Component} from '@angular/core';
+import {Component, EventEmitter} from '@angular/core';
 import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ContratosService} from '../../contratos/contratos.service';
 import {ConvencaoService} from '../convencao.service';
+import {MaterializeAction} from 'angular2-materialize';
+import {Convencao} from '../convencao';
 
 @Component({
   selector: 'app-cadastrar-convencao',
@@ -11,10 +13,14 @@ import {ConvencaoService} from '../convencao.service';
 })
 
 export class CadastrarConvencaoComponent {
+  id: number;
   router: Router;
   route: ActivatedRoute;
   convencaoService: ConvencaoService;
   convencaoForm: FormGroup;
+  convencao: Convencao;
+  notValidEdit = true;
+  modalActions = new EventEmitter<string|MaterializeAction>();
   
   constructor(fb: FormBuilder, convencaoService: ConvencaoService, route: ActivatedRoute, router: Router) {
     this.router = router;
@@ -25,6 +31,19 @@ export class CadastrarConvencaoComponent {
       sigla: new FormControl('', [Validators.required]),
       dataBase: new FormControl('', [Validators.required, this.myDateValidator]),
       descricao: new FormControl('', []),
+    });
+
+    this.route.params.subscribe(params => {
+      this.id = params['id'];
+      if (this.id) {
+        convencaoService.buscarConvencao(this.id).subscribe(res => {
+          this.convencao = res;
+          this.convencaoForm.controls.nome.setValue(this.convencao.nome);
+          this.convencaoForm.controls.sigla.setValue(this.convencao.sigla);
+          this.convencaoForm.controls.dataBase.setValue(this.ajusteData(this.convencao.dataBase));
+          this.convencaoForm.controls.descricao.setValue(this.convencao.descricao);
+        });
+      }
     });
   }
 
@@ -38,6 +57,26 @@ export class CadastrarConvencaoComponent {
     }else {
       this.convencaoService.setValdity(true);
     }
+  }
+
+  activateButton(): void {
+    if (this.id) {
+      if ((this.convencaoService.nome !== this.convencao.nome) ||
+        (this.convencaoService.sigla !== this.convencao.sigla) ||
+        (this.convencaoService.dataBase !== this.convencao.dataBase) ||
+        (this.convencaoService.descricao !== this.convencao.descricao)
+      ) {
+        this.notValidEdit = false;
+      }else if ((this.convencaoService.nome === this.convencao.nome) ||
+        (this.convencaoService.sigla === this.convencao.sigla) ||
+        (this.convencaoService.dataBase === this.convencao.dataBase) ||
+        (this.convencaoService.descricao === this.convencao.descricao)) {
+        this.notValidEdit = true;
+      }
+    }
+  }
+  disableButton() {
+    this.notValidEdit = true;
   }
 
   public myDateValidator(control: AbstractControl): { [key: string]: any } {
@@ -64,5 +103,40 @@ export class CadastrarConvencaoComponent {
       }
     }
     return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
+  }
+
+  openModal() {
+
+  }
+
+  deletarConvencao() {
+
+  }
+
+  closeModal() {
+
+  }
+
+  ajusteData(data: String) {
+    const ano = Number(data.split('-')[0]);
+    const mes = Number(data.split('-')[1]);
+    const dia = Number(data.split('-')[2]);
+    let string: String;
+    if (dia < 10) {
+      string = '0' + dia + '/';
+    } else {
+      string = dia.toString() + '/';
+    }
+    if (mes < 10) {
+      string = string + '0' + mes + '/';
+    } else {
+      string = string + mes.toString() + '/';
+    }
+    string = string + ano.toString();
+    return  string;
+  }
+
+  salvarAlteracao() {
+
   }
 }

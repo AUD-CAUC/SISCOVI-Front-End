@@ -1,5 +1,24 @@
 <div class="container">
   <h2 class="center">Cadastrar Convenção Coletiva</h2>
+  <div class = row *ngIf="id">
+    <button class="btn waves-effect right" (click)="openModal()">Apagar Rubrica</button>
+    <div id="modal1" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions">
+      <div class="modal-content">
+        <div class="container">
+          <div class="row">
+            <h1 class="center">Alerta</h1>
+          </div>
+          <div class="row">
+            <h5 class="center">Tem certeza que deseja APAGAR esta Convenção ?</h5>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn waves-effect right" (click)="deletarConvencao()">Sim</button>
+        <button class="btn waves-effect left" (click)="closeModal()">Não</button>
+      </div>
+    </div>
+  </div>
 </div>
 <div class="container">
   <div class="row">
@@ -7,7 +26,7 @@
       <div class="row">
         <div class="col input-field s6 m6 l4">
           <label for="nome">Nome da Convenção Coletiva</label>
-          <input placeholder="Digite um Nome" id="nome" (keyup)="validateForm()" formControlName="nome" type="text"
+          <input placeholder="Digite um Nome" id="nome" (keyup)="validateForm();  activateButton()" formControlName="nome" type="text"
                  class="validate">
           <div
             *ngIf="convencaoForm.get('nome').invalid && (convencaoForm.get('nome').dirty || convencaoForm.get('nome').touched)">
@@ -20,7 +39,7 @@
       <div class="row">
         <div class="col input-field s6 m6 l4">
           <label for="sigla">Sigla da Convenção</label>
-          <input id="sigla" placeholder="Digite uma Sigla" type="text" (keyup)="validateForm()" formControlName="sigla"
+          <input id="sigla" placeholder="Digite uma Sigla" type="text" (keyup)="validateForm();  activateButton()" formControlName="sigla"
                  class="validate">
           <div
             *ngIf="convencaoForm.get('sigla').invalid && (convencaoForm.get('sigla').dirty || convencaoForm.get('sigla').touched)">
@@ -33,7 +52,7 @@
       <div class="row">
         <div class="col input-field s6 m6 l4">
           <label for="sigla">Data Base da Convenção</label>
-          <input id="dataBase" placeholder="Digite a Data Base" appMaskDate type="text" (keyup)="validateForm()"
+          <input id="dataBase" placeholder="Digite a Data Base" appMaskDate type="text" (keyup)="validateForm();  activateButton()"
                  formControlName="dataBase" class="validate" maxlength="10" minlength="10" required>
           <div
             *ngIf="convencaoForm.get('dataBase').invalid && (convencaoForm.get('dataBase').dirty || convencaoForm.get('dataBase').touched)">
@@ -50,10 +69,16 @@
       </div>
       <div class="row">
         <div class="col input-field s12 m12 l12">
-          <textarea materialize class="materialize-textarea" data-length="200" id="textarea1"(keyup)="validateForm()" formControlName="descricao"></textarea>
+          <textarea materialize class="materialize-textarea" data-length="200" id="textarea1"(keyup)="validateForm();  activateButton()" formControlName="descricao"></textarea>
           <label for="textarea1">Descrição</label>
         </div>
       </div>
     </form>
+    <div class="row" *ngIf="id">
+      <button class="btn waves-effect right" [disabled]="(!notValidEdit && convencaoService.getValidity()) || (notValidEdit)" (click)="salvarAlteracao()">Salvar</button>
+      <button class="btn waves-effect left"(click)="disableButton()" routerLink="/convencoes">
+        Voltar
+      </button>
+    </div>
   </div>
 </div>

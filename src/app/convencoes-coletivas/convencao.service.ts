@@ -51,6 +51,12 @@ export class ConvencaoService {
     const options = new RequestOptions({headers: headers});
     return this.http.post(url, data, options).map(res => res.json());
   }
+
+  buscarConvencao(id: number) {
+    const url = this.config.myApi + '/convencao/getConvencao=' + id;
+    return this.http.get(url).map(res => res.json());
+  }
+
   protected encapsulaDatas(value: any): Date {
     const a = value.split('/');
     const dia = Number(a[0]);

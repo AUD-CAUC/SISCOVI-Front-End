@@ -3,6 +3,7 @@ import {Contrato} from '../contratos/contrato';
 import {ConvencaoService} from './convencao.service';
 import {Convencao} from './convencao';
 import {MaterializeAction} from 'angular2-materialize';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-convencao-coletiva',
@@ -17,8 +18,10 @@ export class ConvencoesColetivasComponent {
   valid = false;
   index: number;
   modalActions = new EventEmitter<string | MaterializeAction>();
+  router: Router;
 
-  constructor(convencaoService: ConvencaoService) {
+  constructor(convencaoService: ConvencaoService, router: Router) {
+    this.router = router;
     this.convencaoService = convencaoService;
     convencaoService.getAll().subscribe(res => {
       this.convencoes = res;
@@ -53,5 +56,9 @@ export class ConvencoesColetivasComponent {
         });
       }
     });
+  }
+
+  editarConvencao(id: number) {
+    this.router.navigate(['/convencoes', id]);
   }
 }

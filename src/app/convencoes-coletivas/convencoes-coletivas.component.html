@@ -43,7 +43,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let convencao of convencoes">
+        <tr *ngFor="let convencao of convencoes" (dblclick)="editarConvencao(convencao.codigo)">
           <td>{{convencao.nome}}</td>
           <td>{{convencao.sigla}}</td>
           <td>{{convencao.dataBase | date: 'shortDate'}}</td>
