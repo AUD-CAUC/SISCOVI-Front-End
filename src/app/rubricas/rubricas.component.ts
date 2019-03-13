@@ -55,8 +55,11 @@ export class RubricasComponent {
   deletarRubrica() {
     this.rubricaService.apagarRubrica(this.id).subscribe(res => {
       if (res === 'Rubrica Apagada Com sucesso !') {
-        this.closeModal();
-        this.router.navigate(['/rubricas']);
+        this.rubricaService.getAllrubricas().subscribe(res2 => {
+          this.rubricas.slice();
+          this.rubricas = res2;
+          this.closeModal2();
+        });
       }
     });
   }
