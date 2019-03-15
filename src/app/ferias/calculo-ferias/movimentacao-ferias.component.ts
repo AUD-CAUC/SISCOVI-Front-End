@@ -65,6 +65,7 @@ export class MovimentacaoFeriasComponent implements OnInit {
         diasUsufruidos: new FormControl(item.diasUsufruidos),
         parcelaAnterior: new FormControl(item.parcelaAnterior),
         ultimoFimUsufruto: new FormControl(item.ultimoFimUsufruto),
+        emAnalise: new FormControl(item.emAnalise),
 
       });
       control.push(addCtrl);
@@ -76,13 +77,14 @@ export class MovimentacaoFeriasComponent implements OnInit {
       this.feriasForm.get('calcularTerceirizados').get('' + i).get('valorMovimentado').setValidators(Validators.required);
       this.feriasForm.get('calcularTerceirizados').get('' + i).get('valorMovimentado').setAsyncValidators(this.valorMovimentadoValidator.bind(this));
       this.feriasForm.get('calcularTerceirizados').get('' + i).get('parcelas').setValidators([Validators.required, this.parcelaValidator]);
+      const emAnalise = this.feriasForm.get('calcularTerceirizados').get('' + i).get('emAnalise').value;
       let ultimaParcela = this.feriasForm.get('calcularTerceirizados').get('' + i).get('parcelaAnterior').value;
 
       if (ultimaParcela === null) {
         ultimaParcela = '0';
       } else if (ultimaParcela === '3') {
         // faz nada;
-      } else {
+      } else if (!emAnalise) {
         ultimaParcela++;
         ultimaParcela.toString();
       }
@@ -103,6 +105,10 @@ export class MovimentacaoFeriasComponent implements OnInit {
         Validators.minLength(10),
         Validators.maxLength(10),
         this.operacaoValidator]);
+
+      if (emAnalise) {
+        this.feriasForm.get('calcularTerceirizados').get('' + i).disable();
+      }
     }
   }
 
@@ -475,7 +481,7 @@ export class MovimentacaoFeriasComponent implements OnInit {
         const val: Number[] = control.parent.get('fimPeriodoAquisitivo').value.split('-');
         const fimPeriodoAquisitivo: Date = new Date(Number(val[0]), Number(val[1]) - 1, Number(val[2]));
 
-        if (inicioUsufruto <= fimPeriodoAquisitivo) {
+        if (inicioUsufruto <= fimPeriodoAquisitivo && control.parent.get('existeCalculoAnterior').value === true) {
           mensagem.push('A data de início do usufruto deve ser maior que a data fim do período aquisitivo !');
         } else if (control.parent.get('ultimoFimUsufruto').value) {
           ano = Number(control.parent.get('ultimoFimUsufruto').value.split('-')[0]);

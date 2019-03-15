@@ -59,31 +59,19 @@ export class FeriasComponent implements OnInit {
   }
 
   testeCalculo(): boolean {
-    if (this.contentAvailable === Content.Calculos) {
-      return true;
-    }
-    return false;
+    return this.contentAvailable === Content.Calculos;
   }
 
   testePendentes(): boolean {
-    if (this.contentAvailable === Content.Pendentes) {
-      return true;
-    }
-    return false;
+    return this.contentAvailable === Content.Pendentes;
   }
 
   testeRetencoes() {
-    if (this.contentAvailable === Content.Retencoes) {
-      return true;
-    }
-    return false;
+    return this.contentAvailable === Content.Retencoes;
   }
 
   testeExecutados() {
-    if (this.contentAvailable === Content.Executados) {
-      return true;
-    }
-    return false;
+    return this.contentAvailable === Content.Executados;
   }
 
   setRetencoesActive(): void {
