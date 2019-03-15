@@ -338,7 +338,11 @@ export class ResgateFeriasComponent implements OnInit {
               mensagem.push('Para período menor que 14 dias: máximo de ' + (saldo - diasVendidos - 14) + ' dias de férias');
               error = true;
             }
-
+          } else if (saldo - (diasDeFerias + diasVendidos) < 5 && saldo - (diasDeFerias + diasVendidos) > 0) {
+            // caso for tirar mais do que 14 dias
+            // deve ter saldo para a próxima parcela se não for tirar tudo
+            mensagem.push('Para período maior que 14 dias: máximo de ' + (saldo - diasVendidos - 5) + ' dias de férias');
+            error = true;
           }
         } else if (parcelaSelecionada === '3' && !error) {
           if (saldo < 5) {

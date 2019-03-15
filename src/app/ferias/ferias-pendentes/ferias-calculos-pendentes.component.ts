@@ -4,7 +4,7 @@ import {FeriasService} from '../ferias.service';
 import {ContratosService} from '../../contratos/contratos.service';
 import {FeriasCalculosPendentes} from './ferias-calculos-pendentes';
 import {ConfigService} from '../../_shared/config.service';
-import {FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MaterializeAction} from 'angular2-materialize';
 import {ListaCalculosPendentes} from './lista-calculos-pendentes';
 
@@ -214,11 +214,14 @@ export class FeriasCalculosPendentesComponent implements OnInit {
         const newControl = this.fb.group({
           calculos: this.fb.array([])
         });
-        item.calculos.forEach(() => {
+        item.calculos.forEach((calc) => {
           const newControl2 = <FormArray>newControl.controls.calculos;
-          const addControl = this.fb.group({
-            observacoes: new FormControl(),
-          });
+          const addControl = this.fb.group((calc.status === 'N') ? {
+              observacoes: new FormControl('', [Validators.required])
+            } : {
+              observacoes: new FormControl('')
+            }
+          );
           newControl2.push(addControl);
         });
         control.push(newControl);
