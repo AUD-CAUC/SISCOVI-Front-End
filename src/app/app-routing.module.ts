@@ -37,6 +37,7 @@ import {SaldoFuncaoComponent} from './saldo/funcao/saldo-funcao.component';
 import {FeriasPendentesResolver} from './ferias/ferias-pendentes.resolver';
 import {FeriasPendentesExecucaoResolver} from './ferias/ferias-pendentes-execucao.resolver';
 import {PercentualDinamicoComponent} from './percentuais-dinamicos/percentual-dinamico.component';
+import {CadastrarPercentualEstaticoComponent} from './percentuais-estaticos/cadastrar-percentual-estatico/cadastrar-percentual-estatico.component';
 
 const routes: Routes = [
   {path: '', pathMatch: 'full', redirectTo: 'home'},
@@ -95,6 +96,7 @@ const routes: Routes = [
       {path: 'totalMensal/:id/:dataReferencia', component: RecalculoTotalMensalComponent, canActivate: [LoggedInGuard]},
       {path: 'saldoConta', component: InicioComponent, canActivate: [LoggedInGuard]},
       {path: 'percentEst', component: PercentuaisEstaticosComponent, canActivate: [LoggedInGuard, ProfileGuard]},
+      {path: 'percentEst/:id', component: CadastrarPercentualEstaticoComponent, canActivate: [LoggedInGuard, ProfileGuard]},
       {path: 'percentDin', component: PercentualDinamicoComponent, canActivate: [LoggedInGuard, ProfileGuard]},
       {path: 'ajustes-contratuais', component: AjusteContratoComponent, canActivate: [LoggedInGuard]},
       {

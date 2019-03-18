@@ -4,6 +4,7 @@ import {Http, Headers, RequestOptions} from '@angular/http';
 import {PercentualEstatico} from './percentual-estatico';
 import {CadastroPercentualEstatico} from './cadastrar-percentual-estatico/cadastro-percentual-estatico';
 import {Observable} from 'rxjs/Observable';
+import {Rubrica} from '../rubricas/rubrica';
 
 @Injectable()
 export class PercentualEstaticoService {
@@ -29,9 +30,26 @@ export class PercentualEstaticoService {
   setValdity(value: boolean) {
     this.validity = value;
   }
-  getPercentuaisEstaticos() {
-    const url = this.config.myApi + '/rubricas/getStaticPercent';
+  getAllPercentuaisEstaticos() {
+    const url = this.config.myApi + '/rubricas/getAllStaticPercent';
     return this.http.get(url).map(res => res.json());
+  }
+  buscarPercentualEstatico(codigo: number)/*: Observable<Rubrica>*/ {
+    const url = this.config.myApi + '/rubricas/getStaticPercent/' + codigo;
+    return this.http.get(url).map(res => res.json());
+  }
+  apagarPercentualEstatico(codigo: number) {
+    const url = this.config.myApi + '/rubricas/deleteStaticPercent/' + codigo;
+    return this.http.delete(url).map(res => res.json());
+  }
+  salvarAlteracao(percentualestatico: PercentualEstatico) {
+    const url = this.config.myApi + '/rubricas/alterarPercentualEstatico';
+    const cadastroPercentualEstatico = new CadastroPercentualEstatico();
+    cadastroPercentualEstatico.percentualEstatico = new PercentualEstatico();
+    cadastroPercentualEstatico.percentualEstatico = percentualestatico;
+    cadastroPercentualEstatico.currentUser = this.config.user.username;
+    const data = CadastroPercentualEstatico;
+    return this.http.put(url, data).map(res => res.json());
   }
   cadastrarPercentualEstatico() {
     const cadastroPercentualEstatico = new CadastroPercentualEstatico();

@@ -12,29 +12,53 @@ import {MaterializeAction} from 'angular2-materialize';
 })
 export class CadastrarPercentualEstaticoComponent implements OnInit {
   percentualEstaticoForm: FormGroup;
-  router: Router;
-  route: ActivatedRoute;
-  percentualEstatico: PercentualEstatico;
   percentualEstaticoService: PercentualEstaticoService;
-  ultimaData: String[] = [];
+  route: ActivatedRoute;
   id: number;
+  percentualEstatico: PercentualEstatico;
+  ultimaData: String[] = [];
   notValidEdit = true;
+  modalActions = new EventEmitter<string|MaterializeAction>();
+  router: Router;
   percentList: PercentualEstatico[] = [];
   @Input() percent: PercentualEstatico[];
   private codigoRubrica: any;
-  constructor(private fb: FormBuilder, percentualEstaticoService: PercentualEstaticoService, route: ActivatedRoute, router: Router) {
+
+  constructor(router: Router, private fb: FormBuilder, percentualEstaticoService: PercentualEstaticoService, route: ActivatedRoute, ) {
     this.router = router;
     this.route = route;
     this.percentualEstaticoService = percentualEstaticoService;
-  }
-  ngOnInit(): void {
-    let i = 0;
-    this.percent.forEach( (percentual) => {
-      if (percentual.dataFim === '-' || percentual.dataFim === null) {
-        this.ultimaData[percentual.codigo] = percentual.dataInicio;
-        this.percentList[i++] = percentual;
+    this.percentualEstaticoForm = fb.group({
+      codigo: new FormControl('', [Validators.required]),
+      nome: new FormControl('', [Validators.required]),
+      percentual: new FormControl('', [Validators.required]),
+      dataInicio: new FormControl('', [Validators.required]),
+      dataAditamento: new FormControl('', [Validators.required]),
+    });
+    this.route.params.subscribe(params => {
+      this.id = params['id'];
+      if (this.id) {
+        percentualEstaticoService.buscarPercentualEstatico(this.id).subscribe(res => {
+          this.percentualEstatico = res;
+          this.percentualEstaticoForm.controls.codigo.setValue(this.percentualEstatico.codigo);
+          this.percentualEstaticoForm.controls.percentual.setValue(this.percentualEstatico.percentual);
+          this.percentualEstaticoForm.controls.dataInicio.setValue(this.percentualEstatico.dataInicio);
+          this.percentualEstaticoForm.controls.dataAditamento.setValue(this.percentualEstatico.dataAditamento);
+        });
       }
     });
+  }
+
+  ngOnInit(): void {
+    let i = 0;
+    if (this.percent) {
+      this.percent.forEach((percentual) => {
+        if (percentual.dataFim === '-' || percentual.dataFim === null) {
+          this.ultimaData[percentual.codigo] = percentual.dataInicio;
+          this.percentList[i++] = percentual;
+        }
+      });
+    }
     this.percentualEstaticoForm = this.fb.group({
       codigo: new FormControl('', [Validators.required]),
       percentual: new FormControl('', [Validators.required]),
@@ -89,10 +113,11 @@ export class CadastrarPercentualEstaticoComponent implements OnInit {
       this.percentualEstaticoService.dataInicio = this.percentualEstaticoForm.controls.dataInicio.value;
       this.percentualEstaticoService.dataAditamento = this.percentualEstaticoForm.controls.dataAditamento.value;
       this.percentualEstaticoService.setValdity(false);
-    }else {
+    } else {
       this.percentualEstaticoService.setValdity(true);
     }
   }
+
   activateButton(): void {
     if (this.id) {
       if ((this.percentualEstaticoService.codigo !== this.percentualEstatico.codigo) ||
@@ -101,7 +126,7 @@ export class CadastrarPercentualEstaticoComponent implements OnInit {
         (this.percentualEstaticoService.dataAditamento !== this.percentualEstatico.dataAditamento)
       ) {
         this.notValidEdit = false;
-      }else if ((this.percentualEstaticoService.codigo === this.percentualEstatico.codigo) ||
+      } else if ((this.percentualEstaticoService.codigo === this.percentualEstatico.codigo) ||
         (this.percentualEstaticoService.percentual === this.percentualEstatico.percentual) ||
         (this.percentualEstaticoService.dataInicio === this.percentualEstatico.dataInicio) ||
         (this.percentualEstaticoService.dataAditamento === this.percentualEstatico.dataAditamento)) {
@@ -109,7 +134,38 @@ export class CadastrarPercentualEstaticoComponent implements OnInit {
       }
     }
   }
+
   disableButton() {
     this.notValidEdit = true;
+  }
+
+  salvarAlteracao() {
+    // this.percentualEstatico.codigo = this.id;
+    // this.percentualEstatico.nome = this.percentualEstaticoForm.controls.nome.value;
+    this.percentualEstatico.percentual = this.percentualEstaticoForm.controls.percentual.value;
+    this.percentualEstatico.dataInicio = this.percentualEstaticoForm.controls.dataInicio.value;
+    // this.percentualEstatico.dataFim = this.percentualEstaticoForm.controls.dataFim.value;
+    this.percentualEstatico.dataAditamento = this.percentualEstaticoForm.controls.dataAditamento.value;
+    this.percentualEstaticoService.salvarAlteracao(this.percentualEstatico).subscribe(res => {
+      if (res === 'Alteração feita com sucesso !') {
+        this.closeModal();
+        this.router.navigate(['/percentEst']);
+      }
+    });
+  }
+
+  deletarPercentualEstatico() {
+    this.percentualEstaticoService.apagarPercentualEstatico(this.id).subscribe(res => {
+      if (res === 'Rubrica Apagada Com sucesso !') {
+        this.closeModal();
+        this.router.navigate(['/percentEst']);
+      }
+    });
+  }
+  openModal() {
+    this.modalActions.emit({action: 'modal', params: ['open']});
+  }
+  closeModal() {
+    this.modalActions.emit({action: 'modal', params: ['close']});
   }
 }
