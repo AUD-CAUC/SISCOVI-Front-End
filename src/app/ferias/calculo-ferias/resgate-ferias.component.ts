@@ -105,7 +105,6 @@ export class ResgateFeriasComponent implements OnInit {
   }
 
   public parcelaValidator(control: AbstractControl): { [key: string]: any } {
-    console.log(control.parent);
     const mensagem = [];
     let error = false;
     const parcelaSelecionada: string = control.value;

@@ -28,7 +28,7 @@ export class FeriasComponent implements OnInit {
       this.ref.markForCheck();
       this.tabSelectionParams = ['select_tab', 'test3'];
       this.setPendentesActive();
-    }, error2 => {
+    }, () => {
       this.cp = this.route.snapshot.data.calculosPendentes;
       this.ref.markForCheck();
       this.tabSelectionParams = ['select_tab', 'test3'];
@@ -43,13 +43,13 @@ export class FeriasComponent implements OnInit {
       this.ref.markForCheck();
       this.tabSelectionParams = ['select_tab', 'test4'];
       this.setExecutadosActive();
-    }, error2 => {
+    }, () => {
       this.cpe = this.route.snapshot.data.calculosPendentesExecucao;
       this.ref.markForCheck();
       this.tabSelectionParams = ['select_tab', 'test4'];
       this.setExecutadosActive();
     });
-    window.scroll(0,0);
+    window.scroll(0, 0);
   }
 
   retencoes(codigoContrato: number) {

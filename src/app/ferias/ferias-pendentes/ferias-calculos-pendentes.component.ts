@@ -41,7 +41,6 @@ export class FeriasCalculosPendentesComponent implements OnInit {
     this.config = config;
 
     this.feriasService.getCalculosPendentes().subscribe(res => {
-      console.log(res);
       this.calculosPendentes = res;
 
       if (this.calculosPendentes.length === 0) {
@@ -52,11 +51,10 @@ export class FeriasCalculosPendentesComponent implements OnInit {
     });
 
     this.feriasService.getCalculosPendentesNegados().subscribe(res3 => {
-      const historico: ListaCalculosPendentes[] = res3;
-      this.calculosNegados = historico;
+      this.calculosNegados = res3;
       this.notifications = this.calculosNegados.length;
       this.ref.markForCheck();
-    }, error2 => {
+    }, () => {
       this.calculosNegados = null;
     });
   }
@@ -240,11 +238,11 @@ export class FeriasCalculosPendentesComponent implements OnInit {
           .get('observacoes').value;
       }
     }
-    this.feriasService.salvarFeriasAvaliadasLista(this.calculosAvaliados).subscribe(res => {
+    this.feriasService.salvarFeriasAvaliadasLista(this.calculosAvaliados).subscribe(() => {
       this.closeModal2();
       this.openModal3();
     },
-      error1 => {
+      () => {
         this.closeModal2();
         this.openModal5();
       });

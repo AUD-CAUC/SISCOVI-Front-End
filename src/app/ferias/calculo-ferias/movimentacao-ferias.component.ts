@@ -262,7 +262,6 @@ export class MovimentacaoFeriasComponent implements OnInit {
   }
 
   public operacaoValidator(control: AbstractControl): { [key: string]: any } | null {
-    console.log(control.parent.value);
     const mensagem = [];
     let saldo: number;
     let diasDeFerias: number;
