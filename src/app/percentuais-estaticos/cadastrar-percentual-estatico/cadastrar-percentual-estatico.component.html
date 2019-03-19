@@ -49,6 +49,18 @@
             <input id="dataInicio" placeholder="Ex: 01/01/2000" appMaskDate type="text"
                    (keyup)="validateForm(); activateButton();" formControlName="dataInicio" class="validate"
                    maxlength="10" required>
+            <div
+              *ngIf="percentualEstaticoForm.get('dataInicio').invalid && (percentualEstaticoForm.get('dataInicio').dirty || percentualEstaticoForm.get('dataInicio').touched)">
+              <div *ngIf="percentualEstaticoForm.get('dataInicio').getError('mensagem')">
+                <div *ngFor="let msg of percentualEstaticoForm.get('dataInicio').getError('mensagem')[0]">
+                  <span class="mensagem-erro">{{msg}}</span>
+                </div>
+              </div>
+              <div
+                *ngIf="percentualEstaticoForm.get('dataInicio').getError('required')">
+                <span class="mensagem-erro">Você deve digitar uma data !</span>
+              </div>
+            </div>
           </div>
         </div>
         <div class="row">
