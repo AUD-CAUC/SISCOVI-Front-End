@@ -21,7 +21,7 @@ export class CadastrarConvencaoComponent {
   convencao: Convencao;
   notValidEdit = true;
   modalActions = new EventEmitter<string|MaterializeAction>();
-  
+
   constructor(fb: FormBuilder, convencaoService: ConvencaoService, route: ActivatedRoute, router: Router) {
     this.router = router;
     this.route = route;
@@ -137,6 +137,16 @@ export class CadastrarConvencaoComponent {
   }
 
   salvarAlteracao() {
-
+    this.convencao.codigo = this.id;
+    this.convencao.nome = this.convencaoForm.controls.nome.value;
+    this.convencao.sigla = this.convencaoForm.controls.sigla.value;
+    this.convencao.dataBase = this.convencaoForm.controls.dataBase.value;
+    this.convencao.descricao = this.convencaoForm.controls.descricao.value;
+    this.convencaoService.salvarAlteracao(this.convencao).subscribe(res => {
+      if (res === 'Alteração feita com sucesso !') {
+        this.closeModal();
+        this.router.navigate(['/rubricas']);
+      }
+    });
   }
 }

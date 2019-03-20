@@ -64,4 +64,13 @@ export class ConvencaoService {
     const ano = Number(a[2]);
     return new Date(ano, mes, dia);
   }
+
+  salvarAlteracao(convencao: Convencao) {
+    const url = this.config.myApi + '/convencao/alterarConvencao';
+    const cadastroConvencao = new CadastroConvencao();
+    cadastroConvencao.convencao = new Convencao();
+    cadastroConvencao.convencao = convencao;
+    cadastroConvencao.currentUser = this.config.user.username;
+    return this.http.put(url, cadastroConvencao).map(res => res.json());
+  }
 }

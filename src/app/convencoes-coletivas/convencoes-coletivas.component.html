@@ -47,7 +47,7 @@
           <td>{{convencao.nome}}</td>
           <td>{{convencao.sigla}}</td>
           <td>{{convencao.dataBase | date: 'shortDate'}}</td>
-          <td>{{(convencao.descricao !== null) ? (convencao.descricao | afirimativePipe) : "-"}}</td>
+          <td>{{convencao.descricao}}</td>
           <td>{{convencao.loginAtualizacao | uppercase}}</td>
           <td>{{convencao.dataAtualizacao | date: 'shortDate'}}</td>
         </tr>

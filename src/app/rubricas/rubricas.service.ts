@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { ConfigService } from '../_shared/config.service';
-import {Http, Headers, RequestOptions} from '@angular/http';
+import {Injectable} from '@angular/core';
+import {ConfigService} from '../_shared/config.service';
+import {Headers, Http, RequestOptions} from '@angular/http';
 import {Rubrica} from './rubrica';
 import {CadastroRubrica} from './cadastrar-rubrica/cadastro-rubrica';
 import {Observable} from 'rxjs/Observable';
@@ -58,7 +58,6 @@ export class RubricasService {
       cadastroRubrica.rubrica = new Rubrica();
       cadastroRubrica.rubrica = rubrica;
       cadastroRubrica.currentUser = this.config.user.username;
-      const data = cadastroRubrica;
-      return this.http.put(url, data).map(res => res.json());
+    return this.http.put(url, cadastroRubrica).map(res => res.json());
   }
 }
