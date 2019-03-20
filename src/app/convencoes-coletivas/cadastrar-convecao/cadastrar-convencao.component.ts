@@ -106,15 +106,20 @@ export class CadastrarConvencaoComponent {
   }
 
   openModal() {
-
-  }
-
-  deletarConvencao() {
-
+    this.modalActions.emit({action: 'modal', params: ['open']});
   }
 
   closeModal() {
+    this.modalActions.emit({action: 'modal', params: ['close']});
+  }
 
+  deletarConvencao() {
+    this.convencaoService.apagarConvencao(this.id).subscribe(res => {
+      if (res === 'Convencao Apagada Com sucesso !') {
+        this.closeModal();
+        this.router.navigate(['/convencoes']);
+      }
+    });
   }
 
   ajusteData(data: String) {
@@ -145,7 +150,7 @@ export class CadastrarConvencaoComponent {
     this.convencaoService.salvarAlteracao(this.convencao).subscribe(res => {
       if (res === 'Alteração feita com sucesso !') {
         this.closeModal();
-        this.router.navigate(['/rubricas']);
+        this.router.navigate(['/convencoes']);
       }
     });
   }

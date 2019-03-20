@@ -73,4 +73,9 @@ export class ConvencaoService {
     cadastroConvencao.currentUser = this.config.user.username;
     return this.http.put(url, cadastroConvencao).map(res => res.json());
   }
+
+  apagarConvencao(codigo: number) {
+    const url = this.config.myApi + '/convencao/deleteConvencao/' + codigo;
+    return this.http.delete(url).map(res => res.json());
+  }
 }
