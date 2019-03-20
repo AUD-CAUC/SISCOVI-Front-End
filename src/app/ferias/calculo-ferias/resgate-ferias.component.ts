@@ -5,7 +5,6 @@ import {Contrato} from '../../contratos/contrato';
 import {TerceirizadoFeriasMovimentacao} from '../terceirizado-ferias-movimentacao';
 import {FeriasCalcular} from '../ferias-calcular';
 import {MaterializeAction} from 'angular2-materialize';
-import {SaldoFuncao} from '../../saldo/funcao/saldo-funcao';
 
 @Component({
   selector: 'app-resgate-ferias-component',
@@ -226,9 +225,9 @@ export class ResgateFeriasComponent implements OnInit {
     }
     if (control.parent) {
       const somaDiasVendidos = control.parent.get('somaDiasVendidos').value;
-      let dia = 0;
-      let mes = 0;
-      let ano = 0;
+      let dia: number;
+      let mes: number;
+      let ano: number;
       dia = Number(control.parent.get('fimFerias').value.split('/')[0]);
       mes = Number(control.parent.get('fimFerias').value.split('/')[1]) - 1;
       ano = Number(control.parent.get('fimFerias').value.split('/')[2]);
@@ -275,19 +274,10 @@ export class ResgateFeriasComponent implements OnInit {
         mes = Number(control.parent.get('inicioFerias').value.split('/')[1]) - 1;
         ano = Number(control.parent.get('inicioFerias').value.split('/')[2]);
         const inicioUsufruto: Date = new Date(ano, mes, dia);
-        let diff = fimUsufruto.getTime() - inicioUsufruto.getTime();
+        const diff = fimUsufruto.getTime() - inicioUsufruto.getTime();
         diasDeFerias = Math.round(diff / (1000 * 3600 * 24)) + 1;
 
-        ano = Number(control.parent.get('fimPeriodoAquisitivo').value.split('-')[0]);
-        mes = Number(control.parent.get('fimPeriodoAquisitivo').value.split('-')[1]) - 1;
-        dia = Number(control.parent.get('fimPeriodoAquisitivo').value.split('-')[2]);
-        const fimPeriodoAquisitivo: Date = new Date(ano, mes, dia);
-        ano = Number(control.parent.get('inicioPeriodoAquisitivo').value.split('-')[0]);
-        mes = Number(control.parent.get('inicioPeriodoAquisitivo').value.split('-')[1]) - 1;
-        dia = Number(control.parent.get('inicioPeriodoAquisitivo').value.split('-')[2]);
-        const inicioPeriodoAquisitivo: Date = new Date(ano, mes, dia);
-        diff = Math.abs(fimPeriodoAquisitivo.getTime() - inicioPeriodoAquisitivo.getTime());
-        saldo = (Math.round(((diff / (1000 * 3600 * 24)) + 1) / 12)) - control.parent.get('diasUsufruidos').value;
+        saldo = 30 - control.parent.get('diasUsufruidos').value;
 
         if (diasDeFerias + diasVendidos > saldo) {
           mensagem.push('A quantidade de dias de férias mais os dias vendido não pode ser superior ao saldo total.' + '\n' + 'Saldo: ' + saldo + ' dias');
@@ -304,24 +294,20 @@ export class ResgateFeriasComponent implements OnInit {
         if (parcelaSelecionada === '0' && !error) {
           if (saldo !== (diasDeFerias + diasVendidos)) {
             mensagem.push('Em parcelas únicas deve utilizar todo o saldo' + '\n' + 'Saldo: ' + saldo + ' dias');
-            error = true;
           }
         } else if (parcelaSelecionada === '1' && !error) {
           if (saldo < 19) { // Deve ter mais de 19 dias de saldo para poder parcelar.
             mensagem.push('Saldo total insuficiente para o parcelamento' + '\n' + 'Saldo: ' + saldo + ' dias');
-            error = true;
           } else { // Caso tenha saldo.
             if (diasDeFerias < 14) { // Caso for tirar menos de 14 dias
               if (saldo - (diasDeFerias + diasVendidos) < 14) {
                 // Deve ter mais de 14 dias para tirar na próxima parcela.
                 mensagem.push('Só é possível tirar no mínimo 5 dias e no máximo ' + (saldo - diasVendidos - 14) + ' dias de férias vendendo ' + diasVendidos + ' dias');
-                error = true;
               }
             } else { // Caso for tirar mais de 14 dias.
               if (saldo - (diasDeFerias + diasVendidos) < 5) {
                 // Deve ter pelo menos 5 dias para tirar na próxima parcela.
                 mensagem.push('Só é possível tirar no máximo ' + (saldo - diasVendidos - 5) + ' dias de férias vendendo ' + diasVendidos + ' dias');
-                error = true;
               }
             }
           }
@@ -329,30 +315,25 @@ export class ResgateFeriasComponent implements OnInit {
           if ((jaTirou14Dias === false) && (diasDeFerias < 14) && (saldo - (diasDeFerias + diasVendidos) < 14)) {
             if ((saldo - diasVendidos - 14) < 5) {
               mensagem.push('Deve tirar no mínimo 14 dias');
-              error = true;
             } else {
               // Caso não tenha tirado os 14 dias.
               // E não for tirar nesta parcela.
               // DEVE ter saldo maior que 14 para tirar na próxima.
               mensagem.push('Para período menor que 14 dias: máximo de ' + (saldo - diasVendidos - 14) + ' dias de férias');
-              error = true;
             }
           } else if (saldo - (diasDeFerias + diasVendidos) < 5 && saldo - (diasDeFerias + diasVendidos) > 0) {
             // caso for tirar mais do que 14 dias
             // deve ter saldo para a próxima parcela se não for tirar tudo
             mensagem.push('Para período maior que 14 dias: máximo de ' + (saldo - diasVendidos - 5) + ' dias de férias');
-            error = true;
           }
         } else if (parcelaSelecionada === '3' && !error) {
           if (saldo < 5) {
             // Deve ter mais de 5 dias de saldo disponível.
             mensagem.push('Para realizar esta parcela é preciso ter um saldo de no mínimo 5 dias');
-            error = true;
           } else {
             if (jaTirou14Dias === false && diasDeFerias < 14) { // Caso não tenha tirado os 14 dias
               // Deve tirar os 14 dias nesta parcela.
               mensagem.push('Só é possível tirar no mínimo 14 dias de férias');
-              error = true;
             }
           }
         }
@@ -365,9 +346,9 @@ export class ResgateFeriasComponent implements OnInit {
     const mensagem = [];
     if (control.parent) {
       if ((control.value.length === 10)) {
-        let dia = 0;
-        let mes = 0;
-        let ano = 0;
+        let dia: number;
+        let mes: number;
+        let ano: number;
         dia = Number(control.value.split('/')[0]);
         mes = Number(control.value.split('/')[1]) - 1;
         ano = Number(control.value.split('/')[2]);
