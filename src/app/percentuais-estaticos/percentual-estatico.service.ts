@@ -1,10 +1,8 @@
-import { Injectable } from '@angular/core';
-import { ConfigService } from '../_shared/config.service';
-import {Http, Headers, RequestOptions} from '@angular/http';
+import {Injectable} from '@angular/core';
+import {ConfigService} from '../_shared/config.service';
+import {Headers, Http, RequestOptions} from '@angular/http';
 import {PercentualEstatico} from './percentual-estatico';
 import {CadastroPercentualEstatico} from './cadastrar-percentual-estatico/cadastro-percentual-estatico';
-import {Observable} from 'rxjs/Observable';
-import {Rubrica} from '../rubricas/rubrica';
 
 @Injectable()
 export class PercentualEstaticoService {
@@ -14,8 +12,8 @@ export class PercentualEstaticoService {
   nome: string;
   codigo: number;
   percentual: number;
-  dataInicio: String;
-  dataAditamento: String;
+  dataInicio: any;
+  dataAditamento: any;
   constructor(private config: ConfigService, private http: Http) {
     this.headers = new Headers(
       {
@@ -47,15 +45,16 @@ export class PercentualEstaticoService {
     const cadastroPercentualEstatico = new CadastroPercentualEstatico();
     cadastroPercentualEstatico.percentualEstatico = new PercentualEstatico();
     cadastroPercentualEstatico.percentualEstatico = percentualestatico;
+    cadastroPercentualEstatico.percentualEstatico.dataInicio = this.encapsulaDatas(this.dataInicio).toISOString().split('T')[0];
+    cadastroPercentualEstatico.percentualEstatico.dataAditamento = this.encapsulaDatas(this.dataAditamento).toISOString().split('T')[0];
     cadastroPercentualEstatico.currentUser = this.config.user.username;
-    const data = CadastroPercentualEstatico;
-    return this.http.put(url, data).map(res => res.json());
+    return this.http.put(url, cadastroPercentualEstatico).map(res => res.json());
   }
   cadastrarPercentualEstatico() {
     const cadastroPercentualEstatico = new CadastroPercentualEstatico();
     cadastroPercentualEstatico.percentualEstatico = new PercentualEstatico();
     cadastroPercentualEstatico.percentualEstatico.nome = this.nome;
-    cadastroPercentualEstatico.percentualEstatico.codigo = this.codigo;
+    cadastroPercentualEstatico.percentualEstatico.codigoRubrica = this.codigo;
     cadastroPercentualEstatico.percentualEstatico.percentual = this.percentual;
     cadastroPercentualEstatico.percentualEstatico.dataInicio = this.encapsulaDatas(this.dataInicio).toISOString().split('T')[0];
     cadastroPercentualEstatico.percentualEstatico.dataFim = null;
