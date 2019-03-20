@@ -40,7 +40,7 @@ export class CadastrarPercentualEstaticoComponent implements OnInit {
       if (this.id) {
         percentualEstaticoService.buscarPercentualEstatico(this.id).subscribe(res => {
           this.percentualEstatico = res;
-          this.percentualEstaticoForm.controls.codigo.setValue(this.percentualEstatico.codigo);
+          this.percentualEstaticoForm.controls.codigo.setValue(this.percentualEstatico.codigoRubrica);
           this.percentualEstaticoForm.controls.percentual.setValue(this.percentualEstatico.percentual);
           this.percentualEstaticoForm.controls.dataInicio.setValue(this.percentualEstatico.dataInicio);
           this.percentualEstaticoForm.controls.dataAditamento.setValue(this.percentualEstatico.dataAditamento);
@@ -54,7 +54,7 @@ export class CadastrarPercentualEstaticoComponent implements OnInit {
     if (this.percent) {
       this.percent.forEach((percentual) => {
         if (percentual.dataFim === '-' || percentual.dataFim === null) {
-          this.ultimaData[percentual.codigo] = percentual.dataInicio;
+          this.ultimaData[percentual.codigoRubrica] = percentual.dataInicio;
           this.percentList[i++] = percentual;
         }
       });
@@ -120,13 +120,13 @@ export class CadastrarPercentualEstaticoComponent implements OnInit {
 
   activateButton(): void {
     if (this.id) {
-      if ((this.percentualEstaticoService.codigo !== this.percentualEstatico.codigo) ||
+      if ((this.percentualEstaticoService.codigo !== this.percentualEstatico.codigoRubrica) ||
         (this.percentualEstaticoService.percentual !== this.percentualEstatico.percentual) ||
         (this.percentualEstaticoService.dataInicio !== this.percentualEstatico.dataInicio) ||
         (this.percentualEstaticoService.dataAditamento !== this.percentualEstatico.dataAditamento)
       ) {
         this.notValidEdit = false;
-      } else if ((this.percentualEstaticoService.codigo === this.percentualEstatico.codigo) ||
+      } else if ((this.percentualEstaticoService.codigo === this.percentualEstatico.codigoRubrica) ||
         (this.percentualEstaticoService.percentual === this.percentualEstatico.percentual) ||
         (this.percentualEstaticoService.dataInicio === this.percentualEstatico.dataInicio) ||
         (this.percentualEstaticoService.dataAditamento === this.percentualEstatico.dataAditamento)) {
