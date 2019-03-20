@@ -29,12 +29,12 @@
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let percentual of staticPercent">
+    <tr *ngFor="let percentual of staticPercent"(dblclick)="editarPercentualEstatico(percentual.cod)">
       <td>{{percentual.nome}}</td>
       <td>{{percentual.percentual}}%</td>
-      <td>{{percentual.dataInicio}}</td>
+      <td>{{percentual.dataInicio | datePipe}}</td>
       <td>{{percentual.dataFim | datePipe}}</td>
-      <td>{{percentual.dataAditamento}}</td>
+      <td>{{percentual.dataAditamento | datePipe}}</td>
     </tr>
     </tbody>
   </table>
