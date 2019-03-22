@@ -181,7 +181,7 @@
         </div>
     </form>
     <button class="btn left" (click)="voltar()">Voltar</button>
-    <button class="btn right" [disabled]="salvarButtonDisabled" (click)="salvarAlteracoes()">Salvar</button>
+    <button class="btn right" [disabled]="(!salvarButtonDisabled && funcServ.getValidity()) || (salvarButtonDisabled)" (click)="salvarAlteracoes()">Salvar</button>
 </div>
 <div id="modal3" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions3">
     <div class="modal-content">
