@@ -28,6 +28,7 @@ export class CadastrarTerceirizadoComponent implements OnInit {
     cpf: string;
     salvarButtonDisabled = true;
     terceirizadosPlanilhaForm: FormGroup;
+    funcServ: FuncionariosService;
     constructor(private fb: FormBuilder, private  terceirizadoService: FuncionariosService, private  route: ActivatedRoute, private router: Router, private ref: ChangeDetectorRef) {
         this.route.params.subscribe(params => {
           if (!isNaN(params['id'])) {
