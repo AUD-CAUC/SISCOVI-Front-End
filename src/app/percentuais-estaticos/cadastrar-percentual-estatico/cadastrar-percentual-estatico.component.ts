@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {PercentualEstaticoService} from '../percentual-estatico.service';
 import {ActivatedRoute, Router} from '@angular/router';
+import {PercentualEstaticoService} from '../percentual-estatico.service';
 import {PercentualEstatico} from '../percentual-estatico';
 import {MaterializeAction} from 'angular2-materialize';
 
