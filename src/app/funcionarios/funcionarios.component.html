@@ -72,11 +72,12 @@
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let funcionario of pagedItems; let i=index" (dblclick)="editarTerceirizado(funcionario.codigo)">
+        <tr *ngFor="let funcionario of pagedItems; let i=index">
             <td>{{(i + 1) + ((pager.currentPage - 1) * 50)}}</td>
             <td>{{funcionario.nome}}</td>
             <td>{{funcionario.cpf | cpfPipe}}</td>
             <td>{{funcionario.ativo | afirimativePipe}}</td>
+          <td class="foo"><i class="material-icons" (click)="editarTerceirizado(funcionario.codigo)" title="Editar Rubrica">edit</i></td>
             <td class="foo"><i class="material-icons" (click)="openModal2(funcionario.codigo)" title="Apagar Terceirizado">delete</i></td>
         </tr>
         </tbody>
