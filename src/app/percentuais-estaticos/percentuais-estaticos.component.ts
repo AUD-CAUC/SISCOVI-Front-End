@@ -69,7 +69,7 @@ export class PercentuaisEstaticosComponent {
   }
   deletarPercentualEstatico() {
     this.percentualEstaticoService.apagarPercentualEstatico(this.id).subscribe(res => {
-      if (res === 'Rubrica Apagada Com sucesso !') {
+      if (res === ' Percentual Estatico Apagado Com sucesso !') {
         this.closeModal();
         this.router.navigate(['/percentEst']);
       }
