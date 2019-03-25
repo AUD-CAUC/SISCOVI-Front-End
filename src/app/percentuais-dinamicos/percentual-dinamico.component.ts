@@ -36,7 +36,7 @@ export class PercentualDinamicoComponent {
   cadastraDinamicoEstatico() {
     this.percentualDinamicoService.cadastrarPercentualDinamico().subscribe(res => {
       if (res === 'Percentual Dinâmico cadastrado com sucesso!') {
-        this.percentualDinamicoService.getPercentuaisDinamicos().subscribe(res2 => {
+        this.percentualDinamicoService.getAllPercentuaisDinamicos().subscribe(res2 => {
           this.dinamicPercent.slice();
           this.dinamicPercent = res2;
           this.closeModal();

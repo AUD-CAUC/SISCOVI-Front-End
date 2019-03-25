@@ -27,7 +27,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let percentual of dinamicPercent"(dblclick)="editarPercentualDinamico()" )>
+    <tr *ngFor="let percentual of dinamicPercent"(dblclick)="editarPercentualDinamico()">
       <td>{{percentual.percentual}}%</td>
       <td>{{percentual.dataAlteracao | datePipe}}</td>
       <td>{{percentual.currentUser}}</td>

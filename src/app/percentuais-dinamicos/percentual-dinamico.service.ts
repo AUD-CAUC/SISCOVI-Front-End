@@ -26,8 +26,8 @@ export class PercentualDinamicoService {
     this.validity = value;
   }
   /*Funcao que traz TODOS os percentuais dinamicos do backend*/
-  getPercentuaisDinamicos() {
-    const url = this.config.myApi + '/rubricas/getDinamicPercent';
+  getAllPercentuaisDinamicos() {
+    const url = this.config.myApi + '/rubricas/getAllDinamicPercent';
     return this.http.get(url).map(res => res.json());
   }
   buscarPercentuaisDinamicos(codigo: number) {
