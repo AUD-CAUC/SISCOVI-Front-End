@@ -14,9 +14,11 @@ export class PercentuaisEstaticosComponent {
   render = false;
   percentualEstaticoService: PercentualEstaticoService;
   modalActions = new EventEmitter<string|MaterializeAction>();
-  constructor(percentualEstaticoService: PercentualEstaticoService) {
+  router: Router;
+  constructor(percentualEstaticoService: PercentualEstaticoService, router: Router) {
+    this.router = router;
     this.percentualEstaticoService = percentualEstaticoService;
-    percentualEstaticoService.getPercentuaisEstaticos().subscribe(res => {
+    percentualEstaticoService.getAllPercentuaisEstaticos().subscribe(res => {
       this.staticPercent = res;
       this.staticPercent.forEach( (percentual) => {
         if (percentual.dataFim === null) {
@@ -45,12 +47,15 @@ export class PercentuaisEstaticosComponent {
   cadastraPercentualEstatico() {
     this.percentualEstaticoService.cadastrarPercentualEstatico().subscribe(res => {
       if (res === 'Percentual Estático cadastrado com sucesso!') {
-        this.percentualEstaticoService.getPercentuaisEstaticos().subscribe(res2 => {
+        this.percentualEstaticoService.getAllPercentuaisEstaticos().subscribe(res2 => {
           this.staticPercent.slice();
           this.staticPercent = res2;
           this.closeModal();
         });
       }
     });
+  }
+  editarPercentualEstatico(id: number) {
+    this.router.navigate(['/percentEst', id]);
   }
 }

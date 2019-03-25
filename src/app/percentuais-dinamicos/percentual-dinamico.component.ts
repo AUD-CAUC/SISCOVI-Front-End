@@ -2,6 +2,7 @@ import {Component, EventEmitter} from '@angular/core';
 import {MaterializeAction} from 'angular2-materialize';
 import {PercentualDinamicoService} from './percentual-dinamico.service';
 import {PercentualDinamico} from './percentual-dinamico';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-percentual-dinamico',
@@ -13,6 +14,7 @@ export class PercentualDinamicoComponent {
   render = false;
   dinamicPercent: PercentualDinamico[] = [];
   percentualDinamicoService: PercentualDinamicoService;
+  router: Router;
   constructor(percentualDinamicoService: PercentualDinamicoService) {
     this.percentualDinamicoService = percentualDinamicoService;
     this.percentualDinamicoService.getPercentuaisDinamicos().subscribe( res => {
@@ -32,7 +34,7 @@ export class PercentualDinamicoComponent {
   }
 
   cadastraDinamicoEstatico() {
-    this.percentualDinamicoService.cadastrarPercentualEstatico().subscribe(res => {
+    this.percentualDinamicoService.cadastrarPercentualDinamico().subscribe(res => {
       if (res === 'Percentual Dinâmico cadastrado com sucesso!') {
         this.percentualDinamicoService.getPercentuaisDinamicos().subscribe(res2 => {
           this.dinamicPercent.slice();
@@ -41,5 +43,8 @@ export class PercentualDinamicoComponent {
         });
       }
     });
+  }
+  editarPercentualDinamico(id: number): void {
+    this.router.navigate(['/PercentDin', id]);
   }
 }
