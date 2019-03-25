@@ -61,6 +61,7 @@
     </div>
 </div> -->
 <div class="container" *ngIf="funcionarios">
+    <!--Clique duplo para editar um funcionário/ cada linha contendo um funcionário dispõe de um botão para apagar o mesmo-->
     <table class="centered responsive-table z-depth-1 hoverable highlight bordered" *ngIf="funcionarios.length > 0">
         <thead>
         <tr>
@@ -76,6 +77,7 @@
             <td>{{funcionario.nome}}</td>
             <td>{{funcionario.cpf | cpfPipe}}</td>
             <td>{{funcionario.ativo | afirimativePipe}}</td>
+            <td class="foo"><i class="material-icons" (click)="openModal2(funcionario.codigo)" title="Apagar Terceirizado">delete</i></td>
         </tr>
         </tbody>
     </table>
@@ -98,4 +100,21 @@
             </li>
         </ul>
     </div>
+</div>
+  <div id="modal2" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions2">
+    <div class="modal-content">
+      <div class="container">
+        <div class="row">
+          <h1 class="center">Alerta</h1>
+        </div>
+        <div class="row">
+          <h5 class="center">Tem certeza que deseja APAGAR este Terceirizado ?</h5>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn waves-effect right" (click)="deletarTerceirizado()">Sim</button>
+      <button class="btn waves-effect left" (click)="closeModal2()">Não</button>
+    </div>
+  </div>
 </div>
