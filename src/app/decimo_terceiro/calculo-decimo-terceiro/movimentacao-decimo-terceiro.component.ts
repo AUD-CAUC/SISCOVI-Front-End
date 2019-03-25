@@ -123,6 +123,7 @@ export class MovimentacaoDecimoTerceiroComponent implements OnInit {
   }
 
   verificaDadosFormulario() {
+    this.calculosDecimoTerceiro = [];
     let aux = 0;
     this.primeiroItemErrado = null;
     for (let i = 0; i < this.terceirizados.length; i++) {
@@ -171,6 +172,7 @@ export class MovimentacaoDecimoTerceiroComponent implements OnInit {
     }
     if ((this.calculosDecimoTerceiro.length > 0) && aux) {
       this.diasConcedidos = [];
+      this.somaDecimo = 0;
       this.decimoTerceiroService.calculaDecimoTerceiroTerceirizados(this.calculosDecimoTerceiro).subscribe(res => {
         if (!res.error) {
           this.calculosDecimoTerceiro = res;

@@ -4,7 +4,7 @@ import {FeriasService} from '../ferias.service';
 import {ContratosService} from '../../contratos/contratos.service';
 import {FeriasCalculosPendentes} from './ferias-calculos-pendentes';
 import {ConfigService} from '../../_shared/config.service';
-import {FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MaterializeAction} from 'angular2-materialize';
 import {ListaCalculosPendentes} from './lista-calculos-pendentes';
 
@@ -41,7 +41,6 @@ export class FeriasCalculosPendentesComponent implements OnInit {
     this.config = config;
 
     this.feriasService.getCalculosPendentes().subscribe(res => {
-      console.log(res);
       this.calculosPendentes = res;
 
       if (this.calculosPendentes.length === 0) {
@@ -52,11 +51,10 @@ export class FeriasCalculosPendentesComponent implements OnInit {
     });
 
     this.feriasService.getCalculosPendentesNegados().subscribe(res3 => {
-      const historico: ListaCalculosPendentes[] = res3;
-      this.calculosNegados = historico;
+      this.calculosNegados = res3;
       this.notifications = this.calculosNegados.length;
       this.ref.markForCheck();
-    }, error2 => {
+    }, () => {
       this.calculosNegados = null;
     });
   }
@@ -214,11 +212,14 @@ export class FeriasCalculosPendentesComponent implements OnInit {
         const newControl = this.fb.group({
           calculos: this.fb.array([])
         });
-        item.calculos.forEach(() => {
+        item.calculos.forEach((calc) => {
           const newControl2 = <FormArray>newControl.controls.calculos;
-          const addControl = this.fb.group({
-            observacoes: new FormControl(),
-          });
+          const addControl = this.fb.group((calc.status === 'N') ? {
+              observacoes: new FormControl('', [Validators.required])
+            } : {
+              observacoes: new FormControl('')
+            }
+          );
           newControl2.push(addControl);
         });
         control.push(newControl);
@@ -237,11 +238,11 @@ export class FeriasCalculosPendentesComponent implements OnInit {
           .get('observacoes').value;
       }
     }
-    this.feriasService.salvarFeriasAvaliadasLista(this.calculosAvaliados).subscribe(res => {
+    this.feriasService.salvarFeriasAvaliadasLista(this.calculosAvaliados).subscribe(() => {
       this.closeModal2();
       this.openModal3();
     },
-      error1 => {
+      () => {
         this.closeModal2();
         this.openModal5();
       });

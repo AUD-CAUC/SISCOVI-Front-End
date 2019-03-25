@@ -2,9 +2,6 @@ import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
 import {ConfigService} from '../_shared/config.service';
 import {FeriasCalcular} from './ferias-calcular';
-import {Observable} from 'rxjs/Observable';
-import {FeriasCalculosPendentes} from './ferias-pendentes/ferias-calculos-pendentes';
-import {User} from '../users/user';
 import {ListaCalculosPendentes} from './ferias-pendentes/lista-calculos-pendentes';
 
 
@@ -76,15 +73,16 @@ export class FeriasService {
     return this.http.get(url).map(res => res.json());
   }
 
-  salvarFeriasAvaliadas(codigoContrato: number, lista: FeriasCalculosPendentes[]) {
-    const url = this.config.myApi + '/ferias/salvarFeriasAvaliadas';
-    const object = {
-      codContrato: codigoContrato,
-      user: this.config.user,
-      calculosAvaliados: lista
-    };
-    return this.http.put(url, object).map(res => res.json());
-  }
+  // salvarFeriasAvaliadas(codigoContrato: number, lista: FeriasCalculosPendentes[]) {
+  //   const url = this.config.myApi + '/ferias/salvarFeriasAvaliadas';
+  //   const object = {
+  //     codContrato: codigoContrato,
+  //     user: this.config.user,
+  //     calculosAvaliados: lista
+  //   };
+  //   return this.http.put(url, object).map(res => res.json());
+  // }
+
   salvarFeriasAvaliadasLista(lista: ListaCalculosPendentes[]) {
     const url = this.config.myApi + '/ferias/salvarFeriasAvaliadas';
     const data = [];
@@ -96,7 +94,6 @@ export class FeriasService {
       };
       data.push(object);
     });
-    console.log(data);
     return this.http.put(url, data).map(res => res.json());
   }
   getCalculosPendentesNegados() {
@@ -139,11 +136,5 @@ export class FeriasService {
     const mes = Number(a[1]) - 1;
     const ano = Number(a[2]);
     return new Date(ano, mes, dia);
-  }
-
-  private handleError(error: any) {
-    let errMsg: string;
-    errMsg = error.message ? error.message : error.toString();
-    return Observable.throw(error);
   }
 }
