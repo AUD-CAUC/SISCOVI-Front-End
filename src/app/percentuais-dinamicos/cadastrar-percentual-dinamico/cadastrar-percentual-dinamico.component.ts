@@ -12,10 +12,10 @@ import {MaterializeAction} from 'angular2-materialize';
 })
 export class CadastrarPercentualDinamicoComponent {
   percentualDinamicoForm: FormGroup;
-  percentualDinamicoService = PercentualDinamicoService;
+  percentualDinamicoService: PercentualDinamicoService;
   route: ActivatedRoute;
   id: number;
-  percentualDinamico = PercentualDinamico;
+  percentualDinamico: PercentualDinamico;
   notValidEdit = true;
   modalActions = new EventEmitter<string|MaterializeAction>();
   router: Router;

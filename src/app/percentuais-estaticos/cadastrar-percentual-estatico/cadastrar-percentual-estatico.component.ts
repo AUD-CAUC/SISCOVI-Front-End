@@ -154,14 +154,7 @@ export class CadastrarPercentualEstaticoComponent implements OnInit {
     });
   }
 
-  deletarPercentualEstatico() {
-    this.percentualEstaticoService.apagarPercentualEstatico(this.id).subscribe(res => {
-      if (res === 'Rubrica Apagada Com sucesso !') {
-        this.closeModal();
-        this.router.navigate(['/percentEst']);
-      }
-    });
-  }
+
   openModal() {
     this.modalActions.emit({action: 'modal', params: ['open']});
   }
