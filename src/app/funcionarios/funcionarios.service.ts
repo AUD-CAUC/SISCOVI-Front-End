@@ -8,9 +8,16 @@ import {Funcionario} from './funcionario';
 export class FuncionariosService {
     http: Http;
     config: ConfigService;
+    validity = true;
     constructor(http: Http, config: ConfigService) {
     this.http = http;
     this.config = config;
+    }
+    getValidity() {
+      return this.validity;
+    }
+    setValdity(value: boolean) {
+      this.validity = value;
     }
     getFuncionarios(contratos: Contrato[]) {
     const url = this.config.myApi + '/funcionarios/getFuncionariosContratos';
@@ -56,9 +63,12 @@ export class FuncionariosService {
         const url = this.config.myApi + '/funcionarios/getTerceirizadosNaoAlocados';
         return this.http.get(url).map(res => res.json());
     }
-
-  verificaTerceirizadoContrato(cpf: string, cod: number) {
-    const url = this.config.myApi + '/funcionarios/verificaExistenciaTerceirizado/' + cpf + '/' + cod;
-    return this.http.get(url).map(res => res.json());
-  }
+    apagarTerceirizado(codigo: number) {
+      const url = this.config.myApi + '/funcionarios/deleteTerceirizado/' + codigo;
+      return this.http.delete(url).map(res => res.json());
+    }
+    verificaTerceirizadoContrato(cpf: string, cod: number) {
+      const url = this.config.myApi + '/funcionarios/verificaExistenciaTerceirizado/' + cpf + '/' + cod;
+      return this.http.get(url).map(res => res.json());
+    }
 }

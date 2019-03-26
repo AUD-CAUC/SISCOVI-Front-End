@@ -104,6 +104,7 @@ export class ResgateDecimoTerceiroComponent implements OnInit {
   }
 
   verificaDadosFormulario() {
+    this.calculosDecimoTerceiro = [];
     let aux = 0;
     this.vmsm = false;
     for (let i = 0; i < this.terceirizados.length; i++) {
@@ -140,9 +141,16 @@ export class ResgateDecimoTerceiroComponent implements OnInit {
     }
     if ((this.calculosDecimoTerceiro.length > 0) && aux) {
       this.diasConcedidos = [];
+      console.log('antes req:');
+      console.log(this.calculosDecimoTerceiro);
       this.decimoTerceiroService.calculaDecimoTerceiroTerceirizados(this.calculosDecimoTerceiro).subscribe(res => {
         if (!res.error) {
           this.calculosDecimoTerceiro = res;
+          console.log('depois req:');
+          console.log(this.calculosDecimoTerceiro);
+          this.somaDecimo = 0;
+          this.somaIncidencia = 0;
+
           for (let i = 0; i < this.calculosDecimoTerceiro.length; i++) {
             this.somaDecimo = this.somaDecimo + this.calculosDecimoTerceiro[i].valoresDecimoTerceiro.valorDecimoTerceiro;
             this.somaIncidencia = this.somaIncidencia + this.calculosDecimoTerceiro[i].valoresDecimoTerceiro.valorIncidenciaDecimoTerceiro;

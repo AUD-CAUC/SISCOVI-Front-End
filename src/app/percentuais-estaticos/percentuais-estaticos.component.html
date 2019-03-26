@@ -1,41 +1,57 @@
 <div materialize class="container">
-  <h2 class="center">Percentuais Estáticos</h2>
-  <div class="row">
-    <div class="col left">
-      <button class="btn waves-effect" (click)="openModal()">Cadastrar Novo Percentual Estático</button>
+    <h2 class="center">Percentuais Estáticos</h2>
+    <div class="row">
+        <div class="col left">
+            <button class="btn waves-effect" (click)="openModal()">Cadastrar Novo Percentual Estático</button>
+        </div>
+        <div id="modal1" class="modal bottom-sheet" materialize="modal" [materializeParams]="[{dismissible: false}]"
+             [materializeActions]="modalActions">
+            <div class="modal-content">
+                <app-cadastrar-percentual-estatico *ngIf="render" [percent]="staticPercent"></app-cadastrar-percentual-estatico>
+            </div>
+            <div class="modal-footer">
+                <button class="btn waves-effect left" (click)="closeModal()">Cancelar</button>
+                <button class="btn waves-effect right" [disabled]="percentualEstaticoService.getValidity()"
+                        (click)="cadastraPercentualEstatico()">Cadastrar</button>
+            </div>
+        </div>
     </div>
-    <div id="modal1" class="modal bottom-sheet" materialize="modal" [materializeParams]="[{dismissible: false}]"
-         [materializeActions]="modalActions">
-      <div class="modal-content">
-        <app-cadastrar-percentual-estatico *ngIf="render" [percent]="staticPercent"></app-cadastrar-percentual-estatico>
+    <table class="bordered highlight centered z-depth-2 hoverable">
+        <thead>
+            <tr>
+                <th>Rubrica</th>
+                <th>Percentual</th>
+                <th>Data de Início</th>
+                <th>Data Fim</th>
+                <th> Data Aditamento</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let percentual of staticPercent">
+                <td>{{percentual.nome}}</td>
+                <td>{{percentual.percentual}}%</td>
+                <td>{{percentual.dataInicio | datePipe}}</td>
+                <td>{{percentual.dataFim | datePipe}}</td>
+                <td>{{percentual.dataAditamento | datePipe}}</td>
+              <td class="foo"><i class="material-icons" (click)="editarPercentualEstatico(percentual.cod)" title="Editar Percentual Estático">edit</i></td>
+              <td class="foo"><i class="material-icons" (click)="openModal2(percentual.cod)" title="Apagar Percentual Estático">delete</i></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div id="modal2" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions2">
+  <div class="modal-content">
+    <div class="container">
+      <div class="row">
+        <h1 class="center">Alerta</h1>
       </div>
-      <div class="modal-footer">
-        <button class="btn waves-effect left" (click)="closeModal()">Cancelar</button>
-        <button class="btn waves-effect right" [disabled]="percentualEstaticoService.getValidity()"
-                (click)="cadastraPercentualEstatico()">Cadastrar
-        </button>
+      <div class="row">
+        <h5 class="center">Tem certeza que deseja APAGAR esta Rubrica ?</h5>
       </div>
     </div>
   </div>
-
-  <table class="bordered highlight centered z-depth-2 hoverable">
-    <thead>
-    <tr>
-      <th>Rubrica</th>
-      <th>Percentual</th>
-      <th>Data de Início</th>
-      <th>Data Fim</th>
-      <th> Data Aditamento</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let percentual of staticPercent">
-      <td>{{percentual.nome}}</td>
-      <td>{{percentual.percentual}}%</td>
-      <td>{{percentual.dataInicio}}</td>
-      <td>{{percentual.dataFim | datePipe}}</td>
-      <td>{{percentual.dataAditamento}}</td>
-    </tr>
-    </tbody>
-  </table>
+  <div class="modal-footer">
+    <button class="btn waves-effect right" (click)="deletarPercentualEstatico()">Sim</button>
+    <button class="btn waves-effect left" (click)="closeModal2()">Não</button>
+  </div>
 </div>

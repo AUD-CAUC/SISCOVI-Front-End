@@ -1,8 +1,9 @@
 export class PercentualEstatico {
+  cod: number;
+  codigoRubrica: number;
   nome: string;
   percentual: number;
   dataInicio: String;
-  codigo: number;
   dataFim: String;
   dataAditamento: String;
 }
