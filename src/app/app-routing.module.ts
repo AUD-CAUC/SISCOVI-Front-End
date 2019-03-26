@@ -39,6 +39,7 @@ import {FeriasPendentesExecucaoResolver} from './ferias/ferias-pendentes-execuca
 import {PercentualDinamicoComponent} from './percentuais-dinamicos/percentual-dinamico.component';
 import {CadastrarConvencaoComponent} from './convencoes-coletivas/cadastrar-convecao/cadastrar-convencao.component';
 import {CadastrarPercentualEstaticoComponent} from './percentuais-estaticos/cadastrar-percentual-estatico/cadastrar-percentual-estatico.component';
+import {ResidualComponent} from './residual/residual.component';
 
 const routes: Routes = [
   {path: '', pathMatch: 'full', redirectTo: 'home'},
@@ -92,6 +93,13 @@ const routes: Routes = [
         resolve: {
           calculosPendentes: RescisaoPendenteResolver,
           calculosPendentesExecucao: RescisaoPendenteExecucaoResolver
+        }
+      },
+      {
+        path: 'residual',
+        component: ResidualComponent,
+        canActivate: [LoggedInGuard],
+        resolve: {
         }
       },
       {path: 'totalMensal', component: TotalMensalComponent, canActivate: [LoggedInGuard]},

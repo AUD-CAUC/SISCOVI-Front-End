@@ -109,6 +109,8 @@ import {PercentualDinamicoComponent} from './percentuais-dinamicos/percentual-di
 import {CadastrarPercentualDinamicoComponent} from './percentuais-dinamicos/cadastrar-percentual-dinamico/cadastrar-percentual-dinamico.component';
 import {PercentualDinamicoService} from './percentuais-dinamicos/percentual-dinamico.service';
 import {CadastrarConvencaoComponent} from './convencoes-coletivas/cadastrar-convecao/cadastrar-convencao.component';
+import {ResidualComponent} from './residual/residual.component';
+import {ResidualService} from './residual/residual.service';
 
 @NgModule({
   declarations: [
@@ -191,6 +193,7 @@ import {CadastrarConvencaoComponent} from './convencoes-coletivas/cadastrar-conv
     CadastrarPercentualEstaticoComponent,
     PercentualDinamicoComponent,
     CadastrarPercentualDinamicoComponent,
+    ResidualComponent,
   ],
   imports: [
     BrowserModule,
@@ -223,6 +226,7 @@ import {CadastrarConvencaoComponent} from './convencoes-coletivas/cadastrar-conv
     SaldoService,
     PercentualEstaticoService,
     PercentualDinamicoService,
+    ResidualService,
     {provide: LOCALE_ID, useValue: 'pt'},
     {
       provide: HTTP_INTERCEPTORS,
