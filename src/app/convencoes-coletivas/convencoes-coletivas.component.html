@@ -43,16 +43,34 @@
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let convencao of convencoes" (dblclick)="editarConvencao(convencao.codigo)">
+        <tr *ngFor="let convencao of convencoes">
           <td>{{convencao.nome}}</td>
           <td>{{convencao.sigla}}</td>
           <td>{{convencao.dataBase | date: 'shortDate'}}</td>
           <td>{{convencao.descricao}}</td>
           <td>{{convencao.loginAtualizacao | uppercase}}</td>
           <td>{{convencao.dataAtualizacao | date: 'shortDate'}}</td>
+          <td class="foo"><i class="material-icons" (click)="editarConvencao(convencao.codigo)" title="Editar Convenção Coletiva">edit</i></td>
+          <td class="foo"><i class="material-icons" (click)="openModal2(convencao.codigo)" title="Apagar Convenção Coletiva">delete</i></td>
         </tr>
         </tbody>
       </table>
     </div>
+  </div>
+</div>
+<div id="modal2" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions2">
+  <div class="modal-content">
+    <div class="container">
+      <div class="row">
+        <h1 class="center">Alerta</h1>
+      </div>
+      <div class="row">
+        <h5 class="center">Tem certeza que deseja APAGAR esta Convenção ?</h5>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn waves-effect right" (click)="deletarConvencao()">Sim</button>
+    <button class="btn waves-effect left" (click)="closeModal2()">Não</button>
   </div>
 </div>

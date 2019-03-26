@@ -11,6 +11,7 @@ import {Router} from '@angular/router';
   styleUrls: ['convencoes.coletivas.component.scss']
 })
 export class ConvencoesColetivasComponent {
+  id: number;
   contratos: Contrato[] = [];
   render = false;
   convencaoService: ConvencaoService;
@@ -18,6 +19,7 @@ export class ConvencoesColetivasComponent {
   valid = false;
   index: number;
   modalActions = new EventEmitter<string | MaterializeAction>();
+  modalActions2 = new EventEmitter<string | MaterializeAction>();
   router: Router;
 
   constructor(convencaoService: ConvencaoService, router: Router) {
@@ -46,6 +48,16 @@ export class ConvencoesColetivasComponent {
     this.modalActions.emit({action: 'modal', params: ['close']});
   }
 
+  openModal2(codigo: number) {
+    this.id = codigo;
+    this.modalActions2.emit({action: 'modal', params: ['open']});
+  }
+
+  closeModal2() {
+    this.id = null;
+    this.modalActions2.emit({action: 'modal', params: ['close']});
+  }
+
   cadastraConvencao() {
     this.convencaoService.cadastrarConvencao().subscribe(res => {
       if (res === 'Rubrica Cadastrada Com sucesso !') {
@@ -60,5 +72,17 @@ export class ConvencoesColetivasComponent {
 
   editarConvencao(id: number) {
     this.router.navigate(['/convencoes', id]);
+  }
+
+  deletarConvencao() {
+    this.convencaoService.apagarConvencao(this.id).subscribe(res => {
+      if (res === 'Convencao Apagada Com sucesso !') {
+        this.convencaoService.getAll().subscribe(res2 => {
+          this.convencoes.slice();
+          this.convencoes = res2;
+          this.closeModal2();
+        });
+      }
+    });
   }
 }

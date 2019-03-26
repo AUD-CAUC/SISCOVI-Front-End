@@ -113,15 +113,6 @@ export class CadastrarConvencaoComponent {
     this.modalActions.emit({action: 'modal', params: ['close']});
   }
 
-  deletarConvencao() {
-    this.convencaoService.apagarConvencao(this.id).subscribe(res => {
-      if (res === 'Convencao Apagada Com sucesso !') {
-        this.closeModal();
-        this.router.navigate(['/convencoes']);
-      }
-    });
-  }
-
   ajusteData(data: String) {
     const ano = Number(data.split('-')[0]);
     const mes = Number(data.split('-')[1]);

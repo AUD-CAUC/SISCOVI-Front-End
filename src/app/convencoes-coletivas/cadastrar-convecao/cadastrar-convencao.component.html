@@ -1,23 +1,9 @@
 <div class="container">
-  <h2 class="center">Cadastrar Convenção Coletiva</h2>
-  <div class = row *ngIf="id">
-    <button class="btn waves-effect right" (click)="openModal()">Apagar Convenção Coletiva</button>
-    <div id="modal1" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions">
-      <div class="modal-content">
-        <div class="container">
-          <div class="row">
-            <h1 class="center">Alerta</h1>
-          </div>
-          <div class="row">
-            <h5 class="center">Tem certeza que deseja APAGAR esta Convenção ?</h5>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn waves-effect right" (click)="deletarConvencao()">Sim</button>
-        <button class="btn waves-effect left" (click)="closeModal()">Não</button>
-      </div>
-    </div>
+  <div *ngIf="id">
+    <h2 class="center">Editar Convenção Coletiva</h2>
+  </div>
+  <div *ngIf="!id">
+    <h2 class="center">Cadastrar Convenção Coletiva</h2>
   </div>
 </div>
 <div class="container">
