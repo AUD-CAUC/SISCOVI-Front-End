@@ -29,7 +29,7 @@ export class CadastrarPercentualDinamicoComponent {
     this.route.params.subscribe(params => {
       this.id = params['id'];
       if (this.id) {
-        percentualDinamicoService.buscarPercentuaisDinamicos(this.id).subscribe(res => {
+        percentualDinamicoService.getPercentuaisDinamicos(this.id).subscribe(res => {
           this.percentualDinamico = res;
           this.percentualDinamicoForm.controls.percentual.setValue(this.percentualDinamico.percentual);
         });

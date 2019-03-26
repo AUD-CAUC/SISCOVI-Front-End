@@ -15,9 +15,10 @@ export class PercentualDinamicoComponent {
   dinamicPercent: PercentualDinamico[] = [];
   percentualDinamicoService: PercentualDinamicoService;
   router: Router;
-  constructor(percentualDinamicoService: PercentualDinamicoService) {
+  constructor(percentualDinamicoService: PercentualDinamicoService, router: Router) {
+    this.router = router
     this.percentualDinamicoService = percentualDinamicoService;
-    this.percentualDinamicoService.getPercentuaisDinamicos().subscribe( res => {
+    this.percentualDinamicoService.getAllPercentuaisDinamicos().subscribe( res => {
       this.dinamicPercent = res;
     });
   }

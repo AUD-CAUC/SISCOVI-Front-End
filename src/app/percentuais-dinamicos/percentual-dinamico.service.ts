@@ -30,7 +30,7 @@ export class PercentualDinamicoService {
     const url = this.config.myApi + '/rubricas/getAllDinamicPercent';
     return this.http.get(url).map(res => res.json());
   }
-  buscarPercentuaisDinamicos(codigo: number) {
+  getPercentuaisDinamicos(codigo: number)/*: Observable<Rubrica>*/ {
     const url = this.config.myApi + '/rubricas/getDinamicPercent/' + codigo;
     return this.http.get(url).map(res => res.json());
   }
