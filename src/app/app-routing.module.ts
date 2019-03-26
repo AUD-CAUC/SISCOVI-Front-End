@@ -98,6 +98,7 @@ const routes: Routes = [
       {path: 'percentEst', component: PercentuaisEstaticosComponent, canActivate: [LoggedInGuard, ProfileGuard]},
       {path: 'percentEst/:id', component: CadastrarPercentualEstaticoComponent, canActivate: [LoggedInGuard, ProfileGuard]},
       {path: 'percentDin', component: PercentualDinamicoComponent, canActivate: [LoggedInGuard, ProfileGuard]},
+      {path: 'percentDin/:id', component: CadastrarPercentualDinamicoComponent, canActivate: [LoggedInGuard, ProfileGuard]},
       {path: 'ajustes-contratuais', component: AjusteContratoComponent, canActivate: [LoggedInGuard]},
       {
         path: 'ajustes-contratuais/cadastrar-ajuste',
