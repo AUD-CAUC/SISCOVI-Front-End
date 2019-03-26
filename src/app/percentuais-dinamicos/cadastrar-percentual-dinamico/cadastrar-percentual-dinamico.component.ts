@@ -62,6 +62,16 @@ export class CadastrarPercentualDinamicoComponent {
   closeModal() {
     this.modalActions.emit({action: 'modal', params: ['close']});
   }
+  // salvarAlteracao() {
+  //   this.percentualDinamico.percentual = this.percentualDinamicoForm.controls.percentual.value;
+  //   this.percentualDinamico.dataAlteracao = this.percentualDinamicoForm.controls.dataAlteracao.value;
+  //   this.percentualDinamicoService.salvarAlteracao(this.percentualDinamico).subscribe(res => {
+  //     if (res === 'Alteração feita com sucesso !') {
+  //       this.closeModal();
+  //       this.router.navigate(['/percentDin']);
+  //     }
+  //   });
+  // }
   deletarPercentualDinamico() {
     this.percentualDinamicoService.apagarPercentuaisDinamicos(this.id).subscribe(res => {
       if (res === 'Rubrica Apagada Com sucesso !') {
