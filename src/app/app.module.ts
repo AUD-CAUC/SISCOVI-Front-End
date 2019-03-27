@@ -111,6 +111,8 @@ import {PercentualDinamicoService} from './percentuais-dinamicos/percentual-dina
 import {CadastrarConvencaoComponent} from './convencoes-coletivas/cadastrar-convecao/cadastrar-convencao.component';
 import {ResidualComponent} from './residual/residual.component';
 import {ResidualService} from './residual/residual.service';
+import {CalculoResiduaisComponent} from './residual/calculo-residuais/calculo-residuais.component';
+import {MovimentacaoResidualFeriasComponent} from './residual/calculo-residuais/movimentacao-residual-ferias.component';
 
 @NgModule({
   declarations: [
@@ -194,6 +196,8 @@ import {ResidualService} from './residual/residual.service';
     PercentualDinamicoComponent,
     CadastrarPercentualDinamicoComponent,
     ResidualComponent,
+    CalculoResiduaisComponent,
+    MovimentacaoResidualFeriasComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,8 +1,9 @@
 import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
 import {ConfigService} from '../_shared/config.service';
-import {FeriasCalcular} from './ferias-calcular';
-import {ListaCalculosPendentes} from './ferias-pendentes/lista-calculos-pendentes';
+import {ResidualCalcular} from './residual-calcular';
+import {ListaCalculosPendentes} from './residuais-pendentes/lista-calculos-pendentes';
+
 
 
 @Injectable()
@@ -11,12 +12,12 @@ export class ResidualService {
   constructor(private http: Http, private config: ConfigService) {
   }
 
-  getFuncionariosFerias(codigoContrato: number, tipoRestituicao: string) {
-    const url = this.config.myApi + '/ferias/getTerceirizadosFerias=' + codigoContrato + '/' + tipoRestituicao;
+  getFuncionariosResidualFerias(codigoContrato: number) {
+    const url = this.config.myApi + '/saldo-residual/getSaldoResidualFerias/' + codigoContrato;
     return this.http.get(url).map(res => res.json());
   }
 
-  calculaFeriasTerceirizados(feriasCalcular: FeriasCalcular[]) {
+  calculaFeriasTerceirizados(feriasCalcular: ResidualCalcular[]) {
     const url = this.config.myApi + '/ferias/calcularFeriasTerceirizados';
     const data = [];
     feriasCalcular.forEach(ferias => {
@@ -50,7 +51,7 @@ export class ResidualService {
     return this.http.post(url, data, headers).map(res => res.json());
   }
 
-  getValoresFeriasTerceirizado(feriasCalcular: FeriasCalcular) {
+  getValoresFeriasTerceirizado(feriasCalcular: ResidualCalcular) {
     const url = this.config.myApi + '/ferias/getValorRestituicaoFerias';
     const inicioFerias = this.encapsulaDatas(feriasCalcular.getInicioFerias());
     const fimFerias = this.encapsulaDatas(feriasCalcular.getFimFerias());
