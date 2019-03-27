@@ -35,13 +35,13 @@ export class PercentualDinamicoService {
     const url = this.config.myApi + '/rubricas/getDinamicPercent/' + codigo;
     return this.http.get(url).map(res => res.json());
   }
-  // salvarAlteracao(percentualdinamico: PercentualDinamico) {
-  //   const url = this.config.myApi + '/rubricas/changeDinamicPercent';
-  //   const cadastroPercentualDinamico = new CadastroPercentualDinamico();
-  //   cadastroPercentualDinamico.percentual = this.percentual;
-  //   cadastroPercentualDinamico.currentUser = this.config.user.username;
-  //   return this.http.put(url, cadastroPercentualDinamico).map(res => res.json());
-  // }
+  salvarAlteracao(percentualdinamico: PercentualDinamico) {
+    const url = this.config.myApi + '/rubricas/changeDinamicPercent';
+    const cadastroPercentualDinamico = new CadastroPercentualDinamico();
+    cadastroPercentualDinamico.percentual = this.percentual;
+    cadastroPercentualDinamico.currentUser = this.config.user.username;
+    return this.http.put(url, cadastroPercentualDinamico).map(res => res.json());
+  }
   apagarPercentuaisDinamicos(codigo: number) {
     const url = this.config.myApi + '/rubricas/deleteDinamicPercent/' + codigo;
     return this.http.delete(url).map(res => res.json());

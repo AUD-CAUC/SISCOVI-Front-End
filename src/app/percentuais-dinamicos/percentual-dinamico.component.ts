@@ -57,12 +57,12 @@ export class PercentualDinamicoComponent {
   editarPercentualDinamico(id: number): void {
     this.router.navigate(['/PercentDin', id]);
   }
-  // deletarPercentualDinamico() {
-  //   this.percentualDinamicoService.apagarPercentuaisDinamicos(this.id).subscribe(res => {
-  //     if (res === 'Percentual Dinâmico Apagado Com sucesso !') {
-  //       this.closeModal();
-  //       this.router.navigate(['/percentDin']);
-  //     }
-  //   });
-  // }
+  deletarPercentualDinamico() {
+    this.percentualDinamicoService.apagarPercentuaisDinamicos(this.id).subscribe(res => {
+      if (res === 'Percentual Dinâmico Apagado Com sucesso !') {
+        this.closeModal();
+        this.router.navigate(['/percentDin']);
+      }
+    });
+  }
 }
