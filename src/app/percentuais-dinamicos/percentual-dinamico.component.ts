@@ -2,7 +2,7 @@ import {Component, EventEmitter} from '@angular/core';
 import {MaterializeAction} from 'angular2-materialize';
 import {PercentualDinamicoService} from './percentual-dinamico.service';
 import {PercentualDinamico} from './percentual-dinamico';
-import {Router} from "@angular/router";
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-percentual-dinamico',

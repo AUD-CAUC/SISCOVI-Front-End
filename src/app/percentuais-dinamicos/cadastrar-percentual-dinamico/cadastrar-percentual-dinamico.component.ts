@@ -24,6 +24,7 @@ export class CadastrarPercentualDinamicoComponent {
     this.route = route;
     this.percentualDinamicoService = percentualDinamicoService;
     this.percentualDinamicoForm = this.fb.group({
+      codigo: new FormControl('', [Validators.required]),
       percentual: new FormControl('', [Validators.required]),
     });
     this.route.params.subscribe(params => {

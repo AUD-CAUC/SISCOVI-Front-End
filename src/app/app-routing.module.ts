@@ -38,6 +38,7 @@ import {FeriasPendentesResolver} from './ferias/ferias-pendentes.resolver';
 import {FeriasPendentesExecucaoResolver} from './ferias/ferias-pendentes-execucao.resolver';
 import {PercentualDinamicoComponent} from './percentuais-dinamicos/percentual-dinamico.component';
 import {CadastrarPercentualEstaticoComponent} from './percentuais-estaticos/cadastrar-percentual-estatico/cadastrar-percentual-estatico.component';
+import {CadastrarPercentualDinamicoComponent} from './percentuais-dinamicos/cadastrar-percentual-dinamico/cadastrar-percentual-dinamico.component';
 
 const routes: Routes = [
   {path: '', pathMatch: 'full', redirectTo: 'home'},
