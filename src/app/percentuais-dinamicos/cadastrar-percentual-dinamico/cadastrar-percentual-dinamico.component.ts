@@ -24,7 +24,7 @@ export class CadastrarPercentualDinamicoComponent {
     this.route = route;
     this.percentualDinamicoService = percentualDinamicoService;
     this.percentualDinamicoForm = this.fb.group({
-      codigo: new FormControl('', [Validators.required]),
+      codigo: new FormControl(''),
       percentual: new FormControl('', [Validators.required]),
     });
     this.route.params.subscribe(params => {
@@ -32,16 +32,17 @@ export class CadastrarPercentualDinamicoComponent {
       if (this.id) {
         percentualDinamicoService.getPercentuaisDinamicos(this.id).subscribe(res => {
           this.percentualDinamico = res;
-          this.percentualDinamicoForm.controls.percentual.setValue(this.percentualDinamico.percentual);
+          this.percentualDinamicoForm.controls.codigo.setValue(this.percentualDinamico[0].cod);
+          this.percentualDinamicoForm.controls.percentual.setValue(this.percentualDinamico[0].percentual);
         });
       }
     });
   }
   activateButton(): void {
     if (this.id) {
-      if ((this.percentualDinamicoService.percentual !== this.percentualDinamico.percentual)) {
+      if ((this.percentualDinamicoService.percentual !== this.percentualDinamico[0].percentual)) {
         this.notValidEdit = false;
-      }else if ((this.percentualDinamicoService.percentual === this.percentualDinamico.percentual)) {
+      }else if ((this.percentualDinamicoService.percentual === this.percentualDinamico[0].percentual)) {
         this.notValidEdit = true;
       }
     }
@@ -64,8 +65,8 @@ export class CadastrarPercentualDinamicoComponent {
     this.modalActions.emit({action: 'modal', params: ['close']});
   }
   salvarAlteracao() {
-    this.percentualDinamico.percentual = this.percentualDinamicoForm.controls.percentual.value;
-    this.percentualDinamico.dataAlteracao = this.percentualDinamicoForm.controls.dataAlteracao.value;
+    this.percentualDinamico[0].cod = this.percentualDinamicoForm.controls.codigo.value;
+    this.percentualDinamico[0].percentual = this.percentualDinamicoForm.controls.percentual.value;
     this.percentualDinamicoService.salvarAlteracao(this.percentualDinamico).subscribe(res => {
       if (res === 'Alteração feita com sucesso !') {
         this.closeModal();

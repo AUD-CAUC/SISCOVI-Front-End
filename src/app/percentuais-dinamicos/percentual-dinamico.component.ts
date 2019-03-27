@@ -18,7 +18,7 @@ export class PercentualDinamicoComponent {
   percentualDinamicoService: PercentualDinamicoService;
   router: Router;
   constructor(percentualDinamicoService: PercentualDinamicoService, router: Router) {
-    this.router = router
+    this.router = router;
     this.percentualDinamicoService = percentualDinamicoService;
     this.percentualDinamicoService.getAllPercentuaisDinamicos().subscribe( res => {
       this.dinamicPercent = res;
@@ -43,7 +43,7 @@ export class PercentualDinamicoComponent {
     this.percentualDinamicoService.setValdity(true);
     this.modalActions2.emit({action: 'modal', params: ['close']});
   }
-  cadastraDinamicoEstatico() {
+  cadastrarPercentualDinamico() {
     this.percentualDinamicoService.cadastrarPercentualDinamico().subscribe(res => {
       if (res === 'Percentual Dinâmico cadastrado com sucesso!') {
         this.percentualDinamicoService.getAllPercentuaisDinamicos().subscribe(res2 => {
@@ -55,13 +55,15 @@ export class PercentualDinamicoComponent {
     });
   }
   editarPercentualDinamico(id: number): void {
-    this.router.navigate(['/PercentDin', id]);
+    this.router.navigate(['/percentDin', id]);
   }
   deletarPercentualDinamico() {
     this.percentualDinamicoService.apagarPercentuaisDinamicos(this.id).subscribe(res => {
       if (res === 'Percentual Dinâmico Apagado Com sucesso !') {
-        this.closeModal();
-        this.router.navigate(['/percentDin']);
+        this.closeModal2();
+        this.percentualDinamicoService.getAllPercentuaisDinamicos().subscribe( res2 => {
+          this.dinamicPercent = res2;
+        });
       }
     });
   }

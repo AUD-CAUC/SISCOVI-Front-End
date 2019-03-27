@@ -12,6 +12,7 @@ export class PercentualDinamicoService {
   disabled = true;
   validity = true;
   percentual: number;
+  codigo: number;
   constructor(private config: ConfigService, private http: Http) {
     this.headers = new Headers(
       {
@@ -35,10 +36,11 @@ export class PercentualDinamicoService {
     const url = this.config.myApi + '/rubricas/getDinamicPercent/' + codigo;
     return this.http.get(url).map(res => res.json());
   }
-  salvarAlteracao(percentualdinamico: PercentualDinamico) {
+  salvarAlteracao(percentualDinamico: PercentualDinamico) {
     const url = this.config.myApi + '/rubricas/changeDinamicPercent';
     const cadastroPercentualDinamico = new CadastroPercentualDinamico();
-    cadastroPercentualDinamico.percentual = this.percentual;
+    cadastroPercentualDinamico.codigo = percentualDinamico[0].cod;
+    cadastroPercentualDinamico.percentual = percentualDinamico[0].percentual;
     cadastroPercentualDinamico.currentUser = this.config.user.username;
     return this.http.put(url, cadastroPercentualDinamico).map(res => res.json());
   }
@@ -52,7 +54,6 @@ export class PercentualDinamicoService {
     cadastroPercentualDinamico.percentual = this.percentual;
     cadastroPercentualDinamico.currentUser = this.config.user.username;
     const url = this.config.myApi + '/rubricas/cadastrarPercentualDinamico';
-    // console.log(cadastroPercentualDinamico)
     const data = cadastroPercentualDinamico;
     const headers = new Headers({'Content-type': 'application/json'});
     const options = new RequestOptions({headers: headers});
