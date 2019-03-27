@@ -12,6 +12,11 @@ export class TerceirizadoFeriasMovimentacao {
     private _parcela14Dias: boolean;
     private _parcelaAnterior: string;
     private _ultimoFimUsufruto: Date;
+    private _emAnalise: boolean;
+
+    get emAnalise(): boolean {
+      return this._emAnalise;
+    }
 
     get ultimoFimUsufruto(): Date {
       return this._ultimoFimUsufruto;

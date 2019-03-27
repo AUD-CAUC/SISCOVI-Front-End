@@ -108,6 +108,7 @@ import {PercentualDinamico} from './percentuais-dinamicos/percentual-dinamico';
 import {PercentualDinamicoComponent} from './percentuais-dinamicos/percentual-dinamico.component';
 import {CadastrarPercentualDinamicoComponent} from './percentuais-dinamicos/cadastrar-percentual-dinamico/cadastrar-percentual-dinamico.component';
 import {PercentualDinamicoService} from './percentuais-dinamicos/percentual-dinamico.service';
+import {CadastrarConvencaoComponent} from './convencoes-coletivas/cadastrar-convecao/cadastrar-convencao.component';
 
 @NgModule({
   declarations: [
@@ -141,6 +142,7 @@ import {PercentualDinamicoService} from './percentuais-dinamicos/percentual-dina
     PercentuaisComponent,
     CargosDoContratoComponent,
     ConvencoesColetivasComponent,
+    CadastrarConvencaoComponent,
     VigenciaDosContratosComponent,
     FuncionariosComponent,
     CargosDosFuncionariosComponent,

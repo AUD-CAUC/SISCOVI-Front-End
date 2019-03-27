@@ -67,14 +67,6 @@ export class CadastrarRubricaComponent {
     disableButton() {
         this.notValidEdit = true;
     }
-    deletarRubrica() {
-        this.rubricaService.apagarRubrica(this.id).subscribe(res => {
-            if (res === 'Rubrica Apagada Com sucesso !') {
-                this.closeModal();
-                this.router.navigate(['/rubricas']);
-            }
-        });
-    }
     openModal() {
         this.modalActions.emit({action: 'modal', params: ['open']});
     }
