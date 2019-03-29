@@ -12,6 +12,7 @@
       <option disabled selected>Selecione o tipo de restituição</option>
       <option value="ferias">Férias</option>
       <option value="decimo">Décimo Terceiro</option>
+      <option value="rescisao">Rescisão</option>
     </select>
     <label for="selecao_tipo_restituicao">Tipo de Restituição<span class="red-text"> *</span></label>
   </div>
@@ -22,6 +23,7 @@
 <div  *ngIf="terceirizadosDecimoTerceiro && (tipoRestituicao == 'decimo')">
   <app-movimentacao-residual-decimo-terceiro-component [tipoRestituicao]="tipoRestituicao" [codigoContrato]="codigo" [terceirizados]="terceirizadosDecimoTerceiro" (navegaParaViewDeCalculos)="eventNav($event)"></app-movimentacao-residual-decimo-terceiro-component>
 </div>
-<!--<div *ngIf="terceirizados && (tipoRestituicao == 'RESGATE')">-->
-<!--  <app-resgate-ferias-component [tipoRestituicao]="tipoRestituicao" [codigoContrato]="codigo" [terceirizados]="terceirizados" (navegaParaViewDeCalculos)="eventNav($event)"></app-resgate-ferias-component>-->
-<!--</div>-->
+<div  *ngIf="terceirizadosRescisao && (tipoRestituicao == 'rescisao')">
+  <app-movimentacao-residual-rescisao-component [tipoRestituicao]="tipoRestituicao" [codigoContrato]="codigo" [terceirizados]="terceirizadosRescisao" (navegaParaViewDeCalculos)="eventNav($event)"></app-movimentacao-residual-rescisao-component>
+</div>
+

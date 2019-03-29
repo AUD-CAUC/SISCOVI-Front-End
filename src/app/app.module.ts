@@ -114,6 +114,7 @@ import {ResidualService} from './residual/residual.service';
 import {CalculoResiduaisComponent} from './residual/calculo-residuais/calculo-residuais.component';
 import {MovimentacaoResidualFeriasComponent} from './residual/calculo-residuais/movimentacao-residual-ferias.component';
 import {MovimentacaoResidualDecimoTerceiroComponent} from './residual/calculo-residuais/movimentacao-residual-decimoTerceiro.component';
+import {MovimentacaoResidualRescisaoComponent} from './residual/calculo-residuais/movimentacao-residual-rescisao.component';
 
 @NgModule({
   declarations: [
@@ -200,6 +201,7 @@ import {MovimentacaoResidualDecimoTerceiroComponent} from './residual/calculo-re
     CalculoResiduaisComponent,
     MovimentacaoResidualFeriasComponent,
     MovimentacaoResidualDecimoTerceiroComponent,
+    MovimentacaoResidualRescisaoComponent,
   ],
   imports: [
     BrowserModule,

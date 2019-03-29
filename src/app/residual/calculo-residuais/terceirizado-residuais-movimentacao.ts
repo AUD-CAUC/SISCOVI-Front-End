@@ -96,4 +96,67 @@ export class TerceirizadoResiduaisMovimentacaoDecimoTerceiro {
   }
 }
 
+export class TerceirizadoResiduaisMovimentacaoRescisao {
+  private _codigoTerceirizadoContrato: number;
+  private _terceirizado: string;
+  private _cpf: string;
+  private _valorIncidenciaDecimoTerceiroResidual: number;
+  private _valorMultaFgtsDecimoTerceiroResidual: number;
+  private _valorIncidenciaFeriasResidual: number;
+  private _valorIncidenciaTercoResidual: number;
+  private _valorMultaFgtsFeriasResidual: number;
+  private _valorMultaFgtsTercoResidual: number;
+  private _valorMultaFgtsSalarioResidual: number;
+  private _valorTotalResidual: number;
+  // private _valorRestituicaoFerias: ValorRestituicaoFerias;
+  private _restituidoFlag: string;
+  // private _emAnalise: boolean;
+
+  // get emAnalise(): boolean {
+  //   return this._emAnalise;
+  // }
+
+  get codigoTerceirizadoContrato(): number {
+    return this._codigoTerceirizadoContrato;
+  }
+
+  get terceirizado(): string {
+    return this._terceirizado;
+  }
+
+  get cpf(): string {
+    return this._cpf;
+  }
+
+  get valorIncidenciaDecimoTerceiroResidual(): number {
+    return this._valorIncidenciaDecimoTerceiroResidual;
+  }
+  get valorMultaFgtsDecimoTerceiroResidual(): number {
+    return this._valorMultaFgtsDecimoTerceiroResidual;
+  }
+  get valorIncidenciaFeriasResidual(): number {
+    return this._valorIncidenciaFeriasResidual;
+  }
+  get valorIncidenciaTercoResidual(): number {
+    return this._valorIncidenciaTercoResidual;
+  }
+  get valorMultaFgtsFeriasResidual(): number {
+    return this._valorMultaFgtsFeriasResidual;
+  }
+  get valorMultaFgtsTercoResidual(): number {
+    return this._valorMultaFgtsTercoResidual;
+  }
+  get valorMultaFgtsSalarioResidual(): number {
+    return this._valorMultaFgtsSalarioResidual;
+  }
+
+  get valorTotalResidual(): number {
+    return this._valorTotalResidual;
+  }
+
+  get restituidoFlag(): string {
+    return this._restituidoFlag;
+  }
+}
+
 

@@ -22,6 +22,11 @@ export class ResidualService {
     return this.http.get(url).map(res => res.json());
   }
 
+  getFuncionariosResidualRescisao(codigoContrato: number) {
+    const url = this.config.myApi + '/saldo-residual/getSaldoResidualRescisao/' + codigoContrato;
+    return this.http.get(url).map(res => res.json());
+  }
+
   getCalculosPendentes() {
     const url = this.config.myApi + '/ferias' + '/getCalculosPendentes' + '/' + this.config.user.id;
     return this.http.get(url).map(res => res.json());

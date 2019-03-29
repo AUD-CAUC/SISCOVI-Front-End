@@ -2,7 +2,7 @@ import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {ContratosService} from '../../contratos/contratos.service';
 import {Contrato} from '../../contratos/contrato';
 import {ResidualService} from '../residual.service';
-import {TerceirizadoResiduaisMovimentacaoDecimoTerceiro, TerceirizadoResiduaisMovimentacaoFerias} from './terceirizado-residuais-movimentacao';
+import {TerceirizadoResiduaisMovimentacaoDecimoTerceiro, TerceirizadoResiduaisMovimentacaoFerias, TerceirizadoResiduaisMovimentacaoRescisao} from './terceirizado-residuais-movimentacao';
 
 @Component({
   selector: 'app-calculo-residuais-component',
@@ -13,6 +13,7 @@ export class CalculoResiduaisComponent {
   protected contratos: Contrato[];
   protected terceirizadosFerias: TerceirizadoResiduaisMovimentacaoFerias[];
   protected terceirizadosDecimoTerceiro: TerceirizadoResiduaisMovimentacaoDecimoTerceiro[];
+  protected terceirizadosRescisao: TerceirizadoResiduaisMovimentacaoRescisao[];
   codigo: number;
   tipoRestituicao: string;
   @Output() navegaParaViewDeCalculos = new EventEmitter();
@@ -37,6 +38,12 @@ export class CalculoResiduaisComponent {
         this.terceirizadosDecimoTerceiro = res;
       });
     }
+    if (this.codigo && this.tipoRestituicao === 'rescisao') {
+      this.residualService.getFuncionariosResidualRescisao(this.codigo).subscribe(res => {
+        this.terceirizadosRescisao = null;
+        this.terceirizadosRescisao = res;
+      });
+    }
   }
 
   defineTipoRestituicao(tipoMovimentacao: string): void {
@@ -51,6 +58,12 @@ export class CalculoResiduaisComponent {
       this.residualService.getFuncionariosResidualDecimoTerceiro(this.codigo).subscribe(res => {
         this.terceirizadosDecimoTerceiro = null;
         this.terceirizadosDecimoTerceiro = res;
+      });
+    }
+    if (this.codigo && this.tipoRestituicao === 'rescisao') {
+      this.residualService.getFuncionariosResidualRescisao(this.codigo).subscribe(res => {
+        this.terceirizadosRescisao = null;
+        this.terceirizadosRescisao = res;
       });
     }
   }
