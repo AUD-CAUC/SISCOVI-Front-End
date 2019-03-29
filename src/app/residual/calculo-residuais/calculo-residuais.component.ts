@@ -2,7 +2,7 @@ import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {ContratosService} from '../../contratos/contratos.service';
 import {Contrato} from '../../contratos/contrato';
 import {ResidualService} from '../residual.service';
-import {TerceirizadoResiduaisMovimentacao} from './terceirizado-residuais-movimentacao';
+import {TerceirizadoResiduaisMovimentacaoDecimoTerceiro, TerceirizadoResiduaisMovimentacaoFerias} from './terceirizado-residuais-movimentacao';
 
 @Component({
   selector: 'app-calculo-residuais-component',
@@ -11,7 +11,8 @@ import {TerceirizadoResiduaisMovimentacao} from './terceirizado-residuais-movime
 })
 export class CalculoResiduaisComponent {
   protected contratos: Contrato[];
-  protected terceirizados: TerceirizadoResiduaisMovimentacao[];
+  protected terceirizadosFerias: TerceirizadoResiduaisMovimentacaoFerias[];
+  protected terceirizadosDecimoTerceiro: TerceirizadoResiduaisMovimentacaoDecimoTerceiro[];
   codigo: number;
   tipoRestituicao: string;
   @Output() navegaParaViewDeCalculos = new EventEmitter();
@@ -23,11 +24,17 @@ export class CalculoResiduaisComponent {
   }
 
   defineCodigoContrato(codigoContrato: number): void {
-    this.terceirizados = null;
     this.codigo = codigoContrato;
     if (this.codigo && this.tipoRestituicao === 'ferias') {
       this.residualService.getFuncionariosResidualFerias(this.codigo).subscribe(res => {
-        this.terceirizados = res;
+        this.terceirizadosFerias = null;
+        this.terceirizadosFerias = res;
+      });
+    }
+    if (this.codigo && this.tipoRestituicao === 'decimo') {
+      this.residualService.getFuncionariosResidualDecimoTerceiro(this.codigo).subscribe(res => {
+        this.terceirizadosDecimoTerceiro = null;
+        this.terceirizadosDecimoTerceiro = res;
       });
     }
   }
@@ -36,7 +43,14 @@ export class CalculoResiduaisComponent {
     this.tipoRestituicao = tipoMovimentacao;
     if (this.codigo && this.tipoRestituicao === 'ferias') {
       this.residualService.getFuncionariosResidualFerias(this.codigo).subscribe(res => {
-        this.terceirizados = res;
+        this.terceirizadosFerias = null;
+        this.terceirizadosFerias = res;
+      });
+    }
+    if (this.codigo && this.tipoRestituicao === 'decimo') {
+      this.residualService.getFuncionariosResidualDecimoTerceiro(this.codigo).subscribe(res => {
+        this.terceirizadosDecimoTerceiro = null;
+        this.terceirizadosDecimoTerceiro = res;
       });
     }
   }

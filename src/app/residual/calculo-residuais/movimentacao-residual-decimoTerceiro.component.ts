@@ -4,19 +4,19 @@ import {MaterializeAction} from 'angular2-materialize';
 import 'rxjs/add/observable/of';
 import {ResidualCalcular} from '../residual-calcular';
 import {ResidualService} from '../residual.service';
-import {TerceirizadoResiduaisMovimentacaoFerias} from './terceirizado-residuais-movimentacao';
+import {TerceirizadoResiduaisMovimentacaoDecimoTerceiro} from './terceirizado-residuais-movimentacao';
 
 
 @Component({
-  selector: 'app-movimentacao-residual-ferias-component',
-  templateUrl: './movimentacao-residual-ferias.component.html',
+  selector: 'app-movimentacao-residual-decimo-terceiro-component',
+  templateUrl: './movimentacao-residual-decimoTerceiro.component.html',
   styleUrls: ['./calculo-residuais.component.scss']
 })
-export class MovimentacaoResidualFeriasComponent implements OnInit {
-  @Input() protected terceirizados: TerceirizadoResiduaisMovimentacaoFerias[];
+export class MovimentacaoResidualDecimoTerceiroComponent implements OnInit {
+  @Input() protected terceirizados: TerceirizadoResiduaisMovimentacaoDecimoTerceiro[];
   @Input() codigoContrato: number;
   @Input() tipoRestituicao: string;
-  feriasForm: FormGroup;
+  decimoTerceiroForm: FormGroup;
   isSelected = false;
   selected = false;
   feriasCalcular: ResidualCalcular[] = [];
@@ -36,26 +36,26 @@ export class MovimentacaoResidualFeriasComponent implements OnInit {
   }
 
   formInit(): void {
-    this.feriasForm = this.fb.group({
+    this.decimoTerceiroForm = this.fb.group({
       calcularTerceirizados: this.fb.array([])
     });
-    const control = <FormArray>this.feriasForm.controls.calcularTerceirizados;
+    const control = <FormArray>this.decimoTerceiroForm.controls.calcularTerceirizados;
     this.terceirizados.forEach(item => {
       const addCtrl = this.fb.group({
         codTerceirizadoContrato: new FormControl(item.codigoTerceirizadoContrato),
-        valorFerias: new FormControl(item.valorFeriasResidual),
-        valorTerco: new FormControl(item.valorTercoResidual),
+        valorDecimoTerceiro: new FormControl(item.valorDecimoTerceiroResidual),
+        valorSubmodulo: new FormControl(item.valorIncidenciaDecimoTerceiroResidual),
         selected: new FormControl(this.isSelected),
         // emAnalise: new FormControl(item.emAnalise),
       });
       control.push(addCtrl);
     });
     for (let i = 0; i < this.terceirizados.length; i++) {
-      this.feriasForm.get('calcularTerceirizados').get('' + i).get('codTerceirizadoContrato').setValidators(Validators.required);
-      // const emAnalise = this.feriasForm.get('calcularTerceirizados').get('' + i).get('emAnalise').value;
+      this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('codTerceirizadoContrato').setValidators(Validators.required);
+      // const emAnalise = this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('emAnalise').value;
       //
       // if (emAnalise) {
-      //   this.feriasForm.get('calcularTerceirizados').get('' + i).disable();
+      //   this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).disable();
       // }
     }
   }
@@ -118,31 +118,31 @@ export class MovimentacaoResidualFeriasComponent implements OnInit {
   //   this.feriasCalcular = [];
   //   let aux = 0;
   //   for (let i = 0; i < this.terceirizados.length; i++) {
-  //     if (this.feriasForm.get('calcularTerceirizados').get('' + i).get('selected').value) {
+  //     if (this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('selected').value) {
   //       aux++;
-  //       this.feriasForm.get('calcularTerceirizados').get('' + i).get('valorMovimentado').updateValueAndValidity();
-  //       if (this.feriasForm.get('calcularTerceirizados').get('' + i).status === 'VALID' && this.feriasForm.get('calcularTerceirizados').get('' + i).get('valorMovimentado').valid) {
-  //         const objeto = new FeriasCalcular(this.feriasForm.get('calcularTerceirizados').get('' + i).get('codTerceirizadoContrato').value,
-  //           this.feriasForm.get('calcularTerceirizados').get('' + i).get('tipoRestituicao').value,
-  //           this.feriasForm.get('calcularTerceirizados').get('' + i).get('diasVendidos').value,
-  //           this.feriasForm.get('calcularTerceirizados').get('' + i).get('inicioFerias').value,
-  //           this.feriasForm.get('calcularTerceirizados').get('' + i).get('fimFerias').value,
-  //           this.feriasForm.get('calcularTerceirizados').get('' + i).get('inicioPeriodoAquisitivo').value,
-  //           this.feriasForm.get('calcularTerceirizados').get('' + i).get('fimPeriodoAquisitivo').value,
-  //           this.feriasForm.get('calcularTerceirizados').get('' + i).get('valorMovimentado').value,
-  //           this.feriasForm.get('calcularTerceirizados').get('' + i).get('parcelas').value,
+  //       this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('valorMovimentado').updateValueAndValidity();
+  //       if (this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).status === 'VALID' && this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('valorMovimentado').valid) {
+  //         const objeto = new FeriasCalcular(this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('codTerceirizadoContrato').value,
+  //           this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('tipoRestituicao').value,
+  //           this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('diasVendidos').value,
+  //           this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('inicioFerias').value,
+  //           this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('fimFerias').value,
+  //           this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('inicioPeriodoAquisitivo').value,
+  //           this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('fimPeriodoAquisitivo').value,
+  //           this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('valorMovimentado').value,
+  //           this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('parcelas').value,
   //           0,
-  //           this.feriasForm.get('calcularTerceirizados').get('' + i).get('valorFerias').value,
-  //           this.feriasForm.get('calcularTerceirizados').get('' + i).get('valorTercoConstitucional').value,
-  //           this.feriasForm.get('calcularTerceirizados').get('' + i).get('valorIncidenciaFerias').value,
-  //           this.feriasForm.get('calcularTerceirizados').get('' + i).get('valorIncidenciaTercoConstitucional').value);
+  //           this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('valorFerias').value,
+  //           this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('valorTercoConstitucional').value,
+  //           this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('valorIncidenciaFerias').value,
+  //           this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('valorIncidenciaTercoConstitucional').value);
   //         if (this.terceirizados[i].valorRestituicaoFerias) {
   //           objeto.setInicioPeriodoAquisitivo(this.terceirizados[i].valorRestituicaoFerias.inicioPeriodoAquisitivo);
   //           objeto.setFimPeriodoAquisitivo(this.terceirizados[i].valorRestituicaoFerias.fimPeriodoAquisitivo);
   //         }
   //         let index = -1;
   //         for (let j = 0; j < this.feriasCalcular.length; j++) {
-  //           if (this.feriasCalcular[j].codTerceirizadoContrato === this.feriasForm.get('calcularTerceirizados').get('' + i).get('codTerceirizadoContrato').value) {
+  //           if (this.feriasCalcular[j].codTerceirizadoContrato === this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('codTerceirizadoContrato').value) {
   //             index = j;
   //           }
   //         }
@@ -154,14 +154,14 @@ export class MovimentacaoResidualFeriasComponent implements OnInit {
   //           this.feriasCalcular.push(objeto);
   //         }
   //       } else {
-  //         this.feriasForm.get('calcularTerceirizados').get('' + i).get('inicioFerias').markAsTouched();
-  //         this.feriasForm.get('calcularTerceirizados').get('' + i).get('inicioFerias').markAsDirty();
-  //         this.feriasForm.get('calcularTerceirizados').get('' + i).get('fimFerias').markAsTouched();
-  //         this.feriasForm.get('calcularTerceirizados').get('' + i).get('fimFerias').markAsDirty();
-  //         this.feriasForm.get('calcularTerceirizados').get('' + i).get('diasVendidos').markAsTouched();
-  //         this.feriasForm.get('calcularTerceirizados').get('' + i).get('diasVendidos').markAsDirty();
-  //         this.feriasForm.get('calcularTerceirizados').get('' + i).get('valorMovimentado').markAsTouched();
-  //         this.feriasForm.get('calcularTerceirizados').get('' + i).get('valorMovimentado').markAsDirty();
+  //         this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('inicioFerias').markAsTouched();
+  //         this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('inicioFerias').markAsDirty();
+  //         this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('fimFerias').markAsTouched();
+  //         this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('fimFerias').markAsDirty();
+  //         this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('diasVendidos').markAsTouched();
+  //         this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('diasVendidos').markAsDirty();
+  //         this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('valorMovimentado').markAsTouched();
+  //         this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('valorMovimentado').markAsDirty();
   //         aux = undefined;
   //         this.openModal2();
   //       }
