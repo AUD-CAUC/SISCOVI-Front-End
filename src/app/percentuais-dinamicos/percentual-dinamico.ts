@@ -1,5 +1,5 @@
 export class PercentualDinamico {
-  codigo: number;
+  cod: number;
   percentual: number;
   dataAlteracao: Date;
   currentUser: string;

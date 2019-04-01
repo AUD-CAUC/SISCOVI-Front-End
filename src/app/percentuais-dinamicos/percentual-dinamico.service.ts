@@ -4,6 +4,7 @@ import {Headers, Http, RequestOptions} from '@angular/http';
 import {CadastroPercentualDinamico} from './cadastrar-percentual-dinamico/cadastro-percentual-dinamico';
 import {Observable} from 'rxjs/Observable';
 import {Rubrica} from '../rubricas/rubrica';
+import {PercentualDinamico} from './percentual-dinamico';
 
 @Injectable()
 export class PercentualDinamicoService {
@@ -11,6 +12,7 @@ export class PercentualDinamicoService {
   disabled = true;
   validity = true;
   percentual: number;
+  codigo: number;
   constructor(private config: ConfigService, private http: Http) {
     this.headers = new Headers(
       {
@@ -26,13 +28,21 @@ export class PercentualDinamicoService {
     this.validity = value;
   }
   /*Funcao que traz TODOS os percentuais dinamicos do backend*/
-  getPercentuaisDinamicos() {
-    const url = this.config.myApi + '/rubricas/getDinamicPercent';
+  getAllPercentuaisDinamicos() {
+    const url = this.config.myApi + '/rubricas/getAllDinamicPercent';
     return this.http.get(url).map(res => res.json());
   }
-  buscarPercentuaisDinamicos(codigo: number) {
+  getPercentuaisDinamicos(codigo: number)/*: Observable<Rubrica>*/ {
     const url = this.config.myApi + '/rubricas/getDinamicPercent/' + codigo;
     return this.http.get(url).map(res => res.json());
+  }
+  salvarAlteracao(percentualDinamico: PercentualDinamico) {
+    const url = this.config.myApi + '/rubricas/changeDinamicPercent';
+    const cadastroPercentualDinamico = new CadastroPercentualDinamico();
+    cadastroPercentualDinamico.codigo = percentualDinamico[0].cod;
+    cadastroPercentualDinamico.percentual = percentualDinamico[0].percentual;
+    cadastroPercentualDinamico.currentUser = this.config.user.username;
+    return this.http.put(url, cadastroPercentualDinamico).map(res => res.json());
   }
   apagarPercentuaisDinamicos(codigo: number) {
     const url = this.config.myApi + '/rubricas/deleteDinamicPercent/' + codigo;
@@ -44,7 +54,6 @@ export class PercentualDinamicoService {
     cadastroPercentualDinamico.percentual = this.percentual;
     cadastroPercentualDinamico.currentUser = this.config.user.username;
     const url = this.config.myApi + '/rubricas/cadastrarPercentualDinamico';
-    // console.log(cadastroPercentualDinamico)
     const data = cadastroPercentualDinamico;
     const headers = new Headers({'Content-type': 'application/json'});
     const options = new RequestOptions({headers: headers});

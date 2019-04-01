@@ -14,6 +14,8 @@ import {Percentual} from '../../percentuais/percentual';
 import {Rubrica} from '../../rubricas/rubrica';
 import {Convencao} from '../../convencoes-coletivas/convencao';
 import {ConvencaoService} from '../../convencoes-coletivas/convencao.service';
+import {PercentualDinamico} from '../../percentuais-dinamicos/percentual-dinamico';
+import {PercentualDinamicoService} from '../../percentuais-dinamicos/percentual-dinamico.service';
 
 @Component({
   selector: 'app-cadastro-contrato',
@@ -48,8 +50,9 @@ export class CadastroContratoComponent implements OnInit {
     ];
     modalActions = new EventEmitter<string | MaterializeAction>();
     convencoesColetivas: Convencao[];
-    constructor(router: Router, carSer: CargoService, fb: FormBuilder, fb1: FormBuilder, contratoService: ContratosService, userService: UserService, config: ConfigService,
-                private convServ: ConvencaoService) {
+    percentuaisDinamicos: PercentualDinamico[] = [];
+    constructor(router: Router, carSer: CargoService, fb: FormBuilder, fb1: FormBuilder, contratoService: ContratosService, userService: UserService,
+                percentualDinamicoService: PercentualDinamicoService, config: ConfigService, private convServ: ConvencaoService) {
         this.router = router;
         this.fb = fb;
         this.fb1 = fb1;
@@ -71,6 +74,10 @@ export class CadastroContratoComponent implements OnInit {
                 this.usuarios = res;
             });
         }
+        percentualDinamicoService.getAllPercentuaisDinamicos().subscribe(res => {
+          console.log(this.percentuaisDinamicos);
+          this.percentuaisDinamicos = res;
+        });
     }
     ngOnInit() {
         this.myForm2 = this.fb1.group({
