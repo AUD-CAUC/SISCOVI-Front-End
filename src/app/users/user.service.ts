@@ -17,11 +17,9 @@ import { User } from './user';
 export class UserService {
   private loggedIn = false;
   private headers: Headers;
+  validity = true;
   public user: User = null;
-  constructor(
-    private config: ConfigService,
-    private http: Http
-  ) {
+  constructor(private config: ConfigService, private http: Http) {
     this.loggedIn = !!localStorage.getItem('auth_token');
   }
   getCurrent() {
@@ -78,6 +76,12 @@ export class UserService {
     errMsg = error.message ? error.message : error.toString();
     console.error(errMsg);
     return Promise.reject(errMsg);
+  }
+  getValidity() {
+    return this.validity;
+  }
+  setValdity(value: boolean) {
+    this.validity = value;
   }
   getUsuarios() {
     const url = this.config.myApi + '/usuario/getUsuarios';
