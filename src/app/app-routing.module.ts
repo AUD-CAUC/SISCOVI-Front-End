@@ -9,7 +9,6 @@ import {RubricasComponent} from './rubricas/rubricas.component';
 import {ProfileGuard} from './users/profile.guard';
 import {PercentuaisEstaticosComponent} from './percentuais-estaticos/percentuais-estaticos.component';
 import {UsuariosComponent} from './usuarios/usuarios.component';
-import {CadastroUsuarioComponent} from './usuarios/cadastro-usuario/cadastro-usuario.component';
 import {CargoComponent} from './cargos/cargo.component';
 import {ContratosComponent} from './contratos/contratos.component';
 import {PercentuaisComponent} from './percentuais/percentuais.component';
@@ -56,7 +55,6 @@ const routes: Routes = [
       {path: 'rubricas', component: RubricasComponent, canActivate: [LoggedInGuard, ProfileGuard]},
       {path: 'rubricas/:id', component: CadastrarRubricaComponent, canActivate: [LoggedInGuard, ProfileGuard]},
       {path: 'usuarios', component: UsuariosComponent, canActivate: [LoggedInGuard, ProfileGuard]},
-      {path: 'usuarios/:id', component: CadastroUsuarioComponent, canActivate: [LoggedInGuard, ProfileGuard]},
       {path: 'cargos', component: CargoComponent, canActivate: [LoggedInGuard, ProfileGuard]},
       {path: 'gerenciar', component: IndicadoresComponent, canActivate: [LoggedInGuard]},
       {path: 'contratos', component: ContratosComponent, canActivate: [LoggedInGuard]},

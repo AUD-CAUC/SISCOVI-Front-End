@@ -29,14 +29,6 @@ export class CadastroUsuarioService {
     setValidity(value: boolean) {
         this.validity = value;
     }
-  getUsuario(codigo: number) {
-      const url = this.config.myApi + '/usuario/getUsuario/' + codigo;
-      return this.http.get(url).map(res => res.json());
-    }
-    getAllUsuarios() {
-      const url = this.config.myApi + '/usuario/getUsuarios';
-      return this.http.get(url).map(res => res.json());
-    }
     cadastrarUsuario() {
         this.cadastroUsuario.usuario = new Usuario();
         this.cadastroUsuario.usuario.login = this.login;
@@ -49,16 +41,4 @@ export class CadastroUsuarioService {
         const url = this.config.myApi + '/usuario/cadastrarUsuario';
         return this.http.post(url, this.cadastroUsuario, options).map(res => res.json());
     }
-    apagarUsuario(codigo: number) {
-      const url = this.config.myApi + '/usuario/deleteUsuario/' + codigo;
-      return this.http.delete(url).map(res => res.json());
-    }
-    salvarAlteracao(usuario: Usuario) {
-      const url = this.config.myApi + '/usuario/alterarUsuario';
-      this.cadastroUsuario = new CadastroUsuario();
-      this.cadastroUsuario.usuario = new Usuario();
-      this.cadastroUsuario.usuario = usuario;
-      this.cadastroUsuario.currentUser = this.config.user.username;
-      return this.http.put(url, this.cadastroUsuario).map(res => res.json());
-  }
 }
