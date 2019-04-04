@@ -15,6 +15,8 @@ export class CadastroUsuarioService {
     http: Http;
     config: ConfigService;
     cadastroUsuario: CadastroUsuario;
+    newPassword: string;
+    confirmNewPassord: string;
     constructor(http: Http, config: ConfigService) {
         this.http = http;
         this.config = config;
@@ -53,11 +55,12 @@ export class CadastroUsuarioService {
       const url = this.config.myApi + '/usuario/deleteUsuario/' + codigo;
       return this.http.delete(url).map(res => res.json());
     }
-    salvarAlteracao(usuario: Usuario) {
+    salvarAlteracao(usuario: Usuario, password, newPassword) {
       const url = this.config.myApi + '/usuario/alterarUsuario';
       this.cadastroUsuario = new CadastroUsuario();
       this.cadastroUsuario.usuario = new Usuario();
       this.cadastroUsuario.usuario = usuario;
+      this.cadastroUsuario.password = this.newPassword;
       this.cadastroUsuario.currentUser = this.config.user.username;
       return this.http.put(url, this.cadastroUsuario).map(res => res.json());
   }
