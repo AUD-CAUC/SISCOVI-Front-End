@@ -46,6 +46,10 @@ export class CadastroUsuarioComponent implements OnInit {
         });
         this.route.params.subscribe(params => {
           this.id = params['id'];
+          console.log(this.id);
+          console.log(this.nome);
+          console.log(this.sigla);
+          console.log(this.password);
           if (this.id) {
             cadUs.getUsuario(this.id).subscribe(res => {
               this.usuario = res;
@@ -54,9 +58,8 @@ export class CadastroUsuarioComponent implements OnInit {
               this.editaUsuarioForm.controls.nome.setValue(this.usuario.nome);
               this.editaUsuarioForm.controls.login.setValue(this.usuario.login);
               this.editaUsuarioForm.controls.password.setValue(this.password);
-              this.editaUsuarioForm.controls.newPassword.setValue(this.newPassword)
-              this.editaUsuarioForm.controls.confirmNewPassord.setValue(this.confirmNewPassword)
-              console.log(this.editaUsuarioForm);
+              this.editaUsuarioForm.controls.newPassword.setValue(this.newPassword);
+              this.editaUsuarioForm.controls.confirmNewPassord.setValue(this.confirmNewPassword);
               if (this.usuario.perfil === '1') {
                 this.usuarioForm.controls.sigla.setValue('ADMINISTRADOR');
               } else if (this.usuario.perfil === '2') {
@@ -97,15 +100,15 @@ export class CadastroUsuarioComponent implements OnInit {
           (this.cadUs.login !== this.login) ||
           (this.cadUs.sigla !== this.sigla) ||
           (this.cadUs.password !== this.password) ||
-          (this.cadUs.newPassword !== this.newPassword)/* &&
-          (this.confirmNewPassword === this.newPassword)*/) {
+          (this.cadUs.newPassword !== this.newPassword) &&
+          (this.confirmNewPassword === this.newPassword)) {
           this.notValidEdit = false; /*permite a edicao se pelo menos 1 dos campos campos a serem alterados forem diferentes dos ja cadastrados*/
         }else if ((this.cadUs.nome === this.usuario.nome) ||
           (this.cadUs.login === this.usuario.login) ||
           (this.cadUs.sigla === this.usuario.perfil) ||
           (this.cadUs.password === this.password) ||
-          (this.cadUs.newPassword === this.newPassword)/* &&
-          (this.confirmNewPassword !== this.newPassword)*/) {
+          (this.cadUs.newPassword === this.newPassword) &&
+          (this.confirmNewPassword !== this.newPassword)) {
           this.notValidEdit = true; /*caso contrario nao habilita o botao para salvar as alteracoes*/
         }
       }
@@ -126,7 +129,7 @@ export class CadastroUsuarioComponent implements OnInit {
         this.login = this.editaUsuarioForm.controls.login.value;
         this.sigla = this.editaUsuarioForm.controls.sigla.value;
         this.password = this.editaUsuarioForm.controls.newPassword.value;
-        this.cadUs.salvarAlteracao(this.usuario, this.password, this.newPassword).subscribe(res => {
+        this.cadUs.salvarAlteracao(this.usuario).subscribe(res => {
           if (res === 'Alteração feita com sucesso !') {
             this.closeModal();
             this.router.navigate(['/usuario']);

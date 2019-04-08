@@ -44,7 +44,7 @@ export class CadastroUsuarioService {
         this.cadastroUsuario.usuario.login = this.login;
         this.cadastroUsuario.usuario.nome = this.nome;
         this.cadastroUsuario.usuario.perfil = this.sigla;
-        this.cadastroUsuario.password = this.password;
+        this.cadastroUsuario.usuario.password = this.password;
         this.cadastroUsuario.currentUser = this.config.user.username;
         const headers = new Headers({'Content-type': 'application/json'});
         const options = new RequestOptions({headers: headers});
@@ -55,7 +55,7 @@ export class CadastroUsuarioService {
       const url = this.config.myApi + '/usuario/deleteUsuario/' + codigo;
       return this.http.delete(url).map(res => res.json());
     }
-    salvarAlteracao(usuario: Usuario, password, newPassword) {
+    salvarAlteracao(usuario: Usuario) {
       const url = this.config.myApi + '/usuario/alterarUsuario';
       this.cadastroUsuario = new CadastroUsuario();
       this.cadastroUsuario.usuario = new Usuario();
