@@ -3,6 +3,7 @@ import {Http} from '@angular/http';
 import {ConfigService} from '../_shared/config.service';
 import {ResidualCalcular} from './residual-calcular';
 import {ListaCalculosPendentes} from './residuais-pendentes/lista-calculos-pendentes';
+import {TerceirizadoResiduaisMovimentacaoFerias} from './calculo-residuais/terceirizado-residuais-movimentacao';
 
 
 
@@ -10,6 +11,19 @@ import {ListaCalculosPendentes} from './residuais-pendentes/lista-calculos-pende
 export class ResidualService {
 
   constructor(private http: Http, private config: ConfigService) {
+  }
+
+  confirmarFeriasResiduais(residuaisFeriasConfirmar: TerceirizadoResiduaisMovimentacaoFerias[]) {
+    const url = this.config.myApi + '/saldo-residual/confirmarFeriasResiduais';
+    const data = [];
+    residuaisFeriasConfirmar.forEach(item => {
+      const object = {
+        codTerceirizadoContrato: item.codigoTerceirizadoContrato,
+        user: this.config.user,
+      };
+      data.push(object);
+    });
+    return this.http.put(url, data).map(res => res.json());
   }
 
   getFuncionariosResidualFerias(codigoContrato: number) {
@@ -28,7 +42,7 @@ export class ResidualService {
   }
 
   getCalculosPendentes() {
-    const url = this.config.myApi + '/ferias' + '/getCalculosPendentes' + '/' + this.config.user.id;
+    const url = this.config.myApi + '/saldo-residual' + '/getCalculosPendentes' + '/' + this.config.user.id;
     return this.http.get(url).map(res => res.json());
   }
 

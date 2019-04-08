@@ -4,12 +4,31 @@ export class TerceirizadoResiduaisMovimentacaoFerias {
   private _cpf: string;
   private _valorFeriasResidual: number;
   private _valorTercoResidual: number;
-  // private _valorRestituicaoFerias: ValorRestituicaoFerias;
   private _valorIncidenciaFeriasResidual: number;
   private _valorIncidenciaTercoResidual: number;
   private _valorTotalResidual: number;
   private _restituidoFlag: string;
   // private _emAnalise: boolean;
+
+  constructor (codTerceirizadoContrato: number,
+               terceirizado: string,
+               cpf: string,
+               valorFeriasResidual: number,
+               valorTercoResidual: number,
+               valorIncidenciaFeriasResidual: number,
+               valorIncidenciaTercoResidual: number,
+               valorTotalResidual: number,
+               restituidoFlag: string) {
+    this._codigoTerceirizadoContrato = codTerceirizadoContrato;
+    this._terceirizado = terceirizado;
+    this._cpf = cpf;
+    this._valorFeriasResidual = valorFeriasResidual;
+    this._valorTercoResidual = valorTercoResidual;
+    this._valorIncidenciaFeriasResidual = valorIncidenciaFeriasResidual;
+    this._valorIncidenciaTercoResidual = valorIncidenciaTercoResidual;
+    this._valorTotalResidual = valorTotalResidual;
+    this._restituidoFlag = restituidoFlag;
+  }
 
   // get emAnalise(): boolean {
   //   return this._emAnalise;
@@ -57,7 +76,6 @@ export class TerceirizadoResiduaisMovimentacaoDecimoTerceiro {
   private _terceirizado: string;
   private _cpf: string;
   private _valorDecimoTerceiroResidual: number;
-  // private _valorRestituicaoFerias: ValorRestituicaoFerias;
   private _valorIncidenciaDecimoTerceiroResidual: number;
   private _valorTotalResidual: number;
   private _restituidoFlag: string;
@@ -108,7 +126,6 @@ export class TerceirizadoResiduaisMovimentacaoRescisao {
   private _valorMultaFgtsTercoResidual: number;
   private _valorMultaFgtsSalarioResidual: number;
   private _valorTotalResidual: number;
-  // private _valorRestituicaoFerias: ValorRestituicaoFerias;
   private _restituidoFlag: string;
   // private _emAnalise: boolean;
 

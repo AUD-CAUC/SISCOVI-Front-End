@@ -25,25 +25,6 @@
           </div>
         </td>
         <td>{{terceirizado.terceirizado}}</td>
-<!--        <td>-->
-<!--          <div [formGroupName]="i">-->
-<!--            <div class="row">-->
-<!--              <div class="input-field col s12">-->
-<!--                <select materialize="material_select" formControlName="parcelas">-->
-<!--                  <option value="0">Única</option>-->
-<!--                  <option value="1">Primeira</option>-->
-<!--                  <option value="2">Segunda</option>-->
-<!--                  <option value="3">Terceira</option>-->
-<!--                </select>-->
-<!--                <div *ngIf="feriasForm.get('calcularTerceirizados').get('' + i).get('parcelas').getError('mensagem')">-->
-<!--                  <div *ngFor="let msg of feriasForm.get('calcularTerceirizados').get('' + i).get('parcelas').getError('mensagem')[0]">-->
-<!--                    <span class="mensagem-erro">{{msg}}</span>-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </td>-->
         <td>{{terceirizado.cpf}}</td>
         <td>{{terceirizado.valorFeriasResidual | currency:'BRL':true:'1.2-2'}}</td>
         <td>{{terceirizado.valorTercoResidual | currency:'BRL':true:'1.2-2'}}</td>
@@ -56,10 +37,10 @@
   </div>
 </form>
 <br>
-<div class="container" *ngIf="tipoRestituicao == 'MOVIMENTACAO'">
+<div class="container">
   <div class="row" *ngIf="terceirizados && tipoRestituicao">
     <div class="center-align">
-<!--      <button class="btn waves-effect center" (click)="verificaDadosFormulario()">Calcular</button>-->
+      <button class="btn waves-effect center" (click)="verificaDadosFormulario()">Calcular</button>
     </div>
   </div>
 </div>
@@ -77,39 +58,32 @@
     </div>
   </div>
 </div>
-<div class="container">
-  <div id="modal2" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions2">
-    <div class="modal-content">
-      <h4 class="center">Atenção</h4>
-      <h5 class=" center">Preencha os campos adequadamente</h5>
-    </div>
-    <div class="modal-footer">
-      <button class="btn waves-effect center" (click)="closeModal2()">Ok</button>
-    </div>
-  </div>
-</div>
 <div id="modal3" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions3">
   <div class="modal-content">
     <h4 class="center">Atenção</h4>
     <h5 class="center">Deseja Confirmar o cálculo realizado ?</h5>
     <p>Obs.: Esta ação não poderá ser desfeita futuramente *</p>
-    <table *ngIf="feriasCalcular"  class="highlight centered responsive-table hoverable">
+    <table *ngIf="residuaisFeriasConfirmar"  class="highlight centered responsive-table hoverable">
       <thead>
       <tr>
-        <th>Terceirizado</th>
-        <th>Início de Férias</th>
-        <th>Fim de Férias</th>
-        <th>Dias Concedidos</th>
-        <th>Valor a Movimentar</th>
+        <th>Terceirizados</th>
+        <th>CPF</th>
+        <th>Valor de férias</th>
+        <th>Valor de terço</th>
+        <th>Incidência sobre férias</th>
+        <th>Incidência sobre terço</th>
+        <th>Restituido?</th>
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let ferias of feriasCalcular; let l = index">
-        <td>{{ferias.nomeTerceirizado}}</td>
-        <td>{{ferias.inicioFerias}}</td>
-        <td>{{ferias.fimFerias}}</td>
-        <td>{{diasConcedidos[l]}}</td>
-        <td>{{ferias.valorMovimentado | currency:'BRL':true:'1.2-2'}}</td>
+      <tr *ngFor="let residuaisFerias of residuaisFeriasConfirmar; let l = index">
+        <td>{{residuaisFerias.terceirizado}}</td>
+        <td>{{residuaisFerias.cpf}}</td>
+        <td>{{residuaisFerias.valorFeriasResidual | currency:'BRL':true:'1.2-2'}}</td>
+        <td>{{residuaisFerias.valorTercoResidual | currency:'BRL':true:'1.2-2'}}</td>
+        <td>{{residuaisFerias.valorIncidenciaFeriasResidual | currency:'BRL':true:'1.2-2'}}</td>
+        <td>{{residuaisFerias.valorIncidenciaTercoResidual | currency:'BRL':true:'1.2-2'}}</td>
+        <td>{{residuaisFerias.restituidoFlag}}</td>
       </tr>
       </tbody>
     </table>

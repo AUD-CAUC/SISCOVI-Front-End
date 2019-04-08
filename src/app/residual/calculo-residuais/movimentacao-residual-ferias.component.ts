@@ -19,7 +19,7 @@ export class MovimentacaoResidualFeriasComponent implements OnInit {
   feriasForm: FormGroup;
   isSelected = false;
   selected = false;
-  feriasCalcular: ResidualCalcular[] = [];
+  residuaisFeriasConfirmar: TerceirizadoResiduaisMovimentacaoFerias[] = [];
   modalActions = new EventEmitter<string | MaterializeAction>();
   modalActions2 = new EventEmitter<string | MaterializeAction>();
   modalActions3 = new EventEmitter<string | MaterializeAction>();
@@ -43,8 +43,14 @@ export class MovimentacaoResidualFeriasComponent implements OnInit {
     this.terceirizados.forEach(item => {
       const addCtrl = this.fb.group({
         codTerceirizadoContrato: new FormControl(item.codigoTerceirizadoContrato),
+        terceirizado: new FormControl(item.terceirizado),
+        cpf: new FormControl(item.cpf),
         valorFerias: new FormControl(item.valorFeriasResidual),
         valorTerco: new FormControl(item.valorTercoResidual),
+        valorIncidenciaFerias: new FormControl(item.valorIncidenciaFeriasResidual),
+        valorIncidenciaTerco: new FormControl(item.valorIncidenciaTercoResidual),
+        valorTotal: new FormControl(item.valorTotalResidual),
+        restituidoFlag: new FormControl(item.restituidoFlag),
         selected: new FormControl(this.isSelected),
         // emAnalise: new FormControl(item.emAnalise),
       });
@@ -105,85 +111,54 @@ export class MovimentacaoResidualFeriasComponent implements OnInit {
     }
   }
 
-  efetuarCalculo(): void {
-    // this.feriasService.calculaFeriasTerceirizados(this.feriasCalcular).subscribe(res => {
-    //   if (res.success) {
-    //     this.closeModal3();
-    //     this.openModal4();
-    //   }
-    // });
+
+  verificaDadosFormulario() {
+    this.residuaisFeriasConfirmar = [];
+    let aux = 0;
+    for (let i = 0; i < this.terceirizados.length; i++) {
+      if (this.feriasForm.get('calcularTerceirizados').get('' + i).get('selected').value) {
+        aux++;
+        if (this.feriasForm.get('calcularTerceirizados').get('' + i).status === 'VALID') {
+          const objeto = new TerceirizadoResiduaisMovimentacaoFerias(
+            this.feriasForm.get('calcularTerceirizados').get('' + i).get('codTerceirizadoContrato').value,
+            this.feriasForm.get('calcularTerceirizados').get('' + i).get('terceirizado').value,
+            this.feriasForm.get('calcularTerceirizados').get('' + i).get('cpf').value,
+            this.feriasForm.get('calcularTerceirizados').get('' + i).get('valorFerias').value,
+            this.feriasForm.get('calcularTerceirizados').get('' + i).get('valorTerco').value,
+            this.feriasForm.get('calcularTerceirizados').get('' + i).get('valorIncidenciaFerias').value,
+            this.feriasForm.get('calcularTerceirizados').get('' + i).get('valorIncidenciaTerco').value,
+            this.feriasForm.get('calcularTerceirizados').get('' + i).get('valorTotal').value,
+            this.feriasForm.get('calcularTerceirizados').get('' + i).get('restituidoFlag').value);
+          let index = -1;
+          for (let j = 0; j < this.residuaisFeriasConfirmar.length; j++) {
+            if (this.residuaisFeriasConfirmar[j].codigoTerceirizadoContrato === this.feriasForm.get('calcularTerceirizados').get('' + i).get('codTerceirizadoContrato').value) {
+              index = j;
+            }
+          }
+          if (index === -1) {
+            this.residuaisFeriasConfirmar.push(objeto);
+          } else {
+            this.residuaisFeriasConfirmar.splice(index, 1);
+            this.residuaisFeriasConfirmar.push(objeto);
+          }
+        }
+      }
+    }
+    if (aux === 0) {
+      this.openModal1();
+    } else {
+      this.openModal3();
+    }
   }
 
-  // verificaDadosFormulario() {
-  //   this.feriasCalcular = [];
-  //   let aux = 0;
-  //   for (let i = 0; i < this.terceirizados.length; i++) {
-  //     if (this.feriasForm.get('calcularTerceirizados').get('' + i).get('selected').value) {
-  //       aux++;
-  //       this.feriasForm.get('calcularTerceirizados').get('' + i).get('valorMovimentado').updateValueAndValidity();
-  //       if (this.feriasForm.get('calcularTerceirizados').get('' + i).status === 'VALID' && this.feriasForm.get('calcularTerceirizados').get('' + i).get('valorMovimentado').valid) {
-  //         const objeto = new FeriasCalcular(this.feriasForm.get('calcularTerceirizados').get('' + i).get('codTerceirizadoContrato').value,
-  //           this.feriasForm.get('calcularTerceirizados').get('' + i).get('tipoRestituicao').value,
-  //           this.feriasForm.get('calcularTerceirizados').get('' + i).get('diasVendidos').value,
-  //           this.feriasForm.get('calcularTerceirizados').get('' + i).get('inicioFerias').value,
-  //           this.feriasForm.get('calcularTerceirizados').get('' + i).get('fimFerias').value,
-  //           this.feriasForm.get('calcularTerceirizados').get('' + i).get('inicioPeriodoAquisitivo').value,
-  //           this.feriasForm.get('calcularTerceirizados').get('' + i).get('fimPeriodoAquisitivo').value,
-  //           this.feriasForm.get('calcularTerceirizados').get('' + i).get('valorMovimentado').value,
-  //           this.feriasForm.get('calcularTerceirizados').get('' + i).get('parcelas').value,
-  //           0,
-  //           this.feriasForm.get('calcularTerceirizados').get('' + i).get('valorFerias').value,
-  //           this.feriasForm.get('calcularTerceirizados').get('' + i).get('valorTercoConstitucional').value,
-  //           this.feriasForm.get('calcularTerceirizados').get('' + i).get('valorIncidenciaFerias').value,
-  //           this.feriasForm.get('calcularTerceirizados').get('' + i).get('valorIncidenciaTercoConstitucional').value);
-  //         if (this.terceirizados[i].valorRestituicaoFerias) {
-  //           objeto.setInicioPeriodoAquisitivo(this.terceirizados[i].valorRestituicaoFerias.inicioPeriodoAquisitivo);
-  //           objeto.setFimPeriodoAquisitivo(this.terceirizados[i].valorRestituicaoFerias.fimPeriodoAquisitivo);
-  //         }
-  //         let index = -1;
-  //         for (let j = 0; j < this.feriasCalcular.length; j++) {
-  //           if (this.feriasCalcular[j].codTerceirizadoContrato === this.feriasForm.get('calcularTerceirizados').get('' + i).get('codTerceirizadoContrato').value) {
-  //             index = j;
-  //           }
-  //         }
-  //         objeto.setNomeTerceirizado(this.terceirizados[i].nomeTerceirizado);
-  //         if (index === -1) {
-  //           this.feriasCalcular.push(objeto);
-  //         } else {
-  //           this.feriasCalcular.splice(index, 1);
-  //           this.feriasCalcular.push(objeto);
-  //         }
-  //       } else {
-  //         this.feriasForm.get('calcularTerceirizados').get('' + i).get('inicioFerias').markAsTouched();
-  //         this.feriasForm.get('calcularTerceirizados').get('' + i).get('inicioFerias').markAsDirty();
-  //         this.feriasForm.get('calcularTerceirizados').get('' + i).get('fimFerias').markAsTouched();
-  //         this.feriasForm.get('calcularTerceirizados').get('' + i).get('fimFerias').markAsDirty();
-  //         this.feriasForm.get('calcularTerceirizados').get('' + i).get('diasVendidos').markAsTouched();
-  //         this.feriasForm.get('calcularTerceirizados').get('' + i).get('diasVendidos').markAsDirty();
-  //         this.feriasForm.get('calcularTerceirizados').get('' + i).get('valorMovimentado').markAsTouched();
-  //         this.feriasForm.get('calcularTerceirizados').get('' + i).get('valorMovimentado').markAsDirty();
-  //         aux = undefined;
-  //         this.openModal2();
-  //       }
-  //     }
-  //   }
-  //   if (aux === 0) {
-  //     this.openModal1();
-  //   }
-  //   if ((this.feriasCalcular.length > 0) && aux) {
-  //     this.diasConcedidos = [];
-  //     for (let i = 0; i < this.feriasCalcular.length; i++) {
-  //       this.getDiasConcedidos(this.feriasCalcular[i].inicioFerias, this.feriasCalcular[i].fimFerias, this.feriasCalcular[i].diasVendidos, i);
-  //       this.terceirizados.forEach(terceirizado => {
-  //         if (this.feriasCalcular[i].codTerceirizadoContrato === terceirizado.codigoTerceirizadoContrato) {
-  //           this.feriasCalcular[i].inicioPeriodoAquisitivo = terceirizado.valorRestituicaoFerias.inicioPeriodoAquisitivo;
-  //           this.feriasCalcular[i].fimPeriodoAquisitivo = terceirizado.valorRestituicaoFerias.fimPeriodoAquisitivo;
-  //         }
-  //       });
-  //     }
-  //     this.openModal3();
-  //   }
-  // }
+  efetuarCalculo(): void {
+    this.residualService.confirmarFeriasResiduais(this.residuaisFeriasConfirmar).subscribe(res => {
+      if (res.success) {
+        this.closeModal3();
+        this.openModal4();
+      }
+    });
+  }
 
   getDiasConcedidos(inicioFerias, fimFerias, diasVendidos, indice) {
     let dia = inicioFerias.split('/')[0];
