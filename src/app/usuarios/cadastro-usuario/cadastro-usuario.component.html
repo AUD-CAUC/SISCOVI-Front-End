@@ -60,6 +60,15 @@
             <label for="confirm-new-password">Confirme a nova senha</label>
             <input  id="confirm-new-password" type="password" class="validate" required formControlName="confirmNewPassword" (keyup)="verifyForm()">
             </div>
+            <div class="row">
+              <div class="input-field col">
+                <select materialize="material_select" [materializeSelectOptions]="perfil" formControlName="sigla" (change)="verifyForm(); activateButton()">
+                  <option disabled>Selecione um Perfil</option>
+                  <option *ngFor="let per of perfil" [value]="per">{{per}}</option>
+                </select>
+                <label>Perfil do Usuário</label>
+              </div>
+            </div>
           </div>
         </div>
       </form>

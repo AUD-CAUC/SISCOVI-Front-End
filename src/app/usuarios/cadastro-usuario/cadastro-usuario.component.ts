@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, EventEmitter, Input, OnInit} from '@angular/core';
 import {Http} from '@angular/http';
 import {ConfigService} from '../../_shared/config.service';
 import {CadastroUsuarioService} from './cadastro-usuario.service';
@@ -6,6 +6,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Usuario} from '../usuario';
 import {MaterializeAction} from 'angular2-materialize';
+import * as XLSX from 'xlsx';
 
 @Component({
     selector: 'app-cadastro-usuario',
@@ -46,20 +47,18 @@ export class CadastroUsuarioComponent implements OnInit {
         });
         this.route.params.subscribe(params => {
           this.id = params['id'];
-          console.log(this.id);
-          console.log(this.nome);
-          console.log(this.sigla);
-          console.log(this.password);
           if (this.id) {
             cadUs.getUsuario(this.id).subscribe(res => {
               this.usuario = res;
+              console.log(res);
               // this.usuarioForm.controls.nome.setValue(this.usuario.nome);
               // this.usuarioForm.controls.login.setValue(this.usuario.login);
               this.editaUsuarioForm.controls.nome.setValue(this.usuario.nome);
               this.editaUsuarioForm.controls.login.setValue(this.usuario.login);
+              this.editaUsuarioForm.controls.sigla.setValue(this.usuario.perfil);
               this.editaUsuarioForm.controls.password.setValue(this.password);
               this.editaUsuarioForm.controls.newPassword.setValue(this.newPassword);
-              this.editaUsuarioForm.controls.confirmNewPassord.setValue(this.confirmNewPassword);
+              // this.editaUsuarioForm.controls.confirmNewPassord.setValue(this.confirmNewPassword);
               if (this.usuario.perfil === '1') {
                 this.usuarioForm.controls.sigla.setValue('ADMINISTRADOR');
               } else if (this.usuario.perfil === '2') {
@@ -94,6 +93,9 @@ export class CadastroUsuarioComponent implements OnInit {
             this.cadUs.validity = true;
         }
     }
+    disableButton() {
+      this.notValidEdit = true;
+    }
     activateButton(): void {
       if (this.id) {
         if ((this.cadUs.nome !== this.nome) ||
@@ -112,9 +114,6 @@ export class CadastroUsuarioComponent implements OnInit {
           this.notValidEdit = true; /*caso contrario nao habilita o botao para salvar as alteracoes*/
         }
       }
-    }
-    disableButton() {
-      this.notValidEdit = true;
     }
     openModal() {
       this.modalActions.emit({action: 'modal', params: ['open']});
