@@ -41,28 +41,28 @@
         <div class="row">
           <div class="col s12 l4">
             <label for="nome-usuario-edicao">Nome do Gestor</label>
-            <input placeholder="Nome" id="nome-usuario-edicao" type="text" class="validate" maxlength="30" required (keyup)="verifyForm(); activateButton()" formControlName="nome">
+            <input placeholder="Nome" id="nome-usuario-edicao" type="text" class="validate" maxlength="30" required (keyup)="verifyEditForm(); activateButton()" formControlName="nome">
           </div>
           <div class="col s12 l4">
             <label for="login-edicao">Nome de Usuário</label>
-            <input placeholder="Login" id="login-edicao" type="text" class="validate" required (keyup)="verifyForm(); activateButton()" formControlName="login">
+            <input placeholder="Login" id="login-edicao" type="text" class="validate" required (keyup)="verifyEditForm(); activateButton()" formControlName="login">
           </div>
           <div class="row">
-            <div class="col s12 l4">
-              <label for="old-password">Digite a senha antiga</label>
-              <input  id="old-password" type="password" class="validate" required formControlName="password" (keyup)="verifyForm()">
-            </div>
+<!--            <div class="col s12 l4">-->
+<!--              <label for="old-password">Digite a senha antiga</label>-->
+<!--              <input  id="old-password" type="password" class="validate" required formControlName="password" (keyup)="verifyEditForm()">-->
+<!--            </div>-->
             <div class="col s12 l4">
               <label for="new-password">Digite a nova senha</label>
-              <input  id="new-password" type="password" class="validate" required formControlName="newPassword" (keyup)="verifyForm()">
+              <input  id="new-password" type="password" class="validate" required formControlName="newPassword" (keyup)="verifyEditForm()">
             </div>
             <div class="col s12 l4">
             <label for="confirm-new-password">Confirme a nova senha</label>
-            <input  id="confirm-new-password" type="password" class="validate" required formControlName="confirmNewPassword" (keyup)="verifyForm()">
+            <input  id="confirm-new-password" type="password" class="validate" required formControlName="confirmNewPassword" (keyup)="verifyEditForm()">
             </div>
             <div class="row">
               <div class="input-field col">
-                <select materialize="material_select" [materializeSelectOptions]="perfil" formControlName="sigla" (change)="verifyForm(); activateButton()">
+                <select materialize="material_select" [materializeSelectOptions]="perfil" formControlName="sigla" (change)="verifyEditForm(); activateButton()">
                   <option disabled>Selecione um Perfil</option>
                   <option *ngFor="let per of perfil" [value]="per">{{per}}</option>
                 </select>

@@ -82,39 +82,43 @@ export class CadastroUsuarioComponent implements OnInit {
     }
 
   verifyForm() {
-        if (this.usuarioForm.valid) {
-            this.cadUs.nome = this.usuarioForm.controls.nome.value;
-            this.cadUs.login = this.usuarioForm.controls.login.value;
-            this.cadUs.sigla = this.usuarioForm.controls.sigla.value;
-            this.cadUs.password = this.usuarioForm.controls.password.value;
-            // this.cadUs.newPassword = this.usuarioForm.controls.newPassword.value;
-           this.cadUs.validity = false;
-        }else {
-            this.cadUs.validity = true;
-        }
+    if (this.usuarioForm.valid) {
+      this.cadUs.nome = this.usuarioForm.controls.nome.value;
+      this.cadUs.login = this.usuarioForm.controls.login.value;
+      this.cadUs.sigla = this.usuarioForm.controls.sigla.value;
+      this.cadUs.password = this.usuarioForm.controls.password.value;
+      this.cadUs.validity = false;
+    }else {
+      this.cadUs.validity = true;
     }
-    disableButton() {
-      this.notValidEdit = true;
+  }
+  verifyEditForm() { /*TODO: colocar essa função em cada input do formulário [formGroup]="editaUsuarioForm" (FEITO!)*/
+    if (this.editaUsuarioForm.valid) { /*TODO: Passar nome, login, sigla, newPassword e confirmNewPassord(?)*/
+      this.cadUs.nome = this.editaUsuarioForm.controls.nome.value;
+      this.cadUs.login = this.editaUsuarioForm.controls.login.value;
+      this.cadUs.sigla = this.editaUsuarioForm.controls.sigla.value;
+      this.cadUs.newPassword = this.editaUsuarioForm.controls.nome.value; /*TODO: criar newPassord no Service (FEITO!)*/
+      this.cadUs.validity = false;
+    }else {
+      this.cadUs.validity = true;
     }
-    activateButton(): void {
-      if (this.id) {
-        if ((this.cadUs.nome !== this.nome) ||
-          (this.cadUs.login !== this.login) ||
-          (this.cadUs.sigla !== this.sigla) ||
-          (this.cadUs.password !== this.password) ||
-          (this.cadUs.newPassword !== this.newPassword) &&
-          (this.confirmNewPassword === this.newPassword)) {
-          this.notValidEdit = false; /*permite a edicao se pelo menos 1 dos campos campos a serem alterados forem diferentes dos ja cadastrados*/
-        }else if ((this.cadUs.nome === this.usuario.nome) ||
-          (this.cadUs.login === this.usuario.login) ||
-          (this.cadUs.sigla === this.usuario.perfil) ||
-          (this.cadUs.password === this.password) ||
-          (this.cadUs.newPassword === this.newPassword) &&
-          (this.confirmNewPassword !== this.newPassword)) {
-          this.notValidEdit = true; /*caso contrario nao habilita o botao para salvar as alteracoes*/
-        }
+  }
+  activateButton() {
+    this.editaUsuarioForm.get('nome').updateValueAndValidity();
+    this.editaUsuarioForm.get('login').updateValueAndValidity();
+    this.editaUsuarioForm.get('password').updateValueAndValidity();
+    this.editaUsuarioForm.get('sigla').updateValueAndValidity();
+    if (this.id) {
+      if ((this.editaUsuarioForm.get('nome').value !== this.usuario.nome ||
+        this.editaUsuarioForm.get('login').value !== this.usuario.login ||
+        this.editaUsuarioForm.get('password').value !== this.newPassword ||
+        this.editaUsuarioForm.get('sigla').value !== this.usuario.perfil)) {
+        this.salvarButtonDisabled = false;
+      }else {
+        this.salvarButtonDisabled = true;
       }
     }
+  }
     openModal() {
       this.modalActions.emit({action: 'modal', params: ['open']});
     }
