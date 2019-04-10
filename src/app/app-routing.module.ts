@@ -41,6 +41,7 @@ import {CadastrarConvencaoComponent} from './convencoes-coletivas/cadastrar-conv
 import {CadastrarPercentualEstaticoComponent} from './percentuais-estaticos/cadastrar-percentual-estatico/cadastrar-percentual-estatico.component';
 import {ResidualComponent} from './residual/residual.component';
 import {CadastrarPercentualDinamicoComponent} from './percentuais-dinamicos/cadastrar-percentual-dinamico/cadastrar-percentual-dinamico.component';
+import {ResidualFeriasPendentesResolver} from './residual/residual-ferias-pendentes.resolver';
 
 const routes: Routes = [
   {path: '', pathMatch: 'full', redirectTo: 'home'},
@@ -101,6 +102,7 @@ const routes: Routes = [
         component: ResidualComponent,
         canActivate: [LoggedInGuard],
         resolve: {
+          calculosPendentes: ResidualFeriasPendentesResolver,
         }
       },
       {path: 'totalMensal', component: TotalMensalComponent, canActivate: [LoggedInGuard]},
@@ -142,7 +144,7 @@ const routes: Routes = [
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
-  providers: [FeriasPendentesResolver, FeriasPendentesExecucaoResolver, RescisaoPendenteResolver, RescisaoPendenteExecucaoResolver]
+  providers: [FeriasPendentesResolver, FeriasPendentesExecucaoResolver, RescisaoPendenteResolver, RescisaoPendenteExecucaoResolver, ResidualFeriasPendentesResolver]
 })
 export class AppRoutingModule {
 }

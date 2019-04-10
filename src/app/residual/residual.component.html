@@ -24,8 +24,8 @@
                                     (navegaParaViewDeCalculos)="calculosPendentes($event)"></app-calculo-residuais-component>
     </div>
     <div id="test3" class="col s12" active="testePendentes()">
-      <app-ferias-calculos-pendentes *ngIf="testePendentes()" [calculosPendentes]="cp"
-                                     (nav)="calculosExecutados($event)"></app-ferias-calculos-pendentes>
+      <app-residuais-calculos-pendentes *ngIf="testePendentes()" [calculosPendentes]="cp"
+                                     (nav)="calculosExecutados($event)"></app-residuais-calculos-pendentes>
     </div>
     <div id="test4" class="col s12" active="testeExecutados()">
       <app-ferias-calculos-pendentes-execucao *ngIf="testeExecutados()" [calculosPendentesExecucao]="cpe"

@@ -7,7 +7,7 @@ export class TerceirizadoResiduaisMovimentacaoFerias {
   private _valorIncidenciaFeriasResidual: number;
   private _valorIncidenciaTercoResidual: number;
   private _valorTotalResidual: number;
-  private _restituidoFlag: string;
+  // private _restituidoFlag: string;
   // private _emAnalise: boolean;
 
   constructor (codTerceirizadoContrato: number,
@@ -27,7 +27,7 @@ export class TerceirizadoResiduaisMovimentacaoFerias {
     this._valorIncidenciaFeriasResidual = valorIncidenciaFeriasResidual;
     this._valorIncidenciaTercoResidual = valorIncidenciaTercoResidual;
     this._valorTotalResidual = valorTotalResidual;
-    this._restituidoFlag = restituidoFlag;
+    // this._restituidoFlag = restituidoFlag;
   }
 
   // get emAnalise(): boolean {
@@ -66,9 +66,9 @@ export class TerceirizadoResiduaisMovimentacaoFerias {
     return this._valorTotalResidual;
   }
 
-  get restituidoFlag(): string {
-    return this._restituidoFlag;
-  }
+  // get restituidoFlag(): string {
+  //   return this._restituidoFlag;
+  // }
 }
 
 export class TerceirizadoResiduaisMovimentacaoDecimoTerceiro {

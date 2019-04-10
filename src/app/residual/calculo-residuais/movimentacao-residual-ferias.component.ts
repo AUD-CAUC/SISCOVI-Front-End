@@ -50,7 +50,6 @@ export class MovimentacaoResidualFeriasComponent implements OnInit {
         valorIncidenciaFerias: new FormControl(item.valorIncidenciaFeriasResidual),
         valorIncidenciaTerco: new FormControl(item.valorIncidenciaTercoResidual),
         valorTotal: new FormControl(item.valorTotalResidual),
-        restituidoFlag: new FormControl(item.restituidoFlag),
         selected: new FormControl(this.isSelected),
         // emAnalise: new FormControl(item.emAnalise),
       });

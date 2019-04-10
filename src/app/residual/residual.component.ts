@@ -15,7 +15,7 @@ export class ResidualComponent implements OnInit {
   codigoContrato: number;
   cp: ListaCalculosPendentes[];
   cpe: ListaCalculosPendentes[];
-  constructor(private route: ActivatedRoute, private feriasService: ResidualService, private ref: ChangeDetectorRef) {
+  constructor(private route: ActivatedRoute, private residualService: ResidualService, private ref: ChangeDetectorRef) {
   }
 
   ngOnInit() {
@@ -24,7 +24,7 @@ export class ResidualComponent implements OnInit {
   }
 
   calculosPendentes() {
-    this.feriasService.getCalculosPendentes().subscribe(res => {
+    this.residualService.getCalculosPendentes().subscribe(res => {
       this.cp = res;
       this.ref.markForCheck();
       this.tabSelectionParams = ['select_tab', 'test3'];
@@ -39,7 +39,7 @@ export class ResidualComponent implements OnInit {
   }
 
   calculosExecutados() {
-    this.feriasService.getCalculosPendentesExecucao().subscribe(res => {
+    this.residualService.getCalculosPendentesExecucao().subscribe(res => {
       this.cpe = res;
       this.ref.markForCheck();
       this.tabSelectionParams = ['select_tab', 'test4'];
