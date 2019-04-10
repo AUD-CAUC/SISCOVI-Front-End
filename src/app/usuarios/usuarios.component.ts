@@ -64,7 +64,7 @@ export class UsuariosComponent {
   deletarUsuario() {
     this.cadUs.apagarUsuario(this.id).subscribe(res => {
       if (res === 'Usuário excluída com sucesso!') {
-        this.cadUs.getAllUsuarios().subscribe(res2 => {
+        this.userService.getUsuarios().subscribe(res2 => {
           this.usuarios.slice();
           this.usuarios = res2;
           this.closeModal2();

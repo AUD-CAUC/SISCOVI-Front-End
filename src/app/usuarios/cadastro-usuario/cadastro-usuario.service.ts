@@ -35,10 +35,10 @@ export class CadastroUsuarioService {
       const url = this.config.myApi + '/usuario/getUsuario/' + codigo;
       return this.http.get(url).map(res => res.json());
     }
-    getAllUsuarios() {
-      const url = this.config.myApi + '/usuario/getUsuarios';
-      return this.http.get(url).map(res => res.json());
-    }
+    // getAllUsuarios() {
+    //   const url = this.config.myApi + '/usuario/getUsuarios';
+    //   return this.http.get(url).map(res => res.json());
+    // }
     cadastrarUsuario() {
         this.cadastroUsuario.usuario = new Usuario();
         this.cadastroUsuario.usuario.login = this.login;
