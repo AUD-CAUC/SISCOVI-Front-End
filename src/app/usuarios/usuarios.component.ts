@@ -47,7 +47,7 @@ export class UsuariosComponent {
     this.userService.setValdity(true);
     this.modalActions2.emit({action: 'modal', params: ['close']});
   }
-  sendForm(event: Event) {
+  cadastrarNovoUsuario(event: Event) {
     event.preventDefault();
     this.cadUs.cadastrarUsuario().subscribe(res => {
       if (res.mensagem === 'Usuário Cadastrado Com Sucesso !') {

@@ -23,6 +23,9 @@ export class CadastroUsuarioComponent implements OnInit {
     id: number;
     notValidEdit = true;
     modalActions = new EventEmitter<string|MaterializeAction>();
+    modalActions6 = new EventEmitter<string | MaterializeAction>();
+    modalActions4 = new EventEmitter<string | MaterializeAction>();
+    modalActions5 = new EventEmitter<string | MaterializeAction>();
     nome = '';
     login = '';
     sigla = '';
@@ -30,6 +33,7 @@ export class CadastroUsuarioComponent implements OnInit {
     router: Router;
     newPassword: '';
     confirmNewPassword: '';
+    salvarButtonDisabled = true;
     constructor(http: Http, config: ConfigService, private fb: FormBuilder, cadUs: CadastroUsuarioService, route: ActivatedRoute, router: Router) {
       this.router = router;
       this.route = route;
@@ -50,7 +54,6 @@ export class CadastroUsuarioComponent implements OnInit {
           if (this.id) {
             cadUs.getUsuario(this.id).subscribe(res => {
               this.usuario = res;
-              console.log(res);
               // this.usuarioForm.controls.nome.setValue(this.usuario.nome);
               // this.usuarioForm.controls.login.setValue(this.usuario.login);
               this.editaUsuarioForm.controls.nome.setValue(this.usuario.nome);
@@ -92,12 +95,12 @@ export class CadastroUsuarioComponent implements OnInit {
       this.cadUs.validity = true;
     }
   }
-  verifyEditForm() { /*TODO: colocar essa função em cada input do formulário [formGroup]="editaUsuarioForm" (FEITO!)*/
-    if (this.editaUsuarioForm.valid) { /*TODO: Passar nome, login, sigla, newPassword e confirmNewPassord(?)*/
+  verifyEditForm() {
+    if (this.editaUsuarioForm.valid) {
       this.cadUs.nome = this.editaUsuarioForm.controls.nome.value;
       this.cadUs.login = this.editaUsuarioForm.controls.login.value;
       this.cadUs.sigla = this.editaUsuarioForm.controls.sigla.value;
-      this.cadUs.newPassword = this.editaUsuarioForm.controls.nome.value; /*TODO: criar newPassord no Service (FEITO!)*/
+      this.cadUs.newPassword = this.editaUsuarioForm.controls.newPassword.value;
       this.cadUs.validity = false;
     }else {
       this.cadUs.validity = true;
@@ -109,21 +112,50 @@ export class CadastroUsuarioComponent implements OnInit {
     this.editaUsuarioForm.get('password').updateValueAndValidity();
     this.editaUsuarioForm.get('sigla').updateValueAndValidity();
     if (this.id) {
-      if ((this.editaUsuarioForm.get('nome').value !== this.usuario.nome ||
-        this.editaUsuarioForm.get('login').value !== this.usuario.login ||
-        this.editaUsuarioForm.get('password').value !== this.newPassword ||
-        this.editaUsuarioForm.get('sigla').value !== this.usuario.perfil)) {
+      if ((this.editaUsuarioForm.get('nome').value !== this.nome ||
+        this.editaUsuarioForm.get('login').value !== this.login ||
+        this.editaUsuarioForm.get('newPassword').value !== this.newPassword ||
+        this.editaUsuarioForm.get('confirmNewPassword').value !== this.newPassword ||
+        this.editaUsuarioForm.get('sigla').value !== this.sigla)) {
         this.salvarButtonDisabled = false;
       }else {
         this.salvarButtonDisabled = true;
       }
     }
   }
+  disableButton() {
+    this.salvarButtonDisabled = true;
+  }
     openModal() {
       this.modalActions.emit({action: 'modal', params: ['open']});
     }
     closeModal() {
       this.modalActions.emit({action: 'modal', params: ['close']});
+    }
+    openModal6() {
+      this.modalActions6.emit({action: 'modal', params: ['open']});
+    }
+    closeModal6() {
+      this.modalActions6.emit({action: 'modal', params: ['close']});
+    }
+    openModal4() {
+      this.modalActions4.emit({action: 'modal', params: ['open']});
+    }
+    closeModal4() {
+      this.modalActions4.emit({action: 'modal', params: ['close']});
+    }
+    openModal5() {
+      this.modalActions5.emit({action: 'modal', params: ['open']});
+    }
+    closeModal5() {
+      this.modalActions5.emit({action: 'modal', params: ['close']});
+    }
+    navTer() {
+      this.closeModal4();
+      this.closeModal5();
+      this.closeModal6();
+      this.modalActions.emit({action: 'modal', params: ['close']});
+      this.router.navigate(['usuarios']);
     }
     salvarAlteracao() {
       if (this.editaUsuarioForm.valid) {
@@ -134,8 +166,16 @@ export class CadastroUsuarioComponent implements OnInit {
         this.password = this.editaUsuarioForm.controls.newPassword.value;
         this.cadUs.salvarAlteracao(this.usuario).subscribe(res => {
           if (res === 'Alteração feita com sucesso !') {
-            this.closeModal();
-            this.router.navigate(['/usuario']);
+            console.log('sucesso!');
+            this.openModal4();
+          }else if (res === 'Houve falha na tentativa de Salvar as Alterações') {
+            console.log('deu ruim');
+            this.openModal5();
+          }else if (res === 'Senha antiga não confere com a senha digitada') {
+            console.log('deu ruim mais verificou...');
+            this.openModal6();
+          }else {
+            console.log('vish...');
           }
         });
       }

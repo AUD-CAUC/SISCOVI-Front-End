@@ -20,7 +20,7 @@ export class CadastroUsuarioService {
     constructor(http: Http, config: ConfigService) {
         this.http = http;
         this.config = config;
-        this.cadastroUsuario = new CadastroUsuario();
+
     }
     changeValidity() {
         this.validity = ((!this.validity && false) || (this.validity && true));
@@ -40,6 +40,7 @@ export class CadastroUsuarioService {
     //   return this.http.get(url).map(res => res.json());
     // }
     cadastrarUsuario() {
+        this.cadastroUsuario = new CadastroUsuario();
         this.cadastroUsuario.usuario = new Usuario();
         this.cadastroUsuario.usuario.login = this.login;
         this.cadastroUsuario.usuario.nome = this.nome;

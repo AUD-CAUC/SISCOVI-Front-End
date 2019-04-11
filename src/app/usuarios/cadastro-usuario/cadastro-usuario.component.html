@@ -48,10 +48,10 @@
             <input placeholder="Login" id="login-edicao" type="text" class="validate" required (keyup)="verifyEditForm(); activateButton()" formControlName="login">
           </div>
           <div class="row">
-<!--            <div class="col s12 l4">-->
-<!--              <label for="old-password">Digite a senha antiga</label>-->
-<!--              <input  id="old-password" type="password" class="validate" required formControlName="password" (keyup)="verifyEditForm()">-->
-<!--            </div>-->
+            <div class="col s12 l4">
+              <label for="old-password">Digite a senha antiga</label>
+              <input  id="old-password" type="password" class="validate" required formControlName="password" (keyup)="verifyEditForm()">
+            </div>
             <div class="col s12 l4">
               <label for="new-password">Digite a nova senha</label>
               <input  id="new-password" type="password" class="validate" required formControlName="newPassword" (keyup)="verifyEditForm()">
@@ -72,7 +72,36 @@
           </div>
         </div>
       </form>
-        <button class="btn waves-effect right" [disabled]="(!notValidEdit && cadUs.getValidity()) || (notValidEdit)" (click)="salvarAlteracao()">Salvar</button>
+        <button class="btn waves-effect right" [disabled]="(!salvarButtonDisabled && cadUs.getValidity()) || (salvarButtonDisabled)" (click)="salvarAlteracao()">Salvar</button>
         <button class="btn waves-effect left"(click)="disableButton()" routerLink="/usuarios">Voltar</button>
+  </div>
+</div>
+<div id="modal4" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions4">
+  <div class="modal-content">
+    <h4 class="center">Ok</h4>
+    <h5 class="center">As alterações foram salvas com sucesso !</h5>
+  </div>
+  <div class="modal-footer">
+    <button class="waves-effect btn" (click)="navTer()">Ok</button>
+  </div>
+</div>
+<div id="modal5" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions5">
+  <div class="modal-content">
+    <h4 class="center">ERRO</h4>
+    <h5 class="center">Ocorreu algum erro ao tentar salvar as alterações!</h5>
+    <p>Tente novamente mais tarde</p>
+  </div>
+  <div class="modal-footer">
+    <button class="waves-effect btn" (click)="navTer()">Ok</button>
+  </div>
+</div>
+<div id="modal6" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions6">
+  <div class="modal-content">
+    <h4 class="center">ERRO</h4>
+    <h5 class="center">A senha antiga não confere com a senha digitada</h5>
+    <p>Tente novamente mais tarde</p>
+  </div>
+  <div class="modal-footer">
+    <button class="waves-effect btn" (click)="navTer()">Ok</button>
   </div>
 </div>
