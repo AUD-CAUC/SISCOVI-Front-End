@@ -4,5 +4,5 @@ import {TerceirizadoResiduaisMovimentacaoFerias} from '../calculo-residuais/terc
 export class ListaCalculosPendentes {
   titulo: string;
   codigo: number;
-  calculosFerias: TerceirizadoResiduaisMovimentacaoFerias[];
+  calculosFerias: ResiduaisCalculosPendentes[];
 }

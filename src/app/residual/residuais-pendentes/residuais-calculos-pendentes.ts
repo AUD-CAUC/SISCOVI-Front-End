@@ -1,11 +1,13 @@
 import {ResidualCalcular} from '../residual-calcular';
 
 export class ResiduaisCalculosPendentes {
-  cod: number;
-  calcularResidualModel: ResidualCalcular;
-  nomeTerceirizado: string;
-  nomeCargo: string;
+  codigoTerceirizadoContrato: number;
+  cpf: number;
   status: string;
-  total: number;
-  observacoes: string;
+  terceirizado: string;
+  valorFeriasResidual: number;
+  valorIncidenciaFeriasResidual: number;
+  valorIncidenciaTercoResidual: number;
+  valorTercoResidual: number;
+  valorTotalResidual: number;
 }

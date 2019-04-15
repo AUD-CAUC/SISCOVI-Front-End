@@ -42,6 +42,7 @@ export class ResiduaisCalculosPendentesComponent implements OnInit {
 
     this.residualService.getCalculosPendentes().subscribe(res => {
       this.calculosPendentes = res;
+      console.log(this.calculosPendentes);
 
       if (this.calculosPendentes.length === 0) {
         this.calculosPendentes = null;
@@ -106,6 +107,7 @@ export class ResiduaisCalculosPendentesComponent implements OnInit {
           calculoPendente.calculosFerias.forEach(() => {
             const newControl2 = <FormArray>newControl.controls.calculosFerias;
             const addControl = this.fb.group({
+              codigoTerceirizadoContrato: new FormControl(),
               selected: new FormControl(),
               avaliacao: new FormControl('S')
             });
@@ -191,16 +193,16 @@ export class ResiduaisCalculosPendentesComponent implements OnInit {
     this.calculosAvaliados = [];
     for (let i = 0; i < this.calculosPendentes.length; i++) {
       const lista = new ListaCalculosPendentes();
-      // for (let j = 0; j < this.calculosPendentes[i].calculos.length; j++) {
-      //   if (this.feriasForm.get('contratos').get('' + i).get('calculosFerias').get('' + j).get('selected').value) {
-      //     aux++;
-      //     const temp: ResiduaisCalculosPendentes = this.calculosPendentes[i].calculos[j];
-      //     temp.status = this.feriasForm.get('contratos').get('' + i).get('calculosFerias').get('' + j).get('avaliacao').value;
-      //     lista.titulo = this.feriasForm.get('contratos').get('' + i).get('titulo').value;
-      //     lista.codigo = this.feriasForm.get('contratos').get('' + i).get('codigo').value;
-      //     lista.calculos.push(temp);
-      //   }
-      // }
+      for (let j = 0; j < this.calculosPendentes[i].calculosFerias.length; j++) {
+        if (this.feriasForm.get('contratos').get('' + i).get('calculosFerias').get('' + j).get('selected').value) {
+          aux++;
+          const temp: ResiduaisCalculosPendentes = this.calculosPendentes[i].calculosFerias[j];
+          temp.status = this.feriasForm.get('contratos').get('' + i).get('calculosFerias').get('' + j).get('avaliacao').value;
+          lista.titulo = this.feriasForm.get('contratos').get('' + i).get('titulo').value;
+          lista.codigo = this.feriasForm.get('contratos').get('' + i).get('codigo').value;
+          lista.calculosFerias.push(temp);
+        }
+      }
       this.calculosAvaliados.push(lista);
     }
     if (aux === 0) {
