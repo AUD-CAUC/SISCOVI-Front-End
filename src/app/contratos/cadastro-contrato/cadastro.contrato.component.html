@@ -311,3 +311,26 @@
     </div>
   </div>
 </div>
+<div id="modal" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]"
+     [materializeActions]="modalActions">
+  <div class="modal-content">
+    <h4 class="center">Sucesso</h4>
+    <br>
+    <h5 class=" center">Contrato cadastrado com sucesso !</h5>
+  </div>
+  <div class="modal-footer">
+    <button id="button-footer" class="btn waves-effect" (click)="closeModal()" routerLink="/contratos">Ok</button>
+  </div>
+</div>
+<div id="modal2" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]"
+     [materializeActions]="modalActions2">
+  <div class="modal-content">
+    <h4 class="center">Erro</h4>
+    <br>
+    <h5 class=" center"><span class="mensagem-erro">Houve uma falha ao tentar cadastrar o contrato ! Tente novamente mais tarde ou entre em contato
+      com o administrador do sistema</span></h5>
+  </div>
+  <div class="modal-footer">
+    <button class="button-footer" class="btn waves-effect" (click)="closeModal2()">Ok</button>
+  </div>
+</div>

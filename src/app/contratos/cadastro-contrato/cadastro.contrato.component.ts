@@ -1,5 +1,5 @@
 import {Component, EventEmitter, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {CargoService} from '../../cargos/cargo.service';
 import {Cargo} from '../../cargos/cargo';
@@ -25,6 +25,7 @@ import {PercentualDinamicoService} from '../../percentuais-dinamicos/percentual-
 export class CadastroContratoComponent implements OnInit {
 
     router: Router;
+    route: ActivatedRoute;
     carSer: CargoService;
     cargosCadastrados: Cargo[];
     myForm: FormGroup;
@@ -49,11 +50,13 @@ export class CadastroContratoComponent implements OnInit {
         {valor: 12, mes: 'Dezembro'}
     ];
     modalActions = new EventEmitter<string | MaterializeAction>();
+    modalActions2 = new EventEmitter<string | MaterializeAction>();
     convencoesColetivas: Convencao[];
     percentuaisDinamicos: PercentualDinamico[] = [];
-    constructor(router: Router, carSer: CargoService, fb: FormBuilder, fb1: FormBuilder, contratoService: ContratosService, userService: UserService,
+    constructor(router: Router, route: ActivatedRoute, carSer: CargoService, fb: FormBuilder, fb1: FormBuilder, contratoService: ContratosService, userService: UserService,
                 percentualDinamicoService: PercentualDinamicoService, config: ConfigService, private convServ: ConvencaoService) {
         this.router = router;
+        this.route = route;
         this.fb = fb;
         this.fb1 = fb1;
         this.contratoService = contratoService;
@@ -75,7 +78,6 @@ export class CadastroContratoComponent implements OnInit {
             });
         }
         percentualDinamicoService.getAllPercentuaisDinamicos().subscribe(res => {
-          console.log(this.percentuaisDinamicos);
           this.percentuaisDinamicos = res;
         });
     }
@@ -127,6 +129,12 @@ export class CadastroContratoComponent implements OnInit {
     }
     closeModal() {
         this.modalActions.emit({action: 'modal', params: ['close']});
+    }
+    openModal2() {
+      this.modalActions2.emit({action: 'modal', params: ['open']});
+    }
+    closeModal2() {
+      this.modalActions2.emit({action: 'modal', params: ['close']});
     }
     adicionaCargo(): void {
         const control = <FormArray>this.myForm.controls.cargos;
@@ -227,7 +235,9 @@ export class CadastroContratoComponent implements OnInit {
         contrato.percentuais = percentuais;
         this.contratoService.cadastrarContrato(contrato).subscribe(res => {
             if (res.success) {
+              this.openModal();
             }else {
+              this.openModal2();
             }
         });
     }
