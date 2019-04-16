@@ -39,6 +39,8 @@ export class CadastrarAjustesComponent {
   contrato: Contrato;
   primeiroSubstituto: string;
   segundoSubstituto: string;
+  terceiroSubstituto: string;
+  quartoSubstituto: string;
   cadastroAjuste = new EventEmitter();
   tiposEventosContratuais: TipoEventoContratual[] = [];
   modalActions = new EventEmitter<string | MaterializeAction>();
@@ -125,6 +127,8 @@ export class CadastrarAjustesComponent {
       gestor: new FormControl('', [Validators.required]),
       primeiroSubstituto: new FormControl(''),
       segundoSubstituto: new FormControl(''),
+      terceiroSubstituto: new FormControl(''),
+      quartoSubstituto: new FormControl(''),
       assinatura: new FormControl('', [Validators.required]),
       inicioVigencia: new FormControl('', [Validators.required]),
       fimVigencia: new FormControl('', [Validators.required]),
@@ -201,6 +205,14 @@ export class CadastrarAjustesComponent {
         if (this.contrato.historicoGestao[2]) {
           this.segundoSubstituto = this.contrato.historicoGestao[2].gestor;
           this.myForm.controls.segundoSubstituto.setValue(this.segundoSubstituto);
+        }
+        if (this.contrato.historicoGestao[3]) {
+          this.terceiroSubstituto = this.contrato.historicoGestao[3].gestor;
+          this.myForm.controls.terceiroSubstituto.setValue(this.terceiroSubstituto);
+        }
+        if (this.contrato.historicoGestao[4]) {
+          this.quartoSubstituto = this.contrato.historicoGestao[4].gestor;
+          this.myForm.controls.quartoSubstituto.setValue(this.quartoSubstituto);
         }
       }
       this.contrato.funcoes.forEach(funcao => {
@@ -407,7 +419,44 @@ export class CadastrarAjustesComponent {
         hist.codigoPerfilGestao = 3;
         contrato.historicoGestao.push(hist);
       }
-
+    }
+    if (this.myForm.get('terceiroSubstituto').value.length > 0) {
+      const historico: HistoricoGestor = this.contrato.historicoGestao.find(item => item.codigoPerfilGestao === 3);
+      let create = false;
+      if (historico) {
+        if (this.myForm.get('terceiroSubstituto').value !== historico.gestor) {
+          create = true;
+        }
+      }else {
+        create = true;
+      }
+      if (create) {
+        const hist: HistoricoGestor = new HistoricoGestor();
+        hist.inicio = this.stringToDate(this.myForm.get('inicioVigencia').value);
+        hist.gestor = this.myForm.get('terceiroSubstituto').value;
+        hist.fim = this.stringToDate(this.myForm.get('fimVigencia').value);
+        hist.codigoPerfilGestao = 4;
+        contrato.historicoGestao.push(hist);
+      }
+    }
+    if (this.myForm.get('quartoSubstituto').value.length > 0) {
+      const historico: HistoricoGestor = this.contrato.historicoGestao.find(item => item.codigoPerfilGestao === 3);
+      let create = false;
+      if (historico) {
+        if (this.myForm.get('quartoSubstituto').value !== historico.gestor) {
+          create = true;
+        }
+      }else {
+        create = true;
+      }
+      if (create) {
+        const hist: HistoricoGestor = new HistoricoGestor();
+        hist.inicio = this.stringToDate(this.myForm.get('inicioVigencia').value);
+        hist.gestor = this.myForm.get('quartoSubstituto').value;
+        hist.fim = this.stringToDate(this.myForm.get('fimVigencia').value);
+        hist.codigoPerfilGestao = 5;
+        contrato.historicoGestao.push(hist);
+      }
     }
 
     contrato.eventoContratual = eventoContratual;

@@ -73,6 +73,28 @@
           <label for="nome_substituto_2">Segundo Substituto</label>
         </div>
       </div>
+      <div class='row'>
+        <div class="input-field col s4">
+          <select materialize="material_select" id="nome_substituto_3" class="validate"
+                  [materializeSelectOptions]="usuarios" formControlName="terceiroSubstituto">
+            <option disabled>Opcional</option>
+            <option *ngFor="let usuario of usuarios" [value]="usuario.nome"
+                    [selected]="usuario.nome == terceiroSubstituto">{{usuario.nome}}
+            </option>
+          </select>
+          <label for="nome_substituto_2">Terceiro Substituto</label>
+        </div>
+        <div class="input-field col s4">
+          <select materialize="material_select" id="nome_substituto_4" class="validate"
+                  [materializeSelectOptions]="usuarios" formControlName="quartoSubstituto">
+            <option disabled>Opcional</option>
+            <option *ngFor="let usuario of usuarios" [value]="usuario.nome"
+                    [selected]="usuario.nome == quartoSubstituto">{{usuario.nome}}
+            </option>
+          </select>
+          <label for="nome_substituto_2">Quarto Substituto</label>
+        </div>
+      </div>
       <div class="row">
         <div class="input-field col ">
           <input placeholder="Ex.: 70/2013" id="numero_contrato" type="text" class="validate"
@@ -303,6 +325,12 @@
                     <small>{{historico.gestor}}</small>
                   </h5>
                   <h5 *ngIf="historico.codigoPerfilGestao == 3">Segundo Substituto:
+                    <small>{{historico.gestor}}</small>
+                  </h5>
+                  <h5 *ngIf="historico.codigoPerfilGestao == 4">Terceiro Substituto:
+                    <small>{{historico.gestor}}</small>
+                  </h5>
+                  <h5 *ngIf="historico.codigoPerfilGestao == 5">Quarto Substituto:
                     <small>{{historico.gestor}}</small>
                   </h5>
                 </div>
