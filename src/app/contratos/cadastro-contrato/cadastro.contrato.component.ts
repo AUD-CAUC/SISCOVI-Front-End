@@ -95,6 +95,8 @@ export class CadastroContratoComponent implements OnInit {
             numeroContrato: new FormControl('', [Validators.required]),
             primeiroSubstituto: new FormControl(''),
             segundoSubstituto: new FormControl(''),
+            terceiroSubstituto: new FormControl(''),
+            quartoSubstituto: new FormControl(''),
             numeroProcessoSTJ: new FormControl('')
         });
         this.myForm = this.fb.group({
@@ -252,6 +254,22 @@ export class CadastroContratoComponent implements OnInit {
             historico.gestor = this.myForm2.get('segundoSubstituto').value;
             historico.fim = this.converteDateFormat(this.myForm2.get('fimVigencia').value);
             historico.codigoPerfilGestao = 3;
+            lista.push(historico);
+            historico = new HistoricoGestor();
+        }
+        if (this.myForm2.get('terceiroSubstituto').value.length > 0) {
+            historico.inicio = this.converteDateFormat(this.myForm2.get('inicioVigencia').value);
+            historico.gestor = this.myForm2.get('terceiroSubstituto').value;
+            historico.fim = this.converteDateFormat(this.myForm2.get('fimVigencia').value);
+            historico.codigoPerfilGestao = 4;
+            lista.push(historico);
+            historico = new HistoricoGestor();
+        }
+        if (this.myForm2.get('quartoSubstituto').value.length > 0) {
+            historico.inicio = this.converteDateFormat(this.myForm2.get('inicioVigencia').value);
+            historico.gestor = this.myForm2.get('quartoSubstituto').value;
+            historico.fim = this.converteDateFormat(this.myForm2.get('fimVigencia').value);
+            historico.codigoPerfilGestao = 5;
             lista.push(historico);
         }
         return lista;
