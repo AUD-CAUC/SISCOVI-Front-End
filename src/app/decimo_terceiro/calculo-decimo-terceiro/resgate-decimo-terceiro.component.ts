@@ -46,7 +46,8 @@ export class ResgateDecimoTerceiroComponent implements OnInit {
         parcelas: new FormControl(0),
         selected: new FormControl(this.isSelected),
         tipoRestituicao: new FormControl(this.tipoRestituicao),
-        inicioContagem: new FormControl(item.inicioContagem)
+        inicioContagem: new FormControl(item.inicioContagem),
+        emAnalise: new FormControl(item.emAnalise),
       });
       control.push(addCtrl);
     });
@@ -56,6 +57,11 @@ export class ResgateDecimoTerceiroComponent implements OnInit {
       this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('parcelas').setValue(0);
       this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('tipoRestituicao').setValidators(Validators.required);
       this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('inicioContagem');
+      const emAnalise = this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('emAnalise').value;
+
+      if (emAnalise) {
+        this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).disable();
+      }
     }
     this.ref.markForCheck();
   }
@@ -141,13 +147,9 @@ export class ResgateDecimoTerceiroComponent implements OnInit {
     }
     if ((this.calculosDecimoTerceiro.length > 0) && aux) {
       this.diasConcedidos = [];
-      console.log('antes req:');
-      console.log(this.calculosDecimoTerceiro);
       this.decimoTerceiroService.calculaDecimoTerceiroTerceirizados(this.calculosDecimoTerceiro).subscribe(res => {
         if (!res.error) {
           this.calculosDecimoTerceiro = res;
-          console.log('depois req:');
-          console.log(this.calculosDecimoTerceiro);
           this.somaDecimo = 0;
           this.somaIncidencia = 0;
 
