@@ -101,6 +101,7 @@ export class CadastroUsuarioComponent implements OnInit {
       this.cadUs.login = this.editaUsuarioForm.controls.login.value;
       this.cadUs.sigla = this.editaUsuarioForm.controls.sigla.value;
       this.cadUs.newPassword = this.editaUsuarioForm.controls.newPassword.value;
+      this.cadUs.password = this.editaUsuarioForm.controls.password.value;
       this.cadUs.validity = false;
     }else {
       this.cadUs.validity = true;
@@ -111,13 +112,14 @@ export class CadastroUsuarioComponent implements OnInit {
     this.editaUsuarioForm.get('login').updateValueAndValidity();
     this.editaUsuarioForm.get('password').updateValueAndValidity();
     this.editaUsuarioForm.get('sigla').updateValueAndValidity();
+    this.editaUsuarioForm.get('confirmNewPassword').updateValueAndValidity();
     if (this.id) {
       if ((this.editaUsuarioForm.get('nome').value !== this.nome ||
         this.editaUsuarioForm.get('login').value !== this.login ||
         this.editaUsuarioForm.get('newPassword').value !== this.newPassword ||
-        this.editaUsuarioForm.get('confirmNewPassword').value !== this.newPassword ||
         this.editaUsuarioForm.get('sigla').value !== this.sigla)) {
         this.salvarButtonDisabled = false;
+        console.log('entrou');
       }else {
         this.salvarButtonDisabled = true;
       }
@@ -157,27 +159,22 @@ export class CadastroUsuarioComponent implements OnInit {
       this.modalActions.emit({action: 'modal', params: ['close']});
       this.router.navigate(['usuarios']);
     }
-    salvarAlteracao() {
-      if (this.editaUsuarioForm.valid) {
-        this.usuario.codigo = this.id;
-        this.nome = this.editaUsuarioForm.controls.nome.value;
-        this.login = this.editaUsuarioForm.controls.login.value;
-        this.sigla = this.editaUsuarioForm.controls.sigla.value;
-        this.password = this.editaUsuarioForm.controls.newPassword.value;
-        this.cadUs.salvarAlteracao(this.usuario).subscribe(res => {
-          if (res === 'Alteração feita com sucesso !') {
-            console.log('sucesso!');
-            this.openModal4();
-          }else if (res === 'Houve falha na tentativa de Salvar as Alterações') {
-            console.log('deu ruim');
-            this.openModal5();
-          }else if (res === 'Senha antiga não confere com a senha digitada') {
-            console.log('deu ruim mais verificou...');
-            this.openModal6();
-          }else {
-            console.log('vish...');
-          }
-        });
-      }
+  salvarAlteracao() {
+    if (this.editaUsuarioForm.valid) {
+      this.nome = this.editaUsuarioForm.get('nome').value;
+      this.login = this.editaUsuarioForm.get('login').value;
+      this.sigla = this.editaUsuarioForm.get('sigla').value;
+      this.password = this.editaUsuarioForm.get('newPassword').value;
+      this.cadUs.salvarAlteracao(this.usuario).subscribe(res => {
+        if (res === 'Alteração feita com sucesso !') {
+          this.openModal4();
+        }else if (res === 'Houve falha na tentativa de Salvar as Alterações') {
+          this.openModal5();
+        }else if (res === 'Senha antiga não confere com a senha digitada') {
+          this.openModal6();
+        }else {
+        }
+      });
     }
+  }
 }
