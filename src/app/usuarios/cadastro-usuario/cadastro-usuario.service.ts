@@ -61,8 +61,11 @@ export class CadastroUsuarioService {
       this.cadastroUsuario = new CadastroUsuario();
       this.cadastroUsuario.usuario = new Usuario();
       this.cadastroUsuario.usuario = usuario;
-      this.cadastroUsuario.password = this.newPassword;
+      this.cadastroUsuario.usuario.perfil = this.sigla;
+      this.cadastroUsuario.password = this.password;
+      this.cadastroUsuario.newPassword = this.newPassword;
       this.cadastroUsuario.currentUser = this.config.user.username;
+      console.log(this.cadastroUsuario);
       return this.http.put(url, this.cadastroUsuario).map(res => res.json());
   }
 }
