@@ -53,6 +53,7 @@ export class MovimentacaoDecimoTerceiroComponent implements OnInit {
         valorDisponivel: new FormControl(item.valorDisponivel),
         inicioContagem: new FormControl(item.inicioContagem),
         emAnalise: new FormControl(item.emAnalise),
+        restituidoAnoPassado: new FormControl(item.restituidoAnoPassado),
       });
       control.push(addCtrl);
     });
@@ -65,8 +66,9 @@ export class MovimentacaoDecimoTerceiroComponent implements OnInit {
       this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('valorDisponivel');
       this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('inicioContagem');
       const emAnalise = this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('emAnalise').value;
+      const restituidoAnoPassado = this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('restituidoAnoPassado').value;
 
-      if (emAnalise) {
+      if (emAnalise || !restituidoAnoPassado) {
         this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).disable();
       }
     }

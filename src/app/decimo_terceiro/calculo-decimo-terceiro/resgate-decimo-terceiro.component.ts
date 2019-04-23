@@ -40,6 +40,7 @@ export class ResgateDecimoTerceiroComponent implements OnInit {
     });
     this.ref.markForCheck();
     const control = <FormArray>this.decimoTerceiroForm.controls.calcularTerceirizados;
+    console.log(this.terceirizados);
     this.terceirizados.forEach(item => {
       const addCtrl = this.fb.group({
         codTerceirizadoContrato: new FormControl(item.codigoTerceirizadoContrato),
@@ -48,18 +49,21 @@ export class ResgateDecimoTerceiroComponent implements OnInit {
         tipoRestituicao: new FormControl(this.tipoRestituicao),
         inicioContagem: new FormControl(item.inicioContagem),
         emAnalise: new FormControl(item.emAnalise),
+        restituidoAnoPassado: new FormControl(item.restituidoAnoPassado),
       });
       control.push(addCtrl);
     });
     for (let i = 0; i < this.terceirizados.length; i++) {
+      console.log(this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('restituidoAnoPassado').value);
       this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('codTerceirizadoContrato').setValidators(Validators.required);
       this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('parcelas').setValidators(Validators.required);
       this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('parcelas').setValue(0);
       this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('tipoRestituicao').setValidators(Validators.required);
       this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('inicioContagem');
       const emAnalise = this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('emAnalise').value;
+      const restituidoAnoPassado = this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('restituidoAnoPassado').value;
 
-      if (emAnalise) {
+      if (emAnalise || !restituidoAnoPassado) {
         this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).disable();
       }
     }

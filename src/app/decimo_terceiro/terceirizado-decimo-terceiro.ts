@@ -13,6 +13,7 @@ export class TerceirizadoDecimoTerceiro {
     fimContagem: Date;
     private id: String;
     emAnalise: boolean;
+    restituidoAnoPassado: boolean;
 
     constructor(codigoTerceirizadoContrato: number, nomeTerceirizado: string, inicioContagem: Date, valorMovimentado: number, parcelas: number) {
         this.codigoTerceirizadoContrato = codigoTerceirizadoContrato;
