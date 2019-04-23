@@ -53,7 +53,8 @@ export class ResgateRescisaoComponent implements OnInit {
         dataInicioFeriasIntegrais: new FormControl(''),
         dataFimFeriasIntegrais: new FormControl(''),
         dataInicioFeriasProporcionais: new FormControl(''),
-        resgateFeriasVencidas: new FormControl('T', [Validators.required, this.resgateValidatore])
+        resgateFeriasVencidas: new FormControl('T', [Validators.required, this.resgateValidatore]),
+        emAnalise: new FormControl(item.emAnalise),
       });
       control.push(addCtrl);
     });
@@ -75,6 +76,10 @@ export class ResgateRescisaoComponent implements OnInit {
         this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasIntegrais').setValue(this.dateToString(this.terceirizados[i].pDataInicioFeriasIntegrais));
         this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataFimFeriasIntegrais').setValue(this.dateToString(this.terceirizados[i].pDataFimFeriasIntegrais));
         this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasVencidas').setValidators([Validators.required, this.resgateValidatore]);
+      }
+      const emAnalise = this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('emAnalise').value;
+      if (emAnalise) {
+        this.rescisaoForm.get('calcularTerceirizados').get('' + i).disable();
       }
     }
   }
