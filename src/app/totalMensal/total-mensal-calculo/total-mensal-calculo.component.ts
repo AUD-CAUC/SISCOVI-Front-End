@@ -37,6 +37,8 @@ export class TotalMensalCalculoComponent implements OnInit {
     @Output() close = new EventEmitter();
     @Output() navegaParaViewDeCalculos = new EventEmitter();
     private anoSelecionado: number;
+    private mesSelecionado: number;
+    private numFuncAtivos: number;
 
     constructor(contServ: ContratosService, fb: FormBuilder, tmService: TotalMensalService) {
         this.tmService = tmService;
@@ -128,6 +130,7 @@ export class TotalMensalCalculoComponent implements OnInit {
 
     onChange(value: number): void {
         this.codigoContrato = value;
+        this.numFuncAtivos = null;
         if (value) {
             this.validate = false;
         }
@@ -145,6 +148,22 @@ export class TotalMensalCalculoComponent implements OnInit {
                 this.meses = res;
             });
         }
+        if (this.mesSelecionado && this.anoSelecionado && this.codigoContrato) {
+            this.getNumFuncionariosAtivos();
+        }
+    }
+
+    mesChange(value: number): void {
+      this.mesSelecionado = value;
+      if (this.mesSelecionado && this.anoSelecionado && this.codigoContrato) {
+        this.getNumFuncionariosAtivos();
+      }
+    }
+
+    getNumFuncionariosAtivos(): void {
+      this.tmService.getNumFuncionariosAtivos(this.mesSelecionado, this.anoSelecionado, this.codigoContrato).subscribe(res => {
+        this.numFuncAtivos = res;
+      });
     }
 
     calculoTotalMensal() {

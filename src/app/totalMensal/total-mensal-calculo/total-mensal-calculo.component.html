@@ -30,6 +30,7 @@
     <div class="row">
       <div class="input-field col l4 center-align">
         <select name="mes" materialize="material_select" formControlName="mes" required
+                (change)="mesChange($event.target.value)"
                 [materializeSelectOptions]="meses">
           <option *ngFor="let mes of meses" [value]="mes.valor" [selected]="mes.valor === currentMonth">{{ mes.mes }}
           </option>
@@ -48,6 +49,9 @@
             <span class="mensagem-erro">Você deve selecionar um mês para o cálculo</span>
           </div>
         </div>
+      </div>
+      <div class="input-field col l4 center-align">
+        <td>Quantidade de funcionários ativos no mês: {{numFuncAtivos}}</td>
       </div>
     </div>
   </form>

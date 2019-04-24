@@ -106,4 +106,10 @@ export class TotalMensalService {
         const url = this.configService.myApi + '/total-mensal-a-reter/getMesesCalculo/' + ano + '/' + codigoContrato;
         return this.http.get(url).map(res => res.json());
     }
+
+    getNumFuncionariosAtivos(mesSelecionado: number, anoSelecionado: number, codigoContrato: number) {
+        const url = this.configService.myApi + '/total-mensal-a-reter/getNumFuncAtivos/' + mesSelecionado + '/' + anoSelecionado + '/' + codigoContrato;
+        return this.http.get(url).map(res => res.json());
+    }
+
 }
