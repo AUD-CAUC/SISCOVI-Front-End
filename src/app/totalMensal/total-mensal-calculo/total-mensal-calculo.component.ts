@@ -47,16 +47,16 @@ export class TotalMensalCalculoComponent implements OnInit {
             contServ.getContratosDoUsuario().subscribe((res) => {
                 contServ.contratos = res;
                 this.contratos = res;
-                this.anoDoContratoMaisAntigo = this.getAnoDoContratoMaisAntigo(this.contratos);
-                this.anoDoContratoMaisRecente = this.getAnoDoContratoMaisRecente(this.contratos);
-                this.years = this.preencheListaDeAnos(this.anoDoContratoMaisAntigo, this.anoDoContratoMaisRecente);
+                // this.anoDoContratoMaisAntigo = this.getAnoDoContratoMaisAntigo(this.contratos);
+                // this.anoDoContratoMaisRecente = this.getAnoDoContratoMaisRecente(this.contratos);
+                // this.years = this.preencheListaDeAnos(this.anoDoContratoMaisAntigo, this.anoDoContratoMaisRecente);
             });
         } else {
             this.contratos = contServ.contratos;
-            this.currentYear = (new Date().getFullYear());
-            this.anoDoContratoMaisAntigo = this.getAnoDoContratoMaisAntigo(this.contratos);
-            this.anoDoContratoMaisRecente = this.getAnoDoContratoMaisRecente(this.contratos);
-            this.years = this.preencheListaDeAnos(this.anoDoContratoMaisAntigo, this.anoDoContratoMaisRecente);
+            // this.currentYear = (new Date().getFullYear());
+            // this.anoDoContratoMaisAntigo = this.getAnoDoContratoMaisAntigo(this.contratos);
+            // this.anoDoContratoMaisRecente = this.getAnoDoContratoMaisRecente(this.contratos);
+            // this.years = this.preencheListaDeAnos(this.anoDoContratoMaisAntigo, this.anoDoContratoMaisRecente);
         }
         // this.normalizaDataFim();
     }
@@ -133,6 +133,11 @@ export class TotalMensalCalculoComponent implements OnInit {
         this.numFuncAtivos = null;
         if (value) {
             this.validate = false;
+        }
+        if (this.codigoContrato) {
+          this.tmService.getAnosValidos(this.codigoContrato).subscribe(res => {
+            this.years = res;
+          });
         }
         if (this.codigoContrato && this.anoSelecionado) {
             this.tmService.getMesesCalculoValidos(value, this.codigoContrato).subscribe(res => {

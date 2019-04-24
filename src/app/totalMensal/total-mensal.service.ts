@@ -112,4 +112,8 @@ export class TotalMensalService {
         return this.http.get(url).map(res => res.json());
     }
 
+    getAnosValidos(codigoContrato: number) {
+      const url = this.configService.myApi + '/total-mensal-a-reter/getAnosValidosContrato/' + codigoContrato;
+      return this.http.get(url).map(res => res.json());
+    }
 }
