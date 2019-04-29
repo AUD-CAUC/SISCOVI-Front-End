@@ -66,7 +66,7 @@ export class MovimentacaoFeriasComponent implements OnInit {
         parcelaAnterior: new FormControl(item.parcelaAnterior),
         ultimoFimUsufruto: new FormControl(item.ultimoFimUsufruto),
         emAnalise: new FormControl(item.emAnalise),
-
+        dataDesligamento: new FormControl(item.dataDesligamento),
       });
       control.push(addCtrl);
     });
@@ -129,7 +129,11 @@ export class MovimentacaoFeriasComponent implements OnInit {
         error = true;
       }
     } else if (parcelaAnt === '1' && !error) {
-      if (parcelaSelecionada === '1') {
+      if (parcelaSelecionada === '0') {
+        // Não pode realizar parcela única.
+        mensagem.push('Não é possível realizar a parcela única');
+        error = true;
+      } else if (parcelaSelecionada === '1') {
         // Já realizou essa parcela.
         mensagem.push('Primeira parcela já realizada');
         error = true;
@@ -430,11 +434,19 @@ export class MovimentacaoFeriasComponent implements OnInit {
         const inicioUsufruto: Date = new Date(ano, mes, dia);
         if (fimUsufruto <= inicioUsufruto) {
           mensagem.push('A Data Fim do Usufruto deve ser maior que a Data de Início do Usufruto !');
-        }
-        const diff = Math.abs(fimUsufruto.getTime() - inicioUsufruto.getTime());
-        const diffDay = Math.round(diff / (1000 * 3600 * 24)) + 1;
-        if (diffDay > 30) {
-          mensagem.push('O período de férias não pode ser maior que 30 dias !');
+        } else if (control.parent.get('dataDesligamento').value) {
+          const aux: Number[] = control.parent.get('dataDesligamento').value.split('-');
+          const dataDesligamento: Date = new Date(Number(aux[0]), Number(aux[1]) - 1, Number(aux[2]));
+          if (fimUsufruto > dataDesligamento) {
+            mensagem.push('A data fim do usufruto deve ser menor que a data de desligamento do terceirizado que é ' + dataDesligamento.getDate() + '/' +
+              (dataDesligamento.getMonth() + 1) + '/' + dataDesligamento.getFullYear() + ' !');
+          }
+        } else {
+          const diff = Math.abs(fimUsufruto.getTime() - inicioUsufruto.getTime());
+          const diffDay = Math.round(diff / (1000 * 3600 * 24)) + 1;
+          if (diffDay > 30) {
+            mensagem.push('O período de férias não pode ser maior que 30 dias !');
+          }
         }
       }
       if ((control.touched || control.dirty) && (control.value.length === 10) && !control.pristine) {
@@ -464,6 +476,13 @@ export class MovimentacaoFeriasComponent implements OnInit {
 
         if (inicioUsufruto <= fimPeriodoAquisitivo && control.parent.get('existeCalculoAnterior').value === true) {
           mensagem.push('A data de início do usufruto deve ser maior que a data fim do período aquisitivo !');
+        } else if (control.parent.get('dataDesligamento').value) {
+          const aux: Number[] = control.parent.get('dataDesligamento').value.split('-');
+          const dataDesligamento: Date = new Date(Number(aux[0]), Number(aux[1]) - 1, Number(aux[2]));
+          if (inicioUsufruto > dataDesligamento) {
+            mensagem.push('A data de início do usufruto deve ser menor que a data de desligamento do terceirizado que é ' + dataDesligamento.getDate() + '/' +
+              (dataDesligamento.getMonth() + 1) + '/' + dataDesligamento.getFullYear() + ' !');
+          }
         } else if (control.parent.get('ultimoFimUsufruto').value) {
           ano = Number(control.parent.get('ultimoFimUsufruto').value.split('-')[0]);
           mes = Number(control.parent.get('ultimoFimUsufruto').value.split('-')[1]) - 1;
