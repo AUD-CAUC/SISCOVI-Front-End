@@ -51,16 +51,19 @@
                         <div class="row">
                             <div class="input-field col s12">
                                 <input type="text" class="validate" placeholder="Ex: 01/01/2000" appMaskDate formControlName="inicioFerias" maxlength="10" required>
-                              <div *ngIf="feriasResgate.get('calcularTerceirizados').get('' + k).get('inicioFerias').invalid && (feriasResgate.get('calcularTerceirizados').get('' + k).get('inicioFerias').dirty ||
-                                feriasResgate.get('calcularTerceirizados').get('' + k).get('inicioFerias').touched)">
-                                    <div *ngIf="feriasResgate.get('calcularTerceirizados').get('' + k).get('inicioFerias').getError('mensagem')">
-                                        <div *ngFor="let msg of feriasResgate.get('calcularTerceirizados').get('' + k).get('inicioFerias').getError('mensagem')[0]">
-                                            <span class="mensagem-erro">{{msg}}</span>
-                                        </div>
-                                    </div>
-                                    <div *ngIf="feriasResgate.get('calcularTerceirizados').get('' + k).get('inicioFerias').getError('required')">
-                                        <span class="mensagem-erro">Você deve digitar uma data !</span>
-                                    </div>
+                                <div *ngIf="feriasResgate.get('calcularTerceirizados').get('' + k).get('inicioFerias').invalid ||
+                                 (feriasResgate.get('calcularTerceirizados').get('' + k).get('inicioFerias').dirty ||
+                                 feriasResgate.get('calcularTerceirizados').get('' + k).get('inicioFerias').touched) &&
+                                 feriasResgate.get('calcularTerceirizados').get('' + k).get('fimFerias').value && feriasResgate.get('calcularTerceirizados').get('' + k).get('inicioFerias').value">
+                                      <div *ngIf="feriasResgate.get('calcularTerceirizados').get('' + k).get('inicioFerias').getError('mensagem')">
+                                          <div *ngFor="let msg of feriasResgate.get('calcularTerceirizados').get('' + k).get('inicioFerias').getError('mensagem')[0]">
+                                              <span class="mensagem-erro">{{msg}}</span>
+                                          </div>
+                                      </div>
+                                      <div *ngIf="feriasResgate.get('calcularTerceirizados').get('' + k).get('inicioFerias').getError('required') &&
+                                      feriasResgate.get('calcularTerceirizados').get('' + k).get('selected').value">
+                                          <span class="mensagem-erro">Você deve digitar uma data!</span>
+                                      </div>
                                 </div>
                             </div>
                         </div>
@@ -71,15 +74,18 @@
                         <div class="row">
                             <div class="input-field col s12 ">
                                 <input type="text" class="validate" placeholder="Ex: 01/01/2000" appMaskDate formControlName="fimFerias" maxlength="10" required>
-                              <div *ngIf="feriasResgate.get('calcularTerceirizados').get('' + k).get('fimFerias').invalid && (feriasResgate.get('calcularTerceirizados').get('' + k).get('fimFerias').dirty ||
-                                feriasResgate.get('calcularTerceirizados').get('' + k).get('fimFerias').touched)">
+                                <div *ngIf="feriasResgate.get('calcularTerceirizados').get('' + k).get('fimFerias').invalid ||
+                                (feriasResgate.get('calcularTerceirizados').get('' + k).get('fimFerias').dirty ||
+                                feriasResgate.get('calcularTerceirizados').get('' + k).get('fimFerias').touched) &&
+                                feriasResgate.get('calcularTerceirizados').get('' + k).get('fimFerias').value && feriasResgate.get('calcularTerceirizados').get('' + k).get('inicioFerias').value">
                                     <div *ngIf="feriasResgate.get('calcularTerceirizados').get('' + k).get('fimFerias').getError('mensagem')">
                                         <div *ngFor="let msg of feriasResgate.get('calcularTerceirizados').get('' + k).get('fimFerias').getError('mensagem')[0]">
-                                            <span class="mensagem-erro">{{msg}}</span>
+                                          <span class="mensagem-erro">{{msg}}</span>
                                         </div>
                                     </div>
-                                    <div *ngIf="feriasResgate.get('calcularTerceirizados').get('' + k).get('fimFerias').getError('required')">
-                                        <span class="mensagem-erro">Você deve digitar uma data !</span>
+                                    <div *ngIf="feriasResgate.get('calcularTerceirizados').get('' + k).get('fimFerias').getError('required') &&
+                                    feriasResgate.get('calcularTerceirizados').get('' + k).get('selected').value">
+                                      <span class="mensagem-erro">Você deve digitar uma data!</span>
                                     </div>
                                 </div>
                             </div>
@@ -91,7 +97,8 @@
                         <div class="row">
                             <div class="input-field col s12">
                                 <input type="number" value="0" placeholder="Exemplo: 0" class="validate" formControlName="diasVendidos" min="0" max="10" required>
-                              <div *ngIf="feriasResgate.get('calcularTerceirizados').get('' + k).get('diasVendidos').invalid && (feriasResgate.get('calcularTerceirizados').get('' + k).get('diasVendidos').dirty ||
+                                <div *ngIf="feriasResgate.get('calcularTerceirizados').get('' + k).get('diasVendidos').invalid &&
+                                (feriasResgate.get('calcularTerceirizados').get('' + k).get('diasVendidos').dirty ||
                                 feriasResgate.get('calcularTerceirizados').get('' + k).get('diasVendidos').touched)">
                                     <div *ngIf="feriasResgate.get('calcularTerceirizados').get('' + k).get('diasVendidos').getError('mensagem')">
                                         <div *ngFor="let msg of feriasResgate.get('calcularTerceirizados').get('' + k).get('diasVendidos').getError('mensagem')[0]">
