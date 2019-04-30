@@ -53,6 +53,8 @@ export class CadastroContratoComponent implements OnInit {
     modalActions2 = new EventEmitter<string | MaterializeAction>();
     convencoesColetivas: Convencao[];
     percentuaisDinamicos: PercentualDinamico[] = [];
+    incidenciaMinima = 28.50;
+    incidenciaMaxima = 39.80;
     constructor(router: Router, route: ActivatedRoute, carSer: CargoService, fb: FormBuilder, fb1: FormBuilder, contratoService: ContratosService, userService: UserService,
                 percentualDinamicoService: PercentualDinamicoService, config: ConfigService, private convServ: ConvencaoService) {
         this.router = router;
@@ -93,7 +95,7 @@ export class CadastroContratoComponent implements OnInit {
             objeto: new FormControl(''),
             percentualFerias: new FormControl('', [Validators.required]),
             percentualDecimoTerceiro: new FormControl('', [Validators.required]),
-            percentualIncidencia: new FormControl('', [Validators.required, this.percentualValidator]),
+            percentualIncidencia: new FormControl('', [Validators.required, this.percentualValidator.bind(this)]),
             numeroContrato: new FormControl('', [Validators.required]),
             primeiroSubstituto: new FormControl(''),
             segundoSubstituto: new FormControl(''),
@@ -171,12 +173,14 @@ export class CadastroContratoComponent implements OnInit {
         return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
     }
     public percentualValidator(control: AbstractControl): {[key: string]: any} {
-        const val = control.value;
+        const percentual = control.value;
         const mensagem = [];
         if (control.value) {
-            if (val === 0) {
-                mensagem.push('Digite um valor para o percentual de incidência. Valores comuns para este percentual são  36,8 e 35,6');
+            if (percentual > this.incidenciaMaxima || percentual < this.incidenciaMinima) {
+                mensagem.push('Percentual inválido. O percentual mínimo para esse campo é ' + this.incidenciaMinima + '% e o máximo é ' + this.incidenciaMaxima + '%');
             }
+        } else if (percentual === 0) {
+            mensagem.push('O percentual deve ser diferente de 0%');
         }
         return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
     }
