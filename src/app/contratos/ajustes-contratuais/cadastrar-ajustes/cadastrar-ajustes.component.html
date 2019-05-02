@@ -174,8 +174,18 @@
           <input id="percentual_incidencia" class="validate" currencyMask
                  [options]="{ prefix: '', thousands: '.', decimal: ',', allowNegative: 'false', suffix: '%'}"
                  type="text" formControlName="percentualIncidencia">
-          <label for="percentual_incidencia">Percentual de Incidência do Submódulo 4.1<span
-            class="mensagem-erro">*</span></label>
+          <label for="percentual_incidencia">Percentual de Incidência do Submódulo 4.1<span class="mensagem-erro">*</span></label>
+            <div
+                *ngIf="myForm.get('percentualIncidencia').invalid && (myForm.get('percentualIncidencia').dirty || myForm.get('percentualIncidencia').touched)">
+                <div *ngIf="myForm.get('percentualIncidencia').getError('mensagem')">
+                    <div *ngFor="let msg of myForm.get('percentualIncidencia').getError('mensagem')[0]">
+                        <span class="mensagem-erro">{{msg}}</span>
+                    </div>
+                </div>
+                <div *ngIf="myForm.get('percentualIncidencia').getError('required')">
+                    <span class="mensagem-erro">Você deve digitar um percentual</span>
+                </div>
+            </div>
         </div>
       </div>
       <h5 class="left-align">Funções do Contrato</h5>
