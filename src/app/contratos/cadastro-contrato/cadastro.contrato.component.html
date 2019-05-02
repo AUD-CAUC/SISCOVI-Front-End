@@ -17,7 +17,7 @@
       </div>
       <div class="input-field col s2">
         <input id="nome_empresa" placeholder="Nome da Empresa" type="text" class="validate"
-               formControlName="nomeEmpresa" (input)="isValid()" (blur)="isValid()" appTitleCase required>
+               formControlName="nomeEmpresa" (input)="isValid()" (blur)="isValid()" required>
         <label for="nome_empresa">Nome da Empresa<span class="mensagem-erro">*</span></label>
         <div
           *ngIf="myForm2.get('nomeEmpresa').invalid && (myForm2.get('nomeEmpresa').dirty || myForm2.get('nomeEmpresa').touched)">
