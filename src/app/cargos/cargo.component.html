@@ -22,6 +22,25 @@
       </div>
   </div>
     <div class="row" *ngIf="pagedItems">
+        <div class="center">
+            <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
+                <li [ngClass]="{disabled:pager.currentPage === 1}">
+                    <a (click)="setPage(1)">Primeira</a>
+                </li>
+                <li [ngClass]="{disabled:pager.currentPage === 1}" class="waves-effect">
+                    <a (click)="setPage(pager.currentPage - 1)">Anterior</a>
+                </li>
+                <li class="waves-effect" *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
+                    <a (click)="setPage(page)">{{page}}</a>
+                </li>
+                <li class="waves-effect" [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                    <a (click)="setPage(pager.currentPage + 1)">Próxima</a>
+                </li>
+                <li class="waves-effect" [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                    <a (click)="setPage(pager.totalPages)">Última</a>
+                </li>
+            </ul>
+        </div>
         <table class="centered highlight z-depth-2 hoverable">
             <thead>
             <tr>
