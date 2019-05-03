@@ -5,7 +5,7 @@ import {UserService} from '../../../users/user.service';
 import {ConfigService} from '../../../_shared/config.service';
 import {Usuario} from '../../../usuarios/usuario';
 import {Cargo} from '../../../cargos/cargo';
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {PercentualService} from '../../../percentuais/percentual.service';
 import {Percentual} from '../../../percentuais/percentual';
 import {Convencao} from '../../../convencoes-coletivas/convencao';
@@ -47,6 +47,8 @@ export class CadastrarAjustesComponent {
   modalActions2 = new EventEmitter<string | MaterializeAction>();
   modalActions3 = new EventEmitter<string | MaterializeAction>();
   tempCon: Contrato;
+  incidenciaMinima = 14.30;
+  incidenciaMaxima = 39.80;
 
   constructor(private contratoService: ContratosService, private userService: UserService, private config: ConfigService,
               private  fb: FormBuilder, private percentService: PercentualService, private convService: ConvencaoService,
@@ -129,13 +131,13 @@ export class CadastrarAjustesComponent {
       segundoSubstituto: new FormControl(''),
       terceiroSubstituto: new FormControl(''),
       quartoSubstituto: new FormControl(''),
-      assinatura: new FormControl('', [Validators.required]),
-      inicioVigencia: new FormControl('', [Validators.required]),
-      fimVigencia: new FormControl('', [Validators.required]),
+      assinatura: new FormControl('', [Validators.required, this.myDateValidator]),
+      inicioVigencia: new FormControl('', [Validators.required, this.myDateValidator]),
+      fimVigencia: new FormControl('', [Validators.required, this.myDateValidator]),
       assunto: new FormControl(''),
       percentualFerias: new FormControl('', [Validators.required]),
       percentualDecimoTerceiro: new FormControl('', [Validators.required]),
-      percentualIncidencia: new FormControl(''),
+      percentualIncidencia: new FormControl('', [Validators.required, this.percentualValidator.bind(this)]),
       numeroContrato: new FormControl('', [Validators.required]),
       nomeEmpresa: new FormControl('', [Validators.required]),
       cnpj: new FormControl('', [Validators.required]),
@@ -517,4 +519,38 @@ export class CadastrarAjustesComponent {
   private navToAjustes() {
     this.router.navigate(['ajustes-contratuais'], {skipLocationChange: true});
   }
+    public percentualValidator(control: AbstractControl): {[key: string]: any} {
+        const percentual = control.value;
+        const mensagem = [];
+        if (control.value) {
+            if (percentual > this.incidenciaMaxima || percentual < this.incidenciaMinima) {
+                mensagem.push('Percentual inválido. O percentual mínimo para esse campo é ' + this.incidenciaMinima + '% e o máximo é ' + this.incidenciaMaxima + '%');
+            }
+        } else if (percentual === 0) {
+            mensagem.push('O percentual deve ser diferente de 0%');
+        }
+        return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
+    }
+    public myDateValidator(control: AbstractControl): { [key: string]: any } {
+        const val = control.value;
+        const mensagem = [];
+        const otherRegex = new RegExp(/^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[1,3-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$/);
+        if (val.length === 10) {
+            const dia = Number(val.split('/')[0]);
+            const mes = Number(val.split('/')[1]);
+            const ano = Number(val.split('/')[2]);
+            if (dia <= 0 || dia > 31) {
+                mensagem.push('O dia da data é inválido.');
+            } else if (mes <= 0 || mes > 12) {
+                mensagem.push('O Mês digitado é inválido');
+            } else if (ano < 2000 || ano > (new Date().getFullYear() + 5)) {
+                mensagem.push('O Ano digitado é inválido');
+            } else if (val.length === 10) {
+                if (!otherRegex.test(val)) {
+                    mensagem.push('A data digitada é inválida');
+                }
+            }
+        }
+        return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
+    }
 }

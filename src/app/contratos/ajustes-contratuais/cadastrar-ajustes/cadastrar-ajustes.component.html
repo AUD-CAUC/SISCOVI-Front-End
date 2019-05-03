@@ -117,16 +117,49 @@
           <input placeholder="dd/mm/aaaa" type="text" id="data_inicio" class="validate"
                  formControlName="inicioVigencia" appMaskDate>
           <label for="data_inicio">Inicio da Vigência<span class="mensagem-erro">*</span></label>
+            <div
+                *ngIf="myForm.get('inicioVigencia').invalid && (myForm.get('inicioVigencia').dirty || myForm.get('inicioVigencia').touched)">
+                <div *ngIf="myForm.get('inicioVigencia').getError('mensagem')">
+                    <div *ngFor="let msg of myForm.get('inicioVigencia').getError('mensagem')[0]">
+                        <span class="mensagem-erro">{{msg}}</span>
+                    </div>
+                </div>
+                <div *ngIf="myForm.get('inicioVigencia').getError('required')">
+                    <span class="mensagem-erro">Você deve digitar uma data!</span>
+                </div>
+            </div>
         </div>
         <div class="input-field col ">
           <input class="validate" placeholder="dd/mm/aaaa" id="data_fim" type="text"
                  formControlName="fimVigencia" appMaskDate>
           <label for="data_fim">Fim da Vigência<span class="mensagem-erro">*</span></label>
+            <div
+                *ngIf="myForm.get('fimVigencia').invalid && (myForm.get('fimVigencia').dirty || myForm.get('fimVigencia').touched)">
+                <div *ngIf="myForm.get('fimVigencia').getError('mensagem')">
+                    <div *ngFor="let msg of myForm.get('fimVigencia').getError('mensagem')[0]">
+                        <span class="mensagem-erro">{{msg}}</span>
+                    </div>
+                </div>
+                <div *ngIf="myForm.get('fimVigencia').getError('required')">
+                    <span class="mensagem-erro">Você deve digitar uma data!</span>
+                </div>
+            </div>
         </div>
         <div class="input-field col ">
           <input class=" validate" placeholder="dd/mm/aaaa" id="data_assinatura" formControlName="assinatura"
                  type="text" appMaskDate>
           <label for="data_assinatura">Data de Assinatura<span class="mensagem-erro">*</span></label>
+            <div
+                *ngIf="myForm.get('assinatura').invalid && (myForm.get('assinatura').dirty || myForm.get('assinatura').touched)">
+                <div *ngIf="myForm.get('assinatura').getError('mensagem')">
+                    <div *ngFor="let msg of myForm.get('assinatura').getError('mensagem')[0]">
+                        <span class="mensagem-erro">{{msg}}</span>
+                    </div>
+                </div>
+                <div *ngIf="myForm.get('assinatura').getError('required')">
+                    <span class="mensagem-erro">Você deve digitar uma data!</span>
+                </div>
+            </div>
         </div>
       </div>
       <div class="row">
@@ -174,8 +207,18 @@
           <input id="percentual_incidencia" class="validate" currencyMask
                  [options]="{ prefix: '', thousands: '.', decimal: ',', allowNegative: 'false', suffix: '%'}"
                  type="text" formControlName="percentualIncidencia">
-          <label for="percentual_incidencia">Percentual de Incidência do Submódulo 4.1<span
-            class="mensagem-erro">*</span></label>
+          <label for="percentual_incidencia">Percentual de Incidência do Submódulo 4.1<span class="mensagem-erro">*</span></label>
+            <div
+                *ngIf="myForm.get('percentualIncidencia').invalid && (myForm.get('percentualIncidencia').dirty || myForm.get('percentualIncidencia').touched)">
+                <div *ngIf="myForm.get('percentualIncidencia').getError('mensagem')">
+                    <div *ngFor="let msg of myForm.get('percentualIncidencia').getError('mensagem')[0]">
+                        <span class="mensagem-erro">{{msg}}</span>
+                    </div>
+                </div>
+                <div *ngIf="myForm.get('percentualIncidencia').getError('required')">
+                    <span class="mensagem-erro">Você deve digitar um percentual</span>
+                </div>
+            </div>
         </div>
       </div>
       <h5 class="left-align">Funções do Contrato</h5>
