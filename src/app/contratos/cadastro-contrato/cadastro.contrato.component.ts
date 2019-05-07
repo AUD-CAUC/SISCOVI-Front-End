@@ -55,6 +55,7 @@ export class CadastroContratoComponent implements OnInit {
     percentuaisDinamicos: PercentualDinamico[] = [];
     incidenciaMinima = 14.30;
     incidenciaMaxima = 39.80;
+    percDinService: PercentualDinamicoService;
     constructor(router: Router, route: ActivatedRoute, carSer: CargoService, fb: FormBuilder, fb1: FormBuilder, contratoService: ContratosService, userService: UserService,
                 percentualDinamicoService: PercentualDinamicoService, config: ConfigService, private convServ: ConvencaoService) {
         this.router = router;
@@ -63,6 +64,10 @@ export class CadastroContratoComponent implements OnInit {
         this.fb1 = fb1;
         this.contratoService = contratoService;
         this.carSer = carSer;
+        this.percDinService = percentualDinamicoService;
+        this.percDinService.getAllPercentuaisDinamicos().subscribe(res => {
+            this.percentuaisDinamicos = res;
+        });
         this.carSer.getAllCargos().subscribe(res => {
             this.cargosCadastrados = res;
             this.initCargos();
@@ -79,9 +84,6 @@ export class CadastroContratoComponent implements OnInit {
                 this.usuarios = res;
             });
         }
-        percentualDinamicoService.getAllPercentuaisDinamicos().subscribe(res => {
-          this.percentuaisDinamicos = res;
-        });
     }
     ngOnInit() {
         this.myForm2 = this.fb1.group({
