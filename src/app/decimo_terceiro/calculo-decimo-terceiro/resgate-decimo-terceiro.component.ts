@@ -1,6 +1,6 @@
 import {ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {TerceirizadoDecimoTerceiro} from '../terceirizado-decimo-terceiro';
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MaterializeAction} from 'angular2-materialize';
 import {DecimoTerceiroService} from '../decimo-terceiro.service';
 
@@ -49,17 +49,26 @@ export class ResgateDecimoTerceiroComponent implements OnInit {
         inicioContagem: new FormControl(item.inicioContagem),
         emAnalise: new FormControl(item.emAnalise),
         restituidoAnoPassado: new FormControl(item.restituidoAnoPassado),
+        parcelaAnterior: new FormControl(item.parcelaAnterior),
       });
       control.push(addCtrl);
     });
     for (let i = 0; i < this.terceirizados.length; i++) {
       this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('codTerceirizadoContrato').setValidators(Validators.required);
-      this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('parcelas').setValidators(Validators.required);
-      this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('parcelas').setValue(0);
+      this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('parcelas').setValidators([Validators.required, this.parcelaValidator]);
       this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('tipoRestituicao').setValidators(Validators.required);
       this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('inicioContagem');
       const emAnalise = this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('emAnalise').value;
       const restituidoAnoPassado = this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('restituidoAnoPassado').value;
+      let ultimaParcela = this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('parcelaAnterior').value;
+
+      if (ultimaParcela === null) {
+          ultimaParcela = '0';
+      } else if (!emAnalise) {
+          ultimaParcela++;
+          ultimaParcela.toString();
+      }
+      this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('parcelas').setValue(ultimaParcela);
 
       if (emAnalise || !restituidoAnoPassado) {
         this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).disable();
@@ -67,6 +76,37 @@ export class ResgateDecimoTerceiroComponent implements OnInit {
     }
     this.ref.markForCheck();
   }
+
+    public parcelaValidator(control: AbstractControl): { [key: string]: any } {
+        const mensagem = [];
+        let error = false;
+        const parcelaSelecionada: string = control.value;
+        const parcelaAnt: string = control.parent.get('parcelaAnterior').value;
+        if (parcelaAnt === null) {
+            if (parcelaSelecionada === '2') {
+                mensagem.push('Deve realizar a Primeira parcela');
+                error = true;
+            }
+        } else if (parcelaAnt === '1' && !error) {
+            if (parcelaSelecionada === '0') {
+                // Não pode realizar parcela única.
+                mensagem.push('Não é possível realizar a parcela única');
+                error = true;
+            } else if (parcelaSelecionada === '1') {
+                // Já realizou essa parcela.
+                mensagem.push('Primeira parcela já realizada');
+                error = true;
+            }
+        }
+
+        if (error) {
+            control.parent.get('parcelas').markAsUntouched();
+        } else if (control.dirty) {
+            control.parent.get('parcelas').markAsUntouched();
+        }
+
+        return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
+    }
 
   closeModal1() {
     this.modalActions.emit({action: 'modal', params: ['close']});
