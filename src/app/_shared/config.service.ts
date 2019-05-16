@@ -4,7 +4,7 @@ import {User} from '../users/user';
 
 @Injectable()
 export class ConfigService {
-  title = 'SISCOVI Beta';
+  title = 'e-Contas';
   subtitle = 'Sistema Conta Vinculada';
   user: User;
   headers: Headers = new Headers();
