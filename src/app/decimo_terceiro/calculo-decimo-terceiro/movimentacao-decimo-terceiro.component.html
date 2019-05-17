@@ -32,6 +32,11 @@
                   <option value="1">Primeira</option>
                   <option value="2">Segunda</option>
                 </select>
+                <div *ngIf="decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('parcelas').getError('mensagem')">
+                    <div *ngFor="let msg of decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('parcelas').getError('mensagem')[0]">
+                        <span class="mensagem-erro">{{msg}}</span>
+                    </div>
+                </div>
               </div>
             </div>
           </div>
