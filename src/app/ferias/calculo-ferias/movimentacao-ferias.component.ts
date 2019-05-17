@@ -472,9 +472,13 @@ export class MovimentacaoFeriasComponent implements OnInit {
         const inicioUsufruto: Date = new Date(ano, mes, dia);
         const val: Number[] = control.parent.get('fimPeriodoAquisitivo').value.split('-');
         const fimPeriodoAquisitivo: Date = new Date(Number(val[0]), Number(val[1]) - 1, Number(val[2]));
+        const val2: Number[] = control.parent.get('inicioPeriodoAquisitivo').value.split('-');
+        const inicioPeriodoAquisitivo: Date = new Date(Number(val2[0]), Number(val2[1]) - 1, Number(val2[2]));
 
         if (inicioUsufruto <= fimPeriodoAquisitivo && control.parent.get('existeCalculoAnterior').value === true) {
           mensagem.push('A data de início do usufruto deve ser maior que a data fim do período aquisitivo !');
+        } else if (inicioUsufruto <= inicioPeriodoAquisitivo) {
+          mensagem.push('A data de início do usufruto deve ser maior que a data inicio do período aquisitivo !');
         } else if (control.parent.get('dataDesligamento').value) {
           const aux: Number[] = control.parent.get('dataDesligamento').value.split('-');
           const dataDesligamento: Date = new Date(Number(aux[0]), Number(aux[1]) - 1, Number(aux[2]));
