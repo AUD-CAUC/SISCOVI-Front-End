@@ -1,6 +1,9 @@
 <div class="container">
   <div class="section">
     <h2 class="center">Cadastro de Contrato</h2>
+    <p style="text-indent: 2em">Preencha todos os campos corretamente e clique em CADASTRAR. Caso você seja um substituto do gestor do contrato,
+      cadastre o contrato no nome do gestor.<br></p>
+    <p style="text-indent: 2em"><span class="mensagem-erro">*</span> = campo obrigatório</p>
     <div class="divider"></div>
   </div>
   <h5>Informações Gerais</h5>
@@ -76,10 +79,10 @@
           </select>
           <label>Ativo<span class="mensagem-erro">*</span></label>
       </div> -->
-      <div class="input-field col s12">
+      <div class="input-field col s12 tooltip">
         <textarea materialize id="textarea1" class="materialize-textarea" data-length="120" formControlName="objeto"
                   (input)="isValid()" (blur)="isValid()"></textarea>
-        <label for="textarea1">Objeto</label>
+        <label for="textarea1">Objeto<span class="tooltiptext">Exemplos: Limpeza, Manutenção, Serviços Gerais, etc.</span></label>
       </div>
     </div>
     <div class="row">
@@ -189,12 +192,12 @@
         </select>
         <label>Percentual de Décimo Terceiro<span class="mensagem-erro">*</span></label>
       </div>
-      <div class="input-field col l2">
+      <div class="input-field col l2 tooltip">
         <input placeholder="Submódulo 4.1" id="percentual_incidencia" type="text" class="validate"
                formControlName="percentualIncidencia" currencyMask
                [options]="{ prefix: '', thousands: '.', decimal: ',', allowNegative: 'false', suffix: '%'}"
                (input)="isValid()" (blur)="isValid()">
-        <label for="percentual_incidencia">Percentual de Incidência do Submódulo 4.1<span class="mensagem-erro">*</span></label>
+        <label for="percentual_incidencia">Percentual de Incidência do Submódulo 4.1<span class="tooltiptext">Submódulo 4.1 da IN 02/2008 MPOG: RAT:</span> <span class="mensagem-erro">*</span></label>
         <div
           *ngIf="myForm2.get('percentualIncidencia').invalid && (myForm2.get('percentualIncidencia').dirty || myForm2.get('percentualIncidencia').touched)">
           <div *ngIf="myForm2.get('percentualIncidencia').getError('mensagem')">
