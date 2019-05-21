@@ -1,9 +1,9 @@
 <div class="container">
   <div class="section">
     <h2 class="center">Cadastro de Contrato</h2>
-    <p style="text-indent: 2em">Preencha todos os campos corretamente e clique em CADASTRAR. Caso você seja um substituto do gestor do contrato,
+    <p style="text-indent: 2em">Preencha todos os campos corretamente e clique em CADASTRAR abaixo. Caso você seja um substituto do gestor do contrato,
       cadastre o contrato no nome do gestor.<br></p>
-    <p style="text-indent: 2em"><span class="mensagem-erro">*</span> = campo obrigatório</p>
+    <p style="text-indent: 2em">Campos com <span class="mensagem-erro">*</span> são obrigatórios.</p>
     <div class="divider"></div>
   </div>
   <h5>Informações Gerais</h5>
@@ -156,11 +156,11 @@
           </div>
         </div>
       </div>
-      <div class="input-field col l2">
+      <div class="input-field col l2 tooltip">
         <input formControlName="assinatura" id="data_assinatura" placeholder="Data de Assinatura" type="text"
                class="validate" required minlength="10" maxlength="10" appMaskDate
                (blur)="isValid()" (input)="isValid()">
-        <label for="data_assinatura">Data de Assinatura<span class="mensagem-erro">*</span></label>
+        <label for="data_assinatura">Data de Assinatura<span class="tooltiptext">A data a qual o contrato foi assinado.</span> <span class="mensagem-erro">*</span></label>
         <div
           *ngIf="myForm2.get('assinatura').invalid && (myForm2.get('assinatura').dirty || myForm2.get('assinatura').touched)">
           <div *ngIf="myForm2.get('assinatura').getError('mensagem') && !myForm2.get('assinatura').errors.required">
@@ -214,6 +214,9 @@
   </form>
   <form [formGroup]="myForm" autocomplete="off">
     <h5>Funções</h5>
+    <br>
+    <p style="text-indent: 2em"> Cadastre aqui todas as funções/cargos constantes no contrato. Lembre-se que cada função só poderá se cadastrada uma vez em cada contrato!</p>
+    <p style="text-indent: 2em"> Clique em ADICIONAR OUTRO CARGO para abrir quantos formulários para funções desejar.</p>
     <div formArrayName="cargos" class="row">
       <div *ngFor="let cargo of getFormArrayItems(); let i = index">
         <div [formGroupName]="i">

@@ -1,11 +1,15 @@
 <div class="container">
   <h2 class="center">Férias</h2>
+  <br>
+  <p style="text-align: center">Caro gestor, esta aba trata única e exclusivamente das restituições de férias a serem
+    feitas. Para realizar o procedimento de cáculo, clique em <b>CALCULAR</b> e siga as instruções. Caso queria ver o histórico de restituições
+  já feitas, clique na aba <b>RESTITUIÇÕES DE FÉRIAS</b>.</p>
   <div class="row">
     <br>
     <div class="col s12">
       <ul class="tabs tabs-fixed-width" materialize="tabs" [materializeParams]="tabSelectionParams">
         <li class="tab col s3 text-grey text-darken-1"><a [class.active]="testeRetencoes()"
-                                                          (click)="setRetencoesActive()">Restituições</a></li>
+                                                          (click)="setRetencoesActive()">Restituições de férias</a></li>
         <li class="tab col s3 text-grey text-darken-1"><a [class.active]="testeCalculo()" (click)="setCalcularActive()">Calcular</a>
         </li>
         <li class="tab col s3 text-grey text-darken-1"><a [class.active]="testePendentes()"
@@ -16,6 +20,8 @@
           Execução</a></li>
       </ul>
     </div>
+    <div class="divider"></div>
+
     <div id="test1" class="col s12" active="testeRetencoes()">
       <app-relatorio-retencoes-ferias-component *ngIf="testeRetencoes()"></app-relatorio-retencoes-ferias-component>
     </div>

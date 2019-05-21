@@ -1,5 +1,8 @@
 <br>
 <div class="row">
+  <h5>Para Calcular:</h5>
+  <p style="text-align: center">Primeiro, selecione o contrato onde está(ão) o(s) funcionário(s) o(s) qual(is) você deseja
+    calcular a restituição:</p>
   <div class="input-field col s7">
     <select id="selecao_contrato" materialize="material_select" [materializeSelectOptions]="contratos"
             (change)="defineCodigoContrato($event.target.value)">
@@ -12,6 +15,7 @@
   </div>
 </div>
 <div class="row">
+  <p style="text-align: center">Em seguida, selecione entre os dois tipos de restituições - resgate ou movimentação:</p>
   <div class="input-field col s4">
     <select id="selecao_tipo_restituicao" materialize="material_select"
             (change)="defineTipoMovimentacao($event.target.value)">
@@ -23,6 +27,9 @@
   </div>
 </div>
 <div class="row">
+  <p style="text-align: center">Em seguida, selecione o ano base para o cálculo do décimo terceiro:</p>
+  <p style="text-align: center"> (Lembre-se que o décimo terceiro só será retido integralmente pela conta vinculada após
+    o segundo ano de contrato vigente no órgão.)</p>
   <div class="input-field col s2">
     <select id="selecao_ano" materialize="material_select" materialize="material_select"
             [materializeSelectOptions]="listaAnos" (change)="defineAnoCalculo($event.target.value)">

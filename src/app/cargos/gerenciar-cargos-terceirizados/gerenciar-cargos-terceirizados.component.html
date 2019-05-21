@@ -1,6 +1,9 @@
 <h2 class="center">Gerenciar Funções</h2>
 <div class="container">
   <div class="row">
+    <p style="text-align: center; text-indent: 2em">Primeiro, selecione o contrato o qual deseja gerenciar na caixa de seleção abaixo:</p>
+<div class="container">
+  <div class="row">
 
     <div class="input-field col l7">
       <select id="selecao_contrato" materialize="material_select" [materializeSelectOptions]="contratos"
@@ -11,12 +14,13 @@
       </select>
       <label for="selecao_contrato">Contrato<span class="red-text"> *</span></label>
     </div>
+    <p style="text-align: center; text-indent: 2em">Selecione dentre as três opções: Alocar, Alterar ou Desligar terceirizado.</p>
     <div class="input-field col s4">
       <select materialize="material_select" (change)="defineValor($event.target.value)">
         <option disabled>Selecione uma opção</option>
         <option value="ALOCAÇÃO">Alocar novo terceirizado</option>
         <option value="ALTERAÇÃO">Alteração de função</option>
-        <option value="DESATIVAÇÃO">Desativação de Terceirizado</option>
+        <option value="DESATIVAÇÃO">Desligar Terceirizado</option>
       </select>
     </div>
   </div>

@@ -1,5 +1,8 @@
 <br>
 <div class="row">
+  <h5>Para Calcular:</h5>
+  <p style="text-align: center">Primeiro, selecione o contrato onde está(ão) o(s) funcionário(s) o(s) qual(is) você deseja
+    calcular a restituição de <b>rescisão</b>:</p>
     <div class="input-field col l7">
         <select id="selecao_contrato"materialize="material_select" [materializeSelectOptions]="contratos" (change)="defineCodigoContrato($event.target.value)">
             <option disabled>Selecione um contrato</option>
@@ -7,6 +10,9 @@
         </select>
         <label for="selecao_contrato">Contrato<span class="red-text"> *</span></label>
     </div>
+  <br>
+  <p style="text-align: center">Em seguida, selecione entre os dois tipos de restituições de rescisão - resgate ou movimentação:</p>
+  <br>
 </div>
 <div class="row">
     <div class="input-field col l3">

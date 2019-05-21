@@ -1,5 +1,7 @@
 <br>
 <div class="row">
+  <p style="text-align: center">Ao selecionar um contrato, aparecerá todas informações pertinentes ao cálculo das férias
+  já realizados dos funcionários.</p>
     <div class="input-field col l7">
         <select id="selecao_contrato"materialize="material_select" [materializeSelectOptions]="contratos" (change)="defineCodigoContrato($event.target.value)">
             <option disabled>Selecione um Contrato</option>
@@ -12,7 +14,7 @@
     <div class="row">
         <div class="col s12 grey lighten-4" style="margin-top: 1em">
             <br>
-            <h5 class="center-align">Não há nenhuma retenção feita ainda ! <i class="small material-icons">mood_bad</i></h5>
+            <h5 class="center-align">Não há nenhuma restituição feita ainda ! <i class="small material-icons">mood_bad</i></h5>
         </div>
     </div>
 </div>

@@ -3,6 +3,7 @@
 <br>
 <div class="container" *ngIf="!id">
     <div class="row">
+      <p style="text-align: center">Selecione um contrato para cadastrar um substituto:</p>
         <div class="col">
             <form [formGroup]="gestorContratoForm">
                 <div class="row">
@@ -15,6 +16,7 @@
                     </div>
                 </div>
                 <div class="row">
+                  <p style="text-align: center">Escolha o servidor para no campo abaixo:</p>
                     <div class="input-field col l5" >
                         <select id="usuarios" materialize="material_select" [materializeSelectOptions]="usuarios" formControlName="servidor">
                             <option disabled>Selecione um usuário</option>
@@ -24,6 +26,7 @@
                     </div>
                 </div>
                 <div class="row">
+                  <p style="text-align: center">Escolha o perfil o qual o servidor será cadastrado (Gestor, 1º, 2º, 3º ou 4º substituto):</p>
                     <div class="input-field col l3">
                         <select id="perfil_gestao" materialize="material_select" [materializeSelectOptions]="perfisGestao" formControlName="perfil">
                             <option disabled>Selecione um perfil</option>
@@ -33,6 +36,7 @@
                     </div>
                 </div>
                 <div class="row">
+                  <p style="text-align: center">Por fim, registre a data de início do servidor na gestão do contrato:</p>
                     <div class="input-field col l3">
                         <input id="data_inicio" formControlName="dataInicio" class="validate" type="text" placeholder="Exemplo: 01/02/2015" required appMaskDate maxlength="10" minlength="10">
                         <label for="data_inicio">Data de início <span class="red-text">*</span></label>

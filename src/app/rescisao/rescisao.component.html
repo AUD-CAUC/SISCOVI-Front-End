@@ -1,11 +1,15 @@
 <script src="rescisao.component.ts"></script>
 <div class="container">
     <h2 class="center">Rescisão</h2>
+  <br>
+  <p style="text-align: center">Caro gestor, esta aba trata única e exclusivamente das restituições de rescisão a serem
+    feitas. Para realizar o procedimento de cáculo, clique em <b>CALCULAR</b> e siga as instruções. Caso queria ver o histórico de restituições
+    já feitas, clique na aba <b>RESTITUIÇÕES DE RESCISÃO</b>.</p>
     <div class="row">
         <br>
         <div class="col s12">
             <ul class="tabs tabs-fixed-width" materialize="tabs" [materializeParams]="tabSelectionParams">
-                <li class="tab col s3 text-grey text-darken-1" ><a [class.active]="testeRetencoes()"(click)="setRetencoesActive()">Restituições</a></li>
+                <li class="tab col s3 text-grey text-darken-1" ><a [class.active]="testeRetencoes()"(click)="setRetencoesActive()">Restituições de rescisão</a></li>
                 <li class="tab col s3 text-grey text-darken-1"><a [class.active]="testeCalculo()" (click)="setCalcularActive()" >Calcular</a></li>
                 <li class="tab col s3 text-grey text-darken-1"><a [class.active]="testePendentes()" (click)="setPendentesActive()">Cálculos pendentes de aprovação</a></li>
                 <li class="tab col s3 text-grey text-darken-1"><a [class.active]="testeExecutados()" (click)="setExecutadosActive()">Cálculos pendentes de execução</a></li>
