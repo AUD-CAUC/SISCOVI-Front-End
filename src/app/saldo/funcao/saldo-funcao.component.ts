@@ -62,7 +62,6 @@ export class SaldoFuncaoComponent {
         if (this.codigoContrato) {
             this.saldoService.getSaldoFuncao(this.codigoContrato).subscribe(res2 => {
                 this.saldos = res2;
-                console.log(res2);
                 if (this.saldos.length === 0) {
                     this.saldoService = null;
                     this.ref.markForCheck();
