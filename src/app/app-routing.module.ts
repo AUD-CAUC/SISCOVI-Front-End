@@ -58,6 +58,7 @@ const routes: Routes = [
       {path: 'cargos', component: CargoComponent, canActivate: [LoggedInGuard, ProfileGuard]},
       {path: 'gerenciar', component: IndicadoresComponent, canActivate: [LoggedInGuard]},
       {path: 'contratos', component: ContratosComponent, canActivate: [LoggedInGuard]},
+      {path: 'contratos/cadastrar-ajuste', component: CadastrarAjustesComponent, canActivate: [LoggedInGuard]},
       {path: 'percentuais', component: PercentuaisComponent, canActivate: [LoggedInGuard]},
       {path: 'cargosContrato', component: CargosDoContratoComponent, canActivate: [LoggedInGuard]},
       {path: 'convencoes', component: ConvencoesColetivasComponent, canActivate: [LoggedInGuard]},
@@ -103,11 +104,7 @@ const routes: Routes = [
       {path: 'percentDin', component: PercentualDinamicoComponent, canActivate: [LoggedInGuard, ProfileGuard]},
       {path: 'percentDin/:id', component: CadastrarPercentualDinamicoComponent, canActivate: [LoggedInGuard, ProfileGuard]},
       {path: 'ajustes-contratuais', component: AjusteContratoComponent, canActivate: [LoggedInGuard]},
-      {
-        path: 'ajustes-contratuais/cadastrar-ajuste',
-        component: CadastrarAjustesComponent,
-        canActivate: [LoggedInGuard]
-      },
+      {path: 'ajustes-contratuais/cadastrar-ajuste', component: CadastrarAjustesComponent, canActivate: [LoggedInGuard]},
       {path: 'historico-gestores', component: HistoricoGestoresComponent, canActivate: [LoggedInGuard]},
       {
         path: 'historico-gestores/:id',
