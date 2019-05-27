@@ -1,9 +1,15 @@
 <div class="container">
+  <div class="pin-top right material-icons" title="Caro gestor, esta aba trata única e exclusivamente das restituições de décimo terceiro
+salário a serem feitas. Para realizar o procedimento de cáculo, clique em CALCULAR e
+siga as instruções. Caso queria ver o histórico de restituições já feitas, clique na aba
+RESTITUIÇÕES DE 13º.
+PARA CALCULAR O RESGATE:
+Selecione o funcionário, a parcela e clique em calcular.
+PARA CALCULAR A MOVIMENTAÇÃO:
+Selecione o funcionário, a parcela e o montante a ser movimentado.
+" style="cursor: help;">help_outline</div>
     <h2 class="center">Décimo Terceiro</h2>
   <br>
-  <p style="text-align: center">Caro gestor, esta aba trata única e exclusivamente das restituições de décimo terceiro
-    salário a serem feitas. Para realizar o procedimento de cáculo, clique em <b>CALCULAR</b> e siga as instruções.
-    Caso queria ver o histórico de restituições já feitas, clique na aba <b>RESTITUIÇÕES DE 13º</b>.</p>
     <div class="row">
         <br>
         <div class="col s12">
@@ -14,6 +20,7 @@
                 <li class="tab col s3 text-grey text-darken-1"><a [class.active]="testeExecutados()" (click)="setExecutadosActive()">Cálculos Pendentes de Execução</a></li>
             </ul>
         </div>
+      <div class="divider"></div>
         <div id="test1" class="col s12" active="testeRetencoes()"><app-relatorio-retencoes-decimo-terceiro-component *ngIf="testeRetencoes()"></app-relatorio-retencoes-decimo-terceiro-component></div>
         <div id="test2" class="col s12" active="testeCalculo()"><app-calculo-decimo-terceiro-component *ngIf="testeCalculo()" (navegaParaViewDeCalculos)="calculosPendentes($event)">
         </app-calculo-decimo-terceiro-component></div>
