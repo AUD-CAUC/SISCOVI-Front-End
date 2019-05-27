@@ -10,6 +10,7 @@ import {Funcionario} from '../../funcionarios/funcionario';
 import {Error} from '../../_shared/error';
 import {Observable} from 'rxjs/Observable';
 import {map} from 'rxjs/operators';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-resgate-rescisao-component',
@@ -31,13 +32,11 @@ export class ResgateRescisaoComponent implements OnInit {
   modalActions4 = new EventEmitter<string | MaterializeAction>();
   @Output() navegaParaViewDeCalculos = new EventEmitter();
 
-  constructor(private fb: FormBuilder, private rescisaoService: RescisaoService) {
+  constructor(private fb: FormBuilder, private rescisaoService: RescisaoService, private router: Router, private route: ActivatedRoute) {
   }
-
   ngOnInit() {
     this.formInit();
   }
-
   formInit(): void {
     this.rescisaoForm = this.fb.group({
       calcularTerceirizados: this.fb.array([])
@@ -92,12 +91,10 @@ export class ResgateRescisaoComponent implements OnInit {
       return '';
     }
   }
-
   private stringToDate(value: string): Date {
     const date: string[] = value.split('/');
     return new Date(Number(date[2]), Number(date[1]) - 1, Number(date[0]));
   }
-
   public resgateValidatore(control: AbstractControl): { [key: string]: any } {
     const mensagem = [];
     if (control.value === 'T') {
@@ -105,40 +102,31 @@ export class ResgateRescisaoComponent implements OnInit {
     }
     return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
   }
-
   closeModal1() {
     this.modalActions.emit({action: 'modal', params: ['close']});
   }
-
   openModal1() {
     this.modalActions.emit({action: 'modal', params: ['open']});
   }
-
   openModal2() {
     this.modalActions2.emit({action: 'modal', params: ['open']});
   }
-
   closeModal2() {
     this.modalActions2.emit({action: 'modal', params: ['close']});
   }
-
   openModal3() {
     this.modalActions3.emit({action: 'modal', params: ['open']});
   }
-
   closeModal3() {
     this.modalActions3.emit({action: 'modal', params: ['close']});
   }
-
   openModal4() {
     this.modalActions4.emit({action: 'modal', params: ['open']});
   }
-
   closeModal4() {
     this.modalActions4.emit({action: 'modal', params: ['close']});
     this.navegaParaViewDeCalculos.emit(this.codigoContrato);
   }
-
   efetuarCalculo(): void {
     this.rescisaoService.registrarCalculoRescisao(this.calculosRescisao).subscribe(res => {
       if (res.success) {
@@ -147,7 +135,6 @@ export class ResgateRescisaoComponent implements OnInit {
       }
     });
   }
-
   verificaDadosFormulario() {
     this.calculosRescisao = [];
     let aux = 0;
@@ -245,5 +232,8 @@ export class ResgateRescisaoComponent implements OnInit {
         });
       }
     }
+  }
+  goToGerenciarCargos() {
+    this.router.navigate(['./gerenciar-funcoes-terceirizados'], {relativeTo: this.route});
   }
 }

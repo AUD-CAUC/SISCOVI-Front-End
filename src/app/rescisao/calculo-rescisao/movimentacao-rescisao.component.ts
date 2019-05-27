@@ -10,6 +10,7 @@ import {Funcionario} from '../../funcionarios/funcionario';
 import {Error} from '../../_shared/error';
 import {Observable} from 'rxjs/Observable';
 import {map} from 'rxjs/operators';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-movimentacao-rescisao-component',
@@ -31,7 +32,7 @@ export class MovimentacaoRescisaoComponent implements OnInit {
   modalActions4 = new EventEmitter<string | MaterializeAction>();
   @Output() navegaParaViewDeCalculos = new EventEmitter();
 
-  constructor(private fb: FormBuilder, private rescisaoService: RescisaoService) {
+  constructor(private fb: FormBuilder, private rescisaoService: RescisaoService, private router: Router, private route: ActivatedRoute) {
   }
 
   ngOnInit() {
@@ -244,5 +245,8 @@ export class MovimentacaoRescisaoComponent implements OnInit {
         });
       }
     }
+  }
+  goToGerenciarCargos() {
+    this.router.navigate(['./gerenciar-funcoes-terceirizados'], {relativeTo: this.route});
   }
 }

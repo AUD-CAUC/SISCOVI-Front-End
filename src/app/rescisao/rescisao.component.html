@@ -1,10 +1,11 @@
 <script src="rescisao.component.ts"></script>
 <div class="container">
+  <div class="pin-top right material-icons" title="Esta aba trata única e exclusivamente das restituições de rescisão a serem
+feitas. Para realizar o procedimento de cáculo, clique em CALCULAR e siga
+as instruções. Caso queria ver o histórico de restituições já feitas, clique na
+aba RESTITUIÇÕES DE RESCISÃO" style="cursor: help">help_outline</div>
     <h2 class="center">Rescisão</h2>
   <br>
-  <p style="text-align: center">Caro gestor, esta aba trata única e exclusivamente das restituições de rescisão a serem
-    feitas. Para realizar o procedimento de cáculo, clique em <b>CALCULAR</b> e siga as instruções. Caso queria ver o histórico de restituições
-    já feitas, clique na aba <b>RESTITUIÇÕES DE RESCISÃO</b>.</p>
     <div class="row">
         <br>
         <div class="col s12">
@@ -15,6 +16,7 @@
                 <li class="tab col s3 text-grey text-darken-1"><a [class.active]="testeExecutados()" (click)="setExecutadosActive()">Cálculos pendentes de execução</a></li>
             </ul>
         </div>
+      <div class="divider"></div>
         <div id="test1" class="col s12" active="testeRetencoes()"><app-relatorio-restituicoes-rescisao-component *ngIf="testeRetencoes()"></app-relatorio-restituicoes-rescisao-component></div>
         <div id="test2" class="col s12" active="testeCalculo()"><app-calculo-rescisao-component *ngIf="testeCalculo()" (navegaParaViewDeCalculos)="calculosPendentes($event)"></app-calculo-rescisao-component></div>
         <div id="test3" class="col s12" active="testePendentes()"><app-rescisao-calculos-pendentes *ngIf="testePendentes()" [calculosPendentes]="cp" (nav)="calculosExecutados($event)"></app-rescisao-calculos-pendentes></div>
