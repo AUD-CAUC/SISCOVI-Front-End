@@ -87,15 +87,13 @@ const routes: Routes = [
         }
       },
       {path: 'decTer', component: DecimoTerceiroComponent, canActivate: [LoggedInGuard]},
-      {
-        path: 'rescisao',
-        component: RescisaoComponent,
-        canActivate: [LoggedInGuard],
+      {path: 'rescisao', component: RescisaoComponent, canActivate: [LoggedInGuard],
         resolve: {
           calculosPendentes: RescisaoPendenteResolver,
           calculosPendentesExecucao: RescisaoPendenteExecucaoResolver
         }
       },
+      {path: 'rescisao/gerenciar-funcoes-terceirizados', component: GerenciarCargosTerceirizadosComponent, canActivate: [LoggedInGuard]},
       {path: 'totalMensal', component: TotalMensalComponent, canActivate: [LoggedInGuard]},
       {path: 'totalMensal/:id/:dataReferencia', component: RecalculoTotalMensalComponent, canActivate: [LoggedInGuard]},
       {path: 'saldoConta', component: InicioComponent, canActivate: [LoggedInGuard]},

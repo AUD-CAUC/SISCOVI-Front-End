@@ -1,16 +1,15 @@
 <div class="divider"></div>
 <br>
-<p style="text-indent: 2em"> Caro gestor, para prosseguir com o cálculo selecione o contrato, o ano vigente e o mês os quais deseja calcular as retenções:</p>
-
+<p style="text-align: center"> Caro gestor, para prosseguir com o cálculo selecione o contrato, o ano vigente e o mês os quais deseja calcular as retenções:</p>
 <div class="row">
   <form [formGroup]="myForm">
     <div class="row">
       <div class="input-field col l7 center-align">
         <select class="black-text" name="contrato" formControlName="contrato" materialize="material_select"
                 [ngModel]="contratos" (change)="onChange($event.target.value)" required>
-          <option disabled>Selecione</option>
-          <option class="black-text" *ngFor="let contrato of contratos" [value]="contrato.codigo"
-          >{{contrato.nomeDaEmpresa}} - Contrato nº: {{contrato.numeroDoContrato}}</option>
+          <option disabled></option>
+          <option class="black-text" *ngFor="let contrato of contratos" [value]="contrato.codigo">
+            {{contrato.nomeDaEmpresa}} - Contrato nº: {{contrato.numeroDoContrato}}</option>
         </select>
         <label style="font-size: 0.55vw">Selecione um Contrato <span class="red-text">*</span></label>
       </div>

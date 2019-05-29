@@ -1,6 +1,20 @@
+<div class="row">
+  <div class="container" *ngIf="terceirizados.length === 0">
+    <div class="row">
+      <div class="col s12 grey lighten-4" style="margin-top: 1em">
+        <br>
+        <h5 class="center-align">Você não desligou nenhum funcionário! Deseja desligar agora?</h5>
+      </div>
+      <div class="row center-align">
+        <button class="btn waves-effect" (click)="goToGerenciarCargos()">Gerenciar Função do Terceirizado</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <form [formGroup]="rescisaoForm">
   <div formArrayName="calcularTerceirizados">
-    <table class="highlight centered responsive-table hoverable">
+    <table class="highlight centered responsive-table hoverable" *ngIf="terceirizados.length !== 0">
       <thead>
       <tr>
         <th>
@@ -153,7 +167,7 @@
 <div class="container" *ngIf="tipoRestituicao == 'RESGATE'">
   <div class="row" *ngIf="terceirizados && tipoRestituicao">
     <div class="center-align">
-      <button class="btn waves-effect center" (click)="verificaDadosFormulario()">Calcular</button>
+      <button class="btn waves-effect center" (click)="verificaDadosFormulario()" *ngIf="terceirizados.length !== 0">Calcular</button>
     </div>
   </div>
 </div>

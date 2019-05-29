@@ -1,9 +1,8 @@
 <div class="container">
-    <h2 class="center">Saldo Total</h2>
-    <br>
-  <p style="text-align: center">Caro gestor, selecione um de seus contratos para visualizar o saldo total da conta vinculada.
-  Lembrando que aqui são descritos os saldos totais por função, caso queira consultar o saldo de um funcionário específico,
-    selecione a aba <b>Saldo Individual</b> no menu principal.</p>
+  <div class="pin-top material-icons right" title="Aqui são descritos os saldos totais por função de cada contrato.
+Caso queira consultar o  saldo  de  um  funcionário  específico,
+selecione  a   aba   Saldo   Individual   no   menu   principal." style="cursor: help">help_outline</div>
+  <h2 class="center">Saldo Total</h2>
     <div class="row">
         <div class="input-field col l7">
             <select id="selecao_contrato"materialize="material_select" [materializeSelectOptions]="contratos" (change)="defineCodigoContrato($event.target.value)">
