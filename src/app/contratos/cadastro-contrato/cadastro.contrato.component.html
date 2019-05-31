@@ -1,10 +1,15 @@
 <div class="container">
+  <ul>
+    <a class="tooltip right"><span class="tooltiptext">Preencha todos os campos corretamente e clique em CADASTRAR no final
+do formulário. Caso você seja um substituto do gestor do contrato, cadastre
+o contrato no nome do gestor.</span><i class="material-icons" style="color: black">help_outline</i></a>
+  </ul>
 
   <div class="section">
     <br>
-    <div class="pin-top right material-icons" title="Preencha todos os campos corretamente e clique em CADASTRAR no final
-do formulário. Caso você seja um substituto do gestor do contrato, cadastre
-o contrato no nome do gestor." style="cursor: help">help</div>
+<!--    <div class="pin-top right material-icons" title="Preencha todos os campos corretamente e clique em CADASTRAR no final-->
+<!--do formulário. Caso você seja um substituto do gestor do contrato, cadastre-->
+<!--o contrato no nome do gestor." style="cursor: help">help</div>-->
     <h2 class="center">Cadastro de Contrato</h2>
     <p style="text-indent: 2em"><br></p>
     <p style="text-indent: 2em">Campos com <span class="mensagem-erro">*</span> são obrigatórios.</p>
@@ -217,10 +222,12 @@ o contrato no nome do gestor." style="cursor: help">help</div>
     </div>
   </form>
   <form [formGroup]="myForm" autocomplete="off">
-    <div class="pin-top right material-icons" title="Cadastre aqui todas as funções/cargos constantes no contrato.
-Lembre-se que cada função só poderá se cadastrada uma vez
-em cada contrato! Clique em ADICIONAR OUTRO CARGO para
-abrir quantos formulários para funções desejar." style="cursor: help">help</div>
+    <ul>
+      <a class="tooltip right"><span class="tooltiptext">Cadastre aqui todas as funções/cargos constantes no contrato.
+        Lembre-se que cada função só poderá se cadastrada uma vez
+        em cada contrato! Clique em ADICIONAR OUTRO CARGO para
+        abrir quantos formulários para funções desejar.</span><i class="material-icons" style="color: black">help_outline</i></a>
+    </ul>
     <h5>Funções</h5>
     <br>
     <div formArrayName="cargos" class="row">

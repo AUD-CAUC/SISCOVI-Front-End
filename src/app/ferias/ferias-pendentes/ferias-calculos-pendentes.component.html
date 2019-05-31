@@ -155,7 +155,7 @@
 <div id="modal2" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]"
      [materializeActions]="modalActions2">
   <div class="modal-content">
-    <h4 class="center">Confirma Operação</h4>
+    <h4 class="center">Confirma Operação </h4>
     <br>
     <div *ngFor="let calcAval of calculosAvaliados; let i = index">
       <h6><b>{{calcAval.titulo}}</b></h6>
@@ -260,7 +260,8 @@
           <th>Incidência Sobre Férias</th>
           <th>Incidência Sobre 1/3</th>
           <th>Total</th>
-          <th>Observações</th>
+          <th class=" centered tooltip">Observações<span class="material-icons">help_outline</span><span class="tooltiptext">Aqui são descritos os motivos da reprovação
+          do cálculo para serem analisados e corrigidos pelo gestor!</span></th>
         </tr>
         </thead>
         <tbody>

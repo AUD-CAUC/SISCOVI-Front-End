@@ -1,8 +1,11 @@
 <div class="container">
-  <div class="pin-top right material-icons" title="Para alocar novo funcionário, modificar/remanejar funcionários ou
+  <ul>
+    <a class="tooltip right"><span class="tooltiptext">Para alocar novo funcionário, modificar/remanejar funcionários ou
 desligar um funcionário clique no botão abaixo. Selecione um de
 seus contratos na caixa de seleção abaixo para
-consultar as funções de cada contrato." style="cursor: help; text-align: center">help_outline</div>
+consultar as funções de cada contrato.</span> <i class="material-icons" style="color: black">help_outline</i></a>
+  </ul>
+
   <h2 class="center-align">Funções Dos Terceirizados</h2>
     <div class="row center-align">
         <button class="btn waves-effect" (click)="goToGerenciarCargos()">Gerenciar Função do Terceirizado</button>
@@ -23,10 +26,15 @@ consultar as funções de cada contrato." style="cursor: help; text-align: cente
     </div>
 </div>
 <div class="container" *ngIf="valid">
-  <div class="pin-top right material-icons" title="Ao clicar em um Cargo, abrir-se-á uma lista com o(s) tercerizados
-atualmente alocados neste cargo, as datas de disponibilização de
-cada funcionário e as datas de desligamento, caso existam."
-       style="cursor: help; text-align: center">help_outline</div>
+  <ul>
+    <a class="tooltip right"><span class="tooltiptext">Ao clicar em um Cargo, abrir-se-á uma lista com o(s) tercerizado(s)
+atualmente alocados neste cargo, as datas de disponibilização de cada funcionário e as datas de desligamento, caso existam.
+</span> <i class="material-icons" style="color: black">help_outline</i></a>
+  </ul>
+<!--  <div class="pin-top right material-icons" title="Ao clicar em um Cargo, abrir-se-á uma lista com o(s) tercerizados-->
+<!--atualmente alocados neste cargo, as datas de disponibilização de-->
+<!--cada funcionário e as datas de desligamento, caso existam."-->
+<!--       style="cursor: help; text-align: center">help_outline</div>-->
   <br>
     <div class="row" *ngIf="listaCargosFuncionarios.length === 0">
         <div class="col s12 grey lighten-4">
