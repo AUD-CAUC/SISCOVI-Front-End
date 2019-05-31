@@ -1,6 +1,5 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {LOCALE_ID, NgModule} from '@angular/core';
-
 import {AppComponent} from './app.component';
 import {HttpModule} from '@angular/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -109,6 +108,7 @@ import {PercentualDinamicoComponent} from './percentuais-dinamicos/percentual-di
 import {CadastrarPercentualDinamicoComponent} from './percentuais-dinamicos/cadastrar-percentual-dinamico/cadastrar-percentual-dinamico.component';
 import {PercentualDinamicoService} from './percentuais-dinamicos/percentual-dinamico.service';
 import {CadastrarConvencaoComponent} from './convencoes-coletivas/cadastrar-convecao/cadastrar-convencao.component';
+
 
 @NgModule({
   declarations: [
