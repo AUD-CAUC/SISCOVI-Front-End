@@ -6,6 +6,8 @@ import {MaterializeAction} from 'angular2-materialize';
 import {TotalMensalService} from '../total-mensal.service';
 import {TotalMensal} from '../totalMensal';
 import {Mes} from './mes';
+import {ActivatedRoute, Router} from '@angular/router';
+import {RescisaoService} from "../../rescisao/rescisao.service";
 
 @Component({
     templateUrl: './total-mensal-calculo.component.html',
@@ -40,7 +42,7 @@ export class TotalMensalCalculoComponent implements OnInit {
     private mesSelecionado: number;
     private numFuncAtivos: number;
 
-    constructor(contServ: ContratosService, fb: FormBuilder, tmService: TotalMensalService) {
+    constructor(contServ: ContratosService, fb: FormBuilder, tmService: TotalMensalService, private router: Router, private route: ActivatedRoute) {
         this.tmService = tmService;
         this.fb = fb;
         if (contServ.contratos.length === 0) {
@@ -230,14 +232,7 @@ export class TotalMensalCalculoComponent implements OnInit {
         this.closeModal2();
         this.navegaParaViewDeCalculos.emit(this.codigoContrato);
     }
-
-
-    confirmaCalculo() {
-      this.tmService.confirmarTotalMensalReter(this.mesSelecionado, this.anoSelecionado, this.codigoContrato).subscribe(res => {
-        this.closeModal();
-        if (!res.error) {
-          this.openModal2();
-        }
-      });
-    }
+  goToGerenciarCargos() {
+    this.router.navigate(['./gerenciar-funcoes-terceirizados'], {relativeTo: this.route});
+  }
 }

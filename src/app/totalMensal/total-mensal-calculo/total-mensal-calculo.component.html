@@ -1,6 +1,6 @@
 <div class="divider"></div>
 <br>
-<p style="text-align: center"> Caro gestor, para prosseguir com o cálculo selecione o contrato, o ano vigente e o mês os quais deseja calcular as retenções:</p>
+<p style="text-align: center"> </p>
 <div class="row">
   <form [formGroup]="myForm">
     <div class="row">
@@ -51,6 +51,20 @@
       </div>
       <div class="input-field col l4 center-align">
         <td>Quantidade de funcionários ativos no mês: {{numFuncAtivos}}</td>
+        <div class="row">
+          <div class="container">
+            <div class="row">
+              <div class="grey lighten-4">
+                <br>
+                <h5 class="center">Caso haja divergência no número de funcionários ativos, clique no link abaixo
+                para fazer as devidas alterações:</h5>
+              </div>
+              <div class="row center-align">
+                <button class="btn waves-effect" (click)="goToGerenciarCargos()">Gerenciar Função do Terceirizado</button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </form>
