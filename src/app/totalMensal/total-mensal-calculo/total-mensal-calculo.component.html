@@ -51,6 +51,20 @@
       </div>
       <div class="input-field col l4 center-align">
         <td>Quantidade de funcionários ativos no mês: {{numFuncAtivos}}</td>
+        <div class="row">
+          <div class="container">
+            <div class="row">
+              <div class="col s12 grey lighten-4" style="margin-top: 1em">
+                <br>
+                <h5 class="center-align">Caso haja divergência no número de funcionários ativos, clique no link abaixo
+                para fazer as devidas alterações:</h5>
+              </div>
+              <div class="row center-align">
+                <button class="btn waves-effect" (click)="goToGerenciarCargos()">Gerenciar Função do Terceirizado</button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </form>
