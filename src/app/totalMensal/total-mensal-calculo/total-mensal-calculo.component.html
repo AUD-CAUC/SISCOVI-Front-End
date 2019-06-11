@@ -52,6 +52,19 @@
       <div class="input-field col l4 center-align">
         <td>Quantidade de funcionários ativos no mês: {{numFuncAtivos}}</td>
         <div class="row">
+          <div class="center-align">
+            <button class="waves-effect waves-light btn-large blue-grey darken-3" type="submit" [disabled]="validate"
+                    (click)="calculoTotalMensal()">Calcular
+            </button>
+            <div *ngIf="myForm.invalid && (myForm.dirty || myForm.touched)">
+              <div *ngIf="myForm.getError('mensagem')">
+                <span class="mensagem-erro">{{myForm.getError('mensagem')}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+        <div class="row">
           <div class="container">
             <div class="row">
               <div class="grey lighten-4">
@@ -59,29 +72,17 @@
                 <h5 class="center">Caso haja divergência no número de funcionários ativos, clique no link abaixo
                 para fazer as devidas alterações:</h5>
               </div>
-              <div class="row center-align">
-                <button class="btn waves-effect" (click)="goToGerenciarCargos()">Gerenciar Função do Terceirizado</button>
+              <div class="row center">
+                <br>
+                <button class="btn waves-effect center" (click)="goToGerenciarCargos()">Gerenciar Função do Terceirizado</button>
               </div>
             </div>
           </div>
         </div>
-      </div>
     </div>
   </form>
 </div>
-<br>
-<div class="row">
-  <div class="center-align">
-    <button class="waves-effect waves-light btn-large blue-grey darken-3" type="submit" [disabled]="validate"
-            (click)="calculoTotalMensal()">Calcular
-    </button>
-    <div *ngIf="myForm.invalid && (myForm.dirty || myForm.touched)">
-      <div *ngIf="myForm.getError('mensagem')">
-        <span class="mensagem-erro">{{myForm.getError('mensagem')}}</span>
-      </div>
-    </div>
-  </div>
-</div>
+
 <div id="modal1" class="modal bottom-fixed-footer" materialize="modal" [materializeParams]="[{dismissible: false}]"
      [materializeActions]="modalActions">
   <div class="modal-content">
