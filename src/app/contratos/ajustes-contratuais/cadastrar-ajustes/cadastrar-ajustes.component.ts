@@ -17,6 +17,7 @@ import {HistoricoGestor} from '../../../historico/historico-gestor';
 import {MaterializeAction} from 'angular2-materialize';
 import {Router} from '@angular/router';
 import {Rubrica} from '../../../rubricas/rubrica';
+import {init} from "protractor/built/launcher";
 
 @Component({
   selector: 'app-cadastrar-ajustes',
@@ -49,6 +50,8 @@ export class CadastrarAjustesComponent {
   tempCon: Contrato;
   incidenciaMinima = 14.30;
   incidenciaMaxima = 39.80;
+  // dataInicioVig = this.tempCon.dataFim;
+  // dataFimVig: Date;
 
   constructor(private contratoService: ContratosService, private userService: UserService, private config: ConfigService,
               private  fb: FormBuilder, private percentService: PercentualService, private convService: ConvencaoService,
@@ -132,8 +135,10 @@ export class CadastrarAjustesComponent {
       terceiroSubstituto: new FormControl(''),
       quartoSubstituto: new FormControl(''),
       assinatura: new FormControl('', [Validators.required, this.myDateValidator]),
-      inicioVigencia: new FormControl('', [Validators.required, this.myDateValidator]),
+      inicioVigencia: new FormControl('', [ Validators.required, this.myDateValidator, this.inicioUsufrutoValidator]),
       fimVigencia: new FormControl('', [Validators.required, this.myDateValidator]),
+      // dataInicioContrato: new FormControl(this.contrato.dataInicio),
+      // dataFimContrato: new FormControl(this.contrato.dataFim, [Validators.required]),
       assunto: new FormControl(''),
       percentualFerias: new FormControl('', [Validators.required]),
       percentualDecimoTerceiro: new FormControl('', [Validators.required]),
@@ -146,7 +151,6 @@ export class CadastrarAjustesComponent {
     });
     this.initCargos();
   }
-
   adicionaCargo(): void {
     const control = <FormArray>this.myForm.controls.cargos;
     const addCtrl = this.initCargos();
@@ -553,4 +557,18 @@ export class CadastrarAjustesComponent {
         }
         return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
     }
+  public inicioUsufrutoValidator(control: AbstractControl): { [key: string]: any } {
+    const mensagem = [];
+    if ((control.value.length === 10)) {
+      const dia = Number(control.value.split('/')[0]);
+      const mes = Number(control.value.split('/')[1]) - 1;
+      const ano = Number(control.value.split('/')[2]);
+      const dataDigitada: Date = new Date(ano, mes, dia);
+      const dataInicioVig = this.tempCon.dataInicio;
+      if (dataDigitada >= dataInicioVig) {
+        mensagem.push('A data de início do ajuste deve ser maior que a data de início do contrato que é ' + dataInicioVig + '!');
+      }
+    }
+    return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
+  }
 }
