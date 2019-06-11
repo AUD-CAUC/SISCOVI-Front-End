@@ -116,7 +116,6 @@ export class ContratosService {
             historico.push(hist);
         });
         contrato.percentuais.forEach(item => {
-            console.log(item.percentual);
             const perc = {
                 percentual: item.percentual,
                 dataInicio: this.convertDate(item.dataInicio),

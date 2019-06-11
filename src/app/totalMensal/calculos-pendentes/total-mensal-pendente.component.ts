@@ -53,7 +53,6 @@ export class TotalMensalPendenteComponent implements OnInit {
       //     this.totalMensalService.getTotaisPendentes(this.codigoContrato).subscribe(res2 => {
       //         const historico: TotalMensalPendente[] = [];
       //         if (!res.error) {
-      //             console.log();
       //             this.totais = res2;
       //         }
       //         if (this.totais) {

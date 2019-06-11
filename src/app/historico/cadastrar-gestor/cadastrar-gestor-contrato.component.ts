@@ -20,13 +20,13 @@ export class CadastrarGestorContratoComponent implements OnInit {
     usuarios: Usuario[];
     perfisGestao: Profile[];
     id: number;
-    constructor(private histService: HistoricoService, private fb: FormBuilder, private contratoService: ContratosService, private usuarioService: UserService, private route: ActivatedRoute, private router: Router) {
+    constructor(private histService: HistoricoService, private fb: FormBuilder, private contratoService: ContratosService,
+                private usuarioService: UserService, private route: ActivatedRoute, private router: Router) {
         this.route.params.subscribe(params => {
             if (!isNaN(params['id'])) {
                 this.id = params['id'];
                 if (this.id) {
                     this.histService.getHistoricoGestor(this.id).subscribe(res => {
-                        console.log(res);
                     });
                 }
             }
@@ -46,8 +46,10 @@ export class CadastrarGestorContratoComponent implements OnInit {
             contrato: new FormControl(),
             servidor: new FormControl(),
             perfil: new FormControl(),
-            dataInicio: new FormControl('')
+            dataInicio: new FormControl(''),
+            // dataFim: new FormControl('')
         });
+        // this.gestorContratoForm.get('dataFim').setValidators([Validators.required, this.myDateValidator]);
         this.gestorContratoForm.get('dataInicio').setValidators([Validators.required, this.myDateValidator]);
         this.gestorContratoForm.get('contrato').setValidators([Validators.required]);
         this.gestorContratoForm.get('servidor').setValidators([Validators.required]);

@@ -36,7 +36,6 @@ export class CargoComponent {
   }
   cadastrarCargos() {
       this.cargoService.cadastrarCargos().subscribe(res => {
-          console.log(res);
           if (res === 'Cadastro realizado com sucesso !') {
               this.cargoService.getAllCargos().subscribe(res2 => {
                   this.cargos.slice();

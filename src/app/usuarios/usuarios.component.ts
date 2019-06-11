@@ -36,7 +36,6 @@ export class UsuariosComponent {
     sendForm(event: Event) {
       event.preventDefault();
       this.cadUs.cadastrarUsuario().subscribe(res => {
-        console.log(res);
         if (res.mensagem === 'Usuário Cadastrado Com Sucesso !') {
             const newUsuarios = this.usuarios.slice(0);
             newUsuarios.push(this.cadUs.cadastroUsuario.usuario);
