@@ -232,7 +232,15 @@ export class TotalMensalCalculoComponent implements OnInit {
         this.closeModal2();
         this.navegaParaViewDeCalculos.emit(this.codigoContrato);
     }
-  goToGerenciarCargos() {
-    this.router.navigate(['./gerenciar-funcoes-terceirizados'], {relativeTo: this.route});
-  }
+    confirmaCalculo() {
+      this.tmService.confirmarTotalMensalReter(this.mesSelecionado, this.anoSelecionado, this.codigoContrato).subscribe(res => {
+        this.closeModal();
+        if (!res.error) {
+          this.openModal2();
+        }
+      });
+    }
+    goToGerenciarCargos() {
+      this.router.navigate(['./gerenciar-funcoes-terceirizados'], {relativeTo: this.route});
+    }
 }
