@@ -648,6 +648,5 @@ export class MovimentacaoFeriasComponent implements OnInit {
     const diffTime = Math.abs(finalDate.getTime() - initDate.getTime());
     const diffDay = Math.round(diffTime / (1000 * 3600 * 24)) + 1;
     this.diasConcedidos[indice] = diffDay + diasVendidos;
-    console.log(this.diasConcedidos);
   }
 }

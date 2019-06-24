@@ -208,7 +208,6 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
             if (this.modoOperacao === 'DESATIVAÇÃO') {
                 this.cargosService.getTerceirizadosFuncao(this.codigo).subscribe(res => {
                     this.listaCargosFuncionarios = res;
-                    console.log(res);
                     this.ref.markForCheck();
                     if (this.listaCargosFuncionarios) {
                           this.desativacaoForm = this.fb.group({

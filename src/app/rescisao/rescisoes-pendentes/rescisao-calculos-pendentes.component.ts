@@ -51,7 +51,6 @@ export class RescisaoCalculosPendentesComponent implements OnInit {
   constructor(private rescisaoService: RescisaoService, private contratoService: ContratosService, config: ConfigService, private fb: FormBuilder, private ref: ChangeDetectorRef) {
     this.config = config;
     this.rescisaoService.getCalculosPendentes().subscribe(res => {
-      console.log(res);
       this.calculosPendentes = res;
       if (this.calculosPendentes.length === 0) {
         this.calculosPendentes = null;
@@ -72,7 +71,7 @@ export class RescisaoCalculosPendentesComponent implements OnInit {
     if (this.calculosPendentes) {
       if (this.calculosPendentes.length === 0) {
         this.calculosPendentes = null;
-      } else {console.log(this.calculosPendentes);
+      } else {
         this.isSelected = new Array(this.calculosPendentes.length).fill(false);
         this.somaFeriasVencidas = new Array(this.calculosPendentes.length).fill(0);
         this.somaTercoVencido = new Array(this.calculosPendentes.length).fill(0);

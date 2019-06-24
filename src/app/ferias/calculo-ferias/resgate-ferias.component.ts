@@ -399,12 +399,11 @@ export class ResgateFeriasComponent implements OnInit {
         let dia = Number(control.value.split('/')[0]);
         let mes = Number(control.value.split('/')[1]) - 1;
         let ano = Number(control.value.split('/')[2]);
-        const inicioUsufruto: Date = new Date(ano, mes, dia);
+        const inicioUsufruto: Date = new Date(ano, mes, dia); /*início do ajuste*/
         const val: Number[] = control.parent.get('fimPeriodoAquisitivo').value.split('-');
         const fimPeriodoAquisitivo: Date = new Date(Number(val[0]), Number(val[1]) - 1, Number(val[2]));
         const val2: Number[] = control.parent.get('inicioPeriodoAquisitivo').value.split('-');
         const inicioPeriodoAquisitivo: Date = new Date(Number(val2[0]), Number(val2[1]) - 1, Number(val2[2]));
-
         if (inicioUsufruto <= fimPeriodoAquisitivo && control.parent.get('existeCalculoAnterior').value === true) {
           mensagem.push('A data de início do usufruto deve ser maior que a data fim do período aquisitivo !');
         } else if (inicioUsufruto <= inicioPeriodoAquisitivo) {
@@ -455,7 +454,6 @@ export class ResgateFeriasComponent implements OnInit {
 
   closeModal2() {
     this.modalActions2.emit({action: 'modal', params: ['close']});
-    console.log(this.feriasResgate.get('calcularTerceirizados').get('0'));
   }
 
   openModal3() {

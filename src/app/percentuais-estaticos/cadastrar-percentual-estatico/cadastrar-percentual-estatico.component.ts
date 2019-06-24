@@ -49,7 +49,7 @@ export class CadastrarPercentualEstaticoComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
+  ngOnInit(): void { /*se a dataFim for nula*/
     let i = 0;
     if (this.percent) {
       this.percent.forEach((percentual) => {
@@ -74,7 +74,6 @@ export class CadastrarPercentualEstaticoComponent implements OnInit {
     if (control.parent) {
       if (this.ultimaData[control.parent.get('codigo').value]) {
         if (control.value.toString().length === 10) {
-          // console.log(this.ultimaData[control.parent.get('codigo').value]);
           let dia = 0;
           let mes = 0;
           let ano = 0;

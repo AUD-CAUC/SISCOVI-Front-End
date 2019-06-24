@@ -201,7 +201,6 @@ export class MovimentacaoRescisaoComponent implements OnInit {
             this.calculosRescisao.push(objeto);
           }
         } else {
-          console.log(this.rescisaoForm);
           this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasVencidas').markAsDirty();
           this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasVencidas').markAsTouched();
           aux = null;
