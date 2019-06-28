@@ -58,6 +58,7 @@ export class CadastrarAjustesComponent {
               private ref: ChangeDetectorRef, private cargoService: CargoService, private router: Router) {
     this.contratoService.getContratosDoUsuario().subscribe(res => {
       this.contratos = res;
+      console.log(res);
     });
     this.percentService.getPercentuaisFerias().subscribe(res => {
       if (!res.error) {
@@ -128,17 +129,17 @@ export class CadastrarAjustesComponent {
     this.myForm = this.fb.group({
       cargos: this.fb.array([]),
       tipoAjuste: new FormControl('', [Validators.required]),
-      prorrogacao: new FormControl('N', [Validators.required]),
+      prorrogacao: new FormControl('S', [Validators.required]),
       gestor: new FormControl('', [Validators.required]),
       primeiroSubstituto: new FormControl(''),
       segundoSubstituto: new FormControl(''),
       terceiroSubstituto: new FormControl(''),
       quartoSubstituto: new FormControl(''),
-      assinatura: new FormControl('', [Validators.required, this.myDateValidator]),
-      inicioVigencia: new FormControl('', [ Validators.required, this.myDateValidator, this.inicioUsufrutoValidator]),
-      fimVigencia: new FormControl('', [Validators.required, this.myDateValidator]),
-      // dataInicioContrato: new FormControl(this.contrato.dataInicio),
-      // dataFimContrato: new FormControl(this.contrato.dataFim, [Validators.required]),
+      assinatura: new FormControl('', [Validators.required, this.myDateValidator, this.assinaturaValidator]),
+      inicioVigencia: new FormControl('', [ Validators.required, this.myDateValidator, this.inicioVigenciaValidator]),
+      fimVigencia: new FormControl('', [Validators.required, this.myDateValidator, this.fimVigenciaValidator]),
+      dataInicioContrato: new FormControl('', [Validators.required]),
+      dataFimContrato: new FormControl('', [Validators.required]),
       assunto: new FormControl(''),
       percentualFerias: new FormControl('', [Validators.required]),
       percentualDecimoTerceiro: new FormControl('', [Validators.required]),
@@ -177,6 +178,8 @@ export class CadastrarAjustesComponent {
     if (this.contrato) {
       this.myForm.controls.numeroContrato.setValue(this.contrato.numeroDoContrato);
       this.myForm.controls.nomeEmpresa.setValue(this.contrato.nomeDaEmpresa);
+      this.myForm.controls.dataInicioContrato.setValue(this.contrato.dataInicio);
+      this.myForm.controls.dataFimContrato.setValue(this.contrato.dataFim);
       this.myForm.controls.cnpj.setValue(this.formaCNPJ(this.contrato.cnpj));
       this.myForm.controls.objeto.setValue(this.contrato.objeto);
       if (this.contrato.seAtivo === 'S' || this.contrato.seAtivo === 'SIM') {
@@ -557,16 +560,77 @@ export class CadastrarAjustesComponent {
         }
         return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
     }
-  public inicioUsufrutoValidator(control: AbstractControl): { [key: string]: any } {
+  public inicioVigenciaValidator(control: AbstractControl): { [key: string]: any } {
     const mensagem = [];
-    if ((control.value.length === 10)) {
-      const dia = Number(control.value.split('/')[0]);
-      const mes = Number(control.value.split('/')[1]) - 1;
-      const ano = Number(control.value.split('/')[2]);
-      const dataDigitada: Date = new Date(ano, mes, dia);
-      const dataInicioVig = this.tempCon.dataInicio;
-      if (dataDigitada >= dataInicioVig) {
-        mensagem.push('A data de início do ajuste deve ser maior que a data de início do contrato que é ' + dataInicioVig + '!');
+    if (control.parent) {
+      if ((control.value.length === 10)) {
+        const dia = Number(control.value.split('/')[0]);
+        const mes = Number(control.value.split('/')[1]) - 1;
+        const ano = Number(control.value.split('/')[2]);
+        const inicioVigencia: Date = new Date(ano, mes, dia);
+        // const fimVigencia: Date = new Date(ano, mes, dia);
+        const val: Number[] = control.parent.get('dataInicioContrato').value.split('-');
+        const inicioContrato: Date = new Date(Number(val[0]), Number(val[1]) - 1, Number(val[2]));
+        const val2: Number[] = control.parent.get('dataFimContrato').value.split('-');
+        const fimContrato: Date = new Date(Number(val2[0]), Number(val2[1]) - 1, Number(val2[2]));
+        if (inicioVigencia < inicioContrato) {
+          mensagem.push('a data do ajuste não pode ser anterior ao início do contrato!');
+        } else if (control.parent.get('prorrogacao').value === 'S') {
+          console.log('foi');
+          if (inicioVigencia < fimContrato) {
+            mensagem.push('Em caso de prorrogações, a data de início da vigência deve ser posterior a data de término do' +
+              ' contrato ou do ajuste anterior!');
+          }
+        }
+      }
+    }
+    return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
+  }
+  public fimVigenciaValidator(control: AbstractControl): { [key: string]: any} | null {
+      const mensagem = [];
+      if (control.parent) {
+        if ((control.value.length === 10)) {
+          let dia: number;
+          let mes: number;
+          let ano: number;
+          dia = Number(control.value.split('/')[0]);
+          mes = Number(control.value.split('/')[1]) - 1;
+          ano = Number(control.value.split('/')[2]);
+          const fimVig: Date = new Date(ano, mes, dia);
+          dia = Number(control.parent.get('inicioVigencia').value.split('/')[0]);
+          mes = Number(control.parent.get('inicioVigencia').value.split('/')[1]) - 1;
+          ano = Number(control.parent.get('inicioVigencia').value.split('/')[2]);
+          const inicioVig: Date = new Date(ano, mes, dia);
+          const val: Number[] = control.parent.get('dataInicioContrato').value.split('-');
+          const inicioContrato: Date = new Date(Number(val[0]), Number(val[1]) - 1, Number(val[2]));
+          if (fimVig <= inicioVig) {
+            mensagem.push('A data fim do ajuste deve ser posterior que a data de início do ajuste !');
+          }
+          if (fimVig <= inicioContrato) {
+            mensagem.push('A data fim da vigência de um ajuste não pode ser anterior a data de início do contrato!');
+          }
+        }
+      }
+      return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
+  }
+  public assinaturaValidator(control: AbstractControl): { [key: string]: any} | null {
+    const mensagem = [];
+    if (control.parent) {
+      if ((control.value.length === 10)) {
+        let dia: number;
+        let mes: number;
+        let ano: number;
+        dia = Number(control.value.split('/')[0]);
+        mes = Number(control.value.split('/')[1]) - 1;
+        ano = Number(control.value.split('/')[2]);
+        const assinDig: Date = new Date(ano, mes, dia);
+        dia = Number(control.parent.get('inicioVigencia').value.split('/')[0]);
+        mes = Number(control.parent.get('inicioVigencia').value.split('/')[1]) - 1;
+        ano = Number(control.parent.get('inicioVigencia').value.split('/')[2]);
+        const inicioVig: Date = new Date(ano, mes, dia);
+        if (assinDig > inicioVig) {
+          mensagem.push('A data da assinatura de um ajuste não pode ser posterior ao início da vigência do ajuste!');
+        }
       }
     }
     return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
