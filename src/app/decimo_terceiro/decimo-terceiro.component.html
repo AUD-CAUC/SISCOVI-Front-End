@@ -1,19 +1,32 @@
 <div class="container">
-  <ul>
-    <a class="tooltip right"><span class="tooltiptext">
-      Para realizar o procedimento de cálculo de Décimo Terceiro, clique na aba
-        <a style="color: black;background-color: #a5a7aa">CALCULAR</a> e siga as instruções. Caso queria ver o histórico de restituições já feitas, clique
-      na aba<a style="color: black;background-color: #a5a7aa">RESTITUIÇÕES DE 13º</a> e selecione o contrato para consulta.
-      <br>PARA CALCULAR O RESGATE: Primeiro, selecione o contrato para cálculo, em seguida, selecione a opção Resgate
-      na caixa de seleção Tipo de Restituição, e por último selecione o ano o qual deseja calcular. Na lista que aparecer,
-      marque o(s) funcionário(s) que deseja realizar o cálculo, especifique o parcelamento da restituição e clique em
-      <button class="btn waves-effect center">Calcular</button>. Para fazer o cálculo de TODOS os terceirizados de uma só
-      vez, marque a primeira caixa de seleção (ao lado da coluna Terceirizado).<br>PARA CALCULAR A MOVIMENTAÇÃO: Primeiro,
-      selecione o contrato para cálculo, em seguida, selecione a opção Movimentação na caixa de seleção Tipo de Restituição,
-      e por último selecione o ano o qual deseja calcular. Na lista que aparecer, marque o(s) funcionário(s), especifique
-      o parcelamento da restituição, o montante a ser movimentado e clique em <button class="btn waves-effect center">
-      Calcular</button>.
+  <ul *ngIf="testeRetencoes()">
+    <a class="tooltip right"><span class="tooltiptext">Nesta aba você pode consultar o histórico de todas as restituições
+    de 13º salario já executadas de seus contratos. Cada contrato possui seu histórico próprio, então basta selecionar o contrato
+      específico para consultar o seu histórico.</span> <i class="material-icons" style="color: black">help_outline</i></a>
+  </ul>
+  <ul *ngIf="testeCalculo()">
+    <a class="tooltip right"><span class="tooltiptext">PARA CALCULAR O RESGATE: Primeiro, selecione o contrato para
+      cálculo, em seguida, selecione a opção Resgate na caixa de seleção Tipo de Restituição, e por último selecione o
+      ano o qual deseja calcular. Na lista que aparecer, marque o(s) funcionário(s) que deseja realizar o cálculo,
+      especifique o parcelamento da restituição e clique em<button class="btn waves-effect center">Calcular</button>.
+      PARA CALCULAR A MOVIMENTAÇÃO: Primeiro, selecione o contrato para cálculo, em seguida, selecione a opção
+      Movimentação na caixa de seleção Tipo de Restituição, e por último selecione o ano o qual deseja calcular. Na lista
+      que aparecer, marque o(s) funcionário(s), especifique o parcelamento da restituição, o montante a ser movimentado
+      e clique em <button class="btn waves-effect center">Calcular</button>.
     </span> <i class="material-icons" style="color: black">help_outline</i></a>
+  </ul>
+  <ul *ngIf="testePendentes()">
+    <a class="tooltip right"><span class="tooltiptext">Nesta aba os funcionários da SAD terão acesso aos pedidos de cálculo
+    referentes à 13º salário feitos pelos gestores, podendo aprovar ou reprovar esses cálculos. Caso aprovados, os cálculos
+      serão enviados para aba CÁLCULOS PENDENTES DE EXECUÇÃO administrada pela SOF, caso contrário os serão devolvidos
+      para aba CALCULAR com as devidas observações e justificativas.</span> <i class="material-icons" style="color: black">
+      help_outline</i></a>
+  </ul>
+  <ul *ngIf="testeExecutados()">
+    <a class="tooltip right"><span class="tooltiptext">Nesta aba os funcionários da SOF terão acesso aos cáculos de 13º
+      salário aprovados pela SAD, podendo excutá-los de fato ou rejeitá-los. Caso seja executado, para efeito dessa
+      ferramenta, o cálculo será confirmado e um histórico será criado na aba RESTITUIÇÕES DE 13º</span>
+      <i class="material-icons" style="color: black">help_outline</i></a>
   </ul>
     <h2 class="center">Décimo Terceiro</h2>
   <br>

@@ -49,15 +49,15 @@
           </div>
         </div>
       </div>
-      <div class="input-field col l4 center-align">
+      <div class="container">
         <td>Quantidade de funcionários ativos no mês: {{numFuncAtivos}}</td>
         <div class="row">
           <div class="container">
-            <div class="row">
+            <div class="row" *ngIf="myForm.get('mes').value && (myForm.get('mes').dirty || myForm.get('mes').touched)">
               <div class="grey lighten-4">
                 <br>
-                <h5 class="center">Caso haja divergência no número de funcionários ativos, clique no link abaixo
-                para fazer as devidas alterações:</h5>
+                <h5 class="center">Caso haja divergência no número de funcionários ativos, clique no link abaixo para
+                  fazer as devidas alterações:</h5>
               </div>
               <div class="row center-align">
                 <button class="btn waves-effect" (click)="goToGerenciarCargos()">Gerenciar Função do Terceirizado</button>
