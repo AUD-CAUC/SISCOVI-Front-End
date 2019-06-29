@@ -1,7 +1,6 @@
 <div class="divider"></div>
-<div class="section">
-
-</div>
+<br>
+<div class="section"></div>
 <div class="row">
         <div class="input-field col l7 center">
             <select class="black-text center" name="contrato" materialize="material_select"
@@ -15,7 +14,7 @@
                 <option class="black-text" *ngFor="let contrato of contratos" [value]="contrato.codigo" >{{contrato.nomeDaEmpresa}} - Contrato nº: {{contrato.numeroDoContrato}}</option>
 
             </select>
-            <label style="font-size: 0.85vw">Selecione um Contrato</label>
+            <label style="font-size: 0.65vw">Selecione um Contrato</label>
         </div>
 </div>
     <div class="row" *ngIf="!calculos && codContrato" (load)="onLoad()">

@@ -1,6 +1,5 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {LOCALE_ID, NgModule} from '@angular/core';
-
 import {AppComponent} from './app.component';
 import {HttpModule} from '@angular/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -90,13 +89,26 @@ import {FeriasCalculosPendentesExecucaoComponent} from './ferias/ferias-pendente
 import {DecimoTerceiroPendenteComponent} from './decimo_terceiro/decimo-terceiro-pendente/decimo-terceiro-pendente.component';
 import {DecimoTerceiroPendenteExecucaoComponent} from './decimo_terceiro/decimo-terceiro-pendente/decimo-terceiro-pendente-execucao.component';
 import {RetencoesDecimoTerceiroComponent} from './decimo_terceiro/relatorio-retencoes-decimo-terceiro/retencoes-decimo-terceiro.component';
-import {RescisaoPendenteComponent} from './rescisao/rescisoes-pendentes/rescisao-pendente.component';
+import {RescisaoCalculosPendentesComponent} from './rescisao/rescisoes-pendentes/rescisao-calculos-pendentes.component';
+import {RescisaoCalculosPendentesExecucaoComponent} from './rescisao/rescisoes-pendentes/rescisao-calculos-pendentes-execucao.component';
 import {CadastrarTerceirizadoComponent} from './funcionarios/cadastrar-terceirizado/cadastrar-terceirizado.component';
 import {CadastrarGestorContratoComponent} from './historico/cadastrar-gestor/cadastrar-gestor-contrato.component';
 import {GerenciarCargosTerceirizadosComponent} from './cargos/gerenciar-cargos-terceirizados/gerenciar-cargos-terceirizados.component';
 import {SaldoService} from './saldo/saldo.service';
 import {SaldoIndividualComponent} from './saldo/individual/saldo-individual-component';
 import {SaldoFuncaoComponent} from './saldo/funcao/saldo-funcao.component';
+import {RelatorioRestituicoesRescisaoComponent} from './rescisao/relatorio-restituicao-rescisao/relatorio-restituicoes-rescisao.component';
+import {FileSizePipe} from './_shared/file-size.pipe';
+import {CadastrarPercentualEstaticoComponent} from './percentuais-estaticos/cadastrar-percentual-estatico/cadastrar-percentual-estatico.component';
+import {PercentualEstaticoService} from './percentuais-estaticos/percentual-estatico.service';
+import {HTTP_INTERCEPTORS} from '@angular/common/http';
+import {AppHttpInterceptor} from './app-http.interceptor';
+import {PercentualDinamico} from './percentuais-dinamicos/percentual-dinamico';
+import {PercentualDinamicoComponent} from './percentuais-dinamicos/percentual-dinamico.component';
+import {CadastrarPercentualDinamicoComponent} from './percentuais-dinamicos/cadastrar-percentual-dinamico/cadastrar-percentual-dinamico.component';
+import {PercentualDinamicoService} from './percentuais-dinamicos/percentual-dinamico.service';
+import {CadastrarConvencaoComponent} from './convencoes-coletivas/cadastrar-convecao/cadastrar-convencao.component';
+
 
 @NgModule({
   declarations: [
@@ -123,12 +135,14 @@ import {SaldoFuncaoComponent} from './saldo/funcao/saldo-funcao.component';
     CnpjPipe,
     DatePipe,
     ParcelaPipe,
+    FileSizePipe,
     PendentePipe,
     TitlecaseMaskDirective,
     AfirmativePipe,
     PercentuaisComponent,
     CargosDoContratoComponent,
     ConvencoesColetivasComponent,
+    CadastrarConvencaoComponent,
     VigenciaDosContratosComponent,
     FuncionariosComponent,
     CargosDosFuncionariosComponent,
@@ -166,12 +180,17 @@ import {SaldoFuncaoComponent} from './saldo/funcao/saldo-funcao.component';
     DecimoTerceiroPendenteComponent,
     DecimoTerceiroPendenteExecucaoComponent,
     RetencoesDecimoTerceiroComponent,
-    RescisaoPendenteComponent,
+    RescisaoCalculosPendentesComponent,
+    RescisaoCalculosPendentesExecucaoComponent,
     CadastrarTerceirizadoComponent,
     CadastrarGestorContratoComponent,
     GerenciarCargosTerceirizadosComponent,
     SaldoFuncaoComponent,
     SaldoIndividualComponent,
+    RelatorioRestituicoesRescisaoComponent,
+    CadastrarPercentualEstaticoComponent,
+    PercentualDinamicoComponent,
+    CadastrarPercentualDinamicoComponent,
   ],
   imports: [
     BrowserModule,
@@ -202,7 +221,14 @@ import {SaldoFuncaoComponent} from './saldo/funcao/saldo-funcao.component';
     DecimoTerceiroService,
     RescisaoService,
     SaldoService,
+    PercentualEstaticoService,
+    PercentualDinamicoService,
     {provide: LOCALE_ID, useValue: 'pt'},
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AppHttpInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })

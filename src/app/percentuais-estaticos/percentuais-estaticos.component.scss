@@ -1,3 +1,186 @@
 table.highlight tbody tr:hover {
-  background-color: #bdbdbd;
+  background-color: #9e9e9e;
+}
+div#modal1.modal.open {
+  position: absolute;
+  top: 10ch;
+  background-color: white;
+  display: block;
+  opacity: 1;
+  transform: scaleX(1);
+  top: 10ch !important;
+  left: 25ch !important;
+  width: 180ch !important;
+  max-height: 70ch;
+}
+div .modal-footer {
+  background-color: white;
+}
+
+.material-icons {
+  font-size: 24px;
+  color: rgba(0, 0, 0, 0.54);
+  cursor: pointer;
+}
+.foo {
+  width: 20px;
+  padding-right: 20px;
+}
+
+.tooltip {
+  position: relative;
+}
+.tooltip:after {
+  position: absolute;
+  padding: 8px;
+  border: 3px solid #fff;
+  border-radius: 8px;
+  background-color: #000000; /*cor de fundo dos tooltips*/
+  font-size: .9em;
+  font-weight: bold;
+  color: #fcf2ff; /*cor da fonte dos tooltips*/
+  content: attr(data-tooltip);
+  min-width: 560px;
+  max-height: 300px;
+  /* width: -moz-max-content; */
+  /* width: -webkit-max-content; */
+  opacity: 0;
+  transition: all .2s ease-in-out .25s;
+  visibility: hidden;
+  z-index: 98;
+}
+.tooltip:hover:after {
+  opacity: 1;
+  visibility: visible;
+
+
+}
+/*Tooltip starting positions*/
+.tooltip-top:after {
+  bottom: 150%;
+  left: 0;
+}
+.tooltip-bottom:after {
+  top: 155%;
+  left: 0;
+}
+.tooltip-left:after {
+  right: 130%;
+  min-width: 100px;
+}
+.tooltip-right:after {
+  left: 130%;
+  min-width: 100px;
+}
+
+/*Tooltip final positions*/
+.tooltip-top:hover:after {
+  bottom: 120%;
+}
+.tooltip-bottom:hover:after {
+  top: 125%;
+}
+.tooltip-left:hover:after {
+  right: 110%;
+}
+.tooltip-right:hover:after {
+  left: 110%;
+}
+/**
+ * Triangles
+ */
+
+.tooltip-top:before,
+.tooltip-bottom:before,
+.tooltip-left:before,
+.tooltip-right:before {
+  content: "";
+  display: block;
+  position: absolute;
+  border-width: 7px;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0);
+  opacity: 0;
+  transition: all .2s ease-in-out .25s;
+  visibility: hidden;
+}
+.tooltip-top:hover:before,
+.tooltip-bottom:hover:before,
+.tooltip-left:hover:before,
+.tooltip-right:hover:before {
+  opacity: 1;
+  visibility: visible;
+}
+/*Triangle starter positions*/
+.tooltip-top:before {
+  top: -51%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-top-color: #000000;
+}
+.tooltip-bottom:before {
+  bottom: -56%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-bottom-color: #000000;
+}
+.tooltip-left:before {
+  left: -31%;
+  top: 15%;
+  border-left-color: #000000;
+}
+.tooltip-right:before {
+  right: -31%;
+  top: 15%;
+  border-right-color: #000000;
+}
+
+/* Triangle final positions */
+.tooltip-top:hover:before {
+  top: -21%;
+}
+.tooltip-bottom:hover:before {
+  bottom: -26%;
+}
+.tooltip-left:hover:before {
+  left: -11%;
+}
+.tooltip-right:hover:before {
+  right: -11%;
+}
+
+.tooltip-wrapper {
+  padding: 160px 0;
+  text-align: center;
+  word-wrap: break-word;
+}
+//wrapper da lista
+.tooltip-wrapper li {
+  list-style: none;
+  display: inline-block;
+  margin: 0 10px;
+}
+//wrapper dos links da lista
+.tooltip-wrapper li a {
+  color: #000000; /*cor da fonte dos títulos dos tooltips*/
+  text-decoration: none;
+}
+ /*wrappers para divs*/
+.tooltip-wrapper2 {
+  padding: 160px 0;
+  text-align: center;
+}
+
+//wrapper de divs
+.tooltip-wrapper2 div {
+  list-style: none;
+  display: inline-block;
+  margin: 0 10px;
+}
+
+//wrapper de icon teste
+.tooltip-wrapper2 div a {
+  color: black;
+  text-decoration: none;
+  word-wrap: break-word;
 }

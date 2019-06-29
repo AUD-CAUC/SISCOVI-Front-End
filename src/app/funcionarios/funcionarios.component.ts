@@ -1,11 +1,10 @@
-import {ChangeDetectorRef, Component, EventEmitter} from '@angular/core';
+import {Component, EventEmitter} from '@angular/core';
 import {Contrato} from '../contratos/contrato';
 import {ContratosService} from '../contratos/contratos.service';
 import {FuncionariosService} from './funcionarios.service';
 import {Funcionario} from './funcionario';
 import {PagerService} from '../_shared/pager.service';
 import {MaterializeAction} from 'angular2-materialize';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
@@ -14,17 +13,19 @@ import {ActivatedRoute, Router} from '@angular/router';
   styleUrls: ['./funcionarios.components.scss']
 })
 export class FuncionariosComponent {
+  codigo: number;
   contratos: Contrato[] = [];
   funcionarios: Funcionario[];
   funcServ: FuncionariosService;
   contrSer: ContratosService;
+  modalActions2 = new EventEmitter<string|MaterializeAction>();
   valid = false;
   index2: number;
   gestor: string;
   pager: any;
   pagedItems: Funcionario[];
   indice = 1;
-  modalActions = new EventEmitter<string | MaterializeAction>();
+  // modalActions = new EventEmitter<string | MaterializeAction>();
   constructor(contrSer: ContratosService, funcServ: FuncionariosService, private pagerService: PagerService, private  route: ActivatedRoute, private router: Router) {
     this.contrSer = contrSer;
     this.funcServ = funcServ;
@@ -60,7 +61,27 @@ export class FuncionariosComponent {
         this.router.navigate(['./cadastro-terceirizado'], {relativeTo: this.route});
   }
 
-    editarTerceirizado(cod: number) {
+  editarTerceirizado(cod: number) {
         this.router.navigate(['terceirizados', cod], {skipLocationChange: true});
-    }
+  }
+  deletarTerceirizado() {
+    this.funcServ.apagarTerceirizado(this.codigo).subscribe(res => {
+      if (res === 'Terceirizado Apagado Com sucesso !') {
+        this.funcServ.getAllTerceirizados().subscribe(res2 => {
+          this.funcionarios.slice();
+          this.funcionarios = res2;
+        });
+      }
+      this.closeModal2();
+    });
+  }
+  openModal2(codigo: number) {
+    this.codigo = codigo;
+    this.modalActions2.emit({action: 'modal', params: ['open']});
+  }
+  closeModal2() {
+    this.funcServ.setValdity(true);
+    this.modalActions2.emit({action: 'modal', params: ['close']});
+    window.location.reload();
+  }
 }

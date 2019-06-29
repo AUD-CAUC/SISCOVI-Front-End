@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { ConfigService } from '../_shared/config.service';
-import {Http, Headers, RequestOptions} from '@angular/http';
+import {Injectable} from '@angular/core';
+import {ConfigService} from '../_shared/config.service';
+import {Headers, Http, RequestOptions} from '@angular/http';
 import {Rubrica} from './rubrica';
 import {CadastroRubrica} from './cadastrar-rubrica/cadastro-rubrica';
 import {Observable} from 'rxjs/Observable';
@@ -31,10 +31,6 @@ export class RubricasService {
     const url = this.config.myApi + '/rubricas/getAll';
     return this.http.get(url).map(res => res.json());
   }
-  getPercentuaisEstaticos() {
-    const url = this.config.myApi + '/rubricas/getStaticPercent';
-    return this.http.get(url).map(res => res.json());
-  }
   cadastrarRubrica() {
       const cadastroRubrica = new CadastroRubrica();
       cadastroRubrica.rubrica = new Rubrica();
@@ -62,7 +58,6 @@ export class RubricasService {
       cadastroRubrica.rubrica = new Rubrica();
       cadastroRubrica.rubrica = rubrica;
       cadastroRubrica.currentUser = this.config.user.username;
-      const data = cadastroRubrica;
-      return this.http.put(url, data).map(res => res.json());
+    return this.http.put(url, cadastroRubrica).map(res => res.json());
   }
 }

@@ -95,7 +95,22 @@ export class CargoService {
       return this.http.post(url, data).map(res => res.json());
 
     }
-}
+
+    desligarTerceirizado(confirmarDesligamento: CargosFuncionarios[], codigoContrato: number) {
+      const url = this.config.myApi + '/cargo/desligarTerceirizado/' + codigoContrato + '/' + this.config.user.username;
+      const data = [];
+      for (let i = 0; i < confirmarDesligamento.length; i++) {
+        const date = confirmarDesligamento[i].dataDesligamento.toISOString().split('T');
+        const info = {
+          funcionario: confirmarDesligamento[i].funcionario,
+          dataDesligamento: date[0],
+          funcao: confirmarDesligamento[i].funcao
+        };
+        data.push(info);
+      }
+      return this.http.post(url, data).map(res => res.json());
+    }
+  }
 export class ListaCargos {
     currentUser: string;
     cargos: Cargo[];

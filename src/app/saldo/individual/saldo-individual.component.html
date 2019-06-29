@@ -1,6 +1,12 @@
 <div class="container">
+  <ul>
+    <a class="tooltip right"><span class="tooltiptext">Aqui são descritos os saldos de cada funcionário no contrato.
+    Caso queira consultar os saldos totais por cargo, selecione a opção Saldo por Função na aba Saldos.
+    </span> <i class="material-icons" style="color: black">help_outline</i></a>
+  </ul>
     <h2 class="center">Saldo Individual</h2>
     <br>
+  <p style="text-align: center">Ao selecionar um contrato, serão listados todos os funcionários e suas devidas retenções.</p>
     <div class="row">
         <div class="input-field col l7">
             <select id="selecao_contrato" materialize="material_select" [materializeSelectOptions]="contratos"
@@ -70,18 +76,16 @@
             -->
             <td>{{saldo.saldo | currency:'BRL':true:'1.2-2'}}</td>
         </tr>
-        </tbody>
-        <tfoot>
         <tr>
-          <th >Somatório</th>
-          <th > </th>
-          <th >{{somaFerias| currency:'BRL':true:'1.2-2'}}</th>
-          <th >{{somaTerco| currency:'BRL':true:'1.2-2'}}</th>
-          <th >{{somaDecimo| currency:'BRL':true:'1.2-2'}}</th>
-          <th >{{somaIncidencia| currency:'BRL':true:'1.2-2'}}</th>
-          <th >{{somaMultaFGTS| currency:'BRL':true:'1.2-2'}}</th>
-          <th >{{somaSaldo| currency:'BRL':true:'1.2-2'}}</th>
+          <td ><b>Somatório</b></td>
+          <td ><b> </b></td>
+          <td ><b>{{somaFerias| currency:'BRL':true:'1.2-2'}}</b></td>
+          <td ><b>{{somaTerco| currency:'BRL':true:'1.2-2'}}</b></td>
+          <td ><b>{{somaDecimo| currency:'BRL':true:'1.2-2'}}</b></td>
+          <td ><b>{{somaIncidencia| currency:'BRL':true:'1.2-2'}}</b></td>
+          <td ><b>{{somaMultaFGTS| currency:'BRL':true:'1.2-2'}}</b></td>
+          <td ><b>{{somaSaldo| currency:'BRL':true:'1.2-2'}}</b></td>
         </tr>
-        </tfoot>
+        </tbody>
     </table>
 </div>

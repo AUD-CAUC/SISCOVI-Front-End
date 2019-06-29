@@ -1,5 +1,5 @@
 import {Component, EventEmitter, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {CargoService} from '../../cargos/cargo.service';
 import {Cargo} from '../../cargos/cargo';
@@ -14,6 +14,9 @@ import {Percentual} from '../../percentuais/percentual';
 import {Rubrica} from '../../rubricas/rubrica';
 import {Convencao} from '../../convencoes-coletivas/convencao';
 import {ConvencaoService} from '../../convencoes-coletivas/convencao.service';
+import {PercentualDinamico} from '../../percentuais-dinamicos/percentual-dinamico';
+import {PercentualDinamicoService} from '../../percentuais-dinamicos/percentual-dinamico.service';
+
 
 @Component({
   selector: 'app-cadastro-contrato',
@@ -21,8 +24,8 @@ import {ConvencaoService} from '../../convencoes-coletivas/convencao.service';
   styleUrls: ['./cadastro.contrato.component.scss']
 })
 export class CadastroContratoComponent implements OnInit {
-
     router: Router;
+    route: ActivatedRoute;
     carSer: CargoService;
     cargosCadastrados: Cargo[];
     myForm: FormGroup;
@@ -47,14 +50,24 @@ export class CadastroContratoComponent implements OnInit {
         {valor: 12, mes: 'Dezembro'}
     ];
     modalActions = new EventEmitter<string | MaterializeAction>();
+    modalActions2 = new EventEmitter<string | MaterializeAction>();
     convencoesColetivas: Convencao[];
-    constructor(router: Router, carSer: CargoService, fb: FormBuilder, fb1: FormBuilder, contratoService: ContratosService, userService: UserService, config: ConfigService,
-                private convServ: ConvencaoService) {
+    percentuaisDinamicos: PercentualDinamico[] = [];
+    incidenciaMinima = 14.30;
+    incidenciaMaxima = 39.80;
+    percDinService: PercentualDinamicoService;
+    constructor(router: Router, route: ActivatedRoute, carSer: CargoService, fb: FormBuilder, fb1: FormBuilder, contratoService: ContratosService, userService: UserService,
+                percentualDinamicoService: PercentualDinamicoService, config: ConfigService, private convServ: ConvencaoService) {
         this.router = router;
+        this.route = route;
         this.fb = fb;
         this.fb1 = fb1;
         this.contratoService = contratoService;
         this.carSer = carSer;
+        this.percDinService = percentualDinamicoService;
+        this.percDinService.getAllPercentuaisDinamicos().subscribe(res => {
+            this.percentuaisDinamicos = res;
+        });
         this.carSer.getAllCargos().subscribe(res => {
             this.cargosCadastrados = res;
             this.initCargos();
@@ -84,10 +97,12 @@ export class CadastroContratoComponent implements OnInit {
             objeto: new FormControl(''),
             percentualFerias: new FormControl('', [Validators.required]),
             percentualDecimoTerceiro: new FormControl('', [Validators.required]),
-            percentualIncidencia: new FormControl('', [Validators.required, this.percentualValidator]),
+            percentualIncidencia: new FormControl('', [Validators.required, this.percentualValidator.bind(this)]),
             numeroContrato: new FormControl('', [Validators.required]),
             primeiroSubstituto: new FormControl(''),
             segundoSubstituto: new FormControl(''),
+            terceiroSubstituto: new FormControl(''),
+            quartoSubstituto: new FormControl(''),
             numeroProcessoSTJ: new FormControl('')
         });
         this.myForm = this.fb.group({
@@ -118,6 +133,12 @@ export class CadastroContratoComponent implements OnInit {
     }
     closeModal() {
         this.modalActions.emit({action: 'modal', params: ['close']});
+    }
+    openModal2() {
+      this.modalActions2.emit({action: 'modal', params: ['open']});
+    }
+    closeModal2() {
+      this.modalActions2.emit({action: 'modal', params: ['close']});
     }
     adicionaCargo(): void {
         const control = <FormArray>this.myForm.controls.cargos;
@@ -154,12 +175,14 @@ export class CadastroContratoComponent implements OnInit {
         return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
     }
     public percentualValidator(control: AbstractControl): {[key: string]: any} {
-        const val = control.value;
+        const percentual = control.value;
         const mensagem = [];
         if (control.value) {
-            if (val === 0) {
-                mensagem.push('Digite um valor para o percentual de incidência. Valores comuns para este percentual são  36,8 e 35,6');
+            if (percentual > this.incidenciaMaxima || percentual < this.incidenciaMinima) {
+                mensagem.push('Percentual inválido. O percentual mínimo para esse campo é ' + this.incidenciaMinima + '% e o máximo é ' + this.incidenciaMaxima + '%');
             }
+        } else if (percentual === 0) {
+            mensagem.push('O percentual deve ser diferente de 0%');
         }
         return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
     }
@@ -218,7 +241,9 @@ export class CadastroContratoComponent implements OnInit {
         contrato.percentuais = percentuais;
         this.contratoService.cadastrarContrato(contrato).subscribe(res => {
             if (res.success) {
+              this.openModal();
             }else {
+              this.openModal2();
             }
         });
     }
@@ -245,6 +270,22 @@ export class CadastroContratoComponent implements OnInit {
             historico.gestor = this.myForm2.get('segundoSubstituto').value;
             historico.fim = this.converteDateFormat(this.myForm2.get('fimVigencia').value);
             historico.codigoPerfilGestao = 3;
+            lista.push(historico);
+            historico = new HistoricoGestor();
+        }
+        if (this.myForm2.get('terceiroSubstituto').value.length > 0) {
+            historico.inicio = this.converteDateFormat(this.myForm2.get('inicioVigencia').value);
+            historico.gestor = this.myForm2.get('terceiroSubstituto').value;
+            historico.fim = this.converteDateFormat(this.myForm2.get('fimVigencia').value);
+            historico.codigoPerfilGestao = 4;
+            lista.push(historico);
+            historico = new HistoricoGestor();
+        }
+        if (this.myForm2.get('quartoSubstituto').value.length > 0) {
+            historico.inicio = this.converteDateFormat(this.myForm2.get('inicioVigencia').value);
+            historico.gestor = this.myForm2.get('quartoSubstituto').value;
+            historico.fim = this.converteDateFormat(this.myForm2.get('fimVigencia').value);
+            historico.codigoPerfilGestao = 5;
             lista.push(historico);
         }
         return lista;

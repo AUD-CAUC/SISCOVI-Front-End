@@ -7,8 +7,25 @@ export class TerceirizadoFeriasMovimentacao {
     private _fimPeriodoAquisitivo: Date;
     private _existeCalculoAnterior: boolean;
     private _valorRestituicaoFerias: ValorRestituicaoFerias;
+    private _somaDiasVendidos: number;
     private _diasUsufruidos: number;
     private _parcela14Dias: boolean;
+    private _parcelaAnterior: string;
+    private _ultimoFimUsufruto: Date;
+    private _emAnalise: boolean;
+    private _dataDesligamento: Date;
+
+    get emAnalise(): boolean {
+      return this._emAnalise;
+    }
+
+    get ultimoFimUsufruto(): Date {
+      return this._ultimoFimUsufruto;
+    }
+
+    get parcelaAnterior(): string {
+      return this._parcelaAnterior;
+    }
 
     get existeCalculoAnterior(): boolean {
         return this._existeCalculoAnterior;
@@ -37,11 +54,19 @@ export class TerceirizadoFeriasMovimentacao {
         return this._valorRestituicaoFerias;
     }
 
+    get somaDiasVendidos(): number {
+      return this._somaDiasVendidos;
+    }
+
     get diasUsufruidos(): number {
       return this._diasUsufruidos;
     }
 
     get parcela14Dias(): boolean {
       return this._parcela14Dias;
+    }
+
+    get dataDesligamento(): Date {
+      return this._dataDesligamento;
     }
 }

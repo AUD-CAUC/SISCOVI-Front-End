@@ -1,6 +1,13 @@
 <div class="container">
-    <h2 class="center">Saldo Total</h2>
-    <br>
+  <ul>
+    <a class="tooltip right"><span class="tooltiptext">Aqui são descritos os saldos totais por função de cada contrato.
+    Caso queira consultar o  saldo  de  um  funcionário  específico, selecione a opção Saldo Individual na aba Saldos.
+    </span> <i class="material-icons" style="color: black">help_outline</i></a>
+  </ul>
+<!--  <div class="pin-top material-icons right" title="Aqui são descritos os saldos totais por função de cada contrato.-->
+<!--Caso queira consultar o  saldo  de  um  funcionário  específico,-->
+<!--selecione  a   aba   Saldo   Individual   no   menu   principal." style="cursor: help">help_outline</div>-->
+  <h2 class="center">Saldo Total</h2>
     <div class="row">
         <div class="input-field col l7">
             <select id="selecao_contrato"materialize="material_select" [materializeSelectOptions]="contratos" (change)="defineCodigoContrato($event.target.value)">
@@ -62,17 +69,15 @@
             -->
             <td >{{saldo.valorSaldo | currency:'BRL':true:'1.2-2'}}</td>
         </tr>
+        <tr>
+          <td ><b>Somatório</b></td>
+          <td ><b>{{somaFerias| currency:'BRL':true:'1.2-2'}}</b></td>
+          <td ><b>{{somaTerco| currency:'BRL':true:'1.2-2'}}</b></td>
+          <td ><b>{{somaDecimo| currency:'BRL':true:'1.2-2'}}</b></td>
+          <td ><b>{{somaIncidencia| currency:'BRL':true:'1.2-2'}}</b></td>
+          <td ><b>{{somaMultaFGTS| currency:'BRL':true:'1.2-2'}}</b></td>
+          <td ><b>{{somaSaldo| currency:'BRL':true:'1.2-2'}}</b></td>
+        </tr>
         </tbody>
-        <tfoot>
-          <tr>
-            <th >Somatório</th>
-            <th >{{somaFerias| currency:'BRL':true:'1.2-2'}}</th>
-            <th >{{somaTerco| currency:'BRL':true:'1.2-2'}}</th>
-            <th >{{somaDecimo| currency:'BRL':true:'1.2-2'}}</th>
-            <th >{{somaIncidencia| currency:'BRL':true:'1.2-2'}}</th>
-            <th >{{somaMultaFGTS| currency:'BRL':true:'1.2-2'}}</th>
-            <th >{{somaSaldo| currency:'BRL':true:'1.2-2'}}</th>
-          </tr>
-        </tfoot>
     </table>
 </div>

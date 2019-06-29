@@ -61,6 +61,26 @@
     </div>
 </div> -->
 <div class="container" *ngIf="funcionarios">
+    <!--Clique duplo para editar um funcionário/ cada linha contendo um funcionário dispõe de um botão para apagar o mesmo-->
+    <div class="center">
+        <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
+            <li [ngClass]="{disabled:pager.currentPage === 1}">
+                <a (click)="setPage(1)">Primeira</a>
+            </li>
+            <li [ngClass]="{disabled:pager.currentPage === 1}" class="waves-effect">
+                <a (click)="setPage(pager.currentPage - 1)">Anterior</a>
+            </li>
+            <li class="waves-effect" *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
+                <a (click)="setPage(page)">{{page}}</a>
+            </li>
+            <li class="waves-effect" [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                <a (click)="setPage(pager.currentPage + 1)">Próxima</a>
+            </li>
+            <li class="waves-effect" [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                <a (click)="setPage(pager.totalPages)">Última</a>
+            </li>
+        </ul>
+    </div>
     <table class="centered responsive-table z-depth-1 hoverable highlight bordered" *ngIf="funcionarios.length > 0">
         <thead>
         <tr>
@@ -71,11 +91,13 @@
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let funcionario of pagedItems; let i=index" (dblclick)="editarTerceirizado(funcionario.codigo)">
+        <tr *ngFor="let funcionario of pagedItems; let i=index">
             <td>{{(i + 1) + ((pager.currentPage - 1) * 50)}}</td>
             <td>{{funcionario.nome}}</td>
             <td>{{funcionario.cpf | cpfPipe}}</td>
             <td>{{funcionario.ativo | afirimativePipe}}</td>
+          <td class="foo"><i class="material-icons" (click)="editarTerceirizado(funcionario.codigo)" title="Editar Rubrica">edit</i></td>
+            <td class="foo"><i class="material-icons" (click)="openModal2(funcionario.codigo)" title="Apagar Terceirizado">delete</i></td>
         </tr>
         </tbody>
     </table>
@@ -98,4 +120,21 @@
             </li>
         </ul>
     </div>
+</div>
+  <div id="modal2" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions2">
+    <div class="modal-content">
+      <div class="container">
+        <div class="row">
+          <h1 class="center">Alerta</h1>
+        </div>
+        <div class="row">
+          <h5 class="center">Tem certeza que deseja APAGAR este Terceirizado ?</h5>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn waves-effect right" (click)="deletarTerceirizado()">Sim</button>
+      <button class="btn waves-effect left" (click)="closeModal2()">Não</button>
+    </div>
+  </div>
 </div>

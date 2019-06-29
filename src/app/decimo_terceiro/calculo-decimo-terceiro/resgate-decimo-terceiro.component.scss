@@ -23,3 +23,11 @@
 .input-field .prefix.active {
   color: red;
 }
+.modal-footer {
+  text-align:center;
+}
+.modal-footer button {
+  display:inline-block;
+  margin:0 15px;
+  float:none; /*if you set float already */
+}

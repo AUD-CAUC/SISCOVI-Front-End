@@ -9,9 +9,9 @@
                 </th>
                 <th>Terceirizados</th>
                 <th>Parcela</th>
-                <th>Início do Período Aquisitivo</th>
-                <th>Fim do Período Aquisititvo</th>
-                <th>Início do Ususfruto</th>
+                <th>Início do Período<br/>Aquisitivo</th>
+                <th>Fim do Período<br/>Aquisititvo</th>
+                <th>Início do Usufruto</th>
                 <th>Fim do Usufruto</th>
                 <th>Dias Vendidos</th>
             </tr>
@@ -35,6 +35,11 @@
                                     <option value="2">Segunda</option>
                                     <option value="3">Terceira</option>
                                 </select>
+                                <div *ngIf="feriasResgate.get('calcularTerceirizados').get('' + k).get('parcelas').getError('mensagem')">
+                                  <div *ngFor="let msg of feriasResgate.get('calcularTerceirizados').get('' + k).get('parcelas').getError('mensagem')[0]">
+                                    <span class="mensagem-erro">{{msg}}</span>
+                                  </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -46,16 +51,19 @@
                         <div class="row">
                             <div class="input-field col s12">
                                 <input type="text" class="validate" placeholder="Ex: 01/01/2000" appMaskDate formControlName="inicioFerias" maxlength="10" required>
-                                <div *ngIf="feriasResgate.get('calcularTerceirizados').get('' + k).get('inicioFerias').invalid && (feriasResgate.get('calcularTerceirizados').get('' + k).get('inicioFerias').dirty ||
-                                feriasResgate.get('calcularTerceirizados').get('' + k).get('inicioFerias').touched)">
-                                    <div *ngIf="feriasResgate.get('calcularTerceirizados').get('' + k).get('inicioFerias').getError('mensagem')">
-                                        <div *ngFor="let msg of feriasResgate.get('calcularTerceirizados').get('' + k).get('inicioFerias').getError('mensagem')[0]">
-                                            <span class="mensagem-erro">{{msg}}</span>
-                                        </div>
-                                    </div>
-                                    <div *ngIf="feriasResgate.get('calcularTerceirizados').get('' + k).get('inicioFerias').getError('required')">
-                                        <span class="mensagem-erro">Você deve digitar uma data !</span>
-                                    </div>
+                                <div *ngIf="feriasResgate.get('calcularTerceirizados').get('' + k).get('inicioFerias').invalid ||
+                                 (feriasResgate.get('calcularTerceirizados').get('' + k).get('inicioFerias').dirty ||
+                                 feriasResgate.get('calcularTerceirizados').get('' + k).get('inicioFerias').touched) &&
+                                 feriasResgate.get('calcularTerceirizados').get('' + k).get('fimFerias').value && feriasResgate.get('calcularTerceirizados').get('' + k).get('inicioFerias').value">
+                                      <div *ngIf="feriasResgate.get('calcularTerceirizados').get('' + k).get('inicioFerias').getError('mensagem')">
+                                          <div *ngFor="let msg of feriasResgate.get('calcularTerceirizados').get('' + k).get('inicioFerias').getError('mensagem')[0]">
+                                              <span class="mensagem-erro">{{msg}}</span>
+                                          </div>
+                                      </div>
+                                      <div *ngIf="feriasResgate.get('calcularTerceirizados').get('' + k).get('inicioFerias').getError('required') &&
+                                      feriasResgate.get('calcularTerceirizados').get('' + k).get('selected').value">
+                                          <span class="mensagem-erro">Você deve digitar uma data!</span>
+                                      </div>
                                 </div>
                             </div>
                         </div>
@@ -66,15 +74,18 @@
                         <div class="row">
                             <div class="input-field col s12 ">
                                 <input type="text" class="validate" placeholder="Ex: 01/01/2000" appMaskDate formControlName="fimFerias" maxlength="10" required>
-                                <div *ngIf="feriasResgate.get('calcularTerceirizados').get('' + k).get('fimFerias').invalid && (feriasResgate.get('calcularTerceirizados').get('' + k).get('fimFerias').dirty ||
-                                feriasResgate.get('calcularTerceirizados').get('' + k).get('fimFerias').touched)">
+                                <div *ngIf="feriasResgate.get('calcularTerceirizados').get('' + k).get('fimFerias').invalid ||
+                                (feriasResgate.get('calcularTerceirizados').get('' + k).get('fimFerias').dirty ||
+                                feriasResgate.get('calcularTerceirizados').get('' + k).get('fimFerias').touched) &&
+                                feriasResgate.get('calcularTerceirizados').get('' + k).get('fimFerias').value && feriasResgate.get('calcularTerceirizados').get('' + k).get('inicioFerias').value">
                                     <div *ngIf="feriasResgate.get('calcularTerceirizados').get('' + k).get('fimFerias').getError('mensagem')">
                                         <div *ngFor="let msg of feriasResgate.get('calcularTerceirizados').get('' + k).get('fimFerias').getError('mensagem')[0]">
-                                            <span class="mensagem-erro">{{msg}}</span>
+                                          <span class="mensagem-erro">{{msg}}</span>
                                         </div>
                                     </div>
-                                    <div *ngIf="feriasResgate.get('calcularTerceirizados').get('' + k).get('fimFerias').getError('required')">
-                                        <span class="mensagem-erro">Você deve digitar uma data !</span>
+                                    <div *ngIf="feriasResgate.get('calcularTerceirizados').get('' + k).get('fimFerias').getError('required') &&
+                                    feriasResgate.get('calcularTerceirizados').get('' + k).get('selected').value">
+                                      <span class="mensagem-erro">Você deve digitar uma data!</span>
                                     </div>
                                 </div>
                             </div>
@@ -86,7 +97,8 @@
                         <div class="row">
                             <div class="input-field col s12">
                                 <input type="number" value="0" placeholder="Exemplo: 0" class="validate" formControlName="diasVendidos" min="0" max="10" required>
-                                <div *ngIf="feriasResgate.get('calcularTerceirizados').get('' + k).get('diasVendidos').invalid && (feriasResgate.get('calcularTerceirizados').get('' + k).get('diasVendidos').dirty ||
+                                <div *ngIf="feriasResgate.get('calcularTerceirizados').get('' + k).get('diasVendidos').invalid &&
+                                (feriasResgate.get('calcularTerceirizados').get('' + k).get('diasVendidos').dirty ||
                                 feriasResgate.get('calcularTerceirizados').get('' + k).get('diasVendidos').touched)">
                                     <div *ngIf="feriasResgate.get('calcularTerceirizados').get('' + k).get('diasVendidos').getError('mensagem')">
                                         <div *ngFor="let msg of feriasResgate.get('calcularTerceirizados').get('' + k).get('diasVendidos').getError('mensagem')[0]">
@@ -121,11 +133,7 @@
         <h5 class=" center">No mínimo uma pessoa deve ser selecionada para se realizar o cálculo !</h5>
     </div>
     <div class="modal-footer">
-        <div class="col center-align center">
-            <div class="center">
-                <button class="btn waves-effect center"  (click)="closeModal1()">Ok</button>
-            </div>
-        </div>
+      <button class="btn waves-effect center-align"  (click)="closeModal1()">Ok</button>
     </div>
 </div>
 <div class="container">
@@ -135,7 +143,7 @@
             <h5 class=" center">Preencha os campos adequadamente</h5>
         </div>
         <div class="modal-footer">
-            <button class="btn waves-effect center" (click)="closeModal2()">Ok</button>
+            <button class="btn waves-effect center-align" (click)="closeModal2()">Ok</button>
         </div>
     </div>
 </div>
@@ -170,20 +178,18 @@
                 <td>{{ferias.pTotalIncidenciaTerco | currency:'BRL':true:'1.2-2'}}</td>
                 <td>{{ferias.pTotalFerias + ferias.pTotalIncidenciaFerias + ferias.pTotalTercoConstitucional + ferias.pTotalIncidenciaTerco | currency:'BRL':true:'1.2-2'}}</td>
             </tr>
-            </tbody>
-            <tfoot>
-            <tr>
-              <th >Somatório</th>
-              <th > </th>
-              <th > </th>
-              <th > </th>
-              <th >{{somaFerias| currency:'BRL':true:'1.2-2'}}</th>
-              <th >{{somaTerco| currency:'BRL':true:'1.2-2'}}</th>
-              <th >{{somaIncidenciaFerias| currency:'BRL':true:'1.2-2'}}</th>
-              <th >{{somaIncidenciaTerco| currency:'BRL':true:'1.2-2'}}</th>
-              <th >{{somaFerias + somaTerco + somaIncidenciaFerias + somaIncidenciaTerco| currency:'BRL':true:'1.2-2'}}</th>
+            <tr class="black-text soma">
+              <td><b>Somatório</b></td>
+              <td><b></b></td>
+              <td><b></b></td>
+              <td><b></b></td>
+              <td><b>{{somaFerias| currency:'BRL':true:'1.2-2'}}</b></td>
+              <td><b>{{somaTerco| currency:'BRL':true:'1.2-2'}}</b></td>
+              <td><b>{{somaIncidenciaFerias| currency:'BRL':true:'1.2-2'}}</b></td>
+              <td><b>{{somaIncidenciaTerco| currency:'BRL':true:'1.2-2'}}</b></td>
+              <td><b>{{somaFerias + somaTerco + somaIncidenciaFerias + somaIncidenciaTerco| currency:'BRL':true:'1.2-2'}}</b></td>
             </tr>
-            </tfoot>
+            </tbody>
         </table>
     </div>
     <div class="modal-footer">
@@ -199,7 +205,7 @@
     </div>
     <div class="modal-footer">
         <div class="center-align">
-            <button class="btn waves-effect center" (click)="closeModal4()">Ok</button>
+            <button class="btn waves-effect center-align" (click)="closeModal4()">Ok</button>
         </div>
     </div>
 </div>

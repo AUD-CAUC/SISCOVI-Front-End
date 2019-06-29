@@ -8,13 +8,13 @@
                     <label for="test5"></label>
                 </th>
                 <th>Terceirizados</th>
-                <th>Número de Parcelas</th>
+                <th>Parcela</th>
                 <th>Início do Período Aquisitivo</th>
                 <th>Fim do Período Aquisititvo</th>
-                <th>Início do Ususfruto</th>
+                <th>Início do Usufruto</th>
                 <th>Fim do Usufruto</th>
                 <th>Dias Vendidos</th>
-                <th>Valor a Ser Movimentado</th>
+                <th>Valor a ser Movimentado</th>
             </tr>
             </thead>
             <tbody>
@@ -36,6 +36,11 @@
                                     <option value="2">Segunda</option>
                                     <option value="3">Terceira</option>
                                 </select>
+                                <div *ngIf="feriasForm.get('calcularTerceirizados').get('' + i).get('parcelas').getError('mensagem')">
+                                  <div *ngFor="let msg of feriasForm.get('calcularTerceirizados').get('' + i).get('parcelas').getError('mensagem')[0]">
+                                    <span class="mensagem-erro">{{msg}}</span>
+                                  </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -47,14 +52,17 @@
                         <div class="row">
                             <div class="input-field col s12">
                                 <input type="text" class="validate" placeholder="Ex: 01/01/2000" appMaskDate formControlName="inicioFerias" maxlength="10" required>
-                                <div *ngIf="feriasForm.get('calcularTerceirizados').get('' + i).get('inicioFerias').invalid && (feriasForm.get('calcularTerceirizados').get('' + i).get('inicioFerias').dirty ||
-                                feriasForm.get('calcularTerceirizados').get('' + i).get('inicioFerias').touched)">
+                                <div *ngIf="feriasForm.get('calcularTerceirizados').get('' + i).get('inicioFerias').invalid ||
+                                (feriasForm.get('calcularTerceirizados').get('' + i).get('inicioFerias').dirty ||
+                                feriasForm.get('calcularTerceirizados').get('' + i).get('inicioFerias').touched) &&
+                                feriasForm.get('calcularTerceirizados').get('' + i).get('fimFerias').value && feriasForm.get('calcularTerceirizados').get('' + i).get('inicioFerias').value">
                                     <div *ngIf="feriasForm.get('calcularTerceirizados').get('' + i).get('inicioFerias').getError('mensagem')">
                                         <div *ngFor="let msg of feriasForm.get('calcularTerceirizados').get('' + i).get('inicioFerias').getError('mensagem')[0]">
                                             <span class="mensagem-erro">{{msg}}</span>
                                         </div>
                                     </div>
-                                    <div *ngIf="feriasForm.get('calcularTerceirizados').get('' + i).get('inicioFerias').getError('required')">
+                                    <div *ngIf="feriasForm.get('calcularTerceirizados').get('' + i).get('inicioFerias').getError('required') &&
+                                    feriasForm.get('calcularTerceirizados').get('' + i).get('selected').value">
                                         <span class="mensagem-erro">Você deve digitar uma data !</span>
                                     </div>
                                 </div>
@@ -67,14 +75,17 @@
                         <div class="row">
                             <div class="input-field col s12 ">
                                 <input type="text" class="validate" placeholder="Ex: 01/01/2000" appMaskDate formControlName="fimFerias" maxlength="10" required>
-                                <div *ngIf="feriasForm.get('calcularTerceirizados').get('' + i).get('fimFerias').invalid && (feriasForm.get('calcularTerceirizados').get('' + i).get('fimFerias').dirty ||
-                                feriasForm.get('calcularTerceirizados').get('' + i).get('fimFerias').touched)">
+                                <div *ngIf="feriasForm.get('calcularTerceirizados').get('' + i).get('fimFerias').invalid ||
+                                (feriasForm.get('calcularTerceirizados').get('' + i).get('fimFerias').dirty ||
+                                feriasForm.get('calcularTerceirizados').get('' + i).get('fimFerias').touched) &&
+                                feriasForm.get('calcularTerceirizados').get('' + i).get('fimFerias').value && feriasForm.get('calcularTerceirizados').get('' + i).get('inicioFerias').value">
                                     <div *ngIf="feriasForm.get('calcularTerceirizados').get('' + i).get('fimFerias').getError('mensagem')">
                                         <div *ngFor="let msg of feriasForm.get('calcularTerceirizados').get('' + i).get('fimFerias').getError('mensagem')[0]">
                                             <span class="mensagem-erro">{{msg}}</span>
                                         </div>
                                     </div>
-                                    <div *ngIf="feriasForm.get('calcularTerceirizados').get('' + i).get('fimFerias').getError('required')">
+                                    <div *ngIf="feriasForm.get('calcularTerceirizados').get('' + i).get('fimFerias').getError('required') &&
+                                    feriasForm.get('calcularTerceirizados').get('' + i).get('selected').value">
                                         <span class="mensagem-erro">Você deve digitar uma data !</span>
                                     </div>
                                 </div>
@@ -115,7 +126,8 @@
                                             <span class="mensagem-erro">{{msg}}</span>
                                         </div>
                                     </div>
-                                    <div *ngIf="feriasForm.get('calcularTerceirizados').get('' + i).get('valorMovimentado').getError('required')">
+                                    <div *ngIf="feriasForm.get('calcularTerceirizados').get('' + i).get('valorMovimentado').getError('required') &&
+                                    feriasForm.get('calcularTerceirizados').get('' + i).get('selected').value">
                                         <span class="mensagem-erro">Você deve digitar algum valor!</span>
                                     </div>
                                 </div>
@@ -204,3 +216,4 @@
         </div>
     </div>
 </div>
+<ul class="tooltip"

@@ -21,7 +21,8 @@
               "src/favicon.ico"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "./node_modules/materialize-css/dist/css/materialize.css"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.js",

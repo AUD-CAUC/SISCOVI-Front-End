@@ -15,11 +15,11 @@ li.waves-effect.active {
  }
 table.highlight tbody tr:hover {
   background-color: #bdbdbd;
-  cursor: pointer;
+
 }
 table.highlight tbody tr:hover .total-calculo{
   background-color: #bdbdbd;
-  cursor: pointer;
+
 }
 .checkbox-black[type="checkbox"] + label:before{
   border: 2px solid black;
@@ -35,7 +35,10 @@ table.highlight tbody tr:hover .total-calculo{
   cursor: pointer !important;
 }
 .material-icons {
-  color: rgba(0,0,0,0.54)
+  color: rgba(0,0,0,0.54);
+  font-size: 24px;
+  cursor: pointer;
+
 }
 .badge1 {
   position:relative;

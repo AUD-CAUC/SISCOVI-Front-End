@@ -1,33 +1,56 @@
 <div materialize class="container">
-    <h2 class="center">Rubricas</h2>
-    <div class="row">
-        <div class="col left">
-            <button class="btn waves-effect" (click)="openModal()">Cadastrar Nova Rubrica</button>
-        </div>
-        <div id="modal1" class="modal bottom-sheet" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions">
-            <div class="modal-content">
-                <app-cadastrar-rubrica *ngIf="render"></app-cadastrar-rubrica>
-            </div>
-            <div class="modal-footer">
-                <button class="btn waves-effect left" (click)="closeModal()">Cancelar</button>
-                <button class="btn waves-effect right" [disabled]="rubricaService.getValidity()" (click)="cadastraRubrica()">Cadastrar</button>
-            </div>
-        </div>
+  <h2 class="center">Rubricas</h2>
+  <div class="row">
+    <div class="col left">
+      <button class="btn waves-effect" (click)="openModal()">Cadastrar Nova Rubrica</button>
     </div>
+    <div id="modal1" class="modal bottom-sheet" materialize="modal" [materializeParams]="[{dismissible: false}]"
+         [materializeActions]="modalActions">
+      <div class="modal-content">
+        <app-cadastrar-rubrica *ngIf="render"></app-cadastrar-rubrica>
+      </div>
+      <div class="modal-footer">
+        <button class="btn waves-effect left" (click)="closeModal()">Cancelar</button>
+        <button class="btn waves-effect right" [disabled]="rubricaService.getValidity()" (click)="cadastraRubrica()">
+          Cadastrar
+        </button>
+      </div>
+    </div>
+  </div>
   <table class="bordered highlight centered z-depth-2 hoverable">
     <thead>
-      <tr>
-        <th>Nome</th>
-        <th>Sigla</th>
-        <th>Descrição</th>
-      </tr>
+    <tr>
+      <th>Nome</th>
+      <th>Sigla</th>
+      <th>Descrição</th>
+      <th></th>
+    </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let rubrica of rubricas" (dblclick)="editarRubrica(rubrica.codigo)">
-            <td>{{ rubrica.nome }}</td>
-            <td>{{ rubrica.sigla }}</td>
-            <td>{{ rubrica.descricao }}</td>
-      </tr>
+    <tr *ngFor="let rubrica of rubricas">
+      <td>{{ rubrica.nome }}</td>
+      <td>{{ rubrica.sigla }}</td>
+      <td>{{ rubrica.descricao }}</td>
+      <td class="foo"><i class="material-icons" (click)="editarRubrica(rubrica.codigo)" title="Editar Rubrica">edit</i></td>
+      <td class="foo"><i class="material-icons" (click)="openModal2(rubrica.codigo)" title="Apagar Rubrica">delete</i></td>
+    </tr>
     </tbody>
   </table>
 </div>
+<div id="modal2" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions2">
+  <div class="modal-content">
+    <div class="container">
+      <div class="row">
+        <h1 class="center">Alerta</h1>
+      </div>
+      <div class="row">
+        <h5 class="center">Tem certeza que deseja APAGAR esta Rubrica ?</h5>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn waves-effect right" (click)="deletarRubrica()">Sim</button>
+    <button class="btn waves-effect left" (click)="closeModal2()">Não</button>
+  </div>
+</div>
+

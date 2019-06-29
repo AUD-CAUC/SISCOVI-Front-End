@@ -42,7 +42,6 @@ export class CalculoFeriasComponent {
     }
 
     eventNav(codigo: number): void {
-        console.log(codigo);
         this.navegaParaViewDeCalculos.emit(codigo);
     }
 }

@@ -1,15 +1,22 @@
 <div class="container">
+  <ul>
+    <a class="tooltip right"><span class="tooltiptext">Para alocar novo funcionário, modificar/remanejar funcionários ou
+desligar um funcionário clique no botão abaixo. Selecione um de
+seus contratos na caixa de seleção abaixo para
+consultar as funções de cada contrato.</span> <i class="material-icons" style="color: black">help_outline</i></a>
+  </ul>
+
   <h2 class="center-align">Funções Dos Terceirizados</h2>
-    <div class="row">
+    <div class="row center-align">
         <button class="btn waves-effect" (click)="goToGerenciarCargos()">Gerenciar Função do Terceirizado</button>
     </div>
   <div class="row">
         <div class="input-field col s12 xl4 l5 m12">
           <select  name="contrato" materialize="material_select" [ngModel]="contratos" (change)="onChange($event.target.value)">
-            <option value="" disabled selected >Selecione o contrato</option>
+            <option value="" disabled selected >Selecione...</option>
             <option class="truncate" *ngFor="let contrato of contratos" [value]="contrato.codigo">{{contrato.nomeDaEmpresa}} - Contrato nº: {{contrato.numeroDoContrato}}/{{contrato.anoDoContrato}}</option>
           </select>
-          <label>Selecione o contrato</label>
+          <label style="font-size: 0.65vw">Selecione o contrato</label>
         </div>
         <div class="input-field col s6 l6 offset-l1 offset-xl2 offset-m6">
           <i class="material-icons prefix">search</i>
@@ -19,6 +26,16 @@
     </div>
 </div>
 <div class="container" *ngIf="valid">
+  <ul>
+    <a class="tooltip right"><span class="tooltiptext">Ao clicar em um Cargo, abrir-se-á uma lista com o(s) tercerizado(s)
+atualmente alocados neste cargo, as datas de disponibilização de cada funcionário e as datas de desligamento, caso existam.
+</span> <i class="material-icons" style="color: black">help_outline</i></a>
+  </ul>
+<!--  <div class="pin-top right material-icons" title="Ao clicar em um Cargo, abrir-se-á uma lista com o(s) tercerizados-->
+<!--atualmente alocados neste cargo, as datas de disponibilização de-->
+<!--cada funcionário e as datas de desligamento, caso existam."-->
+<!--       style="cursor: help; text-align: center">help_outline</div>-->
+  <br>
     <div class="row" *ngIf="listaCargosFuncionarios.length === 0">
         <div class="col s12 grey lighten-4">
             <h5 class="center-align">Não há funcionários cadastrados nas funções ainda <i class="small material-icons">mood_bad</i>. Por favor aloque funcionários nas funções !</h5>

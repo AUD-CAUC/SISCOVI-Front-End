@@ -38,7 +38,6 @@ export class CalculoRescisaoComponent {
         }
     }
     eventNav(codigo: number): void {
-        console.log(codigo);
         this.navegaParaViewDeCalculos.emit(codigo);
     }
 }

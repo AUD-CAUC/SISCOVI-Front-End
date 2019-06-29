@@ -1,17 +1,65 @@
+<script src="rescisao.component.ts"></script>
 <div class="container">
+  <ul *ngIf="testeRetencoes()">
+    <a class="tooltip right"><span class="tooltiptext">Nesta aba você pode consultar o histórico de todas as restituições
+    de rescisão já executadas de seus contratos. Cada contrato possui seu histórico próprio, então basta selecionar o contrato
+      específico para consultar o seu histórico.</span> <i class="material-icons" style="color: black">help_outline</i></a>
+  </ul>
+  <ul *ngIf="testeCalculo()">
+    <a class="tooltip right"><span class="tooltiptext">Selecione o contrato para cálculo, marque o(s) funcionário(s) que
+      deseja calcular a restituição, especifique o tipo de rescisão, se irá resgatar ou não as férias vencidas, por fim
+      verifique se as datas estão corretas e clique em <button class="btn waves-effect center">Calcular</button>. <br>PARA
+      CALCULAR A MOVIMENTAÇÃO: Selecione o funcionário, verifique se todas as datas estão corretas e especifique os
+      montantes de férias vencidas, proporcionais e de décimo terceiro a serem mobilizados e clique no botão
+      <button class="btn waves-effect center">Calcular</button>.
+    </span> <i class="material-icons" style="color: black">help_outline</i></a>
+  </ul>
+  <ul *ngIf="testePendentes()">
+    <a class="tooltip right"><span class="tooltiptext">Nesta aba os funcionários da SAD terão acesso aos pedidos de cálculo
+    referentes à rescisões feitas pelos gestores, podendo aprovar ou reprovar esses cálculos. Caso aprovados, os cálculos
+      serão enviados para aba CÁLCULOS PENDENTES DE EXECUÇÃO administrada pela SOF, caso contrário os serão devolvidos
+      para aba CALCULAR com as devidas observações e justificativas.</span> <i class="material-icons" style="color: black">
+      help_outline</i></a>
+  </ul>
+  <ul *ngIf="testeExecutados()">
+    <a class="tooltip right"><span class="tooltiptext">Nesta aba os funcionários da SOF terão acesso aos cáculos de rescisão
+      aprovados pela SAD, podendo excutá-los de fato ou rejeitá-los. Caso seja executado, para efeito dessa ferramenta,
+      o cálculo será confirmado e um histórico será criado na aba RESTITUIÇÕES DE RESCISÃO.</span>
+      <i class="material-icons" style="color: black">help_outline</i></a>
+  </ul>
+  <!--  <ul>-->
+<!--    <a class="tooltip right"><span class="tooltiptext">Para realizar-->
+<!--    o procedimento de cálculo das restituições de Rescisão, clique na aba <a style="color: black;background-color: #a5a7aa">-->
+<!--        CALCULAR</a> e siga as instruções. Caso queria ver o histórico de restituições já feitas, clique na  aba-->
+<!--        <a style="color: black;background-color: #a5a7aa">RESTITUIÇÕES DE RESCISÃO</a> e selecione o contrato para consulta.<br>Atente-se para o fato de que o-->
+<!--      cálculo de rescisões só pode ser feito para os funcionários que já foram desligados do contrato. Portanto, se você-->
+<!--      selecionou o contrato e o tipo de restituição e recebeu um aviso sobre não ter desligado nenhum funcionário, clique-->
+<!--      no botão abaixo do aviso e siga os procedimentos paradesligar o(s) funcionário(s).<br>PARA CALCULAR O RESGATE:-->
+<!--      Selecione o contrato para cálculo, marque o(s) funcionário(s) que deseja calcular a restituição, especifique o tipo-->
+<!--      de rescisão, se irá resgatar ou não as férias vencidas, por fim verifique se as datas estão corretas e clique em-->
+<!--      <button class="btn waves-effect center">Calcular</button>. Para fazer o cálculo de TODOS os terceirizados de uma só-->
+<!--      vez, marque a primeira caixa de seleção (ao lado da coluna Terceirizado).<br>PARA CALCULAR A MOVIMENTAÇÃO: Selecione-->
+<!--      o funcionário, verifique se todas as datas estão corretas e especifique os montantes de férias vencidas, proporcionais-->
+<!--      e de décimo terceiro a serem mobilizados e clique no botão <button class="btn waves-effect center">Calcular</button>.-->
+<!--    </span> <i class="material-icons" style="color: black">help_outline</i></a>-->
+<!--  </ul>-->
     <h2 class="center">Rescisão</h2>
+  <br>
     <div class="row">
         <br>
         <div class="col s12">
             <ul class="tabs tabs-fixed-width" materialize="tabs" [materializeParams]="tabSelectionParams">
-                <li class="tab col s3 text-grey text-darken-1" ><a [class.active]="testeRetencoes()"(click)="setRetencoesActive()">Restituições</a></li>
+                <li class="tab col s3 text-grey text-darken-1" ><a [class.active]="testeRetencoes()"(click)="setRetencoesActive()">Restituições de rescisão</a></li>
                 <li class="tab col s3 text-grey text-darken-1"><a [class.active]="testeCalculo()" (click)="setCalcularActive()" >Calcular</a></li>
-                <li class="tab col s3 text-grey text-darken-1"><a [class.active]="testePendentes()" (click)="setPendentesActive()">Cálculos Pendentes de Aprovação</a></li>
-                <li class="tab col s3 text-grey text-darken-1"><a [class.active]="testeExecutados()" (click)="setExecutadosActive()">Cálculos Pendentes de Execução</a></li>
+                <li class="tab col s3 text-grey text-darken-1"><a [class.active]="testePendentes()" (click)="setPendentesActive()">Cálculos pendentes de aprovação</a></li>
+                <li class="tab col s3 text-grey text-darken-1"><a [class.active]="testeExecutados()" (click)="setExecutadosActive()">Cálculos pendentes de execução</a></li>
             </ul>
         </div>
-        <div id="test1" class="col s12" active="testeRetencoes()"><app-relatorio-retencoes-ferias-component *ngIf="testeRetencoes()"></app-relatorio-retencoes-ferias-component></div>
+      <div class="divider"></div>
+        <div id="test1" class="col s12" active="testeRetencoes()"><app-relatorio-restituicoes-rescisao-component *ngIf="testeRetencoes()"></app-relatorio-restituicoes-rescisao-component></div>
         <div id="test2" class="col s12" active="testeCalculo()"><app-calculo-rescisao-component *ngIf="testeCalculo()" (navegaParaViewDeCalculos)="calculosPendentes($event)"></app-calculo-rescisao-component></div>
-        <div id="test3" class="col s12" active="testePendentes()"><app-rescisao-pendente-component *ngIf="testePendentes()" [codigoContrato]="codigoContrato"></app-rescisao-pendente-component></div>
+        <div id="test3" class="col s12" active="testePendentes()"><app-rescisao-calculos-pendentes *ngIf="testePendentes()" [calculosPendentes]="cp" (nav)="calculosExecutados($event)"></app-rescisao-calculos-pendentes></div>
+        <div id="test4" class="col s12" active="testeExecutados()"><app-rescisao-calculos-pendentes-execucao *ngIf="testeExecutados()" [calculosPendentesExecucao]="cpe" (nav)="retencoes()"></app-rescisao-calculos-pendentes-execucao>
+      </div>
     </div>
 </div>

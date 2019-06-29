@@ -2,9 +2,11 @@
     <div class="row">
         <h2 class="center">Histórico de Gestores</h2>
     </div>
-    <div>
-        <button class="btn waves-effect" (click)="cadastroGestorContrato()">Cadastrar Gestor no Contrato</button>
-    </div>
+  <div class="row">
+    <p style="text-align: center">Nesta aba você poderá consultar os gestores antes a você e consultar também quem são
+    seus substitutos em cada contrato.</p>
+  </div>
+
     <div class="row center">
         <div class="input-field col s7 center">
             <select materialize="material_select" [materializeSelectOptions]="contratos" (change)="selecionarContrato($event.target.value)">
@@ -22,8 +24,8 @@
                     <tr>
                         <th></th>
                         <th>Gestor</th>
-                        <th>Início</th>
-                        <th>Fim</th>
+                        <th>Início da Gestão</th>
+                        <th>Fim da Gestão</th>
                         <th>Atualizado por...</th>
                         <th>Última Atualização</th>
                     </tr>
@@ -41,4 +43,12 @@
             </table>
         </div>
     </div>
+    <div class="row">
+        <p style="text-align: center">Caro gestor, neste link você poderá cadastrar um ou mais substitutos em seus contratos,
+        respeitando a norma de no máximo 4(quatro) substitutos por contrato.</p>
+        <div class="center">
+            <button class="btn waves-effect" (click)="cadastroGestorContrato()">Cadastrar Gestor no Contrato</button>
+        </div>
+    </div>
 </div>
+

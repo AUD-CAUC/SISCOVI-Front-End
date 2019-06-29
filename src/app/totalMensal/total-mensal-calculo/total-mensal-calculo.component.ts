@@ -6,6 +6,8 @@ import {MaterializeAction} from 'angular2-materialize';
 import {TotalMensalService} from '../total-mensal.service';
 import {TotalMensal} from '../totalMensal';
 import {Mes} from './mes';
+import {ActivatedRoute, Router} from '@angular/router';
+import {RescisaoService} from "../../rescisao/rescisao.service";
 
 @Component({
     templateUrl: './total-mensal-calculo.component.html',
@@ -37,24 +39,26 @@ export class TotalMensalCalculoComponent implements OnInit {
     @Output() close = new EventEmitter();
     @Output() navegaParaViewDeCalculos = new EventEmitter();
     private anoSelecionado: number;
+    private mesSelecionado: number;
+    private numFuncAtivos: number;
 
-    constructor(contServ: ContratosService, fb: FormBuilder, tmService: TotalMensalService) {
+    constructor(contServ: ContratosService, fb: FormBuilder, tmService: TotalMensalService, private router: Router, private route: ActivatedRoute) {
         this.tmService = tmService;
         this.fb = fb;
         if (contServ.contratos.length === 0) {
             contServ.getContratosDoUsuario().subscribe((res) => {
                 contServ.contratos = res;
                 this.contratos = res;
-                this.anoDoContratoMaisAntigo = this.getAnoDoContratoMaisAntigo(this.contratos);
-                this.anoDoContratoMaisRecente = this.getAnoDoContratoMaisRecente(this.contratos);
-                this.years = this.preencheListaDeAnos(this.anoDoContratoMaisAntigo, this.anoDoContratoMaisRecente);
+                // this.anoDoContratoMaisAntigo = this.getAnoDoContratoMaisAntigo(this.contratos);
+                // this.anoDoContratoMaisRecente = this.getAnoDoContratoMaisRecente(this.contratos);
+                // this.years = this.preencheListaDeAnos(this.anoDoContratoMaisAntigo, this.anoDoContratoMaisRecente);
             });
         } else {
             this.contratos = contServ.contratos;
-            this.currentYear = (new Date().getFullYear());
-            this.anoDoContratoMaisAntigo = this.getAnoDoContratoMaisAntigo(this.contratos);
-            this.anoDoContratoMaisRecente = this.getAnoDoContratoMaisRecente(this.contratos);
-            this.years = this.preencheListaDeAnos(this.anoDoContratoMaisAntigo, this.anoDoContratoMaisRecente);
+            // this.currentYear = (new Date().getFullYear());
+            // this.anoDoContratoMaisAntigo = this.getAnoDoContratoMaisAntigo(this.contratos);
+            // this.anoDoContratoMaisRecente = this.getAnoDoContratoMaisRecente(this.contratos);
+            // this.years = this.preencheListaDeAnos(this.anoDoContratoMaisAntigo, this.anoDoContratoMaisRecente);
         }
         // this.normalizaDataFim();
     }
@@ -128,8 +132,14 @@ export class TotalMensalCalculoComponent implements OnInit {
 
     onChange(value: number): void {
         this.codigoContrato = value;
+        this.numFuncAtivos = null;
         if (value) {
             this.validate = false;
+        }
+        if (this.codigoContrato) {
+          this.tmService.getAnosValidos(this.codigoContrato).subscribe(res => {
+            this.years = res;
+          });
         }
         if (this.codigoContrato && this.anoSelecionado) {
             this.tmService.getMesesCalculoValidos(value, this.codigoContrato).subscribe(res => {
@@ -145,6 +155,22 @@ export class TotalMensalCalculoComponent implements OnInit {
                 this.meses = res;
             });
         }
+        if (this.mesSelecionado && this.anoSelecionado && this.codigoContrato) {
+            this.getNumFuncionariosAtivos();
+        }
+    }
+
+    mesChange(value: number): void {
+      this.mesSelecionado = value;
+      if (this.mesSelecionado && this.anoSelecionado && this.codigoContrato) {
+        this.getNumFuncionariosAtivos();
+      }
+    }
+
+    getNumFuncionariosAtivos(): void {
+      this.tmService.getNumFuncionariosAtivos(this.mesSelecionado, this.anoSelecionado, this.codigoContrato).subscribe(res => {
+        this.numFuncAtivos = res;
+      });
     }
 
     calculoTotalMensal() {
@@ -206,4 +232,15 @@ export class TotalMensalCalculoComponent implements OnInit {
         this.closeModal2();
         this.navegaParaViewDeCalculos.emit(this.codigoContrato);
     }
+  confirmaCalculo() {
+    this.tmService.confirmarTotalMensalReter(this.mesSelecionado, this.anoSelecionado, this.codigoContrato).subscribe(res => {
+      this.closeModal();
+      if (!res.error) {
+        this.openModal2();
+      }
+    });
+  }
+  goToGerenciarCargos() {
+    this.router.navigate(['./gerenciar-funcoes-terceirizados'], {relativeTo: this.route});
+  }
 }

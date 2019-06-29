@@ -2,7 +2,7 @@
 <div class="row">
     <div class="input-field col l7">
         <select id="selecao_contrato"materialize="material_select" [materializeSelectOptions]="contratos" (change)="defineCodigoContrato($event.target.value)">
-            <option disabled>Selecione um Contrato</option>
+            <option disabled>Selecione um contrato</option>
             <option *ngFor="let contrato of contratos" [value]="contrato.codigo">{{contrato.nomeDaEmpresa}} - Contrato nº: {{contrato.numeroDoContrato}}</option>
         </select>
         <label for="selecao_contrato">Contrato<span class="red-text"> *</span></label>
@@ -22,6 +22,19 @@
    <app-movimentacao-rescisao-component [tipoRestituicao]="tipoRestituicao" [codigoContrato]="codigo" [terceirizados]="terceirizados" (navegaParaViewDeCalculos)="eventNav($event)">
     </app-movimentacao-rescisao-component>
 </div>
+<!--<div *ngIf="!terceirizados && (tipoRestituicao == 'MOVIMENTACAO')" class="row">-->
+<!--  <div class="col s12 grey lighten-4" style="margin-top: 1em">-->
+<!--    <br>-->
+<!--    <h5 class="center-align">Você não desligou nenhum funcionário! Deseja desligar agora?</h5>-->
+<!--  </div>-->
+<!--</div>-->
+
 <div *ngIf="terceirizados && (tipoRestituicao == 'RESGATE')">
     <app-resgate-rescisao-component [tipoRestituicao]="tipoRestituicao" [codigoContrato]="codigo" [terceirizados]="terceirizados" (navegaParaViewDeCalculos)="eventNav($event)"></app-resgate-rescisao-component>
 </div>
+<!--<div *ngIf="!terceirizados && (tipoRestituicao == 'RESGATE')" class="row">-->
+<!--  <div class="col s12 grey lighten-4" style="margin-top: 1em">-->
+<!--    <br>-->
+<!--    <h5 class="center-align">Você ainda não desligou nenhum funcionário! Deseja desligar agora?</h5>-->
+<!--  </div>-->
+<!--</div>-->

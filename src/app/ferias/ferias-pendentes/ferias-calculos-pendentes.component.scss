@@ -1,7 +1,7 @@
 .row .col{
   float: none !important;
-  margin-left: auto;
-  margin-right: auto;
+  //margin-left: auto;
+  //margin-right: auto;
 }
 table {
   width: 115% !important;
@@ -41,32 +41,45 @@ table {
 
 .tooltip .tooltiptext{
   visibility: hidden;
-  width: 120px;
   background-color: #555;
   color: #fff;
   text-align: center;
   border-radius: 6px;
   padding: 5px 0;
+  min-height: 80px;
+  min-width: 80px;
   position: absolute;
-  z-index: 1;
-  bottom: 125%;
+  z-index: 98;
+  top: 125%;
   left: 50%;
   margin-left: -60px;
   opacity: 0;
   transition: opacity 0.3s;
+
 }
 
-.tooltip .tooltiptext::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  margin-left: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: #555 transparent transparent transparent;
-}
+//.tooltip .tooltiptext::after {
+//  content: "";
+//  position: absolute;
+//  top: -56%;
+//  left: 50%;
+//  transform: translateX(-50%);
+//  margin-left: -5px;
+//  border-width: 5px;
+//  border-style: solid;
+//  border-color: #555 transparent transparent transparent;
+//}
 .tooltip:hover .tooltiptext{
   visibility: visible;
   opacity: 100;
 }
+
+.modal-footer {
+  text-align:center;
+}
+.modal-footer button {
+  display:inline-block;
+  margin:0 15px;
+  float:none; /*if you set float already */
+}
+

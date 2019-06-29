@@ -1,8 +1,17 @@
 /* You can add global styles to this file, and also import other style files */
-/*@import "../node_modules/materialize-css/dist/css/materialize.css";*/
+@import "../node_modules/materialize-css/dist/css/materialize.css";
 @import "./assets/css/materialize.min.css";
 
 /*@import "./sass/styles.geral.scss";*/
+.app-loading {
+  .logo {
+    width: 100px;
+    height: 100px;
+
+    // this way asset gets processed by webpack
+    background: url(./assets/marca_stj_cor_princ.png) center center no-repeat;
+  }
+}
 
 a {
 	cursor: pointer;
@@ -10,6 +19,7 @@ a {
 nav ul a,
 footer.page-footer a {
 	color: inherit;
+
 }
 .btn {
 	background-color: rgb(65,78,84);
@@ -117,4 +127,7 @@ footer.page-footer a {
 	}
 }
 
+footer.page-footer {
+  max-height: 1%;
+}
 

@@ -1,15 +1,17 @@
-import {EventEmitter, Injectable, Output} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
 import {ConfigService} from '../_shared/config.service';
-import {Observable} from 'rxjs/Observable';
 import {TerceirizadoDecimoTerceiro} from './terceirizado-decimo-terceiro';
 import {DecimoTerceiroPendente} from './decimo-terceiro-pendente/decimo-terceiro-pendente';
+import {ListaCalculosPendentes} from './decimo-terceiro-pendente/lista-calculos-pendentes';
+import {Observable} from 'rxjs/Observable';
 
 @Injectable()
 export class DecimoTerceiroService {
     constructor(private http: Http, private config: ConfigService) {}
-    getFuncionariosDecimoTerceiro(codigoContrato: number, tipoRestituicao: string) {
-        const url = this.config.myApi + '/decimo-terceiro/getTerceirizadosDecimoTerceiro=' + codigoContrato + '/' + tipoRestituicao;
+    getFuncionariosDecimoTerceiro(codigoContrato: number, tipoRestituicao: string, ano: number) {
+        const url = this.config.myApi + '/decimo-terceiro/getTerceirizadosDecimoTerceiro=' +
+          codigoContrato + '/' + tipoRestituicao + '/' + ano;
         return this.http.get(url).map(res => res.json());
     }
     /*calculaFeriasTerceirizados(decimoTerceiro: DecimoTerceiroCalcular[]) {
@@ -80,50 +82,64 @@ export class DecimoTerceiroService {
         return this.http.post(url, data, headers).map(res => res.json());
     }
 
-    getCalculosPendentes(codigoContrato: number) {
-        const url = this.config.myApi + '/decimo-terceiro/getCalculosPendentes/' + codigoContrato + '/' + this.config.user.id;
+    getCalculosPendentes() {
+        const url = this.config.myApi + '/decimo-terceiro/getCalculosPendentes/' + this.config.user.id;
         return this.http.get(url).map(res => res.json());
     }
 
-    getCalculosPendentesNegados(codigoContrato: number) {
-        const url = this.config.myApi + '/decimo-terceiro/getCalculosPendentesNegados/' + codigoContrato + '/' + this.config.user.id;
+    getCalculosPendentesNegados() {
+        const url = this.config.myApi + '/decimo-terceiro/getCalculosPendentesNegados/' + this.config.user.id;
         return this.http.get(url).map(res => res.json());
     }
 
-    salvarDecimoTerceiroAvaliados(codigoContrato: number, calculosAvaliados: DecimoTerceiroPendente[]) {
+    salvarDecimoTerceiroAvaliados(calculosAvaliados: ListaCalculosPendentes[]) {
         const url = this.config.myApi + '/decimo-terceiro/avaliarCalculosPendentes';
-        const object = {
-           decimosTerceirosPendentes: calculosAvaliados,
-           user: this.config.user,
-           codigoContrato: codigoContrato
-
-        };
-        return this.http.put(url, object).map(res => res.json());
-    }
-
-    executarDecimoTerceiroAvaliados(codigoContrato: number, calculosAvaliados: DecimoTerceiroPendente[]) {
-        const url = this.config.myApi + '/decimo-terceiro/executarCalculos';
-        const object = {
-            decimosTerceirosPendentes: calculosAvaliados,
+        const data = [];
+        calculosAvaliados.forEach(item => {
+          const object = {
+            decimosTerceirosPendentes: item.calculos,
             user: this.config.user,
-            codigoContrato: codigoContrato
+            codigoContrato: item.codigo
 
-        };
-        return this.http.put(url, object).map(res => res.json());
+          };
+          data.push(object);
+        });
+        return this.http.put(url, data).map(res => res.json());
     }
 
-    getCalculosPendentesExecucao(codigoContrato: number) {
-        const url = this.config.myApi + '/decimo-terceiro/getCalculosPendentesExecucao/' + codigoContrato + '/' + this.config.user.id;
+    executarDecimoTerceiroAvaliados(calculosAvaliados: ListaCalculosPendentes[]) {
+        const url = this.config.myApi + '/decimo-terceiro/executarCalculos';
+        const data = [];
+        calculosAvaliados.forEach(item => {
+          const object = {
+            decimosTerceirosPendentes: item.calculos,
+            user: this.config.user,
+            codigoContrato: item.codigo
+
+          };
+          data.push(object);
+        });
+        return this.http.put(url, data).map(res => res.json());
+    }
+
+    getCalculosPendentesExecucao() {
+        const url = this.config.myApi + '/decimo-terceiro/getCalculosPendentesExecucao/' + this.config.user.id;
         return this.http.get(url).map(res => res.json());
     }
 
-    getCalculosNaoPendentesNegados(codigoContrato: number) {
-        const url = this.config.myApi + '/decimo-terceiro/getCalculosNaoPendentesNegados/' + codigoContrato + '/' + this.config.user.id;
+    getCalculosNaoPendentesNegados(): Observable<ListaCalculosPendentes[]> {
+        const url = this.config.myApi + '/decimo-terceiro/getCalculosNaoPendentesNegados/' + this.config.user.id;
         return this.http.get(url).map(res => res.json());
     }
 
     getRestituicoesDecimoTerceiro(codigoContrato: number) {
         const url = this.config.myApi + '/decimo-terceiro/getRestituicoes/' + codigoContrato + '/' + this.config.user.id;
         return this.http.get(url).map(res => res.json());
+    }
+
+    public getAnos(codigoContrato: number) {
+      const url = this.config.myApi + '/decimo-terceiro/getAnosCalculoDecimoTerceiro/' +
+        codigoContrato + '/' + this.config.user.username;
+      return this.http.get(url).map(res => res.json());
     }
 }

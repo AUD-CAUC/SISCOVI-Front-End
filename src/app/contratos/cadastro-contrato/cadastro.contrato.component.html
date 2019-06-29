@@ -1,6 +1,18 @@
 <div class="container">
+  <ul>
+    <a class="tooltip right"><span class="tooltiptext">Preencha todos os campos corretamente e clique em CADASTRAR no final
+do formulário. Caso você seja um substituto do gestor do contrato, cadastre
+o contrato no nome do gestor.</span><i class="material-icons" style="color: black">help_outline</i></a>
+  </ul>
+
   <div class="section">
+    <br>
+<!--    <div class="pin-top right material-icons" title="Preencha todos os campos corretamente e clique em CADASTRAR no final-->
+<!--do formulário. Caso você seja um substituto do gestor do contrato, cadastre-->
+<!--o contrato no nome do gestor." style="cursor: help">help</div>-->
     <h2 class="center">Cadastro de Contrato</h2>
+    <p style="text-indent: 2em"><br></p>
+    <p style="text-indent: 2em">Campos com <span class="mensagem-erro">*</span> são obrigatórios.</p>
     <div class="divider"></div>
   </div>
   <h5>Informações Gerais</h5>
@@ -17,7 +29,7 @@
       </div>
       <div class="input-field col s2">
         <input id="nome_empresa" placeholder="Nome da Empresa" type="text" class="validate"
-               formControlName="nomeEmpresa" (input)="isValid()" (blur)="isValid()" appTitleCase required>
+               formControlName="nomeEmpresa" (input)="isValid()" (blur)="isValid()" required>
         <label for="nome_empresa">Nome da Empresa<span class="mensagem-erro">*</span></label>
         <div
           *ngIf="myForm2.get('nomeEmpresa').invalid && (myForm2.get('nomeEmpresa').dirty || myForm2.get('nomeEmpresa').touched)">
@@ -47,7 +59,7 @@
         </div>
       </div>
       <div class="input-field col s2">
-        <input id="numero_contrato" placeholder="Número do Contrato" type="number" class="validate"
+        <input id="numero_contrato" placeholder="Número do Contrato" type="text" class="validate"
                formControlName="numeroContrato" (input)="isValid()" (blur)="isValid()" required>
         <label for="numero_contrato">Número do Contrato<span class="mensagem-erro">*</span></label>
         <div
@@ -58,7 +70,7 @@
         </div>
       </div>
       <div class="input-field col s2">
-        <input id="numero_processo_stj" placeholder="Número do Processo" type="number" class="validate"
+        <input id="numero_processo_stj" placeholder="Número do Processo" type="text" class="validate"
                formControlName="numeroProcessoSTJ" (input)="isValid()" (blur)="isValid()" required>
         <label for="numero_processo_stj">Número do Prcesso no STJ<span class="mensagem-erro">*</span></label>
         <div
@@ -76,17 +88,17 @@
           </select>
           <label>Ativo<span class="mensagem-erro">*</span></label>
       </div> -->
-      <div class="input-field col s12">
+      <div class="input-field col s12 tooltip">
         <textarea materialize id="textarea1" class="materialize-textarea" data-length="120" formControlName="objeto"
                   (input)="isValid()" (blur)="isValid()"></textarea>
-        <label for="textarea1">Objeto</label>
+        <label for="textarea1" style="cursor: help">Objeto<span class="tooltiptext" style="cursor: help">Exemplos: Limpeza, Manutenção, Serviços Gerais, etc.</span></label>
       </div>
     </div>
     <div class="row">
       <div class="input-field col s3">
         <select [materializeSelectOptions]="usuarios" materialize="material_select" id="primeiroSubstituto"
                 formControlName="primeiroSubstituto" (change)="isValid()" (blur)="isValid()">
-          <option disabled>Selecione um Substituto</option>
+          <option value="">Selecione um Substituto</option>
           <option *ngFor="let usuario of usuarios" [value]="usuario.nome">{{usuario.nome}}</option>
         </select>
         <label for="primeiroSubstituto">Primeiro Substituto</label>
@@ -94,10 +106,26 @@
       <div class="input-field col s3">
         <select [materializeSelectOptions]="usuarios" materialize="material_select" id="segundoSubstituto"
                 formControlName="segundoSubstituto" (change)="isValid()" (blur)="isValid()">
-          <option disabled>Selecione um Substituto</option>
+          <option value="">Selecione um Substituto</option>
           <option *ngFor="let usuario of usuarios" [value]="usuario.nome">{{usuario.nome}}</option>
         </select>
         <label for="segundoSubstituto">Segundo Substituto</label>
+      </div>
+      <div class="input-field col s3">
+        <select [materializeSelectOptions]="usuarios" materialize="material_select" id="terceiroSubstituto"
+                formControlName="terceiroSubstituto" (change)="isValid()" (blur)="isValid()">
+          <option value="">Selecione um Substituto</option>
+          <option *ngFor="let usuario of usuarios" [value]="usuario.nome">{{usuario.nome}}</option>
+        </select>
+        <label for="terceiroSubstituto">Terceiro Substituto</label>
+      </div>
+      <div class="input-field col s3">
+        <select [materializeSelectOptions]="usuarios" materialize="material_select" id="quartoSubstituto"
+                formControlName="quartoSubstituto" (change)="isValid()" (blur)="isValid()">
+          <option value="">Selecione um Substituto</option>
+          <option *ngFor="let usuario of usuarios" [value]="usuario.nome">{{usuario.nome}}</option>
+        </select>
+        <label for="quartoSubstituto">Quarto Substituto</label>
       </div>
     </div>
     <h5>Vigência</h5>
@@ -137,11 +165,11 @@
           </div>
         </div>
       </div>
-      <div class="input-field col l2">
+      <div class="input-field col l2 tooltip">
         <input formControlName="assinatura" id="data_assinatura" placeholder="Data de Assinatura" type="text"
                class="validate" required minlength="10" maxlength="10" appMaskDate
                (blur)="isValid()" (input)="isValid()">
-        <label for="data_assinatura">Data de Assinatura<span class="mensagem-erro">*</span></label>
+        <label for="data_assinatura">Data de Assinatura<span class="tooltiptext">A data a qual o contrato foi assinado.</span> <span class="mensagem-erro">*</span></label>
         <div
           *ngIf="myForm2.get('assinatura').invalid && (myForm2.get('assinatura').dirty || myForm2.get('assinatura').touched)">
           <div *ngIf="myForm2.get('assinatura').getError('mensagem') && !myForm2.get('assinatura').errors.required">
@@ -161,8 +189,7 @@
         <select materialize="material_select" formControlName="percentualFerias" (change)="isValid()"
                 (blur)="isValid()">
           <option disabled>Selecione um percentual para Férias</option>
-          <option value="8.33">8.33%</option>
-          <option value="9.09">9.09%</option>
+          <option class="black-text" *ngFor="let percentualDinamico of percentuaisDinamicos" [value]="percentualDinamico.percentual">{{percentualDinamico.percentual}}</option>
         </select>
         <label>Percentual de Férias<span class="mensagem-erro">*</span></label>
       </div>
@@ -170,17 +197,16 @@
         <select materialize="material_select" formControlName="percentualDecimoTerceiro" (change)="isValid()"
                 (blur)="isValid()">
           <option disabled>Selecione um percentual para Décimo Terceiro</option>
-          <option value="8.33">8.33%</option>
-          <option value="9.33">9.09%</option>
+          <option class="black-text" *ngFor="let percentualDinamico of percentuaisDinamicos" [value]="percentualDinamico.percentual">{{percentualDinamico.percentual}}</option>
         </select>
         <label>Percentual de Décimo Terceiro<span class="mensagem-erro">*</span></label>
       </div>
-      <div class="input-field col l2">
+      <div class="input-field col l2 tooltip">
         <input placeholder="Submódulo 4.1" id="percentual_incidencia" type="text" class="validate"
                formControlName="percentualIncidencia" currencyMask
                [options]="{ prefix: '', thousands: '.', decimal: ',', allowNegative: 'false', suffix: '%'}"
                (input)="isValid()" (blur)="isValid()">
-        <label for="percentual_incidencia">Percentual de Incidência do Submódulo 4.1<span class="mensagem-erro">*</span></label>
+        <label for="percentual_incidencia">Percentual de Incidência do Submódulo 4.1<span class="tooltiptext">Submódulo 4.1 da IN 02/2008 MPOG: RAT:</span> <span class="mensagem-erro">*</span></label>
         <div
           *ngIf="myForm2.get('percentualIncidencia').invalid && (myForm2.get('percentualIncidencia').dirty || myForm2.get('percentualIncidencia').touched)">
           <div *ngIf="myForm2.get('percentualIncidencia').getError('mensagem')">
@@ -196,7 +222,14 @@
     </div>
   </form>
   <form [formGroup]="myForm" autocomplete="off">
+    <ul>
+      <a class="tooltip right"><span class="tooltiptext">Cadastre aqui todas as funções/cargos constantes no contrato.
+        Lembre-se que cada função só poderá se cadastrada uma vez
+        em cada contrato! Clique em ADICIONAR OUTRO CARGO para
+        abrir quantos formulários para funções desejar.</span><i class="material-icons" style="color: black">help_outline</i></a>
+    </ul>
     <h5>Funções</h5>
+    <br>
     <div formArrayName="cargos" class="row">
       <div *ngFor="let cargo of getFormArrayItems(); let i = index">
         <div [formGroupName]="i">
@@ -295,5 +328,28 @@
         Cadastrar
       </button>
     </div>
+  </div>
+</div>
+<div id="modal" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]"
+     [materializeActions]="modalActions">
+  <div class="modal-content">
+    <h4 class="center">Sucesso</h4>
+    <br>
+    <h5 class=" center">Contrato cadastrado com sucesso !</h5>
+  </div>
+  <div class="modal-footer">
+    <button id="button-footer" class="btn waves-effect" (click)="closeModal()" routerLink="/contratos">Ok</button>
+  </div>
+</div>
+<div id="modal2" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]"
+     [materializeActions]="modalActions2">
+  <div class="modal-content">
+    <h4 class="center">Erro</h4>
+    <br>
+    <h5 class=" center"><span class="mensagem-erro">Houve uma falha ao tentar cadastrar o contrato ! Tente novamente mais tarde ou entre em contato
+      com o administrador do sistema</span></h5>
+  </div>
+  <div class="modal-footer">
+    <button class="button-footer" class="btn waves-effect" (click)="closeModal2()">Ok</button>
   </div>
 </div>

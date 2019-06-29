@@ -21,7 +21,6 @@ export class VigenciaDosContratosComponent {
       this.contratos = res;
       this.vigServ.getVigenciasDosContratos(this.contratos).subscribe(res2 => {
         this.vigencias = res2;
-        console.log(this.vigencias);
       });
     });
   }
