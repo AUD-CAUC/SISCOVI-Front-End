@@ -42,7 +42,7 @@
           </div>
         </td>
         <td>{{terceirizado.inicioContagem | date: 'shortDate'}}</td>
-        <td>{{terceirizado.valorDisponivel | currency:'BRL':true:'1.2-2'}}</td>
+        <td>{{terceirizado.valorDisponivel - terceirizado.valorMovimentado | currency:'BRL':true:'1.2-2'}}</td>
         <td>
           <div [formGroupName]="i">
             <div class="row">
