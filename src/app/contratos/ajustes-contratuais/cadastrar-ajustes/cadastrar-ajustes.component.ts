@@ -17,7 +17,7 @@ import {HistoricoGestor} from '../../../historico/historico-gestor';
 import {MaterializeAction} from 'angular2-materialize';
 import {Router} from '@angular/router';
 import {Rubrica} from '../../../rubricas/rubrica';
-import {init} from "protractor/built/launcher";
+import {el} from "@angular/platform-browser/testing/src/browser_util";
 
 @Component({
   selector: 'app-cadastrar-ajustes',
@@ -129,7 +129,7 @@ export class CadastrarAjustesComponent {
     this.myForm = this.fb.group({
       cargos: this.fb.array([]),
       tipoAjuste: new FormControl('', [Validators.required]),
-      prorrogacao: new FormControl('S', [Validators.required]),
+      prorrogacao: new FormControl('', [Validators.required]),
       gestor: new FormControl('', [Validators.required]),
       primeiroSubstituto: new FormControl(''),
       segundoSubstituto: new FormControl(''),
@@ -557,6 +557,9 @@ export class CadastrarAjustesComponent {
                     mensagem.push('A data digitada é inválida');
                 }
             }
+            /*para qualquer formato que não seja o especificado na condição acima, acusa erro: */
+        } else {
+          mensagem.push('Formato de data inválido!');
         }
         return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
     }
@@ -573,13 +576,23 @@ export class CadastrarAjustesComponent {
         const inicioContrato: Date = new Date(Number(val[0]), Number(val[1]) - 1, Number(val[2]));
         const val2: Number[] = control.parent.get('dataFimContrato').value.split('-');
         const fimContrato: Date = new Date(Number(val2[0]), Number(val2[1]) - 1, Number(val2[2]));
+        /*Se a data informada para inicio for anterior a data inicio do contrato, acusa erro: */
         if (inicioVigencia < inicioContrato) {
           mensagem.push('a data do ajuste não pode ser anterior ao início do contrato!');
-        } else if (control.parent.get('prorrogacao').value === 'S') {
-          console.log('foi');
-          if (inicioVigencia < fimContrato) {
-            mensagem.push('Em caso de prorrogações, a data de início da vigência deve ser posterior a data de término do' +
-              ' contrato ou do ajuste anterior!');
+        } else {
+        /**/
+          if (control.parent.get('prorrogacao').value === 'S') {
+            if (inicioVigencia <= fimContrato) {
+              mensagem.push('Em caso de prorrogações, a data de início da vigência deve ser imediatamente posterior a data' +
+                            ' de término do contrato ou da prorrogação vigente que é:'  + fimContrato.getDate() + '/' +
+                            (fimContrato.getMonth() + 1) + '/' + fimContrato.getFullYear() + '!');
+            }
+          } else {
+            if (inicioVigencia > fimContrato) {
+              mensagem.push('Para apostilamentos ou termos aditivos sem prorrogação a data de início da vigência não pode ' +
+                'ser superior a data término do contrato ou da prorrogação vigente que é:'  + fimContrato.getDate() + '/' +
+              (fimContrato.getMonth() + 1) + '/' + fimContrato.getFullYear() + '!');
+            }
           }
         }
       }
@@ -603,11 +616,29 @@ export class CadastrarAjustesComponent {
           const inicioVig: Date = new Date(ano, mes, dia);
           const val: Number[] = control.parent.get('dataInicioContrato').value.split('-');
           const inicioContrato: Date = new Date(Number(val[0]), Number(val[1]) - 1, Number(val[2]));
-          if (fimVig <= inicioVig) {
-            mensagem.push('A data fim do ajuste deve ser posterior que a data de início do ajuste !');
-          }
+          const val2: Number[] = control.parent.get('dataFimContrato').value.split('-');
+          const fimContrato: Date = new Date(Number(val2[0]), Number(val2[1]) - 1, Number(val2[2]));
           if (fimVig <= inicioContrato) {
             mensagem.push('A data fim da vigência de um ajuste não pode ser anterior a data de início do contrato!');
+          } else {
+            if (fimVig <= inicioVig) {
+              mensagem.push('A data fim do ajuste deve ser posterior que a data de início do ajuste !');
+            } else {
+              /*se o fim da vigência digitado for posterior ou igual a data fim do contrato e Não for prorrogação, acusa erro*/
+              if ((fimVig >= fimContrato) && (control.parent.get('prorrogacao').value === 'N')) {
+                mensagem.push('Para Apostilamentos e termos aditivos sem prorrogação a data fim do ajuste não pode ultrapassar' +
+                  ' a data fim do contrato ou ajuste vigente que é: '  + fimContrato.getDate() + '/' +
+                  (fimContrato.getMonth() + 1) + '/' + fimContrato.getFullYear() + '!');
+              } else {
+                if ((fimVig >= fimContrato) && (control.parent.get('prorrogacao').value === 'S')) {
+                  const diff = Math.abs(fimVig.getTime() - inicioVig.getTime());
+                  const diffDay = Math.round(diff / (1000 * 3600 * 24)) + 1;
+                  if ((diffDay < 365) || (diffDay > 365)) {
+                    mensagem.push('A vigência de uma prorrogação deve ser de 1(um) ano exato !');
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -628,8 +659,16 @@ export class CadastrarAjustesComponent {
         mes = Number(control.parent.get('inicioVigencia').value.split('/')[1]) - 1;
         ano = Number(control.parent.get('inicioVigencia').value.split('/')[2]);
         const inicioVig: Date = new Date(ano, mes, dia);
+        const val: Number[] = control.parent.get('dataInicioContrato').value.split('-');
+        const inicioContrato: Date = new Date(Number(val[0]), Number(val[1]) - 1, Number(val[2]));
+        const val2: Number[] = control.parent.get('dataFimContrato').value.split('-');
+        const fimContrato: Date = new Date(Number(val2[0]), Number(val2[1]) - 1, Number(val2[2]));
         if (assinDig > inicioVig) {
           mensagem.push('A data da assinatura de um ajuste não pode ser posterior ao início da vigência do ajuste!');
+        } else {
+          if (assinDig > fimContrato) {
+            mensagem.push('A data de assinatura não pode ser superior a data fim do contrato ou ajuste vigente!');
+          }
         }
       }
     }

@@ -1,10 +1,13 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {FeriasService} from '../ferias.service';
 import {Contrato} from '../../contratos/contrato';
 import {TerceirizadoFeriasMovimentacao} from '../terceirizado-ferias-movimentacao';
 import {FeriasCalcular} from '../ferias-calcular';
 import {MaterializeAction} from 'angular2-materialize';
+import {SaldoIndividual} from '../../saldo/individual/saldo-individual';
+import {SaldoService} from '../../saldo/saldo.service';
+import {ContratosService} from '../../contratos/contratos.service';
 
 @Component({
   selector: 'app-resgate-ferias-component',
@@ -20,18 +23,37 @@ export class ResgateFeriasComponent implements OnInit {
   isSelected = false;
   selected = false;
   protected diasConcedidos: number[] = [];
+  saldos: SaldoIndividual[];
   somaFerias = 0;
   somaIncidenciaFerias = 0;
   somaIncidenciaTerco = 0;
   somaTerco = 0;
+  saldoFerias = 0;
   feriasCalcular: FeriasCalcular[] = [];
   modalActions = new EventEmitter<string | MaterializeAction>();
   modalActions2 = new EventEmitter<string | MaterializeAction>();
   modalActions3 = new EventEmitter<string | MaterializeAction>();
   modalActions4 = new EventEmitter<string | MaterializeAction>();
+  modalActions5 = new EventEmitter<string | MaterializeAction>();
   @Output() navegaParaViewDeCalculos = new EventEmitter();
 
-  constructor(private feriasService: FeriasService, private fb2: FormBuilder) {
+  constructor(private feriasService: FeriasService, private fb2: FormBuilder, private saldoService: SaldoService,
+              private contratoService: ContratosService, private ref: ChangeDetectorRef) {
+    this.contratoService.getContratosDoUsuario().subscribe(res => {
+      this.contratos = res;
+      console.log(res);
+      if (this.codigoContrato) {
+        this.saldoService.getSaldoIndividual(this.codigoContrato).subscribe(res2 => {
+          this.saldos = res2;
+          console.log(res2);
+          this.saldoFerias = 0;
+          for (let i = 0; i < this.saldos.length; i++) {
+            this.saldoFerias = this.saldos[i].decimoTerceiroRetido;
+            console.log(this.saldoFerias);
+          }
+        });
+      }
+    });
   }
 
   ngOnInit() {
@@ -473,6 +495,13 @@ export class ResgateFeriasComponent implements OnInit {
     this.navegaParaViewDeCalculos.emit(this.codigoContrato);
   }
 
+  openModal5() {
+    this.modalActions5.emit({action: 'modal', params: ['open']});
+  }
+
+  closeModal5() {
+    this.modalActions5.emit({action: 'modal', params: ['close']});
+  }
   protected encapsulaDatas(value: any, operacao: boolean): Date {
     if (operacao) {
       const a = value.split['/'];
@@ -499,8 +528,9 @@ export class ResgateFeriasComponent implements OnInit {
     let aux = 0;
     for (let i = 0; i < this.terceirizados.length; i++) {
       if (this.feriasResgate.get('calcularTerceirizados').get('' + i).get('selected').value) {
-        aux++;
+        aux++; /*incrementa a variável para cada terceirizado selecionado*/
         if (this.feriasResgate.get('calcularTerceirizados').get('' + i).status === 'VALID') {
+          /*registra o cálculo se ele for válido*/
           const objeto = new FeriasCalcular(this.feriasResgate.get('calcularTerceirizados').get('' + i).get('codTerceirizadoContrato').value,
             this.feriasResgate.get('calcularTerceirizados').get('' + i).get('tipoRestituicao').value,
             this.feriasResgate.get('calcularTerceirizados').get('' + i).get('diasVendidos').value,
@@ -523,6 +553,7 @@ export class ResgateFeriasComponent implements OnInit {
           objeto.setNomeTerceirizado(this.terceirizados[i].nomeTerceirizado);
           if (index === -1) {
             this.feriasCalcular.push(objeto);
+            console.log(objeto);
           } else {
             this.feriasCalcular.splice(index, 1);
             this.feriasCalcular.push(objeto);
@@ -552,40 +583,58 @@ export class ResgateFeriasComponent implements OnInit {
           this.feriasResgate.get('calcularTerceirizados').get('' + i).get('valorMovimentado').markAsDirty();
       } */
     }
-    if ((this.feriasCalcular.length > 0) && aux) {
-      this.diasConcedidos = [];
-      for (let i = 0; i < this.feriasCalcular.length; i++) {
-        this.somaFerias = 0;
-        this.somaTerco = 0;
-        this.somaIncidenciaFerias = 0;
-        this.somaIncidenciaTerco = 0;
+    if ((this.feriasCalcular.length > 0) && aux) { /*se a lista de cálculos não está vazia e existe terceirizado selecionado*/
+        this.diasConcedidos = [];
+        for (let i = 0; i < this.feriasCalcular.length; i++) { /*realiza os comandos abaixo para cada cálculo*/
+            this.somaFerias = 0;
+            this.somaTerco = 0;
+            this.somaIncidenciaFerias = 0;
+            this.somaIncidenciaTerco = 0;
 
-        this.getDiasConcedidos(this.feriasCalcular[i].inicioFerias, this.feriasCalcular[i].fimFerias, this.feriasCalcular[i].diasVendidos, i);
-        this.feriasService.getValoresFeriasTerceirizado(this.feriasCalcular[i]).subscribe(res => {
-          if (!res.error) {
-            this.terceirizados.forEach(terceirizado => {
-              if (terceirizado.codigoTerceirizadoContrato === this.feriasCalcular[i].codTerceirizadoContrato) {
-                terceirizado.valorRestituicaoFerias = res;
-                this.feriasCalcular[i].pTotalFerias = terceirizado.valorRestituicaoFerias.valorFerias;
-                this.feriasCalcular[i].pTotalTercoConstitucional = terceirizado.valorRestituicaoFerias.valorTercoConstitucional;
-                this.feriasCalcular[i].pTotalIncidenciaFerias = terceirizado.valorRestituicaoFerias.valorIncidenciaFerias;
-                this.feriasCalcular[i].pTotalIncidenciaTerco = terceirizado.valorRestituicaoFerias.valorIncidenciaTercoConstitucional;
-                this.feriasCalcular[i].inicioPeriodoAquisitivo = terceirizado.valorRestituicaoFerias.inicioPeriodoAquisitivo;
-                this.feriasCalcular[i].fimPeriodoAquisitivo = terceirizado.valorRestituicaoFerias.fimPeriodoAquisitivo;
-
-                this.somaFerias = this.somaFerias + terceirizado.valorRestituicaoFerias.valorFerias;
-                this.somaTerco = this.somaTerco + terceirizado.valorRestituicaoFerias.valorTercoConstitucional;
-                this.somaIncidenciaFerias = this.somaIncidenciaFerias + terceirizado.valorRestituicaoFerias.valorIncidenciaFerias;
-                this.somaIncidenciaTerco = this.somaIncidenciaTerco + terceirizado.valorRestituicaoFerias.valorIncidenciaTercoConstitucional;
-
-                if (i === (this.feriasCalcular.length - 1)) {
-                  this.openModal3();
+            this.getDiasConcedidos(this.feriasCalcular[i].inicioFerias, this.feriasCalcular[i].fimFerias, this.feriasCalcular[i].diasVendidos, i);
+        /*pega os dias de férias que o terceirizado tem direito*/
+            this.feriasService.getValoresFeriasTerceirizado(this.feriasCalcular[i]).subscribe(res => {
+              /*pega os valores de férias a serem restituídas à empresa*/
+                if (!res.error) { /*se não tiver erros na requisição*/
+                    this.terceirizados.forEach(terceirizado => {
+                        if (terceirizado.codigoTerceirizadoContrato === this.feriasCalcular[i].codTerceirizadoContrato) {
+                            terceirizado.valorRestituicaoFerias = res;
+                            this.feriasCalcular[i].pTotalFerias = terceirizado.valorRestituicaoFerias.valorFerias;
+                            this.feriasCalcular[i].pTotalTercoConstitucional = terceirizado.valorRestituicaoFerias.valorTercoConstitucional;
+                            this.feriasCalcular[i].pTotalIncidenciaFerias = terceirizado.valorRestituicaoFerias.valorIncidenciaFerias;
+                            this.feriasCalcular[i].pTotalIncidenciaTerco = terceirizado.valorRestituicaoFerias.valorIncidenciaTercoConstitucional;
+                            this.feriasCalcular[i].inicioPeriodoAquisitivo = terceirizado.valorRestituicaoFerias.inicioPeriodoAquisitivo;
+                            this.feriasCalcular[i].fimPeriodoAquisitivo = terceirizado.valorRestituicaoFerias.fimPeriodoAquisitivo;
+                            for (let k = 0; k < this.feriasCalcular.length; k++) {
+                                console.log('entrou no for');
+                                if (this.saldos[k].feriasRetido - (this.feriasCalcular[k].pTotalTercoConstitucional +
+                                    this.feriasCalcular[k].pTotalFerias + this.feriasCalcular[k].pTotalIncidenciaFerias +
+                                    this.feriasCalcular[k].pTotalIncidenciaTerco) < 0) {
+                                    // console.log('entrou no if');
+                                    // console.log(this.saldos[k].feriasRetido);
+                                    // console.log(this.feriasCalcular[k].pTotalFerias);
+                                    // console.log(this.feriasCalcular[k].pTotalTercoConstitucional);
+                                    // console.log(this.feriasCalcular[k].pTotalIncidenciaFerias);
+                                    // console.log(this.feriasCalcular[k].pTotalIncidenciaTerco);
+                                    // console.log(this.saldos[k].feriasRetido - (this.feriasCalcular[k].pTotalTercoConstitucional +
+                                    //   this.feriasCalcular[k].pTotalFerias + this.feriasCalcular[k].pTotalIncidenciaFerias +
+                                    //   this.feriasCalcular[k].pTotalIncidenciaTerco));
+                                    this.openModal5();
+                                } else {
+                                    this.somaFerias = this.somaFerias + terceirizado.valorRestituicaoFerias.valorFerias;
+                                    this.somaTerco = this.somaTerco + terceirizado.valorRestituicaoFerias.valorTercoConstitucional;
+                                    this.somaIncidenciaFerias = this.somaIncidenciaFerias + terceirizado.valorRestituicaoFerias.valorIncidenciaFerias;
+                                    this.somaIncidenciaTerco = this.somaIncidenciaTerco + terceirizado.valorRestituicaoFerias.valorIncidenciaTercoConstitucional;
+                                    if (i === (this.feriasCalcular.length - 1)) {
+                                        this.openModal3();
+                                    }
+                                }
+                            }
+                        }
+                    });
                 }
-              }
             });
-          }
-        });
-      }
+        }
     }
   }
 
