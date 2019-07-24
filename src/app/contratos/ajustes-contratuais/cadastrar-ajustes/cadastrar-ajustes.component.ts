@@ -70,7 +70,6 @@ export class CadastrarAjustesComponent {
     });
     this.contratoService.getContratosDoUsuario().subscribe(res => {
       this.contratos = res;
-      console.log(res);
     });
     this.percentService.getPercentuaisFerias().subscribe(res => {
       if (!res.error) {
@@ -537,7 +536,7 @@ export class CadastrarAjustesComponent {
   }
 
   private navToAjustes() {
-    this.router.navigate(['ajustes-contratuais'], {skipLocationChange: true});
+    this.router.navigate(['./contratos']);
   }
     public percentualValidator(control: AbstractControl): {[key: string]: any} {
         const percentual = control.value;
@@ -589,7 +588,6 @@ export class CadastrarAjustesComponent {
         if (inicioVigencia < inicioContrato) {
           mensagem.push('a data do ajuste não pode ser anterior ao início do contrato!');
         } else if (control.parent.get('prorrogacao').value === 'S') {
-          console.log('foi');
           if (inicioVigencia < fimContrato) {
             mensagem.push('Em caso de prorrogações, a data de início da vigência deve ser posterior a data de término do' +
               ' contrato ou do ajuste anterior!');
