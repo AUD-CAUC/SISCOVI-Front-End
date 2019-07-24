@@ -43,7 +43,7 @@ export class ContratosComponent {
   cadastrarContrato() {
       this.router.navigate(['./cadastro-contrato'], {relativeTo: this.route});
   }
-  cadastrarAjuste() {
-    this.router.navigate(['./cadastrar-ajuste'], {relativeTo: this.route});
+  cadastrarAjuste(codigoContrato) {
+    this.router.navigate(['./cadastrar-ajuste', codigoContrato], {relativeTo: this.route});
   }
 }

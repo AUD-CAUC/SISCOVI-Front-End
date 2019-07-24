@@ -15,7 +15,7 @@ import {EventoContratual} from '../evento-contratual';
 import {TipoEventoContratual} from '../tipo-evento-contratual';
 import {HistoricoGestor} from '../../../historico/historico-gestor';
 import {MaterializeAction} from 'angular2-materialize';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Rubrica} from '../../../rubricas/rubrica';
 import {init} from "protractor/built/launcher";
 
@@ -25,6 +25,7 @@ import {init} from "protractor/built/launcher";
   styleUrls: ['./cadastrar-ajustes.component.scss']
 })
 export class CadastrarAjustesComponent {
+  codContrato: number;
   contratos: Contrato[];
   field = false;
   usuarios: Usuario[];
@@ -55,7 +56,18 @@ export class CadastrarAjustesComponent {
 
   constructor(private contratoService: ContratosService, private userService: UserService, private config: ConfigService,
               private  fb: FormBuilder, private percentService: PercentualService, private convService: ConvencaoService,
-              private ref: ChangeDetectorRef, private cargoService: CargoService, private router: Router) {
+              private ref: ChangeDetectorRef, private cargoService: CargoService, private router: Router, private route: ActivatedRoute) {
+    route.params.subscribe(params => {
+      this.codContrato = params['codContrato'];
+      // if (this.id) {
+      //   rubricaService.buscarRubrica(this.id).subscribe(res => {
+      //     this.rubrica = res;
+      //     this.rubricaForm.controls.nome.setValue(this.rubrica.nome);
+      //     this.rubricaForm.controls.sigla.setValue(this.rubrica.sigla);
+      //     this.rubricaForm.controls.descricao.setValue(this.rubrica.descricao);
+      //   });
+      // }
+    });
     this.contratoService.getContratosDoUsuario().subscribe(res => {
       this.contratos = res;
       console.log(res);
@@ -92,6 +104,7 @@ export class CadastrarAjustesComponent {
     this.contratoService.getTiposEventosContratuais().subscribe(res => {
       this.tiposEventosContratuais = res;
     });
+    this.enableField(this.codContrato);
   }
 
   enableField(codigo: number) {
