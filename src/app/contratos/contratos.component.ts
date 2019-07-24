@@ -3,6 +3,7 @@ import {ContratosService} from './contratos.service';
 import {Contrato} from './contrato';
 import {MaterializeAction} from 'angular2-materialize';
 import {ActivatedRoute, Route, Router} from '@angular/router';
+import {EventoContratual} from './ajustes-contratuais/evento-contratual';
 
 @Component({
   selector: 'app-contrato',
@@ -20,6 +21,12 @@ export class ContratosComponent {
       contServ.getContratosDoUsuario().subscribe( res => {
         contServ.contratos = res;
         this.contratos = res;
+
+        this.contratos.forEach(contrato => {
+          this.contServ.getEventosContratuais(contrato.codigo).subscribe((res2: EventoContratual[]) => {
+            contrato.eventosContratuais = res2;
+          });
+        });
       });
   }
   loadMyChildComponent() {

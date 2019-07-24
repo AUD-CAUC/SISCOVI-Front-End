@@ -58,7 +58,7 @@ const routes: Routes = [
       {path: 'cargos', component: CargoComponent, canActivate: [LoggedInGuard, ProfileGuard]},
       {path: 'gerenciar', component: IndicadoresComponent, canActivate: [LoggedInGuard]},
       {path: 'contratos', component: ContratosComponent, canActivate: [LoggedInGuard]},
-      {path: 'contratos/cadastrar-ajuste', component: CadastrarAjustesComponent, canActivate: [LoggedInGuard]},
+      {path: 'contratos/cadastrar-ajuste/:codContrato', component: CadastrarAjustesComponent, canActivate: [LoggedInGuard]},
       {path: 'percentuais', component: PercentuaisComponent, canActivate: [LoggedInGuard]},
       {path: 'cargosContrato', component: CargosDoContratoComponent, canActivate: [LoggedInGuard]},
       {path: 'convencoes', component: ConvencoesColetivasComponent, canActivate: [LoggedInGuard]},

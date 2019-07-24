@@ -15,7 +15,10 @@ div#modal1.modal.open {
   max-height: 90ch;
 }
 
-/*table.highlight tbody td {
-  min-width: 6em;
-  padding: 2em;
-}*/
+li {
+  list-style-type: none;
+}
+
+.collapsible-body {
+  padding: 1.5vh 0 0;
+}
