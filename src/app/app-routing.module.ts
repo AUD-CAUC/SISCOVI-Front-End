@@ -104,14 +104,14 @@ const routes: Routes = [
       {path: 'percentDin/:id', component: CadastrarPercentualDinamicoComponent, canActivate: [LoggedInGuard, ProfileGuard]},
       {path: 'ajustes-contratuais', component: AjusteContratoComponent, canActivate: [LoggedInGuard]},
       {path: 'ajustes-contratuais/cadastrar-ajuste', component: CadastrarAjustesComponent, canActivate: [LoggedInGuard]},
-      {path: 'historico-gestores', component: HistoricoGestoresComponent, canActivate: [LoggedInGuard]},
+      {path: 'contratos/historico-gestores/:codContrato', component: HistoricoGestoresComponent, canActivate: [LoggedInGuard]},
+      // {
+      //   path: 'contratos/historico-gestores/:id',
+      //   component: CadastrarGestorContratoComponent,
+      //   canActivate: [LoggedInGuard, ProfileGuard]
+      // },
       {
-        path: 'historico-gestores/:id',
-        component: CadastrarGestorContratoComponent,
-        canActivate: [LoggedInGuard, ProfileGuard]
-      },
-      {
-        path: 'historico-gestores/cadastro-gestor-contrato',
+        path: 'contratos/historico-gestores/:codContrato/cadastro-gestor-contrato',
         component: CadastrarGestorContratoComponent,
         canActivate: [LoggedInGuard, ProfileGuard]
       },

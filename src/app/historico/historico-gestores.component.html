@@ -6,15 +6,6 @@
     <p style="text-align: center">Nesta aba você poderá consultar os gestores antes a você e consultar também quem são
     seus substitutos em cada contrato.</p>
   </div>
-
-    <div class="row center">
-        <div class="input-field col s7 center">
-            <select materialize="material_select" [materializeSelectOptions]="contratos" (change)="selecionarContrato($event.target.value)">
-                <option disabled>Selecione um Contrato</option>
-                <option *ngFor="let contrato of contratos" [value]="contrato.codigo">{{contrato.nomeDaEmpresa}} - Contrato Nº: {{contrato.numeroDoContrato}}</option>
-            </select>
-        </div>
-    </div>
 </div>
 <div class="container">
     <div class="row" *ngIf="historicoGestor">

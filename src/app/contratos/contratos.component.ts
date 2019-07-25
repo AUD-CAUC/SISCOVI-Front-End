@@ -4,6 +4,9 @@ import {Contrato} from './contrato';
 import {MaterializeAction} from 'angular2-materialize';
 import {ActivatedRoute, Route, Router} from '@angular/router';
 import {EventoContratual} from './ajustes-contratuais/evento-contratual';
+import {HistoricoGestor} from '../historico/historico-gestor';
+import {HistoricoService} from '../historico/historico.service';
+
 
 @Component({
   selector: 'app-contrato',
@@ -12,12 +15,15 @@ import {EventoContratual} from './ajustes-contratuais/evento-contratual';
 })
 export class ContratosComponent {
   contratos: Contrato[];
+  historicoGestor: HistoricoGestor[];
   modalActions = new EventEmitter<string | MaterializeAction>();
   private loadComponent = false;
   render = false;
+  histoServ: HistoricoService;
   contServ: ContratosService;
-  constructor(contServ: ContratosService, private router: Router, private route: ActivatedRoute) {
+  constructor(contServ: ContratosService, private router: Router, private route: ActivatedRoute, histoServ: HistoricoService) {
       this.contServ = contServ;
+      this.histoServ = histoServ;
       contServ.getContratosDoUsuario().subscribe( res => {
         contServ.contratos = res;
         this.contratos = res;
@@ -45,5 +51,13 @@ export class ContratosComponent {
   }
   cadastrarAjuste(codigoContrato) {
     this.router.navigate(['./cadastrar-ajuste', codigoContrato], {relativeTo: this.route});
+  }
+  acessoHistorico(codigoContrato) {
+    this.router.navigate(['./historico-gestores', codigoContrato], {relativeTo: this.route});
+  }
+  selecionarContrato(codigo: number) {
+    this.histoServ.getHistoricoGestores(codigo).subscribe(res3 => {
+      this.historicoGestor = res3;
+    });
   }
 }

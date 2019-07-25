@@ -19,14 +19,14 @@ export class CadastrarGestorContratoComponent implements OnInit {
     contratos: Contrato[];
     usuarios: Usuario[];
     perfisGestao: Profile[];
-    id: number;
+    codContrato: number;
     constructor(private histService: HistoricoService, private fb: FormBuilder, private contratoService: ContratosService,
                 private usuarioService: UserService, private route: ActivatedRoute, private router: Router) {
         this.route.params.subscribe(params => {
-            if (!isNaN(params['id'])) {
-                this.id = params['id'];
-                if (this.id) {
-                    this.histService.getHistoricoGestor(this.id).subscribe(res => {
+            if (!isNaN(params['codContrato'])) {
+                this.codContrato = params['codContrato'];
+                if (this.codContrato) {
+                    this.histService.getHistoricoGestor(this.codContrato).subscribe(res => {
                     });
                 }
             }
