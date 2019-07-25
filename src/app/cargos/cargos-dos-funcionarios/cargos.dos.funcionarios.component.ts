@@ -18,12 +18,17 @@ export class CargosDosFuncionariosComponent {
     cargServ: CargoService;
     listaCargosFuncionarios: ListaCargosFuncionarios[] = [];
     valid = false;
+    codContrato: number;
     modalActions = new EventEmitter<string | MaterializeAction>();
     constructor(config: ConfigService, funcServ: FuncionariosService, cargServ: CargoService, contServ: ContratosService, private router: Router, private route: ActivatedRoute) {
         this.cargServ = cargServ;
         contServ.getContratosDoUsuario().subscribe(res => {
           this.contratos = res;
         });
+      route.params.subscribe(params => {
+        this.codContrato = params['codContrato'];
+      });
+      this.onChange(this.codContrato);
     }
     onChange (value: number) {
         this.valid = true;

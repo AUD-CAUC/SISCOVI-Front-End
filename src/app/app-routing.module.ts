@@ -74,7 +74,7 @@ const routes: Routes = [
         component: CadastrarTerceirizadoComponent,
         canActivate: [LoggedInGuard, ProfileGuard]
       },
-      {path: 'funcoes-dos-terceirizados', component: CargosDosFuncionariosComponent, canActivate: [LoggedInGuard]},
+      {path: 'contratos/funcoes-dos-terceirizados/:codContrato', component: CargosDosFuncionariosComponent, canActivate: [LoggedInGuard]},
       {path: 'vigencias', component: VigenciaDosContratosComponent, canActivate: [LoggedInGuard]},
       {path: 'home', component: InicioComponent, canActivate: [LoggedInGuard]},
       {
@@ -116,7 +116,7 @@ const routes: Routes = [
         canActivate: [LoggedInGuard, ProfileGuard]
       },
       {
-        path: 'funcoes-dos-terceirizados/gerenciar-funcoes-terceirizados',
+        path: 'contratos/funcoes-dos-terceirizados/:codContrato/gerenciar-funcoes-terceirizados',
         component: GerenciarCargosTerceirizadosComponent,
         canActivate: [LoggedInGuard]
       },

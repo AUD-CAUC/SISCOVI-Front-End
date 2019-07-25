@@ -55,6 +55,9 @@ export class ContratosComponent {
   acessoHistorico(codigoContrato) {
     this.router.navigate(['./historico-gestores', codigoContrato], {relativeTo: this.route});
   }
+  acessoTerceirizados(codigoContrato) {
+    this.router.navigate(['./funcoes-dos-terceirizados', codigoContrato], {relativeTo: this.route});
+  }
   selecionarContrato(codigo: number) {
     this.histoServ.getHistoricoGestores(codigo).subscribe(res3 => {
       this.historicoGestor = res3;

@@ -11,7 +11,7 @@ import {MaterializeAction} from 'angular2-materialize';
 import {Observable} from 'rxjs/Observable';
 import {map} from 'rxjs/operators';
 import {Error} from '../../_shared/error';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
     selector: 'app-gerenciar-cargos-terceirizados-component',
@@ -20,8 +20,9 @@ import {Router} from '@angular/router';
 })
 export class GerenciarCargosTerceirizadosComponent implements OnInit {
     modoOperacao: string;
-    contratos: Contrato[];
+    nomeContrato: string;
     codigo: number;
+    codContrato: number;
     terceirizados: Funcionario[];
     funcoes: Cargo[];
     gerenciaForm: FormGroup;
@@ -40,9 +41,13 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
 
     constructor(private contServ: ContratosService, private funcServ: FuncionariosService,
                 private cargosService: CargoService, private ref: ChangeDetectorRef, private fb: FormBuilder,
-                private router: Router) {
-        this.contServ.getContratosDoUsuario().subscribe(res => {
-            this.contratos = res;
+                private router: Router, private route: ActivatedRoute) {
+        route.params.subscribe(params => {
+            this.codContrato = params['codContrato'];
+        });
+        this.defineValor(this.codContrato);
+        this.contServ.getContratoCompletoUsuario(this.codContrato).subscribe(res => {
+          this.nomeContrato = res.nomeDaEmpresa;
         });
     }
 
@@ -371,7 +376,7 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
 
     closeModal4() {
         this.modalActions4.emit({action: 'modal', params: ['close']});
-        this.router.navigate(['funcoes-dos-terceirizados']);
+        this.router.navigate(['contratos/funcoes-dos-terceirizados', this.codContrato]);
     }
 
     openModal5() {
