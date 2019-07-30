@@ -1,17 +1,16 @@
 <div class="container">
   <ul>
-    <a class="tooltip right"><span class="tooltiptext">Para alocar novo funcionário, modificar/remanejar funcionários ou
-desligar um funcionário clique no botão abaixo. Selecione um de
-seus contratos na caixa de seleção abaixo para
-consultar as funções de cada contrato.</span> <i class="material-icons" style="color: black">help_outline</i></a>
+    <a class="tooltip right"><span class="tooltiptext">Para alocar novo funcionário, modificar/remanejar ou
+desligar funcionários clique no botão abaixo.</span> <i class="material-icons" style="color: black">help_outline</i></a>
   </ul>
 
-  <h2 class="center-align">Funções Dos Terceirizados</h2>
+  <h2 class="center-align">Cargos Dos Terceirizados</h2>
+    <h5 class="center-align">{{nomeContrato}}</h5>
     <div class="row center-align">
-        <button class="btn waves-effect" (click)="goToGerenciarCargos()">Gerenciar Função do Terceirizado</button>
+        <button class="btn waves-effect" (click)="goToGerenciarCargos()">Gerenciar Terceirizados</button>
     </div>
   <div class="row">
-        <div class="input-field col s6 l6 offset-l1 offset-xl2 offset-m6">
+        <div class="input-field col s3 l6 offset-xl10 offset-m6">
           <i class="material-icons prefix">search</i>
           <input placeholder="Digite um nome" id="search_name" type="text" class="validate">
           <label for="search_name">Busca</label>
