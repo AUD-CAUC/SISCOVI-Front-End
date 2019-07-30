@@ -175,6 +175,11 @@ export class ContratosService {
         return this.http.get(url).map(res => res.json() as Contrato);
     }
 
+    getAjusteCompleto(codContrato: number, codAjuste: number) {
+      const url = this.config.myApi + '/contrato/getAjusteCompleto/' + this.config.user.username + '/' + codContrato + '/' + codAjuste;
+      return this.http.get(url).map(res => res.json() as Contrato);
+    }
+
     getTiposEventosContratuais(): Observable<TipoEventoContratual[]> {
         const url = this.config.myApi + '/contrato/getTiposEventosContratuais';
         return this.http.get(url).map(res => res.json());

@@ -40,6 +40,7 @@ import {PercentualDinamicoComponent} from './percentuais-dinamicos/percentual-di
 import {CadastrarConvencaoComponent} from './convencoes-coletivas/cadastrar-convecao/cadastrar-convencao.component';
 import {CadastrarPercentualEstaticoComponent} from './percentuais-estaticos/cadastrar-percentual-estatico/cadastrar-percentual-estatico.component';
 import {CadastrarPercentualDinamicoComponent} from './percentuais-dinamicos/cadastrar-percentual-dinamico/cadastrar-percentual-dinamico.component';
+import {VisualizarAjusteComponent} from "./contratos/visualizar-ajuste/visualizar-ajuste.component";
 
 const routes: Routes = [
   {path: '', pathMatch: 'full', redirectTo: 'home'},
@@ -59,6 +60,7 @@ const routes: Routes = [
       {path: 'gerenciar', component: IndicadoresComponent, canActivate: [LoggedInGuard]},
       {path: 'contratos', component: ContratosComponent, canActivate: [LoggedInGuard]},
       {path: 'contratos/cadastrar-ajuste/:codContrato', component: CadastrarAjustesComponent, canActivate: [LoggedInGuard]},
+      {path: 'contratos/visualizar-ajuste/:codContrato/:codAjuste', component: VisualizarAjusteComponent, canActivate: [LoggedInGuard]},
       {path: 'percentuais', component: PercentuaisComponent, canActivate: [LoggedInGuard]},
       {path: 'cargosContrato', component: CargosDoContratoComponent, canActivate: [LoggedInGuard]},
       {path: 'convencoes', component: ConvencoesColetivasComponent, canActivate: [LoggedInGuard]},
