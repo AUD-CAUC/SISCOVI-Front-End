@@ -14,46 +14,49 @@
         <label style="font-size: 0.55vw">Selecione um Contrato <span class="red-text">*</span></label>
       </div>
     </div>
-    <div class="row">
-      <div class="input-field col l2  center-align">
-        <select class="center center-align centered" name="ano" id="select-year" materialize="material_select"
-                formControlName="ano" [materializeSelectOptions]="years"
-                required (change)="otherChange($event.target.value)">
-          <option *ngFor="let year of years" class="center-align center" [value]="year"
-                  [selected]="year === currentYear">{{year}}
-          </option>
-        </select>
-        <label style="font-size: 0.55vw">Selecione um ano <span class="red-text">*</span></label>
-      </div>
+<!--    <div class="row">-->
+<!--      <div class="input-field col l2  center-align">-->
+<!--        <select class="center center-align centered" name="ano" id="select-year" materialize="material_select"-->
+<!--                formControlName="ano" [materializeSelectOptions]="years"-->
+<!--                required (change)="otherChange($event.target.value)">-->
+<!--          <option *ngFor="let year of years" class="center-align center" [value]="year"-->
+<!--                  [selected]="year === currentYear">{{year}}-->
+<!--          </option>-->
+<!--        </select>-->
+<!--        <label style="font-size: 0.55vw">Selecione um ano <span class="red-text">*</span></label>-->
+<!--      </div>-->
+<!--    </div>-->
+    <div *ngIf="currentYear && currentMonth" class="row">
+      <p>Ano: {{currentYear}} Mês: {{currentMonth.mes}}</p>
     </div>
     <div class="row">
-      <div class="input-field col l4 center-align">
-        <select name="mes" materialize="material_select" formControlName="mes" required
-                (change)="mesChange($event.target.value)"
-                [materializeSelectOptions]="meses">
-          <option *ngFor="let mes of meses" [value]="mes.valor" [selected]="mes.valor === currentMonth">{{ mes.mes }}
-          </option>
-        </select>
-        <label style="font-size: 0.55vw">Selecione um mês <span class="red-text">*</span></label>
-        <div *ngIf="myForm.get('mes').invalid &&
-                                        (myForm.get('mes').dirty ||
-                                        myForm.get('mes').touched)">
-          <div *ngIf="myForm.getError('mensagem') &&
-                                          !myForm.get('mes').errors.required">
-            <div *ngFor="let msg of myForm.get('mes').getError('mensagem')[0]">
-              <span class="mensagem-erro">{{msg}}</span>
-            </div>
-          </div>
-          <div *ngIf="myForm.get('mes').getError('required')">
-            <span class="mensagem-erro">Você deve selecionar um mês para o cálculo</span>
-          </div>
-        </div>
-      </div>
+<!--      <div class="input-field col l4 center-align">-->
+<!--        <select name="mes" materialize="material_select" formControlName="mes" required-->
+<!--                (change)="mesChange($event.target.value)"-->
+<!--                [materializeSelectOptions]="meses">-->
+<!--          <option *ngFor="let mes of meses" [value]="mes.valor" [selected]="mes.valor === currentMonth">{{ mes.mes }}-->
+<!--          </option>-->
+<!--        </select>-->
+<!--        <label style="font-size: 0.55vw">Selecione um mês <span class="red-text">*</span></label>-->
+<!--        <div *ngIf="myForm.get('mes').invalid &&-->
+<!--                                        (myForm.get('mes').dirty ||-->
+<!--                                        myForm.get('mes').touched)">-->
+<!--          <div *ngIf="myForm.getError('mensagem') &&-->
+<!--                                          !myForm.get('mes').errors.required">-->
+<!--            <div *ngFor="let msg of myForm.get('mes').getError('mensagem')[0]">-->
+<!--              <span class="mensagem-erro">{{msg}}</span>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div *ngIf="myForm.get('mes').getError('required')">-->
+<!--            <span class="mensagem-erro">Você deve selecionar um mês para o cálculo</span>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
       <div class="container">
         <td>Quantidade de funcionários ativos no mês: {{numFuncAtivos}}</td>
         <div class="row">
           <div class="container">
-            <div class="row" *ngIf="myForm.get('mes').value && (myForm.get('mes').dirty || myForm.get('mes').touched)">
+            <div class="row" *ngIf="myForm.get('contrato').value && (myForm.get('contrato').dirty || myForm.get('contrato').touched)">
               <div class="grey lighten-4">
                 <br>
                 <h5 class="center">Caso haja divergência no número de funcionários ativos, clique no link abaixo para

@@ -18,13 +18,14 @@ export class TotalMensalCalculoComponent implements OnInit {
     contratos: Contrato[] = [];
     meses: Mes[];
     years: number[] = [];
-    currentYear = new Date().getFullYear();
+    anoAtual: number;
+    currentYear: number;
     anoDoContratoMaisAntigo: number;
     anoDoContratoMaisRecente: number;
     myForm: FormGroup;
     codigoContrato: number;
     validate = true;
-    currentMonth = new Date().getMonth() + 1;
+    currentMonth: Mes;
     fb: FormBuilder;
     modalActions = new EventEmitter<string | MaterializeAction>();
     modalActions2 = new EventEmitter<string | MaterializeAction>();
@@ -66,8 +67,6 @@ export class TotalMensalCalculoComponent implements OnInit {
     ngOnInit() {
         this.myForm = this.fb.group({
             contrato: new FormControl(this.codigoContrato, [Validators.required]),
-            mes: new FormControl('', [Validators.required]),
-            ano: new FormControl(this.currentYear, [Validators.required])
         });
     }
 
@@ -130,22 +129,43 @@ export class TotalMensalCalculoComponent implements OnInit {
         return years;
     }
 
+    mes(mes) {
+
+    }
+
+    async defineMesAtual() {
+      for (let i = 0; i < this.years.length; i++) {
+        this.meses = await this.tmService.getMesesCalculoValidos(this.years[i], this.codigoContrato).toPromise();
+        if (this.meses.length > 0) {
+          this.currentYear = this.years[i];
+          this.currentMonth = this.meses[0];
+          this.getNumFuncionariosAtivos();
+          break;
+        }
+      }
+    }
+
+    defineAnoAtual() {
+      this.tmService.getAnosValidos(this.codigoContrato).subscribe(res => {
+        this.years = res;
+        this.defineMesAtual();
+      });
+    }
+
     onChange(value: number): void {
         this.codigoContrato = value;
         this.numFuncAtivos = null;
         if (value) {
             this.validate = false;
         }
-        if (this.codigoContrato) {
-          this.tmService.getAnosValidos(this.codigoContrato).subscribe(res => {
-            this.years = res;
-          });
-        }
-        if (this.codigoContrato && this.anoSelecionado) {
-            this.tmService.getMesesCalculoValidos(value, this.codigoContrato).subscribe(res => {
-                this.meses = res;
-            });
-        }
+        this.defineAnoAtual();
+        // if (this.codigoContrato && this.anoSelecionado) {
+        //     this.tmService.getMesesCalculoValidos(value, this.codigoContrato).subscribe(res => {
+        //       console.log(value);
+        //       console.log(this.codigoContrato);
+        //       this.meses = res;
+        //     });
+        // }
     }
 
     otherChange(value: number): void {
@@ -168,14 +188,14 @@ export class TotalMensalCalculoComponent implements OnInit {
     }
 
     getNumFuncionariosAtivos(): void {
-      this.tmService.getNumFuncionariosAtivos(this.mesSelecionado, this.anoSelecionado, this.codigoContrato).subscribe(res => {
+      this.tmService.getNumFuncionariosAtivos(this.currentMonth.valor, this.currentYear, this.codigoContrato).subscribe(res => {
         this.numFuncAtivos = res;
       });
     }
 
     calculoTotalMensal() {
         if (this.myForm.valid) {
-            this.tmService.calcularTotalMensal(this.myForm.get('contrato').value, this.myForm.get('mes').value, this.myForm.get('ano').value).subscribe(res => {
+            this.tmService.calcularTotalMensal(this.myForm.get('contrato').value, this.currentMonth.valor, this.currentYear).subscribe(res => {
                 if (!res.error) {
                     this.resultado = res;
                     this.somaFerias = 0;
@@ -198,9 +218,6 @@ export class TotalMensalCalculoComponent implements OnInit {
                 }
 
             });
-        } else {
-            this.myForm.get('mes').updateValueAndValidity();
-            this.myForm.get('mes').markAsTouched();
         }
     }
 
@@ -233,7 +250,7 @@ export class TotalMensalCalculoComponent implements OnInit {
         this.navegaParaViewDeCalculos.emit(this.codigoContrato);
     }
   confirmaCalculo() {
-    this.tmService.confirmarTotalMensalReter(this.mesSelecionado, this.anoSelecionado, this.codigoContrato).subscribe(res => {
+    this.tmService.confirmarTotalMensalReter(this.currentMonth.valor, this.currentYear, this.codigoContrato).subscribe(res => {
       this.closeModal();
       if (!res.error) {
         this.openModal2();
