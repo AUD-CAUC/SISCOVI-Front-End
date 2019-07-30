@@ -63,6 +63,7 @@
                     <td>{{evento.dataInicioVigencia | date: 'shortDate'}}</td>
                     <td>{{evento.dataFimVigencia | date: 'shortDate'}}</td>
                     <td>{{evento.dataAssinatura | date: 'shortDate'}}</td>
+                    <td class="foo"><i class="material-icons rounded" (click)="visualizarAjuste(cont.codigo, evento.codigo)" title="Visualizar Ajuste">description</i></td>
                   </tr>
                   </tbody>
                 </table>
@@ -80,3 +81,4 @@
 <!--    </tbody>-->
 <!--  </table>-->
 </div>
+

@@ -2,7 +2,7 @@ table.highlight tbody tr:hover {
   background-color: #9e9e9e;
   cursor: context-menu;
 }
-div#modal1.modal.open {
+div#modal.modal.open {
   position: absolute;
   top: 10ch;
   background-color: white;
@@ -10,9 +10,12 @@ div#modal1.modal.open {
   opacity: 1;
   transform: scaleX(1);
   top: 10ch !important;
-  left: 10ch !important;
-  width: 210ch !important;
-  max-height: 90ch;
+  left: 25ch !important;
+  width: 180ch !important;
+  max-height: 70ch;
+}
+div .modal-footer {
+  background-color: white;
 }
 
 li {
@@ -22,3 +25,15 @@ li {
 .collapsible-body {
   padding: 1.5vh 0 0;
 }
+
+.foo {
+  width: 20px;
+  padding-right: 20px;
+}
+
+.material-icons {
+  font-size: 24px;
+  color: rgba(0, 0, 0, 0.54);
+  cursor: pointer;
+}
+

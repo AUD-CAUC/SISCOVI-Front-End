@@ -15,6 +15,7 @@ import {HistoricoService} from '../historico/historico.service';
 })
 export class ContratosComponent {
   contratos: Contrato[];
+  contrato: Contrato;
   historicoGestor: HistoricoGestor[];
   modalActions = new EventEmitter<string | MaterializeAction>();
   private loadComponent = false;
@@ -38,13 +39,8 @@ export class ContratosComponent {
   loadMyChildComponent() {
     this.loadComponent = true;
   }
-  openModal() {
-    this.render = true;
-    this.modalActions.emit({action: 'modal', params: ['open']});
-  }
-  closeModal() {
-    this.render = false;
-    this.modalActions.emit({action: 'modal', params: ['close']});
+  visualizarAjuste(codContrato, codAjuste) {
+    this.router.navigate(['/contratos/visualizar-ajuste', codContrato, codAjuste]);
   }
   cadastrarContrato() {
       this.router.navigate(['./cadastro-contrato'], {relativeTo: this.route});
