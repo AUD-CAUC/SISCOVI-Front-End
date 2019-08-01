@@ -153,6 +153,7 @@ export class TotalMensalCalculoComponent implements OnInit {
     }
 
     onChange(value: number): void {
+      console.log(value);
         this.codigoContrato = value;
         this.numFuncAtivos = null;
         if (value) {
@@ -194,31 +195,28 @@ export class TotalMensalCalculoComponent implements OnInit {
     }
 
     calculoTotalMensal() {
-        if (this.myForm.valid) {
-            this.tmService.calcularTotalMensal(this.myForm.get('contrato').value, this.currentMonth.valor, this.currentYear).subscribe(res => {
-                if (!res.error) {
-                    this.resultado = res;
-                    this.somaFerias = 0;
-                    this.somaTerco = 0;
-                    this.somaDecimo = 0;
-                    this.somaIncidencia = 0;
-                    this.somaMultaFGTS = 0;
-                    this.somaSaldo = 0;
-                    for (let i = 0; i < this.resultado.length; i++) {
-                      this.somaFerias = this.somaFerias + this.resultado[i].ferias;
-                      this.somaTerco = this.somaTerco + this.resultado[i].tercoConstitucional;
-                      this.somaDecimo = this.somaDecimo + this.resultado[i].decimoTerceiro;
-                      this.somaIncidencia = this.somaIncidencia + this.resultado[i].incidencia;
-                      this.somaMultaFGTS = this.somaMultaFGTS + this.resultado[i].multaFGTS;
-                      this.somaSaldo = this.somaSaldo + this.resultado[i].total;
-                    }
-                    this.openModal();
-                } else {
-                    this.myForm.setErrors({'mensagem': res.error});
+        this.tmService.calcularTotalMensal(this.codigoContrato, this.currentMonth.valor, this.currentYear).subscribe(res => {
+            if (!res.error) {
+                this.resultado = res;
+                this.somaFerias = 0;
+                this.somaTerco = 0;
+                this.somaDecimo = 0;
+                this.somaIncidencia = 0;
+                this.somaMultaFGTS = 0;
+                this.somaSaldo = 0;
+                for (let i = 0; i < this.resultado.length; i++) {
+                  this.somaFerias = this.somaFerias + this.resultado[i].ferias;
+                  this.somaTerco = this.somaTerco + this.resultado[i].tercoConstitucional;
+                  this.somaDecimo = this.somaDecimo + this.resultado[i].decimoTerceiro;
+                  this.somaIncidencia = this.somaIncidencia + this.resultado[i].incidencia;
+                  this.somaMultaFGTS = this.somaMultaFGTS + this.resultado[i].multaFGTS;
+                  this.somaSaldo = this.somaSaldo + this.resultado[i].total;
                 }
-
-            });
-        }
+                this.openModal();
+            } else {
+                this.myForm.setErrors({'mensagem': res.error});
+            }
+        });
     }
 
     openModal() {
