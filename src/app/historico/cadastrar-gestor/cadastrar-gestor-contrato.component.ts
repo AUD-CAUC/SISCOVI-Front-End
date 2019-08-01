@@ -17,9 +17,11 @@ import {ActivatedRoute, Router} from '@angular/router';
 export class CadastrarGestorContratoComponent implements OnInit {
     gestorContratoForm: FormGroup;
     contratos: Contrato[];
+    nomeContrato: string;
     usuarios: Usuario[];
     perfisGestao: Profile[];
     codContrato: number;
+
     constructor(private histService: HistoricoService, private fb: FormBuilder, private contratoService: ContratosService,
                 private usuarioService: UserService, private route: ActivatedRoute, private router: Router) {
         this.route.params.subscribe(params => {
@@ -31,16 +33,17 @@ export class CadastrarGestorContratoComponent implements OnInit {
                 }
             }
         });
-        this.contratoService.getContratosDoUsuario().subscribe(res => {
-            this.contratos = res;
+        this.contratoService.getContratoCompletoUsuario(this.codContrato).subscribe(res => {
+            this.nomeContrato = res.nomeDaEmpresa;
         });
         this.usuarioService.getUsuarios().subscribe(res => {
             this.usuarios = res;
         });
         this.histService.getPerfisGestao().subscribe(res => {
-           this.perfisGestao = res;
+            this.perfisGestao = res;
         });
     }
+
     ngOnInit() {
         this.gestorContratoForm = this.fb.group({
             contrato: new FormControl(),
@@ -55,15 +58,16 @@ export class CadastrarGestorContratoComponent implements OnInit {
         this.gestorContratoForm.get('servidor').setValidators([Validators.required]);
         this.gestorContratoForm.get('perfil').setValidators([Validators.required]);
     }
-    public myDateValidator(control: AbstractControl): {[key: string]: any} {
+
+    public myDateValidator(control: AbstractControl): { [key: string]: any } {
         const val = control.value;
         const mensagem = [];
         const otherRegex = new RegExp(/^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[1,3-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$/);
-        if (val.length > 0 ) {
+        if (val.length > 0) {
             const dia = Number(val.split('/')[0]);
             const mes = Number(val.split('/')[1]);
             const ano = Number(val.split('/')[2]);
-            if (dia <= 0 || dia > 31 ) {
+            if (dia <= 0 || dia > 31) {
                 mensagem.push('O dia da data é inválido.');
             }
             if (mes <= 0 || mes > 12) {
@@ -72,7 +76,7 @@ export class CadastrarGestorContratoComponent implements OnInit {
             if (ano < 2000 || ano > (new Date().getFullYear() + 5)) {
                 mensagem.push('O Ano digitado é inválido');
             }
-            if (val.length === 10 ) {
+            if (val.length === 10) {
                 if (!otherRegex.test(val)) {
                     mensagem.push('A data digitada é inválida');
                 }
@@ -83,14 +87,14 @@ export class CadastrarGestorContratoComponent implements OnInit {
 
     cadastrarGestorNoContrato() {
         if (this.gestorContratoForm.valid) {
-           const historico =  new HistoricoGestor();
-           historico.codigoContrato = this.gestorContratoForm.get('contrato').value;
-           historico.gestor = this.gestorContratoForm.get('servidor').value;
-           historico.codigoPerfilGestao = this.gestorContratoForm.get('perfil').value;
-           historico.inicio = this.convertDateFormat(this.gestorContratoForm.get('dataInicio').value);
-           this.histService.cadastrarGestorContrato(historico).subscribe(res => {
+            const historico = new HistoricoGestor();
+            historico.codigoContrato = this.gestorContratoForm.get('contrato').value;
+            historico.gestor = this.gestorContratoForm.get('servidor').value;
+            historico.codigoPerfilGestao = this.gestorContratoForm.get('perfil').value;
+            historico.inicio = this.convertDateFormat(this.gestorContratoForm.get('dataInicio').value);
+            this.histService.cadastrarGestorContrato(historico).subscribe(res => {
 
-           });
+            });
         }
     }
 
