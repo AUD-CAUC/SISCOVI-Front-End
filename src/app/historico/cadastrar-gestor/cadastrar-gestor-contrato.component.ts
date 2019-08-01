@@ -46,7 +46,7 @@ export class CadastrarGestorContratoComponent implements OnInit {
 
     ngOnInit() {
         this.gestorContratoForm = this.fb.group({
-            contrato: new FormControl(),
+            contrato: new FormControl(this.codContrato),
             servidor: new FormControl(),
             perfil: new FormControl(),
             dataInicio: new FormControl(''),
@@ -101,7 +101,7 @@ export class CadastrarGestorContratoComponent implements OnInit {
     private convertDateFormat(value: string): Date {
         const temp = value.split('/');
         const dia = Number(temp[0]);
-        const mes = Number(temp[1]);
+        const mes = Number(temp[1]) - 1;
         const ano = Number(temp[2]);
         return new Date(ano, mes, dia);
     }
