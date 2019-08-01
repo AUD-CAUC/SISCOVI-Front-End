@@ -7,13 +7,14 @@ import {TotalMensalService} from '../total-mensal.service';
 import {TotalMensal} from '../totalMensal';
 import {Mes} from './mes';
 import {ActivatedRoute, Router} from '@angular/router';
-import {RescisaoService} from "../../rescisao/rescisao.service";
+import {$} from 'protractor';
 
 @Component({
     templateUrl: './total-mensal-calculo.component.html',
     selector: 'app-total-mensal-calculo',
     styleUrls: ['./total-mensal-calculo.component.scss']
 })
+
 export class TotalMensalCalculoComponent implements OnInit {
     contratos: Contrato[] = [];
     meses: Mes[];
@@ -63,6 +64,7 @@ export class TotalMensalCalculoComponent implements OnInit {
         }
         // this.normalizaDataFim();
     }
+
 
     ngOnInit() {
         this.myForm = this.fb.group({
@@ -134,39 +136,33 @@ export class TotalMensalCalculoComponent implements OnInit {
     }
 
     async defineMesAtual() {
-      for (let i = 0; i < this.years.length; i++) {
-        this.meses = await this.tmService.getMesesCalculoValidos(this.years[i], this.codigoContrato).toPromise();
-        if (this.meses.length > 0) {
-          this.currentYear = this.years[i];
-          this.currentMonth = this.meses[0];
-          this.getNumFuncionariosAtivos();
-          break;
+        for (let i = 0; i < this.years.length; i++) {
+            this.meses = await this.tmService.getMesesCalculoValidos(this.years[i], this.codigoContrato).toPromise();
+            if (this.meses.length > 0) {
+                this.currentYear = this.years[i];
+                this.currentMonth = this.meses[0];
+                this.getNumFuncionariosAtivos();
+                break;
+            }
         }
-      }
     }
 
     defineAnoAtual() {
-      this.tmService.getAnosValidos(this.codigoContrato).subscribe(res => {
-        this.years = res;
-        this.defineMesAtual();
-      });
+        this.tmService.getAnosValidos(this.codigoContrato).subscribe(res => {
+            this.years = res;
+            this.defineMesAtual();
+        });
     }
 
     onChange(value: number): void {
-      console.log(value);
-        this.codigoContrato = value;
-        this.numFuncAtivos = null;
-        if (value) {
-            this.validate = false;
+        this.validate = false;
+        if (this.codigoContrato !== value) {
+            this.numFuncAtivos = null;
+            this.currentMonth = null;
+            this.currentYear = null;
+            this.codigoContrato = value;
+            this.defineAnoAtual();
         }
-        this.defineAnoAtual();
-        // if (this.codigoContrato && this.anoSelecionado) {
-        //     this.tmService.getMesesCalculoValidos(value, this.codigoContrato).subscribe(res => {
-        //       console.log(value);
-        //       console.log(this.codigoContrato);
-        //       this.meses = res;
-        //     });
-        // }
     }
 
     otherChange(value: number): void {
@@ -182,16 +178,16 @@ export class TotalMensalCalculoComponent implements OnInit {
     }
 
     mesChange(value: number): void {
-      this.mesSelecionado = value;
-      if (this.mesSelecionado && this.anoSelecionado && this.codigoContrato) {
-        this.getNumFuncionariosAtivos();
-      }
+        this.mesSelecionado = value;
+        if (this.mesSelecionado && this.anoSelecionado && this.codigoContrato) {
+            this.getNumFuncionariosAtivos();
+        }
     }
 
     getNumFuncionariosAtivos(): void {
-      this.tmService.getNumFuncionariosAtivos(this.currentMonth.valor, this.currentYear, this.codigoContrato).subscribe(res => {
-        this.numFuncAtivos = res;
-      });
+        this.tmService.getNumFuncionariosAtivos(this.currentMonth.valor, this.currentYear, this.codigoContrato).subscribe(res => {
+            this.numFuncAtivos = res;
+        });
     }
 
     calculoTotalMensal() {
@@ -205,12 +201,12 @@ export class TotalMensalCalculoComponent implements OnInit {
                 this.somaMultaFGTS = 0;
                 this.somaSaldo = 0;
                 for (let i = 0; i < this.resultado.length; i++) {
-                  this.somaFerias = this.somaFerias + this.resultado[i].ferias;
-                  this.somaTerco = this.somaTerco + this.resultado[i].tercoConstitucional;
-                  this.somaDecimo = this.somaDecimo + this.resultado[i].decimoTerceiro;
-                  this.somaIncidencia = this.somaIncidencia + this.resultado[i].incidencia;
-                  this.somaMultaFGTS = this.somaMultaFGTS + this.resultado[i].multaFGTS;
-                  this.somaSaldo = this.somaSaldo + this.resultado[i].total;
+                    this.somaFerias = this.somaFerias + this.resultado[i].ferias;
+                    this.somaTerco = this.somaTerco + this.resultado[i].tercoConstitucional;
+                    this.somaDecimo = this.somaDecimo + this.resultado[i].decimoTerceiro;
+                    this.somaIncidencia = this.somaIncidencia + this.resultado[i].incidencia;
+                    this.somaMultaFGTS = this.somaMultaFGTS + this.resultado[i].multaFGTS;
+                    this.somaSaldo = this.somaSaldo + this.resultado[i].total;
                 }
                 this.openModal();
             } else {
@@ -247,15 +243,17 @@ export class TotalMensalCalculoComponent implements OnInit {
         this.closeModal2();
         this.navegaParaViewDeCalculos.emit(this.codigoContrato);
     }
-  confirmaCalculo() {
-    this.tmService.confirmarTotalMensalReter(this.currentMonth.valor, this.currentYear, this.codigoContrato).subscribe(res => {
-      this.closeModal();
-      if (!res.error) {
-        this.openModal2();
-      }
-    });
-  }
-  goToGerenciarCargos() {
-    this.router.navigate(['./gerenciar-funcoes-terceirizados'], {relativeTo: this.route});
-  }
+
+    confirmaCalculo() {
+        this.tmService.confirmarTotalMensalReter(this.currentMonth.valor, this.currentYear, this.codigoContrato).subscribe(res => {
+            this.closeModal();
+            if (!res.error) {
+                this.openModal2();
+            }
+        });
+    }
+
+    goToGerenciarCargos() {
+        this.router.navigate(['./gerenciar-funcoes-terceirizados'], {relativeTo: this.route});
+    }
 }
