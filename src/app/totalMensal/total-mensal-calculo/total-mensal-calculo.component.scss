@@ -3,6 +3,20 @@
   margin-left: auto;
   margin-right: auto;
 }
+.tab a.active {
+  color: white!important;
+  background-color: #eceff1!important;
+}
+.tabs .tab a:hover {
+  background-color: #404f54!important;
+  color: white!important;
+}
+.tabs .tab a {
+  color: #212121!important;
+}
+ul > .tabs > li > .indicator {
+  background-color: black!important;
+}
 .mensagem-erro {
   color: red;
   font-size: 1em;
@@ -22,4 +36,31 @@
 /* icon prefix focus color */
 .input-field .prefix.active {
   color: red;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+.tooltip .tooltiptext {
+  visibility: hidden;
+  min-width: 560px;
+  max-height: 560px;
+  background-color: #555;
+  color: #000000;
+  text-align: left;
+  border-radius: 6px;
+  padding: 8px 3px 3px 8px;
+  position: absolute;
+  z-index: 98;
+  top: 125%;
+  right: 50%;
+  margin-left: -40px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
 }

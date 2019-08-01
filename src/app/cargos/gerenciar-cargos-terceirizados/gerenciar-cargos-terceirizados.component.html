@@ -212,11 +212,11 @@ desligar funcionários clique no botão abaixo.</span> <i class="material-icons"
             </div>
           </form>
           <br>
-          <div class="row">
-            <button class="btn waves-effect" [disabled]="!gerenciaForm.valid" style="margin-right: 13vw"
-                    (click)="verificarFormularioGerencia()">Alocar</button>
-            <button class="waves-effect btn" style="margin-left: 13vw" (click)="voltaContratos()">Voltar</button>
-
+          <div class="row center">
+            <button class="waves-effect btn" style="margin-right: 13vw" (click)="voltaContratos()">Voltar</button>
+            <button class="btn waves-effect" [disabled]="!gerenciaForm.valid" style="margin-left: 13vw"
+                    (click)="verificarFormularioGerencia()">Alocar
+            </button>
           </div>
         </div>
       </div>
@@ -317,222 +317,225 @@ desligar funcionários clique no botão abaixo.</span> <i class="material-icons"
             </div>
           </form>
           <br>
-          <div class="row">
-            <div class="col center-align">
-              <button class="btn waves-effect" (click)="verificaFormularioAlteracao()">Salvar</button>
-              <button class="waves-effect btn" (click)="voltaContratos()">Voltar</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row" *ngIf="listaCargosFuncionarios && modoOperacao">
-        <div *ngIf="modoOperacao == 'DESATIVAÇÃO'">
-          <div class="center-align divider"></div>
-          <br>
-          <form [formGroup]="desativacaoForm">
-            <div formArrayName="desativaTerceirizado">
-              <table class="hoverable centered highlight">
-                <thead>
-                <tr>
-                  <th>
-                    <input type="checkbox" id="test7" (change)="isSelected = !isSelected"/>
-                    <label for="test7"></label>
-                  </th>
-                  <th>Terceirizado</th>
-                  <th>Função</th>
-                  <th>Data de Desligamento</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let lista of listaCargosFuncionarios; let j = index">
-                  <td>
-                    <div class="row">
-                      <div class="col">
-                        <div [formGroupName]="j">
-                          <input type="checkbox" [checked]="isSelected" [ngModel]="isSelected"
-                                 id="{{j}}"
-                                 formControlName="selected"/>
-                          <label for="{{j}}"></label>
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                  <td><b>{{lista.funcionario.nome}}</b></td>
-                  <td><b>{{lista.funcao.nome}}</b></td>
-                  <td>
-                    <div [formGroupName]="j">
-                      <div class="input-field  ">
-                        <input id="data_desligamento_funcionario" class="validate" type="text" appMaskDate
-                               required maxlength="10"
-                               minlength="10" formControlName="dataDesligamento">
-                        <label for="data_desligamento_funcionario">Data de Desligamento do Funcionário <span
-                          class="mensagem-erro">*</span></label>
-                        <div *ngIf="desativacaoForm.get('desativaTerceirizado').get('' + j).get('dataDesligamento').invalid &&
-                                            (desativacaoForm.get('desativaTerceirizado').get('' + j).get('dataDesligamento').dirty ||
-                                desativacaoForm.get('desativaTerceirizado').get('' + j).get('dataDesligamento').touched)">
-                          <div
-                            *ngIf="desativacaoForm.get('desativaTerceirizado').get('' + j).get('dataDesligamento').getError('mensagem')">
-                            <div
-                              *ngFor="let msg of desativacaoForm.get('desativaTerceirizado').get('' + j).get('dataDesligamento').getError('mensagem')[0]">
-                              <span class="mensagem-erro">{{msg}}</span>
-                            </div>
-                          </div>
-                          <div
-                            *ngIf="desativacaoForm.get('desativaTerceirizado').get('' + j).get('dataDesligamento').getError('required')">
-                            <span class="mensagem-erro">Você deve digitar uma data !</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-                </tbody>
-              </table>
-            </div>
-          </form>
-          <br>
-          <div class="row">
-            <div class="col center-align">
-              <button class="btn waves-effect" (click)="verificaFormularioDesativacao()">Salvar</button>
-              <button class="waves-effect btn" (click)="voltaContratos()">Voltar</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <div id="modal1" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]"
-         [materializeActions]="modalActions">
-      <div class="modal-content">
-        <h4 class="center">Atenção</h4>
-        <div class="center-align">
-          <p>Selecione no mínimo um terceirizado</p>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <div class=" col center-align">
-          <button class="btn waves-effect" (click)="closeModal()">Ok</button>
-        </div>
-      </div>
-    </div>
-    <div id="modal2" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]"
-         [materializeActions]="modalActions2">
-      <div class="modal-content">
-        <h4 class="center">Confirmar</h4>
-        <div class="center-align">
-          <p>Deseja realizar as alterações ?</p>
-        </div>
-        <div class="left-align">
-          <p>As alterações não poderão ser desfeitas*</p>
-        </div>
-        <div class="center-align">
-          <div class="row">
-            <table class="highlight centered hoverable responsive-table">
-              <thead>
-              <tr>
-                <th>Terceirizado</th>
-                <th>Função</th>
-                <th>Data de Início</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr *ngFor="let funcaoTerceirirzado of confirmarAlteracao">
-                <td>{{funcaoTerceirirzado.funcionario.nome}}</td>
-                <td>{{funcaoTerceirirzado.funcao.nome}}</td>
-                <td>{{funcaoTerceirirzado.dataDisponibilizacao | date: 'shortDate'}}</td>
-              </tr>
-              </tbody>
-            </table>
+          <div class="row center">
+            <button class="waves-effect btn" style="margin-right: 13vw" (click)="voltaContratos()">Voltar</button>
+            <button class="btn waves-effect" style="margin-left: 13vw" (click)="verificaFormularioAlteracao()">Salvar
+            </button>
+
           </div>
         </div>
       </div>
-      <div class="modal-footer">
-        <button class="btn waves-effect left" (click)="closeModal2()">Cancelar</button>
-        <button class="btn waves-effect right" (click)="salvarAlteracoesFuncaoTerceirizado()">Confirmar Alterações
-        </button>
-      </div>
     </div>
-    <div id="modal6" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]"
-         [materializeActions]="modalActions6">
-      <div class="modal-content">
-        <h4 class="center">Confirmar</h4>
-        <div class="center-align">
-          <p>Deseja realizar as alterações ?</p>
-        </div>
-        <div class="left-align">
-          <p>As alterações não poderão ser desfeitas*</p>
-        </div>
-        <div class="center-align">
-          <div class="row">
-            <table class="highlight centered hoverable responsive-table">
+    <div class="row" *ngIf="listaCargosFuncionarios && modoOperacao">
+      <div *ngIf="modoOperacao == 'DESATIVAÇÃO'">
+        <div class="center-align divider"></div>
+        <br>
+        <form [formGroup]="desativacaoForm">
+          <div formArrayName="desativaTerceirizado">
+            <table class="hoverable centered highlight">
               <thead>
               <tr>
+                <th>
+                  <input type="checkbox" id="test7" (change)="isSelected = !isSelected"/>
+                  <label for="test7"></label>
+                </th>
                 <th>Terceirizado</th>
                 <th>Função</th>
                 <th>Data de Desligamento</th>
               </tr>
               </thead>
               <tbody>
-              <tr *ngFor="let funcaoTerceirirzado of confirmarDesligamento">
-                <td>{{funcaoTerceirirzado.funcionario.nome}}</td>
-                <td>{{funcaoTerceirirzado.funcao.nome}}</td>
-                <td>{{funcaoTerceirirzado.dataDesligamento | date: 'shortDate'}}</td>
+              <tr *ngFor="let lista of listaCargosFuncionarios; let j = index">
+                <td>
+                  <div class="row">
+                    <div class="col">
+                      <div [formGroupName]="j">
+                        <input type="checkbox" [checked]="isSelected" [ngModel]="isSelected"
+                               id="{{j}}"
+                               formControlName="selected"/>
+                        <label for="{{j}}"></label>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td><b>{{lista.funcionario.nome}}</b></td>
+                <td><b>{{lista.funcao.nome}}</b></td>
+                <td>
+                  <div [formGroupName]="j">
+                    <div class="input-field">
+                      <input id="data_desligamento_funcionario" class="validate" type="text" appMaskDate
+                             required maxlength="10"
+                             minlength="10" formControlName="dataDesligamento">
+                      <label for="data_desligamento_funcionario">Data de Desligamento do Funcionário <span
+                        class="mensagem-erro">*</span></label>
+                      <div *ngIf="desativacaoForm.get('desativaTerceirizado').get('' + j).get('dataDesligamento').invalid &&
+                                            (desativacaoForm.get('desativaTerceirizado').get('' + j).get('dataDesligamento').dirty ||
+                                desativacaoForm.get('desativaTerceirizado').get('' + j).get('dataDesligamento').touched)">
+                        <div
+                          *ngIf="desativacaoForm.get('desativaTerceirizado').get('' + j).get('dataDesligamento').getError('mensagem')">
+                          <div
+                            *ngFor="let msg of desativacaoForm.get('desativaTerceirizado').get('' + j).get('dataDesligamento').getError('mensagem')[0]">
+                            <span class="mensagem-erro">{{msg}}</span>
+                          </div>
+                        </div>
+                        <div
+                          *ngIf="desativacaoForm.get('desativaTerceirizado').get('' + j).get('dataDesligamento').getError('required')">
+                          <span class="mensagem-erro">Você deve digitar uma data !</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
               </tr>
               </tbody>
             </table>
           </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn waves-effect left" (click)="closeModal6()">Cancelar</button>
-        <button class="btn waves-effect right" (click)="salvarDesligamentoTerceirizado()">Confirmar Desligamento
-        </button>
-      </div>
-    </div>
-    <div id="modal3" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]"
-         [materializeActions]="modalActions3">
-      <div class="modal-content">
-        <h4 class="center red-text">Atenção</h4>
-        <div class="center-align">
-          <p><b>As informações inseridas para um ou mais terceirizados não são válidas !</b></p>
-          <br>
-          <p>Confira e tente novamente !</p>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <div class=" col center-align">
-          <button class="btn waves-effect" (click)="closeModal3()">Ok</button>
+        </form>
+        <br>
+        <div class="row center">
+          <div class="col center-align">
+            <button class="waves-effect btn" style="margin-right: 13vw" (click)="voltaContratos()">Voltar</button>
+            <button class="btn waves-effect" style="margin-left: 13vw" (click)="verificaFormularioDesativacao()">
+              Salvar
+            </button>
+          </div>
         </div>
       </div>
     </div>
-    <div id="modal4" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]"
-         [materializeActions]="modalActions4">
-      <div class="modal-content">
-        <h4 class="center green-text">Sucesso</h4>
-        <div class="center-align">
-          <p>As informações foram alteradas com sucesso !</p>
-        </div>
+  </div>
+
+  <div id="modal1" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]"
+       [materializeActions]="modalActions">
+    <div class="modal-content">
+      <h4 class="center">Atenção</h4>
+      <div class="center-align">
+        <p>Selecione no mínimo um terceirizado</p>
       </div>
-      <div class="modal-footer">
-        <div class=" col center-align">
-          <button class="btn waves-effect" (click)="closeModal4()">Ok</button>
+    </div>
+    <div class="modal-footer">
+      <div class=" col center-align">
+        <button class="btn waves-effect" (click)="closeModal()">Ok</button>
+      </div>
+    </div>
+  </div>
+  <div id="modal2" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]"
+       [materializeActions]="modalActions2">
+    <div class="modal-content">
+      <h4 class="center">Confirmar</h4>
+      <div class="center-align">
+        <p>Deseja realizar as alterações ?</p>
+      </div>
+      <div class="left-align">
+        <p>As alterações não poderão ser desfeitas*</p>
+      </div>
+      <div class="center-align">
+        <div class="row">
+          <table class="highlight centered hoverable responsive-table">
+            <thead>
+            <tr>
+              <th>Terceirizado</th>
+              <th>Função</th>
+              <th>Data de Início</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let funcaoTerceirirzado of confirmarAlteracao">
+              <td>{{funcaoTerceirirzado.funcionario.nome}}</td>
+              <td>{{funcaoTerceirirzado.funcao.nome}}</td>
+              <td>{{funcaoTerceirirzado.dataDisponibilizacao | date: 'shortDate'}}</td>
+            </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
-    <div id="modal5" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]"
-         [materializeActions]="modalActions5">
-      <div class="modal-content">
-        <h4 class="center red-text">Erro</h4>
-        <div class="center-align">
-          <p><b>Ocorreu algum erro !</b></p>
-          <br>
-          <p>Tente novamente mais tarde ou entre em contato com o admnistrador do sistema !</p>
+    <div class="modal-footer">
+      <button class="btn waves-effect left" (click)="closeModal2()">Cancelar</button>
+      <button class="btn waves-effect right" (click)="salvarAlteracoesFuncaoTerceirizado()">Confirmar Alterações
+      </button>
+    </div>
+  </div>
+  <div id="modal6" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]"
+       [materializeActions]="modalActions6">
+    <div class="modal-content">
+      <h4 class="center">Confirmar</h4>
+      <div class="center-align">
+        <p>Deseja realizar as alterações ?</p>
+      </div>
+      <div class="left-align">
+        <p>As alterações não poderão ser desfeitas*</p>
+      </div>
+      <div class="center-align">
+        <div class="row">
+          <table class="highlight centered hoverable responsive-table">
+            <thead>
+            <tr>
+              <th>Terceirizado</th>
+              <th>Função</th>
+              <th>Data de Desligamento</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let funcaoTerceirirzado of confirmarDesligamento">
+              <td>{{funcaoTerceirirzado.funcionario.nome}}</td>
+              <td>{{funcaoTerceirirzado.funcao.nome}}</td>
+              <td>{{funcaoTerceirirzado.dataDesligamento | date: 'shortDate'}}</td>
+            </tr>
+            </tbody>
+          </table>
         </div>
       </div>
-      <div class="modal-footer">
-        <div class=" col center-align">
-          <button class="btn waves-effect" (click)="closeModal5()">Ok</button>
-        </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn waves-effect left" (click)="closeModal6()">Cancelar</button>
+      <button class="btn waves-effect right" (click)="salvarDesligamentoTerceirizado()">Confirmar Desligamento
+      </button>
+    </div>
+  </div>
+  <div id="modal3" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]"
+       [materializeActions]="modalActions3">
+    <div class="modal-content">
+      <h4 class="center red-text">Atenção</h4>
+      <div class="center-align">
+        <p><b>As informações inseridas para um ou mais terceirizados não são válidas !</b></p>
+        <br>
+        <p>Confira e tente novamente !</p>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div class=" col center-align">
+        <button class="btn waves-effect" (click)="closeModal3()">Ok</button>
+      </div>
+    </div>
+  </div>
+  <div id="modal4" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]"
+       [materializeActions]="modalActions4">
+    <div class="modal-content">
+      <h4 class="center green-text">Sucesso</h4>
+      <div class="center-align">
+        <p>As informações foram alteradas com sucesso !</p>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div class=" col center-align">
+        <button class="btn waves-effect" (click)="closeModal4()">Ok</button>
+      </div>
+    </div>
+  </div>
+  <div id="modal5" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]"
+       [materializeActions]="modalActions5">
+    <div class="modal-content">
+      <h4 class="center red-text">Erro</h4>
+      <div class="center-align">
+        <p><b>Ocorreu algum erro !</b></p>
+        <br>
+        <p>Tente novamente mais tarde ou entre em contato com o admnistrador do sistema !</p>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div class=" col center-align">
+        <button class="btn waves-effect" (click)="closeModal5()">Ok</button>
       </div>
     </div>
   </div>

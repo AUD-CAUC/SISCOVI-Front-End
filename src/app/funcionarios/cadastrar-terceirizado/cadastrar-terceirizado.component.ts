@@ -218,6 +218,9 @@ export class CadastrarTerceirizadoComponent implements OnInit {
             }
         }
     }
+  voltaParaTerceirizados() {
+    this.router.navigate(['/terceirizados']);
+  }
     cadastroTerceirizadosPlanilha() {
         if (this.terceirizadosPlanilhaForm.valid) {
             this.listaTerceirizados = [];
