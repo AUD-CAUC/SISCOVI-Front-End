@@ -76,7 +76,7 @@ const routes: Routes = [
         component: CadastrarTerceirizadoComponent,
         canActivate: [LoggedInGuard, ProfileGuard]
       },
-      {path: 'contratos/funcoes-dos-terceirizados/:codContrato', component: CargosDosFuncionariosComponent, canActivate: [LoggedInGuard]},
+      {path: 'contratos/funcoes-dos-terceirizados/:codContrato', component: GerenciarCargosTerceirizadosComponent, canActivate: [LoggedInGuard]},
       {path: 'vigencias', component: VigenciaDosContratosComponent, canActivate: [LoggedInGuard]},
       {path: 'home', component: InicioComponent, canActivate: [LoggedInGuard]},
       {
@@ -116,11 +116,6 @@ const routes: Routes = [
         path: 'contratos/historico-gestores/:codContrato/cadastro-gestor-contrato',
         component: CadastrarGestorContratoComponent,
         canActivate: [LoggedInGuard, ProfileGuard]
-      },
-      {
-        path: 'contratos/funcoes-dos-terceirizados/:codContrato/gerenciar-funcoes-terceirizados',
-        component: GerenciarCargosTerceirizadosComponent,
-        canActivate: [LoggedInGuard]
       },
       {path: 'contratos/cadastro-contrato', component: CadastroContratoComponent, canActivate: [LoggedInGuard]},
       {path: 'saldo/individual', component: SaldoIndividualComponent, canActivate: [LoggedInGuard]},

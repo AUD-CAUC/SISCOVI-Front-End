@@ -646,4 +646,7 @@ export class CadastrarAjustesComponent {
     }
     return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
   }
+  voltaContratos() {
+    this.router.navigate(['/contratos']);
+  }
 }

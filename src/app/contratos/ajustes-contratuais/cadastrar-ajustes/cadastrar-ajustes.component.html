@@ -280,9 +280,10 @@
           Outro Cargo
       </button> -->
         </form>
-        <div class="center-align">
-            <button class="btn waves-effect" [disabled]="myForm.invalid" (click)="verificaAjusteASerCadastrado()">Cadastrar Ajuste</button>
-        </div>
+      <div class="row">
+        <button class="btn waves-effect right" [disabled]="myForm.invalid" style="margin-right: 13vw" (click)="verificaAjusteASerCadastrado()">Cadastrar Ajuste</button>
+        <button class="waves-effect btn left" style="margin-left: 13vw" (click)="voltaContratos()">Voltar</button>
+      </div>
     </div>
 </div>
 <div *ngIf="tempCon" id="modal1" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]"

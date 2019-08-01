@@ -12,6 +12,7 @@ import {Observable} from 'rxjs/Observable';
 import {map} from 'rxjs/operators';
 import {Error} from '../../_shared/error';
 import {ActivatedRoute, Router} from '@angular/router';
+import {ListaCargosFuncionarios} from "../cargos-dos-funcionarios/lista.cargos.funcionarios";
 
 @Component({
     selector: 'app-gerenciar-cargos-terceirizados-component',
@@ -29,6 +30,7 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
     alteracaoForm: FormGroup;
     desativacaoForm: FormGroup;
     listaCargosFuncionarios: CargosFuncionarios[];
+    cargosFuncionarios: ListaCargosFuncionarios[];
     isSelected = false;
     confirmarAlteracao: CargosFuncionarios[];
     confirmarDesligamento: CargosFuncionarios[];
@@ -171,13 +173,20 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
     }
 
     defineValor(value: any): void {
-        if (value === 'ALOCAÇÃO' || value === 'ALTERAÇÃO' || value === 'DESATIVAÇÃO') {
+        if (value === 'LISTAR' || value === 'ALOCAÇÃO' || value === 'ALTERAÇÃO' || value === 'DESATIVAÇÃO') {
           this.modoOperacao = value;
         } else {
           this.codigo = value;
         }
 
         if (this.modoOperacao && this.codigo) {
+          if (this.modoOperacao === 'LISTAR') {
+            this.cargosService.getCargosFuncionarios(this.codigo).subscribe(res => {
+              this.cargosFuncionarios = res;
+            }, error => {
+              this.cargosFuncionarios = [];
+            });
+          }
             if (this.modoOperacao === 'ALOCAÇÃO') {
                 this.funcServ.getTerceirizadosNaoAlocados().subscribe(res => {
                     this.terceirizados = res;
@@ -619,5 +628,8 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
       this.closeModal2();
       this.openModal5();
     });
+  }
+  voltaContratos() {
+    this.router.navigate(['/contratos']);
   }
 }

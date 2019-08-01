@@ -323,11 +323,10 @@ o contrato no nome do gestor.</span><i class="material-icons" style="color: blac
   <div class="divider"></div>
   <br>
   <div class="row">
-    <div class="center-align">
-      <button class="btn waves-effect" [disabled]="!(myForm.valid && myForm2.valid)" (click)="enviarCadastroContrato()">
+      <button class="btn waves-effect right" style="margin-right: 13vw" [disabled]="!(myForm.valid && myForm2.valid)" (click)="enviarCadastroContrato()">
         Cadastrar
       </button>
-    </div>
+      <button class="waves-effect btn left" style="margin-left: 13vw" (click)="voltaContratos()">Voltar</button>
   </div>
 </div>
 <div id="modal" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]"

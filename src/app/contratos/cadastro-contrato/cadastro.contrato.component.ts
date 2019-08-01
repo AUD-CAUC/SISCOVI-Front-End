@@ -362,4 +362,7 @@ export class CadastroContratoComponent implements OnInit {
         percentuais.push(percentual);
         return percentuais;
     }
+  voltaContratos() {
+    this.router.navigate(['/contratos']);
+  }
 }
