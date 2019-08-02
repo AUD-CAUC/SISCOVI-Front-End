@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit} from '@angular/core';
 import {HistoricoService} from '../historico.service';
 import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ContratosService} from '../../contratos/contratos.service';
@@ -8,6 +8,7 @@ import {Usuario} from '../../usuarios/usuario';
 import {Profile} from '../../users/profile';
 import {HistoricoGestor} from '../historico-gestor';
 import {ActivatedRoute, Router} from '@angular/router';
+import {MaterializeAction} from 'angular2-materialize';
 
 @Component({
     selector: 'app-cadastrar-gestor-contrato-component',
@@ -15,23 +16,19 @@ import {ActivatedRoute, Router} from '@angular/router';
     styleUrls: ['./cadastrar-gestor-contrato.component.scss']
 })
 export class CadastrarGestorContratoComponent implements OnInit {
+    error: string;
     gestorContratoForm: FormGroup;
     contratos: Contrato[];
     nomeContrato: string;
     usuarios: Usuario[];
     perfisGestao: Profile[];
     codContrato: number;
+    modalActions = new EventEmitter<string | MaterializeAction>();
 
     constructor(private histService: HistoricoService, private fb: FormBuilder, private contratoService: ContratosService,
                 private usuarioService: UserService, private route: ActivatedRoute, private router: Router) {
         this.route.params.subscribe(params => {
-            if (!isNaN(params['codContrato'])) {
-                this.codContrato = params['codContrato'];
-                if (this.codContrato) {
-                    this.histService.getHistoricoGestor(this.codContrato).subscribe(res => {
-                    });
-                }
-            }
+            this.codContrato = params['codContrato'];
         });
         this.contratoService.getContratoCompletoUsuario(this.codContrato).subscribe(res => {
             this.nomeContrato = res.nomeDaEmpresa;
@@ -86,6 +83,7 @@ export class CadastrarGestorContratoComponent implements OnInit {
     }
 
     cadastrarGestorNoContrato() {
+        this.error = null;
         if (this.gestorContratoForm.valid) {
             const historico = new HistoricoGestor();
             historico.codigoContrato = this.gestorContratoForm.get('contrato').value;
@@ -93,7 +91,12 @@ export class CadastrarGestorContratoComponent implements OnInit {
             historico.codigoPerfilGestao = this.gestorContratoForm.get('perfil').value;
             historico.inicio = this.convertDateFormat(this.gestorContratoForm.get('dataInicio').value);
             this.histService.cadastrarGestorContrato(historico).subscribe(res => {
-
+                console.log(res);
+                if (res.error) {
+                    this.error = res.error;
+                } else {
+                    this.openModal();
+                }
             });
         }
     }
@@ -104,5 +107,14 @@ export class CadastrarGestorContratoComponent implements OnInit {
         const mes = Number(temp[1]) - 1;
         const ano = Number(temp[2]);
         return new Date(ano, mes, dia);
+    }
+
+    openModal() {
+        this.modalActions.emit({action: 'modal', params: ['open']});
+    }
+
+    closeModal() {
+        this.modalActions.emit({action: 'modal', params: ['close']});
+        this.router.navigate(['/contratos/historico-gestores', this.codContrato]);
     }
 }

@@ -43,9 +43,23 @@
             </form>
         </div>
         <div class="center-align">
+            <div *ngIf="error">
+                <p class="red-text">{{error}}</p>
+            </div>
             <button class="btn waves-effect" [disabled]="!gestorContratoForm.valid"
                     (click)="cadastrarGestorNoContrato()">Cadastrar
             </button>
         </div>
+    </div>
+</div>
+<div id="modal" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]"
+     [materializeActions]="modalActions">
+    <div class="modal-content">
+        <h4 class="center">Atenção</h4>
+        <br>
+        <h5 class="center">Gestor cadastrado com sucesso!</h5>
+    </div>
+    <div class="modal-footer">
+        <button class="btn waves-effect center" (click)="closeModal()">Ok</button>
     </div>
 </div>
