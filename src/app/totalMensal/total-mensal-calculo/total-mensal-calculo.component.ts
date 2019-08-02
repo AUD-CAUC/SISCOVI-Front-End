@@ -70,68 +70,64 @@ export class TotalMensalCalculoComponent implements OnInit {
         });
     }
 
-    getAnoDoContratoMaisAntigo(contratos: Contrato[]): number {
-        let anoDoCMA: number = contratos[0].anoDoContrato;
-        if (contratos.length > 1) {
-            for (let i = 1; i < contratos.length; i++) {
-                if (contratos[i].anoDoContrato < contratos[i - 1].anoDoContrato) {
-                    if (contratos[i].anoDoContrato < anoDoCMA) {
-                        anoDoCMA = contratos[i].anoDoContrato;
-                    }
-                } else {
-                    if (contratos[i - 1].anoDoContrato < anoDoCMA) {
-                        anoDoCMA = contratos[i - 1].anoDoContrato;
-                    }
-                }
-            }
-        } else {
-            anoDoCMA = contratos[0].anoDoContrato;
-        }
-        return anoDoCMA;
-    }
+    // getAnoDoContratoMaisAntigo(contratos: Contrato[]): number {
+    //     let anoDoCMA: number = contratos[0].anoDoContrato;
+    //     if (contratos.length > 1) {
+    //         for (let i = 1; i < contratos.length; i++) {
+    //             if (contratos[i].anoDoContrato < contratos[i - 1].anoDoContrato) {
+    //                 if (contratos[i].anoDoContrato < anoDoCMA) {
+    //                     anoDoCMA = contratos[i].anoDoContrato;
+    //                 }
+    //             } else {
+    //                 if (contratos[i - 1].anoDoContrato < anoDoCMA) {
+    //                     anoDoCMA = contratos[i - 1].anoDoContrato;
+    //                 }
+    //             }
+    //         }
+    //     } else {
+    //         anoDoCMA = contratos[0].anoDoContrato;
+    //     }
+    //     return anoDoCMA;
+    // }
 
-    getAnoDoContratoMaisRecente(contratos: Contrato[]): number {
-        let anoDOCMR: number;
-        if (contratos.length > 1) {
-            for (let i = 1; i < contratos.length; i++) {
-                if (contratos[i].anoDoContrato > contratos[i - 1].anoDoContrato) {
-                    anoDOCMR = contratos[i].anoDoContrato;
-                } else {
-                    anoDOCMR = contratos[i - 1].anoDoContrato;
-                }
-            }
-        } else {
-            anoDOCMR = contratos[0].anoDoContrato;
-        }
-        return anoDOCMR;
-    }
+    // getAnoDoContratoMaisRecente(contratos: Contrato[]): number {
+    //     let anoDOCMR: number;
+    //     if (contratos.length > 1) {
+    //         for (let i = 1; i < contratos.length; i++) {
+    //             if (contratos[i].anoDoContrato > contratos[i - 1].anoDoContrato) {
+    //                 anoDOCMR = contratos[i].anoDoContrato;
+    //             } else {
+    //                 anoDOCMR = contratos[i - 1].anoDoContrato;
+    //             }
+    //         }
+    //     } else {
+    //         anoDOCMR = contratos[0].anoDoContrato;
+    //     }
+    //     return anoDOCMR;
+    // }
 
-    preencheListaDeAnos(anoDoContratoMaisAntigo: number, anoDoContratoMaisRecente: number): number[] {
-        let currentYear: number = (new Date().getFullYear());
-        const years: number[] = [];
-        if (anoDoContratoMaisRecente === anoDoContratoMaisAntigo) {
-            for (let i = 0; i < 10; i++) {
-                years[i] = anoDoContratoMaisAntigo;
-                anoDoContratoMaisAntigo = anoDoContratoMaisAntigo + 1;
-            }
-            return years;
-        }
-        for (let i = 0; currentYear > anoDoContratoMaisAntigo; i++) {
-            currentYear = currentYear - 1;
-            years[i] = currentYear;
-        }
-        currentYear = (new Date().getFullYear());
-        for (let i = years.length; currentYear < (anoDoContratoMaisRecente + 6); i++) {
-            years[i] = currentYear;
-            currentYear = currentYear + 1;
-        }
-        years.sort((a, b) => (a - b));
-        return years;
-    }
-
-    mes(mes) {
-
-    }
+    // preencheListaDeAnos(anoDoContratoMaisAntigo: number, anoDoContratoMaisRecente: number): number[] {
+    //     let currentYear: number = (new Date().getFullYear());
+    //     const years: number[] = [];
+    //     if (anoDoContratoMaisRecente === anoDoContratoMaisAntigo) {
+    //         for (let i = 0; i < 10; i++) {
+    //             years[i] = anoDoContratoMaisAntigo;
+    //             anoDoContratoMaisAntigo = anoDoContratoMaisAntigo + 1;
+    //         }
+    //         return years;
+    //     }
+    //     for (let i = 0; currentYear > anoDoContratoMaisAntigo; i++) {
+    //         currentYear = currentYear - 1;
+    //         years[i] = currentYear;
+    //     }
+    //     currentYear = (new Date().getFullYear());
+    //     for (let i = years.length; currentYear < (anoDoContratoMaisRecente + 6); i++) {
+    //         years[i] = currentYear;
+    //         currentYear = currentYear + 1;
+    //     }
+    //     years.sort((a, b) => (a - b));
+    //     return years;
+    // }
 
     async defineMesAtual() {
       for (let i = 0; i < this.years.length; i++) {

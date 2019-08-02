@@ -1,3 +1,16 @@
+table.highlight tbody tr:hover {
+  background-color: #9e9e9e;
+  cursor: context-menu;
+}
+
+li {
+  list-style-type: none;
+}
+
+.collapsible-body {
+  padding: 1.5vh 0 0;
+}
+
 .tab a.active {
   color: white!important;
   background-color: #eceff1!important;
