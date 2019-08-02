@@ -16,6 +16,7 @@
                 <tr>
                     <th></th>
                     <th>Gestor</th>
+                    <th>Sigla</th>
                     <th>Início da Gestão</th>
                     <th>Fim da Gestão</th>
                     <th>Atualizado por...</th>
@@ -26,6 +27,7 @@
                 <tr *ngFor="let historico of historicoGestor; let i=index">
                     <td>{{i + 1}}</td>
                     <td>{{historico.gestor}}</td>
+                    <td>{{historico.sigla}}</td>
                     <td>{{historico.inicio}}</td>
                     <td>{{historico.fim | datePipe}}</td>
                     <td>{{historico.loginAtualizacao}}</td>
