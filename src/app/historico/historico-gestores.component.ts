@@ -48,6 +48,10 @@ export class HistoricoGestoresComponent {
         this.router.navigate(['./cadastro-gestor-contrato'], {relativeTo: this.route});
     }
 
+    voltaContratos() {
+        this.router.navigate(['/contratos']);
+    }
+
     editarHistoricoGestaoContrato(id: number) {
         this.router.navigate(['historico-gestores', id], {skipLocationChange: true});
     }

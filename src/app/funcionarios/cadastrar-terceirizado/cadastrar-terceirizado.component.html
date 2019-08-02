@@ -62,7 +62,9 @@
                     </button>
                     <div class="file-path-wrapper">
                         <input class="file-path validate" type="text">
-                        <button class="btn waves-effect right" (click)="uploadData()" [disabled]="buttonDisabled" >Enviar planilha</button>
+
+                        <button class="btn waves-effect left" style="margin-top: 6vh" (click)="voltaParaTerceirizados()">Voltar</button>
+                        <button class="btn waves-effect right" style="margin-top: 6vh" (click)="uploadData()" [disabled]="buttonDisabled" >Enviar planilha</button>
                     </div>
                 </div>
             </form>
@@ -116,14 +118,16 @@
                     </div>
                 </form>
                 <div class="center-align">
-                    <button class="center center-align btn waves-effect" (click)="cadastroTerceirizadosPlanilha()">Cadastrar Terceirizados</button>
+                    <button class="btn waves-effect" style="margin-right: 13vw" (click)="voltaParaTerceirizados()">Voltar</button>
+                    <button class="center center-align btn waves-effect" style="margin-left: 13vw" (click)="cadastroTerceirizadosPlanilha()">Cadastrar Terceirizados</button>
                 </div>
             </div>
         </div>
     </div>
     <div class="row" *ngIf="opcao == 1">
         <div class="center-align">
-            <button class="btn waves-effect" [disabled]="!terceirizadoForm.valid" (click)="cadastroTerceirizado()">Cadastrar</button>
+          <button class="btn waves-effect" style="margin-right: 13vw" (click)="voltaParaTerceirizados()">Voltar</button>
+          <button class="btn waves-effect" style="margin-left: 13vw" [disabled]="!terceirizadoForm.valid" (click)="cadastroTerceirizado()">Cadastrar</button>
         </div>
     </div>
 </div>

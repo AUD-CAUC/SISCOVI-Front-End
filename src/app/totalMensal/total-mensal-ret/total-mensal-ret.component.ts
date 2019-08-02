@@ -27,6 +27,7 @@ export class TotalMensalRetComponent implements OnInit {
         this.tmService = tmService;
 
         if (this.contratoSelecionado) {
+          console.log(this.contratoSelecionado);
             this.tmService.getValoresRetidos(this.contratoSelecionado, this.config.user.id).subscribe(res => {
                 if (this.calculos) {
                    this.calculos =  this.calculos.splice(0);
@@ -38,25 +39,28 @@ export class TotalMensalRetComponent implements OnInit {
     }
     onChange(value: number) {
        this.codContrato = value;
-       this.tmService.getValoresRetidos(this.codContrato, this.config.user.id).subscribe(res => {
+       console.log(value);
+       if (value) {
+         this.tmService.getValoresRetidos(this.codContrato, this.config.user.id).subscribe(res => {
            if (this.calculos) {
-               this.calculos = this.calculos.splice(0);
+             this.calculos = this.calculos.splice(0);
            }
            this.calculos = res;
            this.changeDetector.detectChanges();
-       });
+         });
+       }
     }
-    onLoad() {
-        if (this.codContrato && this.contratoSelecionado) {
-            this.tmService.getValoresRetidos(this.codContrato, this.config.user.id).subscribe(res => {
-                if (this.calculos) {
-                   this.calculos = this.calculos.splice(0);
-                }
-                this.calculos = res;
-                this.changeDetector.detectChanges();
-            });
-        }
-    }
+    // onLoad() {
+    //      {
+    //         this.tmService.getValoresRetidos(this.codContrato, this.config.user.id).subscribe(res => {
+    //             if (this.calculos) {
+    //                this.calculos = this.calculos.splice(0);
+    //             }
+    //             this.calculos = res;
+    //             this.changeDetector.detectChanges();
+    //         });
+    //     }
+    // }
     ngOnInit () {
         if (this.contratoSelecionado) {
             this.codContrato = this.contratoSelecionado;

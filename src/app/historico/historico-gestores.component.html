@@ -37,8 +37,14 @@
             </table>
         </div>
     </div>
-    <div class="row center" *ngIf="admin">
-        <button class="btn waves-effect" (click)="cadastroGestorContrato()">Cadastrar Gestor no Contrato</button>
+    <div class="row" *ngIf="admin">
+        <button class="btn waves-effect right" style="margin-right: 13vw" (click)="cadastroGestorContrato()">Cadastrar
+            Gestor no Contrato
+        </button>
+        <button class="waves-effect btn left" style="margin-left: 13vw" (click)="voltaContratos()">Voltar</button>
+    </div>
+    <div class="row center" *ngIf="!admin">
+        <button class="waves-effect btn" (click)="voltaContratos()">Voltar</button>
     </div>
 </div>
 

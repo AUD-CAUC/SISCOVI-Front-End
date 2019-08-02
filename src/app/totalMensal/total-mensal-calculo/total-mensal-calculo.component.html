@@ -9,23 +9,24 @@
       </div>
       <div class="collapsible-body center-align">
         <div *ngIf="currentYear && currentMonth" class="row">
-          <div>
+          <div style="margin-top: -2.5vh">
             <p>Próxima retenção: {{currentMonth.mes}} de {{currentYear}}</p>
           </div>
           <div class="divider"></div>
           <div>
-            <p>Quantidade de funcionários ativos no mês: {{numFuncAtivos}}</p>
-          </div>
-            <div class="divider"></div>
-          <div>
-            <p>Caso haja divergência no número de funcionários ativos, clique no link abaixo para
-              fazer as devidas alterações:</p>
-            <button class="btn waves-effect" (click)="goToGerenciarCargos()">Gerenciar Função do Terceirizado</button>
+              <p>Quantidade de funcionários ativos no mês: {{numFuncAtivos}}
+                <a data-toggle="tooltip"
+                   title="Caso haja divergência no número de funcionários ativos clique nesse link para fazer as devidas alterações!"
+                   class="btn waves-effect" style="margin-bottom: 1vh; margin-left: 2vw" (click)="goToGerenciarCargos()">
+                  Alterar
+                </a>
+              </p>
+
           </div>
           <div class="divider"></div>
           <div>
             <button class="waves-effect waves-light btn-large blue-grey darken-3" type="submit" [disabled]="validate"
-                    (click)="calculoTotalMensal()" style="">Calcular</button>
+                    (click)="calculoTotalMensal()" style="margin-top: 2.5vh; margin-bottom: -3vh">Calcular</button>
           </div>
 
         </div>
