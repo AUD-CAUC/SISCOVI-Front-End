@@ -1,6 +1,12 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+      "baseUrl": "D:\\Users\\alpenido\\Documents\\GitHub\\SISCOVI-FrontEnd\\node_modules",
+      "paths": {
+          "exceljs": [
+              "../node_modules/exceljs/dist/es5/exceljs.browser"
+          ]
+      },
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
