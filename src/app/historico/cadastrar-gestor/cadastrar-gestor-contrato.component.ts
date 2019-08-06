@@ -115,6 +115,10 @@ export class CadastrarGestorContratoComponent implements OnInit {
 
     closeModal() {
         this.modalActions.emit({action: 'modal', params: ['close']});
+        this.voltaContratos();
+    }
+
+    voltaContratos() {
         this.router.navigate(['/contratos/historico-gestores', this.codContrato]);
     }
 }

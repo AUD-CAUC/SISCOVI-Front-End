@@ -1,4 +1,4 @@
-<h2 class="center" *ngIf="!id">Cadastro de Substituto</h2>
+<h2 class="center" *ngIf="!id">Cadastro de Gestor</h2>
 <h2 class="center" *ngIf="id">Edição de Histórico</h2>
 <br>
 <div class="container" *ngIf="!id">
@@ -46,9 +46,10 @@
             <div *ngIf="error">
                 <p class="red-text">{{error}}</p>
             </div>
-            <button class="btn waves-effect" [disabled]="!gestorContratoForm.valid"
+            <button class="btn waves-effect right" style="margin-right: 13vw" [disabled]="!gestorContratoForm.valid"
                     (click)="cadastrarGestorNoContrato()">Cadastrar
             </button>
+            <button class="waves-effect btn left" style="margin-left: 13vw" (click)="voltaContratos()">Voltar</button>
         </div>
     </div>
 </div>
