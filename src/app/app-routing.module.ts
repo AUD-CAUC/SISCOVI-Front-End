@@ -95,7 +95,7 @@ const routes: Routes = [
           calculosPendentesExecucao: RescisaoPendenteExecucaoResolver
         }
       },
-      {path: 'rescisao/gerenciar-funcoes-terceirizados', component: GerenciarCargosTerceirizadosComponent, canActivate: [LoggedInGuard]},
+      {path: 'rescisao/funcoes-dos-terceirizados/:codContrato', component: GerenciarCargosTerceirizadosComponent, canActivate: [LoggedInGuard]},
       {path: 'totalMensal', component: TotalMensalComponent, canActivate: [LoggedInGuard]},
       {path: 'totalMensal/gerenciar-funcoes-terceirizados', component: GerenciarCargosTerceirizadosComponent, canActivate: [LoggedInGuard]},
       {path: 'totalMensal/:id/:dataReferencia', component: RecalculoTotalMensalComponent, canActivate: [LoggedInGuard]},
