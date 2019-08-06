@@ -245,7 +245,7 @@ export class MovimentacaoRescisaoComponent implements OnInit {
       }
     }
   }
-  goToGerenciarCargos() {
-    this.router.navigate(['./gerenciar-funcoes-terceirizados'], {relativeTo: this.route});
-  }
+    acessoTerceirizados(codigoContrato) {
+        this.router.navigate(['./funcoes-dos-terceirizados', codigoContrato], {relativeTo: this.route});
+    }
 }
