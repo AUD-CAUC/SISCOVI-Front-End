@@ -672,17 +672,39 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
             { header: 'Cargos', key: 'cargos', width: 57},
             { header: 'Data de início', key: 'dataInicio', width: 57}
         ];
+        worksheet.eachRow({ includeEmpty: true }, function (row, _rowNumber) {
+            row.eachCell({ includeEmpty: true }, function (cell, _colNumber) {
+                console.log(cell.address);
+                cell.border = {
+                    top: { style: 'thin' },
+                    left: { style: 'thin' },
+                    bottom: { style: 'thin' },
+                    right: { style: 'thin' }
+                };
+            });
+        });
+        let temp = [];
+        let temp2;
+        this.funcoes.forEach(funcao => {
+            temp.push(funcao.nome);
+        });
+        temp2 = temp.toString();
+        temp2 = '"'.concat(temp2, '"');
+        temp = [temp2];
+        console.log(temp);
+
+        worksheet.getCell('A3').dataValidation = {
+            type: 'list',
+            allowBlank: true,
+            formulae: temp,
+        };
         while (i <= 16384) {
             const dobCol = worksheet.getColumn(i);
             dobCol.hidden = true;
             i++;
         }
 
-        // worksheet.getCell('A1').dataValidation = {
-        //     type: 'list',
-        //     allowBlank: true,
-        //     formulae: ['"One,Two,Three,Four"']
-        // };
+
         workbook.xlsx.writeBuffer()
             .then(buffer => saveAs(new Blob([buffer]), 'feedback.xlsx'))
             .catch(err => console.log('Error writing excel export', err));
