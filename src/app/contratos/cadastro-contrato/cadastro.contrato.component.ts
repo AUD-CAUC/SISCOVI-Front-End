@@ -67,6 +67,7 @@ export class CadastroContratoComponent implements OnInit {
         this.percDinService = percentualDinamicoService;
         this.percDinService.getAllPercentuaisDinamicos().subscribe(res => {
             this.percentuaisDinamicos = res;
+            console.log(res);
         });
         this.carSer.getAllCargos().subscribe(res => {
             this.cargosCadastrados = res;
@@ -118,10 +119,10 @@ export class CadastroContratoComponent implements OnInit {
     initCargos() {
         return this.fb.group({
             nome: new FormControl('', [Validators.required]),
-            remuneracao: new FormControl('', [Validators.required]),
+            remuneracao: new FormControl('0', [Validators.required]),
             descricao: new FormControl(''),
-            adicionais: new FormControl(''),
-            trienios: new FormControl(''),
+            adicionais: new FormControl('0'),
+            trienios: new FormControl('0'),
             convencao: new FormControl(''),
             dataBase: new FormControl('')
             // dia: new FormControl('', [Validators.required]),
