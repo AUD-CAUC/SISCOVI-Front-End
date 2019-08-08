@@ -14,8 +14,8 @@ import {Error} from '../../_shared/error';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ListaCargosFuncionarios} from '../cargos-dos-funcionarios/lista.cargos.funcionarios';
 import * as XLSX from 'xlsx';
-import { Borders, FillPattern, Font, Workbook, Worksheet } from 'exceljs';
-import { saveAs } from 'file-saver';
+import {Borders, FillPattern, Font, Workbook, Worksheet} from 'exceljs';
+import {saveAs} from 'file-saver';
 
 @Component({
     selector: 'app-gerenciar-cargos-terceirizados-component',
@@ -659,6 +659,7 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
         XLSX.writeFile(wb, 'sheetjs.xlsx');
     }
 
+
     teste2() {
         const workbook = new Workbook();
         const worksheet = workbook.addWorksheet('My Sheet');
@@ -667,22 +668,12 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
             {state: 'frozen', ySplit: 1, activeCell: 'A1'}
         ];
         worksheet.columns = [
-            { header: 'CPF', key: 'cpf', width: 57 },
-            { header: 'Nome', key: 'nome', width: 57 },
-            { header: 'Cargos', key: 'cargos', width: 57},
-            { header: 'Data de início', key: 'dataInicio', width: 57}
+            {header: 'CPF', key: 'cpf', width: 57},
+            {header: 'Nome', key: 'nome', width: 57},
+            {header: 'Cargos', key: 'cargos', width: 57},
+            {header: 'Data de início', key: 'dataInicio', width: 57}
         ];
-        worksheet.eachRow({ includeEmpty: true }, function (row, _rowNumber) {
-            row.eachCell({ includeEmpty: true }, function (cell, _colNumber) {
-                console.log(cell.address);
-                cell.border = {
-                    top: { style: 'thin' },
-                    left: { style: 'thin' },
-                    bottom: { style: 'thin' },
-                    right: { style: 'thin' }
-                };
-            });
-        });
+
         let temp = [];
         let temp2;
         this.funcoes.forEach(funcao => {
@@ -692,6 +683,23 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
         temp2 = '"'.concat(temp2, '"');
         temp = [temp2];
         console.log(temp);
+
+        for (let x = 2; x <= 200; x++) {
+            worksheet.getRow(x).getCell(3).dataValidation = {
+                type: 'list',
+                allowBlank: true,
+                formulae: temp,
+            };
+        }
+
+        worksheet.eachRow({includeEmpty: true}, function (row, _rowNumber) {
+            row.border = {
+                top: {style: 'thin'},
+                left: {style: 'thin'},
+                bottom: {style: 'thin'},
+                right: {style: 'thin'}
+            };
+        });
 
         worksheet.getCell('A3').dataValidation = {
             type: 'list',
