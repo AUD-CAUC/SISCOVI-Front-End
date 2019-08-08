@@ -149,7 +149,7 @@ o contrato no nome do gestor.</span><i class="material-icons" style="color: blac
         </div>
       </div>
       <div class="input-field col l2">
-        <input formControlName="fimVigencia" id="fim_vigencia" placeholder="Fim da Vigência" type="text" maxlength="10"
+        <input formControlName="fimVigencia" id="fim_vigencia" placeholder="Ex.: 02/01/2000" type="text"
                class="validate" minlength="10" maxlength="10" required
                appMaskDate (blur)="isValid()" (input)="isValid()">
         <label for="fim_vigencia">Data Fim da Vigência<span class="mensagem-erro">*</span></label>
@@ -271,8 +271,7 @@ o contrato no nome do gestor.</span><i class="material-icons" style="color: blac
           </div>
           <div class="input-field col form-group">
             <input id="trienios" formControlName="trienios" type="text" currencyMask
-                   [options]="{prefix: 'R$', thousands: '.', decimal: ',', allowNegative: 'false'}"
-                   (change)="isValid()" (blur)="isValid()" required>
+                   [options]="{prefix: 'R$', thousands: '.', decimal: ',', allowNegative: 'false'}">
             <label for="trienios">Triênios<span class="mensagem-erro">*</span></label>
           </div>
           <div class="col s12">
