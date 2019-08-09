@@ -39,6 +39,9 @@ export class ContratosComponent {
   loadMyChildComponent() {
     this.loadComponent = true;
   }
+  visualizarContrato(codigo: number) {
+
+  }
   visualizarAjuste(codContrato, codAjuste) {
     this.router.navigate(['/contratos/visualizar-ajuste', codContrato, codAjuste]);
   }
