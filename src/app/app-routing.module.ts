@@ -60,7 +60,7 @@ const routes: Routes = [
       {path: 'gerenciar', component: IndicadoresComponent, canActivate: [LoggedInGuard]},
       {path: 'contratos', component: ContratosComponent, canActivate: [LoggedInGuard]},
       {path: 'contratos/cadastrar-ajuste/:codContrato', component: CadastrarAjustesComponent, canActivate: [LoggedInGuard]},
-      {path: 'contratos/visualizar-ajuste/:codContrato/:codAjuste', component: VisualizarAjusteComponent, canActivate: [LoggedInGuard]},
+      {path: 'contratos/visualizar-evento/:codContrato/:codAjuste', component: VisualizarAjusteComponent, canActivate: [LoggedInGuard]},
       {path: 'percentuais', component: PercentuaisComponent, canActivate: [LoggedInGuard]},
       {path: 'cargosContrato', component: CargosDoContratoComponent, canActivate: [LoggedInGuard]},
       {path: 'convencoes', component: ConvencoesColetivasComponent, canActivate: [LoggedInGuard]},
