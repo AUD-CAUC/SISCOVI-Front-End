@@ -37,6 +37,8 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
     isSelected = false;
     confirmarAlteracao: CargosFuncionarios[];
     confirmarDesligamento: CargosFuncionarios[];
+    buttonDisabled = true;
+    file: File;
     modalActions = new EventEmitter<string | MaterializeAction>();
     modalActions2 = new EventEmitter<string | MaterializeAction>();
     modalActions3 = new EventEmitter<string | MaterializeAction>();
@@ -637,33 +639,10 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
         this.router.navigate(['/contratos']);
     }
 
-    teste() {
-        /* external references:
-     - https://rawgit.com/SheetJS/js-xlsx/master/dist/xlsx.full.min.js
-    */
-        /* original data */
-        const data = [
-            {'name': 'John', 'city': 'Seattle'},
-            {'name': 'Mike', 'city': 'Los Angeles'},
-            {'name': 'Zach', 'city': 'New York'}
-        ];
-
-        /* make the worksheet */
-        const ws = XLSX.utils.json_to_sheet(data);
-
-        /* add to workbook */
-        const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, 'People');
-
-        /* generate an XLSX file */
-        XLSX.writeFile(wb, 'sheetjs.xlsx');
-    }
-
-
-    teste2() {
+    criarPlanilhaCadastroTerceirizado() {
         const workbook = new Workbook();
-        const worksheet = workbook.addWorksheet('My Sheet');
-        let i = 5;
+        const worksheet = workbook.addWorksheet('Terceirizados');
+
         worksheet.views = [
             {state: 'frozen', ySplit: 1, activeCell: 'A1'}
         ];
@@ -673,26 +652,43 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
             {header: 'Cargos', key: 'cargos', width: 57},
             {header: 'Data de início', key: 'dataInicio', width: 57}
         ];
+        worksheet.getRow(1).font = {name: 'Arial', size: 18};
+        worksheet.getRow(1).alignment = {vertical: 'middle', horizontal: 'center'};
 
-        let temp = [];
+
+        const temp = [];
         let temp2;
         this.funcoes.forEach(funcao => {
             temp.push(funcao.nome);
         });
         temp2 = temp.toString();
         temp2 = '"'.concat(temp2, '"');
-        temp = [temp2];
-        console.log(temp);
 
         for (let x = 2; x <= 200; x++) {
-            worksheet.getRow(x).getCell(3).dataValidation = {
+            let row;
+            row = worksheet.getRow(x);
+            row.getCell(3).dataValidation = {
                 type: 'list',
+                showErrorMessage: true,
+                errorStyle: 'error',
+                errorTitle: 'Valor inválido!',
+                error: 'O valor neste campo neste campo deve ser um dos da lista.',
                 allowBlank: true,
-                formulae: temp,
+                operator: 'equal',
+                formulae: [temp2],
             };
+            row.getCell(4).dataValidation = {
+                type: 'date',
+                showErrorMessage: true,
+                errorStyle: 'error',
+                errorTitle: 'Valor inválido!',
+                error: 'O valor neste campo deve ser uma data',
+                allowBlank: false,
+            };
+            row.font = {name: 'Arial', size: 16};
         }
 
-        worksheet.eachRow({includeEmpty: true}, function (row, _rowNumber) {
+        worksheet.eachRow({includeEmpty: true}, function (row) {
             row.border = {
                 top: {style: 'thin'},
                 left: {style: 'thin'},
@@ -701,11 +697,7 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
             };
         });
 
-        worksheet.getCell('A3').dataValidation = {
-            type: 'list',
-            allowBlank: true,
-            formulae: temp,
-        };
+        let i = 5;
         while (i <= 16384) {
             const dobCol = worksheet.getColumn(i);
             dobCol.hidden = true;
@@ -714,7 +706,70 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
 
 
         workbook.xlsx.writeBuffer()
-            .then(buffer => saveAs(new Blob([buffer]), 'feedback.xlsx'))
+            .then(buffer => saveAs(new Blob([buffer]), 'modelo-alocar-terceirizado.xlsx'))
             .catch(err => console.log('Error writing excel export', err));
+    }
+
+    sobeArquivo(event: any) {
+        console.log(event);
+        if (event.srcElement.files[0]) {
+            if (event.srcElement.files[0].name === 'modelo-alocar-terceirizados.xlsx') {
+                this.file = event.srcElement.files[0];
+                this.buttonDisabled = false;
+            } else {
+                this.file = null;
+                this.buttonDisabled = true;
+            }
+        }
+    }
+
+    uploadData() {
+        this.buttonDisabled = true;
+        this.terceirizados = [];
+        if (this.file) {
+            const fileReader = new FileReader();
+            fileReader.onload = (e: any) => {
+                const bstr: string = e.target.result;
+                const wb: XLSX.WorkBook = XLSX.read(bstr, {type: 'binary'});
+
+                /* grab first sheet */
+                const wsname: string = wb.SheetNames[0];
+                const ws: XLSX.WorkSheet = wb.Sheets[wsname];
+
+                /* save data */
+                const data = (XLSX.utils.sheet_to_json(ws, {header: 1}));
+                data.forEach((result: any) => {
+                    if (result[0]) {
+                        const funcionario = new Funcionario();
+                        funcionario.nome = result[0];
+                        funcionario.cpf = result[1];
+                        funcionario.ativo = result[2];
+                        if (funcionario.ativo.toUpperCase() === 'SIM') {
+                            funcionario.ativo = 'S';
+                        } else {
+                            funcionario.ativo = 'N';
+                        }
+                        this.terceirizados.push(funcionario);
+                    }
+                });
+                this.terceirizados.splice(0, 1);
+                if (this.terceirizados.length > 0) {
+                    this.gerenciaForm = this.fb.group({
+                        terceirizados: this.fb.array([])
+                    });
+                    const formArray = this.gerenciaForm.get('terceirizados') as FormArray;
+                    this.terceirizados.forEach(terceirizado => {
+                        formArray.push(this.fb.group({
+                            nomeTerceirizado: new FormControl(terceirizado.nome, [Validators.required]),
+                            cpf: new FormControl(terceirizado.cpf, [Validators.required]),
+                            ativo: new FormControl(terceirizado.ativo, [Validators.required])
+                        }));
+                    });
+                    this.gerenciaForm.updateValueAndValidity();
+                    this.ref.markForCheck();
+                }
+            };
+            fileReader.readAsBinaryString(this.file);
+        }
     }
 }
