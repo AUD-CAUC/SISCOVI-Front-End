@@ -1,5 +1,4 @@
 import {ChangeDetectorRef, Component, EventEmitter, OnInit} from '@angular/core';
-import {Contrato} from '../../contratos/contrato';
 import {ContratosService} from '../../contratos/contratos.service';
 import {FuncionariosService} from '../../funcionarios/funcionarios.service';
 import {CargoService} from '../cargo.service';
@@ -14,7 +13,7 @@ import {Error} from '../../_shared/error';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ListaCargosFuncionarios} from '../cargos-dos-funcionarios/lista.cargos.funcionarios';
 import * as XLSX from 'xlsx';
-import {Borders, FillPattern, Font, Workbook, Worksheet} from 'exceljs';
+import {Workbook} from 'exceljs';
 import {saveAs} from 'file-saver';
 
 @Component({
@@ -27,7 +26,8 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
     nomeContrato: string;
     codigo: number;
     codContrato: number;
-    terceirizados: Funcionario[];
+    terceirizadosNaoAlocados: Funcionario[];
+    terceirizados: CargosFuncionarios[];
     funcoes: Cargo[];
     gerenciaForm: FormGroup;
     alteracaoForm: FormGroup;
@@ -194,7 +194,7 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
             }
             if (this.modoOperacao === 'ALOCAÇÃO') {
                 this.funcServ.getTerceirizadosNaoAlocados().subscribe(res => {
-                    this.terceirizados = res;
+                    this.terceirizadosNaoAlocados = res;
                     this.ref.markForCheck();
                 });
             }
@@ -711,7 +711,6 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
     }
 
     sobeArquivo(event: any) {
-        console.log(event);
         if (event.srcElement.files[0]) {
             if (event.srcElement.files[0].name === 'modelo-alocar-terceirizados.xlsx') {
                 this.file = event.srcElement.files[0];
@@ -740,29 +739,31 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
                 const data = (XLSX.utils.sheet_to_json(ws, {header: 1}));
                 data.forEach((result: any) => {
                     if (result[0]) {
-                        const funcionario = new Funcionario();
-                        funcionario.nome = result[0];
-                        funcionario.cpf = result[1];
-                        funcionario.ativo = result[2];
-                        if (funcionario.ativo.toUpperCase() === 'SIM') {
-                            funcionario.ativo = 'S';
-                        } else {
-                            funcionario.ativo = 'N';
-                        }
+                        const funcionario = new CargosFuncionarios();
+                        funcionario.funcionario = new Funcionario();
+                        funcionario.funcao = new Cargo();
+
+                        funcionario.funcionario.cpf = result[0];
+                        funcionario.funcionario.nome = result[1];
+                        funcionario.funcao.nome = result[2];
+                        funcionario.dataDisponibilizacao = result[3];
                         this.terceirizados.push(funcionario);
                     }
                 });
                 this.terceirizados.splice(0, 1);
+
+                console.log(this.terceirizados);
                 if (this.terceirizados.length > 0) {
                     this.gerenciaForm = this.fb.group({
-                        terceirizados: this.fb.array([])
+                        gerenciarTerceirizados: this.fb.array([])
                     });
-                    const formArray = this.gerenciaForm.get('terceirizados') as FormArray;
+                    const formArray = this.gerenciaForm.get('gerenciarTerceirizados') as FormArray;
                     this.terceirizados.forEach(terceirizado => {
                         formArray.push(this.fb.group({
-                            nomeTerceirizado: new FormControl(terceirizado.nome, [Validators.required]),
-                            cpf: new FormControl(terceirizado.cpf, [Validators.required]),
-                            ativo: new FormControl(terceirizado.ativo, [Validators.required])
+                            cpfTerceirizado: new FormControl(terceirizado.funcionario.cpf, [Validators.required]),
+                            nomeTerceirizado: new FormControl(terceirizado.funcionario.nome, [Validators.required]),
+                            funcao: new FormControl(terceirizado.funcao.nome, [Validators.required]),
+                            dataInicio: new FormControl(terceirizado.dataDisponibilizacao, [Validators.required]),
                         }));
                     });
                     this.gerenciaForm.updateValueAndValidity();
