@@ -765,18 +765,17 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
                         const disp = new Date(terceirizado.dataDisponibilizacao);
 
                         formArray.push(this.fb.group({
-                            cpfTerceirizado: new FormControl('05625965188', [Validators.required, Validators.maxLength(11), Validators.minLength(11)],
+                            cpfTerceirizado: new FormControl(terceirizado.funcionario.cpf, [Validators.required, Validators.maxLength(11), Validators.minLength(11)],
                                 ),
                             nomeTerceirizado: new FormControl(terceirizado.funcionario.nome, [Validators.required]),
                             ativo: new FormControl('', [Validators.required]),
-                            funcao: new FormControl(codFuncao, [Validators.required]),
+                            funcao: new FormControl(codFuncao.toString(), [Validators.required]),
                             dataInicio: new FormControl(disp.toLocaleDateString(), [Validators.required, this.myDateValidator]),
                             codigo: new FormControl(0),
                         }));
                     });
                     this.gerenciaForm.updateValueAndValidity();
                     this.ref.markForCheck();
-                    console.log(formArray);
                 }
             };
             fileReader.readAsBinaryString(this.file);

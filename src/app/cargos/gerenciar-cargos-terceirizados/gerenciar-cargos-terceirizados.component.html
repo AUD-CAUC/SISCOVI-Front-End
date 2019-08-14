@@ -116,7 +116,7 @@ desligar funcionários clique no botão abaixo.</span> <i class="material-icons"
                         <input materialize id="cpf_terceirizado_nao_alocado" placeholder="Digite o CPF" type="text"
                                class="validate"
                                formControlName="cpfTerceirizado"
-                               appKzMask="999.999.999-99" required>
+                               required>
                         <label for="cpf_terceirizado_nao_alocado">CPF<span
                           class="mensagem-erro">*</span></label>
                         <div *ngIf="gerenciaForm.get('gerenciarTerceirizados').get('' + i).get('cpfTerceirizado').invalid &&
