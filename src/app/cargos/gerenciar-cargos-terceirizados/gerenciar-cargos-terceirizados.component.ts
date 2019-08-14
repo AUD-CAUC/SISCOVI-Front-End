@@ -655,7 +655,6 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
         worksheet.getRow(1).font = {name: 'Arial', size: 18};
         worksheet.getRow(1).alignment = {vertical: 'middle', horizontal: 'center'};
 
-
         const temp = [];
         let temp2;
         this.funcoes.forEach(funcao => {
@@ -667,6 +666,7 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
         for (let x = 2; x <= 200; x++) {
             let row;
             row = worksheet.getRow(x);
+            row.getCell(1).numFmt = '@';
             row.getCell(3).dataValidation = {
                 type: 'list',
                 showErrorMessage: true,
@@ -685,6 +685,7 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
                 error: 'O valor neste campo deve ser uma data',
                 allowBlank: false,
             };
+            row.getCell(4).numFmt = 'dd/mm/yyyy';
             row.font = {name: 'Arial', size: 16};
         }
 
@@ -704,9 +705,8 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
             i++;
         }
 
-
         workbook.xlsx.writeBuffer()
-            .then(buffer => saveAs(new Blob([buffer]), 'modelo-alocar-terceirizado.xlsx'))
+            .then(buffer => saveAs(new Blob([buffer]), 'modelo-alocar-terceirizados.xlsx'))
             .catch(err => console.log('Error writing excel export', err));
     }
 
@@ -752,22 +752,31 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
                 });
                 this.terceirizados.splice(0, 1);
 
-                console.log(this.terceirizados);
                 if (this.terceirizados.length > 0) {
                     this.gerenciaForm = this.fb.group({
                         gerenciarTerceirizados: this.fb.array([])
                     });
                     const formArray = this.gerenciaForm.get('gerenciarTerceirizados') as FormArray;
                     this.terceirizados.forEach(terceirizado => {
+                        // Procura no array de funções a que foi selecionada na planilha e retorna seu código
+                        const codFuncao = this.funcoes.find(function (funcao) {
+                            return funcao.nome === terceirizado.funcao.nome;
+                        }).codigo;
+                        const disp = new Date(terceirizado.dataDisponibilizacao);
+
                         formArray.push(this.fb.group({
-                            cpfTerceirizado: new FormControl(terceirizado.funcionario.cpf, [Validators.required]),
+                            cpfTerceirizado: new FormControl('05625965188', [Validators.required, Validators.maxLength(11), Validators.minLength(11)],
+                                ),
                             nomeTerceirizado: new FormControl(terceirizado.funcionario.nome, [Validators.required]),
-                            funcao: new FormControl(terceirizado.funcao.nome, [Validators.required]),
-                            dataInicio: new FormControl(terceirizado.dataDisponibilizacao, [Validators.required]),
+                            ativo: new FormControl('', [Validators.required]),
+                            funcao: new FormControl(codFuncao, [Validators.required]),
+                            dataInicio: new FormControl(disp.toLocaleDateString(), [Validators.required, this.myDateValidator]),
+                            codigo: new FormControl(0),
                         }));
                     });
                     this.gerenciaForm.updateValueAndValidity();
                     this.ref.markForCheck();
+                    console.log(formArray);
                 }
             };
             fileReader.readAsBinaryString(this.file);
