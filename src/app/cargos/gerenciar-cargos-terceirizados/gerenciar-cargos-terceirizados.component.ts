@@ -105,43 +105,45 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
         const mensagem = [];
         let error = false;
         Soma = 0;
-        if (control.value === '00000000000') {
-            error = true;
+        if (control.parent) {
+            if (control.value === '00000000000') {
+                error = true;
 
-        }
+            }
 
-        for (let i = 1; i <= 9; i++) {
-            Soma = Soma + Number(control.value.substring(i - 1, i)) * (11 - i);
-        }
+            for (let i = 1; i <= 9; i++) {
+                Soma = Soma + Number(control.value.substring(i - 1, i)) * (11 - i);
+            }
 
-        Resto = (Soma * 10) % 11;
+            Resto = (Soma * 10) % 11;
 
-        if ((Resto === 10) || (Resto === 11)) {
-            Resto = 0;
-        }
+            if ((Resto === 10) || (Resto === 11)) {
+                Resto = 0;
+            }
 
-        if (Resto !== Number(control.value.substring(9, 10))) {
-            error = true;
-        }
+            if (Resto !== Number(control.value.substring(9, 10))) {
+                error = true;
+            }
 
-        Soma = 0;
-        for (let i = 1; i <= 10; i++) {
-            Soma = Soma + Number(control.value.substring(i - 1, i)) * (12 - i);
-        }
-        Resto = (Soma * 10) % 11;
+            Soma = 0;
+            for (let i = 1; i <= 10; i++) {
+                Soma = Soma + Number(control.value.substring(i - 1, i)) * (12 - i);
+            }
+            Resto = (Soma * 10) % 11;
 
-        if ((Resto === 10) || (Resto === 11)) {
-            Resto = 0;
-        }
-        if (Resto !== Number(control.value.substring(10, 11))) {
-            error = true;
-        }
+            if ((Resto === 10) || (Resto === 11)) {
+                Resto = 0;
+            }
+            if (Resto !== Number(control.value.substring(10, 11))) {
+                error = true;
+            }
 
-        if (error === true) {
-            control.parent.get('nomeTerceirizado').setValue('');
-            control.parent.get('nomeTerceirizado').disable();
-            mensagem.push('CPF inválido!');
-            control.setErrors(mensagem);
+            if (error === true) {
+                control.parent.get('nomeTerceirizado').setValue('');
+                control.parent.get('nomeTerceirizado').disable();
+                mensagem.push('CPF inválido!');
+                control.setErrors(mensagem);
+            }
         }
         return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
     }
@@ -390,7 +392,7 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
 
     closeModal4() {
         this.modalActions4.emit({action: 'modal', params: ['close']});
-        this.router.navigate(['contratos/funcoes-dos-terceirizados', this.codContrato]);
+        this.router.navigate(['contratos/', this.codContrato]);
     }
 
     openModal5() {
@@ -534,10 +536,12 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
     cpfAsyncValidator(control: AbstractControl) {
         const cpf: string = control.value;
         const mensagem = [];
-        control.parent.get('nomeTerceirizado').disable();
-        control.parent.get('ativo').disable();
-        control.parent.get('nomeTerceirizado').reset();
-        control.parent.get('ativo').reset();
+        if (control.parent) {
+            control.parent.get('nomeTerceirizado').disable();
+            control.parent.get('ativo').disable();
+            control.parent.get('nomeTerceirizado').reset();
+            control.parent.get('ativo').reset();
+        }
         if (cpf.length === 11) {
             this.funcServ.verificaTerceirizadoContrato(cpf, this.codigo).subscribe(res => {
                     const terceirizado: Funcionario = res;
@@ -765,10 +769,10 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
                         const disp = new Date(terceirizado.dataDisponibilizacao);
 
                         formArray.push(this.fb.group({
-                            cpfTerceirizado: new FormControl(terceirizado.funcionario.cpf, [Validators.required, Validators.maxLength(11), Validators.minLength(11)],
-                                ),
+                            cpfTerceirizado: new FormControl(terceirizado.funcionario.cpf.replace(/[.\-]/gi, ''), [Validators.required, Validators.maxLength(11), Validators.minLength(11), this.TestaCPF],
+                            ),
                             nomeTerceirizado: new FormControl(terceirizado.funcionario.nome, [Validators.required]),
-                            ativo: new FormControl('', [Validators.required]),
+                            ativo: new FormControl(''),
                             funcao: new FormControl(codFuncao.toString(), [Validators.required]),
                             dataInicio: new FormControl(disp.toLocaleDateString(), [Validators.required, this.myDateValidator]),
                             codigo: new FormControl(0),
