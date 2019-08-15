@@ -99,6 +99,7 @@ export class CadastrarAjustesComponent {
     this.cargoService.getAllCargos().subscribe(res => {
       this.cargosCadastrados = res;
     }, error2 => {
+        // faz nada
     });
     this.contratoService.getTiposEventosContratuais().subscribe(res => {
       this.tiposEventosContratuais = res;
@@ -163,6 +164,7 @@ export class CadastrarAjustesComponent {
       objeto: new FormControl('')
     });
     this.initCargos();
+    console.log(this.myForm.value.dataInicioContrato);
   }
   adicionaCargo(): void {
     const control = <FormArray>this.myForm.controls.cargos;
@@ -191,6 +193,7 @@ export class CadastrarAjustesComponent {
       this.myForm.controls.numeroContrato.setValue(this.contrato.numeroDoContrato);
       this.myForm.controls.nomeEmpresa.setValue(this.contrato.nomeDaEmpresa);
       this.myForm.controls.dataInicioContrato.setValue(this.contrato.dataInicio);
+      console.log(this.contrato.dataInicio);
       this.myForm.controls.dataFimContrato.setValue(this.contrato.dataFim);
       this.myForm.controls.cnpj.setValue(this.formaCNPJ(this.contrato.cnpj));
       this.myForm.controls.objeto.setValue(this.contrato.objeto);
@@ -580,8 +583,10 @@ export class CadastrarAjustesComponent {
         const mes = Number(control.value.split('/')[1]) - 1;
         const ano = Number(control.value.split('/')[2]);
         const inicioVigencia: Date = new Date(ano, mes, dia);
+        console.log(inicioVigencia);
         // const fimVigencia: Date = new Date(ano, mes, dia);
         const val: Number[] = control.parent.get('dataInicioContrato').value.split('-');
+        console.log(control.parent.get('dataInicioContrato').value);
         const inicioContrato: Date = new Date(Number(val[0]), Number(val[1]) - 1, Number(val[2]));
         const val2: Number[] = control.parent.get('dataFimContrato').value.split('-');
         const fimContrato: Date = new Date(Number(val2[0]), Number(val2[1]) - 1, Number(val2[2]));
@@ -657,9 +662,13 @@ export class CadastrarAjustesComponent {
         mes = Number(control.parent.get('inicioVigencia').value.split('/')[1]) - 1;
         ano = Number(control.parent.get('inicioVigencia').value.split('/')[2]);
         const inicioVig: Date = new Date(ano, mes, dia);
-        if (assinDig > inicioVig) {
-          mensagem.push('A data da assinatura de um ajuste não pode ser posterior ao início da vigência do ajuste!');
-        }
+          if (control.parent.get('prorrogacao').value === 'S') {
+              if (assinDig > inicioVig) {
+                  mensagem.push('A data da assinatura de um ajuste não pode ser posterior ao início da vigência do ajuste!');
+              } else {
+                  // faz nada
+              }
+          }
       }
     }
     return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
