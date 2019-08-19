@@ -536,12 +536,12 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
     cpfAsyncValidator(control: AbstractControl) {
         const cpf: string = control.value;
         const mensagem = [];
-        if (control.parent) {
-            control.parent.get('nomeTerceirizado').disable();
-            control.parent.get('ativo').disable();
-            control.parent.get('nomeTerceirizado').reset();
-            control.parent.get('ativo').reset();
-        }
+        // if (control.parent) {
+        //     control.parent.get('nomeTerceirizado').disable();
+        //     control.parent.get('ativo').disable();
+        //     control.parent.get('nomeTerceirizado').reset();
+        //     control.parent.get('ativo').reset();
+        // }
         if (cpf.length === 11) {
             this.funcServ.verificaTerceirizadoContrato(cpf, this.codigo).subscribe(res => {
                     const terceirizado: Funcionario = res;
@@ -553,28 +553,29 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
                         control.parent.get('codigo').setValue(terceirizado.codigo);
 
                     } else {
-                        control.parent.get('ativo').setValue('');
-                        control.parent.get('nomeTerceirizado').setValue('');
+                        // console.log('ENTROU AQUI')
+                        // control.parent.get('ativo').setValue('');
+                        // control.parent.get('nomeTerceirizado').setValue('');
                         control.parent.get('nomeTerceirizado').enable();
-                        control.parent.get('ativo').enable();
-                        control.parent.get('ativo').updateValueAndValidity();
-                        control.parent.get('nomeTerceirizado').updateValueAndValidity();
-                        control.parent.get('nomeTerceirizado').markAsTouched();
-                        control.parent.get('ativo').markAsTouched();
-                        control.parent.get('nomeTerceirizado').markAsDirty();
-                        control.parent.get('ativo').markAsDirty();
-
-                        control.parent.get('funcao').setValue('');
-                        control.parent.get('funcao').enable();
-                        control.parent.get('funcao').updateValueAndValidity();
-                        control.parent.get('funcao').markAsTouched();
-                        control.parent.get('funcao').markAsDirty();
-
-                        control.parent.get('dataInicio').setValue('');
-                        control.parent.get('dataInicio').enable();
-                        control.parent.get('dataInicio').updateValueAndValidity();
-                        control.parent.get('dataInicio').markAsTouched();
-                        control.parent.get('dataInicio').markAsDirty();
+                        // control.parent.get('ativo').enable();
+                        // control.parent.get('ativo').updateValueAndValidity();
+                        // control.parent.get('nomeTerceirizado').updateValueAndValidity();
+                        // control.parent.get('nomeTerceirizado').markAsTouched();
+                        // control.parent.get('ativo').markAsTouched();
+                        // control.parent.get('nomeTerceirizado').markAsDirty();
+                        // control.parent.get('ativo').markAsDirty();
+                        //
+                        // control.parent.get('funcao').setValue('');
+                        // control.parent.get('funcao').enable();
+                        // control.parent.get('funcao').updateValueAndValidity();
+                        // control.parent.get('funcao').markAsTouched();
+                        // control.parent.get('funcao').markAsDirty();
+                        //
+                        // control.parent.get('dataInicio').setValue('');
+                        // control.parent.get('dataInicio').enable();
+                        // control.parent.get('dataInicio').updateValueAndValidity();
+                        // control.parent.get('dataInicio').markAsTouched();
+                        // control.parent.get('dataInicio').markAsDirty();
                     }
                 },
                 error => {
@@ -768,8 +769,9 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
                         }).codigo;
                         const disp = new Date(terceirizado.dataDisponibilizacao);
 
+
                         formArray.push(this.fb.group({
-                            cpfTerceirizado: new FormControl(terceirizado.funcionario.cpf.replace(/[.\-]/gi, ''), [Validators.required, Validators.maxLength(11), Validators.minLength(11), this.TestaCPF],
+                            cpfTerceirizado: new FormControl(terceirizado.funcionario.cpf.replace(/[.\-]/gi, ''), [Validators.required, Validators.maxLength(11), Validators.minLength(11), this.TestaCPF], this.cpfAsyncValidator.bind(this)
                             ),
                             nomeTerceirizado: new FormControl(terceirizado.funcionario.nome, [Validators.required]),
                             ativo: new FormControl(''),
