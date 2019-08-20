@@ -90,7 +90,7 @@ o contrato no nome do gestor.</span><i class="material-icons" style="color: blac
           <label>Ativo<span class="mensagem-erro">*</span></label>
       </div> -->
       <div class="input-field col s12 tooltip">
-        <textarea materialize id="textarea1" class="materialize-textarea" data-length="120" formControlName="objeto"
+        <textarea materialize id="textarea1" class="materialize-textarea" data-length="1000" formControlName="objeto"
                   (input)="isValid()" (blur)="isValid()"></textarea>
         <label for="textarea1" style="cursor: help">Objeto<span class="tooltiptext" style="cursor: help">Exemplos: Limpeza, Manutenção, Serviços Gerais, etc.</span></label>
       </div>
@@ -150,7 +150,7 @@ o contrato no nome do gestor.</span><i class="material-icons" style="color: blac
         </div>
       </div>
       <div class="input-field col l2">
-        <input formControlName="fimVigencia" id="fim_vigencia" placeholder="Fim da Vigência" type="text"
+        <input formControlName="fimVigencia" id="fim_vigencia" placeholder="Ex.: 02/01/2000" type="text" type="text"
                maxlength="10"
                class="validate" minlength="10" maxlength="10" required
                appMaskDate (blur)="isValid()" (input)="isValid()">
@@ -284,8 +284,7 @@ o contrato no nome do gestor.</span><i class="material-icons" style="color: blac
           </div>
           <div class="input-field col form-group">
             <input id="trienios" formControlName="trienios" type="text" currencyMask
-                   [options]="{prefix: 'R$', thousands: '.', decimal: ',', allowNegative: 'false'}"
-                   (change)="isValid()" (blur)="isValid()" required>
+                   [options]="{prefix: 'R$', thousands: '.', decimal: ',', allowNegative: 'false'}">
             <label for="trienios">Triênios<span class="mensagem-erro">*</span></label>
           </div>
           <div class="col s12">

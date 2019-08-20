@@ -12,6 +12,12 @@ import {ListaTotalMensalData} from '../lista-total-mensal-data';
 })
 export class TotalMensalRetComponent implements OnInit {
     calculos: ListaTotalMensalData[];
+    somaFerias: number;
+    somaTerco: number;
+    somaDecimo: number;
+    somaIncidencia: number;
+    somaMultaFGTS: number;
+    somaSaldo: number;
     contratos: Contrato[];
     tmService: TotalMensalService;
     contratoService: ContratosService;
@@ -67,6 +73,24 @@ export class TotalMensalRetComponent implements OnInit {
             this.tmService.getValoresRetidos(this.contratoSelecionado, this.config.user.id).subscribe(res => {
                this.calculos = res;
             });
+        }
+    }
+
+    calculaTotais(calculo: ListaTotalMensalData) {
+        this.somaFerias = 0;
+        this.somaTerco = 0;
+        this.somaDecimo = 0;
+        this.somaIncidencia = 0;
+        this.somaMultaFGTS = 0;
+        this.somaSaldo = 0;
+
+        for (let i = 0; i < calculo.totais.length; i++) {
+            this.somaFerias = this.somaFerias + calculo.totais[i].ferias;
+            this.somaTerco = this.somaTerco + calculo.totais[i].tercoConstitucional;
+            this.somaDecimo = this.somaDecimo + calculo.totais[i].decimoTerceiro;
+            this.somaIncidencia = this.somaIncidencia + calculo.totais[i].incidencia;
+            this.somaMultaFGTS = this.somaMultaFGTS + calculo.totais[i].multaFGTS;
+            this.somaSaldo = this.somaSaldo + calculo.totais[i].total;
         }
     }
 }

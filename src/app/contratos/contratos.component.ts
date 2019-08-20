@@ -39,8 +39,11 @@ export class ContratosComponent {
   loadMyChildComponent() {
     this.loadComponent = true;
   }
+  visualizarContrato(codContrato: number) {
+    this.router.navigate(['/contratos/visualizar-evento', codContrato, 0]);
+  }
   visualizarAjuste(codContrato, codAjuste) {
-    this.router.navigate(['/contratos/visualizar-ajuste', codContrato, codAjuste]);
+    this.router.navigate(['/contratos/visualizar-evento', codContrato, codAjuste]);
   }
   cadastrarContrato() {
       this.router.navigate(['./cadastro-contrato'], {relativeTo: this.route});

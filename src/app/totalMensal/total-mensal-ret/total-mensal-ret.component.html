@@ -17,13 +17,12 @@
         <div class="col" *ngIf="calculos">
           <ul materialize="collapsible" class="collapsible" data-collapsible="accordion" >
             <li *ngFor="let calculo of calculos">
-              <div class="collapsible-header">
+              <div class="collapsible-header center" (click)="calculaTotais(calculo)">
                 <h5 class="center-align">Data Referência: {{calculo.dataReferencia | date: 'shortDate'}}</h5>
               </div>
-              <div class="collapsible-body row">
-
-                <div class="col xl12 offset-l6 rigth center-align" >
-                  <table class="highlight centered center-align">
+              <div class="collapsible-body">
+                <div class="col xl12 offset-l6 center-align" >
+                  <table class="highlight centered responsive-table">
                     <thead>
                     <tr>
                       <th>Função</th>
@@ -48,6 +47,18 @@
                       <td class="black-text"><b>{{total.total | currency:'BRL':true:'1.2-2'}}</b></td>
                     </tr>
                     </tbody>
+                      <tfoot>
+                      <tr>
+                          <td><b>Somatório</b></td>
+                          <td></td>
+                          <td><b>{{somaFerias| currency:'BRL':true:'1.2-2'}}</b></td>
+                          <td><b>{{somaTerco| currency:'BRL':true:'1.2-2'}}</b></td>
+                          <td><b>{{somaDecimo| currency:'BRL':true:'1.2-2'}}</b></td>
+                          <td><b>{{somaIncidencia| currency:'BRL':true:'1.2-2'}}</b></td>
+                          <td><b>{{somaMultaFGTS| currency:'BRL':true:'1.2-2'}}</b></td>
+                          <td><b>{{somaSaldo| currency:'BRL':true:'1.2-2'}}</b></td>
+                      </tr>
+                      </tfoot>
                   </table>
                 </div>
               </div>

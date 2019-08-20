@@ -57,6 +57,14 @@
                   </thead>
 
                   <tbody>
+                  <tr>
+                      <td>CONTRATO</td>
+                      <td></td>
+                      <td>{{cont.dataInicio | date: 'shortDate'}}</td>
+                      <td>{{cont.dataFim | date: 'shortDate'}}</td>
+                      <td>{{cont.dataAssinatura | date: 'shortDate'}}</td>
+                      <td class="foo"><i class="material-icons rounded" (click)="visualizarContrato(cont.codigo)" title="Visualizar Contrato">description</i></td>
+                  </tr>
                   <tr *ngFor="let evento of cont.eventosContratuais">
                     <td>{{evento.tipo.tipo}}</td>
                     <td>{{evento.assunto}}</td>
