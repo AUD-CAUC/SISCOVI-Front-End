@@ -90,7 +90,7 @@ o contrato no nome do gestor.</span><i class="material-icons" style="color: blac
                 <label>Ativo<span class="mensagem-erro">*</span></label>
             </div> -->
             <div class="input-field col s12 tooltip">
-        <textarea materialize id="textarea1" class="materialize-textarea" data-length="1000" formControlName="objeto"
+        <textarea materialize id="textarea1" class="materialize-textarea" data-length="120" formControlName="objeto"
                   (input)="isValid()" (blur)="isValid()"></textarea>
                 <label for="textarea1" style="cursor: help">Objeto<span class="tooltiptext" style="cursor: help">Exemplos: Limpeza, Manutenção, Serviços Gerais, etc.</span></label>
             </div>
@@ -103,6 +103,14 @@ o contrato no nome do gestor.</span><i class="material-icons" style="color: blac
                     <option *ngFor="let usuario of usuarios" [value]="usuario.nome">{{usuario.nome}}</option>
                 </select>
                 <label for="primeiroSubstituto">Primeiro Substituto</label>
+                <div
+                    *ngIf="myForm2.get('primeiroSubstituto').invalid && (myForm2.get('primeiroSubstituto').dirty || myForm2.get('primeiroSubstituto').touched)">
+                    <div *ngIf="myForm2.get('primeiroSubstituto').getError('mensagem')">
+                        <div *ngFor="let msg of myForm2.get('primeiroSubstituto').getError('mensagem')[0]">
+                            <span class="mensagem-erro">{{msg}}</span>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="input-field col s3">
                 <select [materializeSelectOptions]="usuarios" materialize="material_select" id="segundoSubstituto"
@@ -111,6 +119,14 @@ o contrato no nome do gestor.</span><i class="material-icons" style="color: blac
                     <option *ngFor="let usuario of usuarios" [value]="usuario.nome">{{usuario.nome}}</option>
                 </select>
                 <label for="segundoSubstituto">Segundo Substituto</label>
+                <div
+                    *ngIf="myForm2.get('segundoSubstituto').invalid && (myForm2.get('segundoSubstituto').dirty || myForm2.get('segundoSubstituto').touched)">
+                    <div *ngIf="myForm2.get('segundoSubstituto').getError('mensagem')">
+                        <div *ngFor="let msg of myForm2.get('segundoSubstituto').getError('mensagem')[0]">
+                            <span class="mensagem-erro">{{msg}}</span>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="input-field col s3">
                 <select [materializeSelectOptions]="usuarios" materialize="material_select" id="terceiroSubstituto"
@@ -119,6 +135,14 @@ o contrato no nome do gestor.</span><i class="material-icons" style="color: blac
                     <option *ngFor="let usuario of usuarios" [value]="usuario.nome">{{usuario.nome}}</option>
                 </select>
                 <label for="terceiroSubstituto">Terceiro Substituto</label>
+                <div
+                    *ngIf="myForm2.get('terceiroSubstituto').invalid && (myForm2.get('terceiroSubstituto').dirty || myForm2.get('terceiroSubstituto').touched)">
+                    <div *ngIf="myForm2.get('terceiroSubstituto').getError('mensagem')">
+                        <div *ngFor="let msg of myForm2.get('terceiroSubstituto').getError('mensagem')[0]">
+                            <span class="mensagem-erro">{{msg}}</span>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="input-field col s3">
                 <select [materializeSelectOptions]="usuarios" materialize="material_select" id="quartoSubstituto"
@@ -127,6 +151,14 @@ o contrato no nome do gestor.</span><i class="material-icons" style="color: blac
                     <option *ngFor="let usuario of usuarios" [value]="usuario.nome">{{usuario.nome}}</option>
                 </select>
                 <label for="quartoSubstituto">Quarto Substituto</label>
+                <div
+                    *ngIf="myForm2.get('quartoSubstituto').invalid && (myForm2.get('quartoSubstituto').dirty || myForm2.get('quartoSubstituto').touched)">
+                    <div *ngIf="myForm2.get('quartoSubstituto').getError('mensagem')">
+                        <div *ngFor="let msg of myForm2.get('quartoSubstituto').getError('mensagem')[0]">
+                            <span class="mensagem-erro">{{msg}}</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <h5>Vigência</h5>

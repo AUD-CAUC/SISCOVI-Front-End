@@ -1,15 +1,13 @@
 <h2 class="center" *ngIf="!id">Cadastro de Gestor</h2>
 <h2 class="center" *ngIf="id">Edição de Histórico</h2>
-<br>
+
 <div class="container" *ngIf="!id">
     <div class="row">
         <div class="col">
             <form [formGroup]="gestorContratoForm">
-                <div class="row">
                     <h5 class="center-align">{{nomeContrato}}</h5>
-                </div>
                 <div class="row">
-                    <p style="text-align: center">Escolha o servidor para no campo abaixo:</p>
+                    <p style="text-align: center">Escolha o servidor no campo abaixo:</p>
                     <div class="input-field col l5">
                         <select id="usuarios" materialize="material_select" [materializeSelectOptions]="usuarios"
                                 formControlName="servidor">
@@ -38,6 +36,17 @@
                         <input id="data_inicio" formControlName="dataInicio" class="validate" type="text"
                                placeholder="Exemplo: 01/02/2015" required appMaskDate maxlength="10" minlength="10">
                         <label for="data_inicio">Data de início <span class="red-text">*</span></label>
+                        <div *ngIf="gestorContratoForm.get('dataInicio').invalid &&
+                        (gestorContratoForm.get('dataInicio').dirty || gestorContratoForm.get('dataInicio').touched)">
+                            <div *ngIf="gestorContratoForm.get('dataInicio').getError('mensagem')">
+                                <div *ngFor="let msg of gestorContratoForm.get('dataInicio').getError('mensagem')[0]">
+                                    <span class="mensagem-erro">{{msg}}</span>
+                                </div>
+                            </div>
+                            <div *ngIf="gestorContratoForm.get('dataInicio').getError('required')">
+                                <span class="mensagem-erro">Você deve digitar uma data!</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </form>
