@@ -17,7 +17,8 @@ desligar funcionários clique no botão abaixo.</span> <i class="material-icons"
         <!--          </select>-->
         <!--          <label for="selecao_contrato">Contrato<span class="red-text"> *</span></label>-->
         <!--        </div>-->
-        <p style="text-align: center; text-indent: 2em">Selecione dentre as três opções: Alocar, Alterar ou Desligar
+        <p style="text-align: center; text-indent: 2em">Selecione dentre as três opções: Alocar, Alterar ou
+          Desligar
           terceirizado.</p>
         <div class="input-field col s4">
           <select materialize="material_select" (change)="defineValor($event.target.value)">
@@ -38,7 +39,8 @@ desligar funcionários clique no botão abaixo.</span> <i class="material-icons"
                 Por favor aloque funcionários nas funções !</h5>
             </div>
           </div>
-          <ul materialize="collapsible" class="collapsible" data-collapsible="accordion" id="cargos-funcionarios"
+          <ul materialize="collapsible" class="collapsible" data-collapsible="accordion"
+              id="cargos-funcionarios"
               *ngIf="cargosFuncionarios.length > 0">
             <li *ngFor="let lista of cargosFuncionarios">
               <div class="collapsible-header">
@@ -73,18 +75,31 @@ desligar funcionários clique no botão abaixo.</span> <i class="material-icons"
           </div>
         </div>
       </div>
-      <div class="row" *ngIf="terceirizados && modoOperacao">
+      <div class="row" *ngIf="terceirizadosNaoAlocados && modoOperacao">
         <div *ngIf="modoOperacao == 'ALOCAÇÃO'">
           <div class="center-align divider"></div>
           <br>
           <div class="center-align">
-            <button class="btn waves-effect" (click)="teste2()">teste</button>
+            <button class="btn waves-effect" (click)="criarPlanilhaCadastroTerceirizado()">Dowload
+              Planilha
+            </button>
             <button class="btn waves-effect" (click)="adicionaGerenciar()">Adicionar Linha</button>
-            <button class="btn waves-effect" (click)="removerGerenciar()" [disabled]="!(gerenciar.length > 1)">
+            <button class="btn waves-effect" (click)="removerGerenciar()"
+                    [disabled]="!(gerenciar.length > 1)">
               Remover
               Linha
             </button>
           </div>
+          <div class="file-field input-field row">
+            <button class="btn waves-effect">
+              <span>File</span>
+              <input type="file" accept=".xlsx" (change)="sobeArquivo($event)">
+            </button>
+            <button class="btn waves-effect" (click)="uploadData()" [disabled]="buttonDisabled">
+              Enviar planilha
+            </button>
+          </div>
+
           <br>
           <form [formGroup]="gerenciaForm">
             <div formArrayName="gerenciarTerceirizados">
@@ -102,10 +117,11 @@ desligar funcionários clique no botão abaixo.</span> <i class="material-icons"
                   <td>
                     <div class="row">
                       <div class="input-field col s8">
-                        <input id="cpf_terceirizado_nao_alocado" placeholder="Digite o CPF" type="text"
+                        <input materialize id="cpf_terceirizado_nao_alocado"
+                               placeholder="Digite o CPF" type="text"
                                class="validate"
                                formControlName="cpfTerceirizado"
-                               appKzMask="999.999.999-99" required autocomplete="off">
+                               required autocomplete="off">
                         <label for="cpf_terceirizado_nao_alocado">CPF<span
                           class="mensagem-erro">*</span></label>
                         <div *ngIf="gerenciaForm.get('gerenciarTerceirizados').get('' + i).get('cpfTerceirizado').invalid &&
@@ -189,7 +205,8 @@ desligar funcionários clique no botão abaixo.</span> <i class="material-icons"
                                 [materializeSelectOptions]="funcoes"
                                 formControlName="funcao" required>
                           <option disabled>Selecione uma Função para o Terceirizado</option>
-                          <option *ngFor="let funcao of funcoes" [value]="funcao.codigo">{{funcao.nome}}</option>
+                          <option *ngFor="let funcao of funcoes"
+                                  [value]="funcao.codigo">{{funcao.nome}}</option>
                         </select>
                         <label for="funcoes_contrato">Funções do Contrato<span
                           class="mensagem-erro">*</span></label>
@@ -199,7 +216,8 @@ desligar funcionários clique no botão abaixo.</span> <i class="material-icons"
                   <td>
                     <div class="row">
                       <div class="input-field col s8">
-                        <input id="data_inicio_funcao" formControlName="dataInicio" class="validate"
+                        <input id="data_inicio_funcao" formControlName="dataInicio"
+                               class="validate"
                                type="text" appMaskDate
                                required maxlength="10" minlength="10">
                         <label for="data_inicio_funcao">Data de Início na Função<span
@@ -214,7 +232,8 @@ desligar funcionários clique no botão abaixo.</span> <i class="material-icons"
           </form>
           <br>
           <div class="row center">
-            <button class="waves-effect btn" style="margin-right: 13vw" (click)="voltaContratos()">Voltar</button>
+            <button class="waves-effect btn" style="margin-right: 13vw" (click)="voltaContratos()">Voltar
+            </button>
             <button class="btn waves-effect" [disabled]="!gerenciaForm.valid" style="margin-left: 13vw"
                     (click)="verificarFormularioGerencia()">Cadastrar
             </button>
@@ -288,7 +307,8 @@ desligar funcionários clique no botão abaixo.</span> <i class="material-icons"
                   <td>
                     <div [formGroupName]="k">
                       <div class="input-field  ">
-                        <input id="data_inicio_nova_funcao" class="validate" type="text" appMaskDate
+                        <input id="data_inicio_nova_funcao" class="validate" type="text"
+                               appMaskDate
                                required maxlength="10"
                                minlength="10" formControlName="dataInicio"
                                placeholder="Exemplo: 01/01/2000">
@@ -320,8 +340,10 @@ desligar funcionários clique no botão abaixo.</span> <i class="material-icons"
           <br>
 
           <div class="row center">
-            <button class="waves-effect btn" style="margin-right: 13vw" (click)="voltaContratos()">Voltar</button>
-            <button class="btn waves-effect" style="margin-left: 13vw" (click)="verificaFormularioAlteracao()">Salvar
+            <button class="waves-effect btn" style="margin-right: 13vw" (click)="voltaContratos()">Voltar
+            </button>
+            <button class="btn waves-effect" style="margin-left: 13vw"
+                    (click)="verificaFormularioAlteracao()">Salvar
             </button>
 
           </div>
@@ -365,11 +387,13 @@ desligar funcionários clique no botão abaixo.</span> <i class="material-icons"
                 <td>
                   <div [formGroupName]="j">
                     <div class="input-field">
-                      <input id="data_desligamento_funcionario" class="validate" type="text" appMaskDate
+                      <input id="data_desligamento_funcionario" class="validate" type="text"
+                             appMaskDate
                              required maxlength="10"
                              minlength="10" formControlName="dataDesligamento">
-                      <label for="data_desligamento_funcionario">Data de Desligamento do Funcionário <span
-                        class="mensagem-erro">*</span></label>
+                      <label for="data_desligamento_funcionario">Data de Desligamento do
+                        Funcionário <span
+                          class="mensagem-erro">*</span></label>
                       <div *ngIf="desativacaoForm.get('desativaTerceirizado').get('' + j).get('dataDesligamento').invalid &&
                                             (desativacaoForm.get('desativaTerceirizado').get('' + j).get('dataDesligamento').dirty ||
                                 desativacaoForm.get('desativaTerceirizado').get('' + j).get('dataDesligamento').touched)">
@@ -396,8 +420,10 @@ desligar funcionários clique no botão abaixo.</span> <i class="material-icons"
         <br>
         <div class="row center">
           <div class="col center-align">
-            <button class="waves-effect btn" style="margin-right: 13vw" (click)="voltaContratos()">Voltar</button>
-            <button class="btn waves-effect" style="margin-left: 13vw" (click)="verificaFormularioDesativacao()">
+            <button class="waves-effect btn" style="margin-right: 13vw" (click)="voltaContratos()">Voltar
+            </button>
+            <button class="btn waves-effect" style="margin-left: 13vw"
+                    (click)="verificaFormularioDesativacao()">
               Salvar
             </button>
           </div>
