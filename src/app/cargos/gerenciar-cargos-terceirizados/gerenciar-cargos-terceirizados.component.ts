@@ -1,5 +1,4 @@
 import {ChangeDetectorRef, Component, EventEmitter, OnInit} from '@angular/core';
-import {Contrato} from '../../contratos/contrato';
 import {ContratosService} from '../../contratos/contratos.service';
 import {FuncionariosService} from '../../funcionarios/funcionarios.service';
 import {CargoService} from '../cargo.service';
@@ -14,8 +13,8 @@ import {Error} from '../../_shared/error';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ListaCargosFuncionarios} from '../cargos-dos-funcionarios/lista.cargos.funcionarios';
 import * as XLSX from 'xlsx';
-import { Borders, FillPattern, Font, Workbook, Worksheet } from 'exceljs';
-import { saveAs } from 'file-saver';
+import {Workbook} from 'exceljs';
+import {saveAs} from 'file-saver';
 
 @Component({
     selector: 'app-gerenciar-cargos-terceirizados-component',
@@ -27,7 +26,8 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
     nomeContrato: string;
     codigo: number;
     codContrato: number;
-    terceirizados: Funcionario[];
+    terceirizadosNaoAlocados: Funcionario[];
+    terceirizados: CargosFuncionarios[];
     funcoes: Cargo[];
     gerenciaForm: FormGroup;
     alteracaoForm: FormGroup;
@@ -37,6 +37,8 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
     isSelected = false;
     confirmarAlteracao: CargosFuncionarios[];
     confirmarDesligamento: CargosFuncionarios[];
+    buttonDisabled = true;
+    file: File;
     modalActions = new EventEmitter<string | MaterializeAction>();
     modalActions2 = new EventEmitter<string | MaterializeAction>();
     modalActions3 = new EventEmitter<string | MaterializeAction>();
@@ -103,43 +105,45 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
         const mensagem = [];
         let error = false;
         Soma = 0;
-        if (control.value === '00000000000') {
-            error = true;
+        if (control.parent) {
+            if (control.value === '00000000000') {
+                error = true;
 
-        }
+            }
 
-        for (let i = 1; i <= 9; i++) {
-            Soma = Soma + Number(control.value.substring(i - 1, i)) * (11 - i);
-        }
+            for (let i = 1; i <= 9; i++) {
+                Soma = Soma + Number(control.value.substring(i - 1, i)) * (11 - i);
+            }
 
-        Resto = (Soma * 10) % 11;
+            Resto = (Soma * 10) % 11;
 
-        if ((Resto === 10) || (Resto === 11)) {
-            Resto = 0;
-        }
+            if ((Resto === 10) || (Resto === 11)) {
+                Resto = 0;
+            }
 
-        if (Resto !== Number(control.value.substring(9, 10))) {
-            error = true;
-        }
+            if (Resto !== Number(control.value.substring(9, 10))) {
+                error = true;
+            }
 
-        Soma = 0;
-        for (let i = 1; i <= 10; i++) {
-            Soma = Soma + Number(control.value.substring(i - 1, i)) * (12 - i);
-        }
-        Resto = (Soma * 10) % 11;
+            Soma = 0;
+            for (let i = 1; i <= 10; i++) {
+                Soma = Soma + Number(control.value.substring(i - 1, i)) * (12 - i);
+            }
+            Resto = (Soma * 10) % 11;
 
-        if ((Resto === 10) || (Resto === 11)) {
-            Resto = 0;
-        }
-        if (Resto !== Number(control.value.substring(10, 11))) {
-            error = true;
-        }
+            if ((Resto === 10) || (Resto === 11)) {
+                Resto = 0;
+            }
+            if (Resto !== Number(control.value.substring(10, 11))) {
+                error = true;
+            }
 
-        if (error === true) {
-            control.parent.get('nomeTerceirizado').setValue('');
-            control.parent.get('nomeTerceirizado').disable();
-            mensagem.push('CPF inválido!');
-            control.setErrors(mensagem);
+            if (error === true) {
+                control.parent.get('nomeTerceirizado').setValue('');
+                control.parent.get('nomeTerceirizado').disable();
+                mensagem.push('CPF inválido!');
+                control.setErrors(mensagem);
+            }
         }
         return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
     }
@@ -192,7 +196,7 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
             }
             if (this.modoOperacao === 'ALOCAÇÃO') {
                 this.funcServ.getTerceirizadosNaoAlocados().subscribe(res => {
-                    this.terceirizados = res;
+                    this.terceirizadosNaoAlocados = res;
                     this.ref.markForCheck();
                 });
             }
@@ -388,7 +392,7 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
 
     closeModal4() {
         this.modalActions4.emit({action: 'modal', params: ['close']});
-        this.router.navigate(['contratos/funcoes-dos-terceirizados', this.codContrato]);
+        this.router.navigate(['contratos/', this.codContrato]);
     }
 
     openModal5() {
@@ -532,10 +536,12 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
     cpfAsyncValidator(control: AbstractControl) {
         const cpf: string = control.value;
         const mensagem = [];
-        control.parent.get('nomeTerceirizado').disable();
-        control.parent.get('ativo').disable();
-        control.parent.get('nomeTerceirizado').reset();
-        control.parent.get('ativo').reset();
+        // if (control.parent) {
+        //     control.parent.get('nomeTerceirizado').disable();
+        //     control.parent.get('ativo').disable();
+        //     control.parent.get('nomeTerceirizado').reset();
+        //     control.parent.get('ativo').reset();
+        // }
         if (cpf.length === 11) {
             this.funcServ.verificaTerceirizadoContrato(cpf, this.codigo).subscribe(res => {
                     const terceirizado: Funcionario = res;
@@ -547,28 +553,29 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
                         control.parent.get('codigo').setValue(terceirizado.codigo);
 
                     } else {
-                        control.parent.get('ativo').setValue('');
-                        control.parent.get('nomeTerceirizado').setValue('');
+                        // console.log('ENTROU AQUI')
+                        // control.parent.get('ativo').setValue('');
+                        // control.parent.get('nomeTerceirizado').setValue('');
                         control.parent.get('nomeTerceirizado').enable();
-                        control.parent.get('ativo').enable();
-                        control.parent.get('ativo').updateValueAndValidity();
-                        control.parent.get('nomeTerceirizado').updateValueAndValidity();
-                        control.parent.get('nomeTerceirizado').markAsTouched();
-                        control.parent.get('ativo').markAsTouched();
-                        control.parent.get('nomeTerceirizado').markAsDirty();
-                        control.parent.get('ativo').markAsDirty();
-
-                        control.parent.get('funcao').setValue('');
-                        control.parent.get('funcao').enable();
-                        control.parent.get('funcao').updateValueAndValidity();
-                        control.parent.get('funcao').markAsTouched();
-                        control.parent.get('funcao').markAsDirty();
-
-                        control.parent.get('dataInicio').setValue('');
-                        control.parent.get('dataInicio').enable();
-                        control.parent.get('dataInicio').updateValueAndValidity();
-                        control.parent.get('dataInicio').markAsTouched();
-                        control.parent.get('dataInicio').markAsDirty();
+                        // control.parent.get('ativo').enable();
+                        // control.parent.get('ativo').updateValueAndValidity();
+                        // control.parent.get('nomeTerceirizado').updateValueAndValidity();
+                        // control.parent.get('nomeTerceirizado').markAsTouched();
+                        // control.parent.get('ativo').markAsTouched();
+                        // control.parent.get('nomeTerceirizado').markAsDirty();
+                        // control.parent.get('ativo').markAsDirty();
+                        //
+                        // control.parent.get('funcao').setValue('');
+                        // control.parent.get('funcao').enable();
+                        // control.parent.get('funcao').updateValueAndValidity();
+                        // control.parent.get('funcao').markAsTouched();
+                        // control.parent.get('funcao').markAsDirty();
+                        //
+                        // control.parent.get('dataInicio').setValue('');
+                        // control.parent.get('dataInicio').enable();
+                        // control.parent.get('dataInicio').updateValueAndValidity();
+                        // control.parent.get('dataInicio').markAsTouched();
+                        // control.parent.get('dataInicio').markAsDirty();
                     }
                 },
                 error => {
@@ -637,54 +644,147 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
         this.router.navigate(['/contratos']);
     }
 
-    teste() {
-        /* external references:
-     - https://rawgit.com/SheetJS/js-xlsx/master/dist/xlsx.full.min.js
-    */
-        /* original data */
-        const data = [
-            {'name': 'John', 'city': 'Seattle'},
-            {'name': 'Mike', 'city': 'Los Angeles'},
-            {'name': 'Zach', 'city': 'New York'}
-        ];
-
-        /* make the worksheet */
-        const ws = XLSX.utils.json_to_sheet(data);
-
-        /* add to workbook */
-        const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, 'People');
-
-        /* generate an XLSX file */
-        XLSX.writeFile(wb, 'sheetjs.xlsx');
-    }
-
-    teste2() {
+    criarPlanilhaCadastroTerceirizado() {
         const workbook = new Workbook();
-        const worksheet = workbook.addWorksheet('My Sheet');
-        let i = 5;
+        const worksheet = workbook.addWorksheet('Terceirizados');
+
         worksheet.views = [
             {state: 'frozen', ySplit: 1, activeCell: 'A1'}
         ];
         worksheet.columns = [
-            { header: 'CPF', key: 'cpf', width: 57 },
-            { header: 'Nome', key: 'nome', width: 57 },
-            { header: 'Cargos', key: 'cargos', width: 57},
-            { header: 'Data de início', key: 'dataInicio', width: 57}
+            {header: 'CPF', key: 'cpf', width: 57},
+            {header: 'Nome', key: 'nome', width: 57},
+            {header: 'Cargos', key: 'cargos', width: 57},
+            {header: 'Data de início', key: 'dataInicio', width: 57}
         ];
+        worksheet.getRow(1).font = {name: 'Arial', size: 18};
+        worksheet.getRow(1).alignment = {vertical: 'middle', horizontal: 'center'};
+
+        const temp = [];
+        let temp2;
+        this.funcoes.forEach(funcao => {
+            temp.push(funcao.nome);
+        });
+        temp2 = temp.toString();
+        temp2 = '"'.concat(temp2, '"');
+
+        for (let x = 2; x <= 200; x++) {
+            let row;
+            row = worksheet.getRow(x);
+            row.getCell(1).numFmt = '@';
+            row.getCell(3).dataValidation = {
+                type: 'list',
+                showErrorMessage: true,
+                errorStyle: 'error',
+                errorTitle: 'Valor inválido!',
+                error: 'O valor neste campo neste campo deve ser um dos da lista.',
+                allowBlank: true,
+                operator: 'equal',
+                formulae: [temp2],
+            };
+            row.getCell(4).dataValidation = {
+                type: 'date',
+                showErrorMessage: true,
+                errorStyle: 'error',
+                errorTitle: 'Valor inválido!',
+                error: 'O valor neste campo deve ser uma data',
+                allowBlank: false,
+            };
+            row.getCell(4).numFmt = 'dd/mm/yyyy';
+            row.font = {name: 'Arial', size: 16};
+        }
+
+        worksheet.eachRow({includeEmpty: true}, function (row) {
+            row.border = {
+                top: {style: 'thin'},
+                left: {style: 'thin'},
+                bottom: {style: 'thin'},
+                right: {style: 'thin'}
+            };
+        });
+
+        let i = 5;
         while (i <= 16384) {
             const dobCol = worksheet.getColumn(i);
             dobCol.hidden = true;
             i++;
         }
 
-        // worksheet.getCell('A1').dataValidation = {
-        //     type: 'list',
-        //     allowBlank: true,
-        //     formulae: ['"One,Two,Three,Four"']
-        // };
         workbook.xlsx.writeBuffer()
-            .then(buffer => saveAs(new Blob([buffer]), 'feedback.xlsx'))
+            .then(buffer => saveAs(new Blob([buffer]), 'modelo-alocar-terceirizados.xlsx'))
             .catch(err => console.log('Error writing excel export', err));
+    }
+
+    sobeArquivo(event: any) {
+        if (event.srcElement.files[0]) {
+            if (event.srcElement.files[0].name === 'modelo-alocar-terceirizados.xlsx') {
+                this.file = event.srcElement.files[0];
+                this.buttonDisabled = false;
+            } else {
+                this.file = null;
+                this.buttonDisabled = true;
+            }
+        }
+    }
+
+    uploadData() {
+        this.buttonDisabled = true;
+        this.terceirizados = [];
+        if (this.file) {
+            const fileReader = new FileReader();
+            fileReader.onload = (e: any) => {
+                const bstr: string = e.target.result;
+                const wb: XLSX.WorkBook = XLSX.read(bstr, {type: 'binary'});
+
+                /* grab first sheet */
+                const wsname: string = wb.SheetNames[0];
+                const ws: XLSX.WorkSheet = wb.Sheets[wsname];
+
+                /* save data */
+                const data = (XLSX.utils.sheet_to_json(ws, {header: 1}));
+                data.forEach((result: any) => {
+                    if (result[0]) {
+                        const funcionario = new CargosFuncionarios();
+                        funcionario.funcionario = new Funcionario();
+                        funcionario.funcao = new Cargo();
+
+                        funcionario.funcionario.cpf = result[0];
+                        funcionario.funcionario.nome = result[1];
+                        funcionario.funcao.nome = result[2];
+                        funcionario.dataDisponibilizacao = result[3];
+                        this.terceirizados.push(funcionario);
+                    }
+                });
+                this.terceirizados.splice(0, 1);
+
+                if (this.terceirizados.length > 0) {
+                    this.gerenciaForm = this.fb.group({
+                        gerenciarTerceirizados: this.fb.array([])
+                    });
+                    const formArray = this.gerenciaForm.get('gerenciarTerceirizados') as FormArray;
+                    this.terceirizados.forEach(terceirizado => {
+                        // Procura no array de funções a que foi selecionada na planilha e retorna seu código
+                        const codFuncao = this.funcoes.find(function (funcao) {
+                            return funcao.nome === terceirizado.funcao.nome;
+                        }).codigo;
+                        const disp = new Date(terceirizado.dataDisponibilizacao);
+
+
+                        formArray.push(this.fb.group({
+                            cpfTerceirizado: new FormControl(terceirizado.funcionario.cpf.replace(/[.\-]/gi, ''), [Validators.required, Validators.maxLength(11), Validators.minLength(11), this.TestaCPF], this.cpfAsyncValidator.bind(this)
+                            ),
+                            nomeTerceirizado: new FormControl(terceirizado.funcionario.nome, [Validators.required]),
+                            ativo: new FormControl(''),
+                            funcao: new FormControl(codFuncao.toString(), [Validators.required]),
+                            dataInicio: new FormControl(disp.toLocaleDateString(), [Validators.required, this.myDateValidator]),
+                            codigo: new FormControl(0),
+                        }));
+                    });
+                    this.gerenciaForm.updateValueAndValidity();
+                    this.ref.markForCheck();
+                }
+            };
+            fileReader.readAsBinaryString(this.file);
+        }
     }
 }
