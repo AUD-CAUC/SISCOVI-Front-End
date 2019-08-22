@@ -417,4 +417,23 @@ export class CadastroContratoComponent implements OnInit {
         }
         return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
     }
+
+  // public listaParaSelecao() {
+  //   const gest = this.myForm2.parent.get('nomeGestor').value;
+  //   const fstSubs = this.myForm2.parent.get('primeiroSubstituto').value;
+  //   console.log(fstSubs);
+  //   const sndSubs = this.myForm2.parent.get('segundoSubstituto').value;
+  //   const trdSubs = this.myForm2.parent.get('terceiroSubstituto').value;
+  //   const fthSubs = this.myForm2.parent.get('quartoSubstituto').value;
+  //   if (this.usuarios) {
+  //     this.usuarios.forEach((usuario) => {
+  //       this.listaParaMostrar.push(usuario.nome);
+  //       if (usuario.nome === gest || usuario.nome === fstSubs || usuario.nome === sndSubs ||
+  //         usuario.nome === trdSubs || usuario.nome === fthSubs) {
+  //         // console.log(usuario.nome, gest);
+  //         this.listaParaMostrar.splice(this.listaParaMostrar.indexOf(usuario.nome));
+  //       }
+  //     });
+  //   }
+  // }
 }
