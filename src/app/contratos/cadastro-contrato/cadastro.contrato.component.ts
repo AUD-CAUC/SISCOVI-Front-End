@@ -16,6 +16,8 @@ import {Convencao} from '../../convencoes-coletivas/convencao';
 import {ConvencaoService} from '../../convencoes-coletivas/convencao.service';
 import {PercentualDinamico} from '../../percentuais-dinamicos/percentual-dinamico';
 import {PercentualDinamicoService} from '../../percentuais-dinamicos/percentual-dinamico.service';
+import {DropdownModule} from 'primeng/primeng';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 
 @Component({
@@ -24,6 +26,7 @@ import {PercentualDinamicoService} from '../../percentuais-dinamicos/percentual-
   styleUrls: ['./cadastro.contrato.component.scss']
 })
 export class CadastroContratoComponent implements OnInit {
+    // listaParaMostrar = [];
     router: Router;
     route: ActivatedRoute;
     carSer: CargoService;
@@ -35,6 +38,7 @@ export class CadastroContratoComponent implements OnInit {
     contratoService: ContratosService;
     dataInicio = '';
     usuarios: Usuario[];
+    // selectedUsuario: Usuario;
     meses =  [
         {valor: 1, mes: 'Janeiro'},
         {valor: 2, mes: 'Fevereiro'},
@@ -91,7 +95,7 @@ export class CadastroContratoComponent implements OnInit {
             inicioVigencia: new FormControl('', [Validators.required, this.myDateValidator]),
             fimVigencia: new FormControl('', [Validators.required, this.myDateValidator, this.fimContratoValidator]),
             assinatura: new FormControl('', [Validators.required, this.myDateValidator, this.assinaturaValidator]),
-            nomeGestor: new FormControl('', [Validators.required, this.nameValidator]),
+            nomeGestor: new FormControl('', [Validators.required, this.nameValidator, /*this.gestao2validator*/]),
             nomeEmpresa: new FormControl('', [Validators.required, this.nameValidator]),
             cnpj: new FormControl('', [Validators.required, this.cnpjValidator]),
             ativo: new FormControl('S', [Validators.required]),
@@ -100,7 +104,7 @@ export class CadastroContratoComponent implements OnInit {
             percentualDecimoTerceiro: new FormControl('', [Validators.required]),
             percentualIncidencia: new FormControl('', [Validators.required, this.percentualValidator.bind(this)]),
             numeroContrato: new FormControl('', [Validators.required]),
-            primeiroSubstituto: new FormControl(''),
+            primeiroSubstituto: new FormControl('', [Validators.required, /*this.gestao2validator*/]),
             segundoSubstituto: new FormControl(''),
             terceiroSubstituto: new FormControl(''),
             quartoSubstituto: new FormControl(''),
@@ -360,9 +364,9 @@ export class CadastroContratoComponent implements OnInit {
         percentuais.push(percentual);
         return percentuais;
     }
-  voltaContratos() {
-    this.router.navigate(['/contratos']);
-  }
+    voltaContratos() {
+      this.router.navigate(['/contratos']);
+    }
     public fimContratoValidator(control: AbstractControl): { [key: string]: any} | null {
         const mensagem = [];
         if (control.parent) {
@@ -435,5 +439,57 @@ export class CadastroContratoComponent implements OnInit {
   //       }
   //     });
   //   }
+  // }
+  // public gestaoValidator(control: AbstractControl): { [key: string]: any} | null {
+  //
+  //     const mensagem = [];
+  //     if (control.parent) {
+  //         const gest = String(control.parent.get('nomeGestor').value);
+  //         const fstSubs = String(control.parent.get('primeiroSubstituto').value);
+  //         const sndSubs = String(control.parent.get('segundoSubstituto').value);
+  //         const trdSubs = String(control.parent.get('terceiroSubstituto').value);
+  //         const fthSubs = String(control.parent.get('quartoSubstituto').value);
+  //
+  //
+  //         // console.log(listaParaMostrar);
+  //         // if (fstSubs === gest || sndSubs === gest || trdSubs === gest || fthSubs === gest) {
+  //         //     mensagem.push('Não se podem acumular as funções de Gestor e Substituto a uma mesma pessoa!');
+  //         // }
+  //         //     if ((control.touched || control.dirty) && !control.pristine) {
+  //         //
+  //         //         if (control.valid && control.parent.get('primeiroSubstituto')) {
+  //         //             control.clearValidators();
+  //         //             control.parent.get('primeiroSubstituto').updateValueAndValidity();
+  //         //         }
+  //                 // if (control.valid && control.parent.get('primeiroSubstituto')) {
+  //                 //     console.log('2')
+  //                 //     console.log(control.value)
+  //                 //     control.markAsPristine();
+  //                 //     control.parent.get('nomeGestor').updateValueAndValidity();
+  //                 // }
+  //             }
+  //
+  //     }
+  //     return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
+  // }
+
+
+  // public gestao2validator(control: AbstractControl): { [key: string]: any} | null {
+  //     const mensagem = [];
+  //     if (control.parent) {
+  //         const gestor = String(control.parent.get('nomeGestor').value);
+  //         const substitutoUm = String(control.parent.get('primeiroSubstituto').value);
+  //         if (substitutoUm === gestor) {
+  //             mensagem.push('Não se podem acumular as funções de Gestor e Substituto a uma mesma pessoa em um mesmo contrato.');
+  //             return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
+  //         } else if (control.touched || control.parent.touched) {
+  //           control.parent.get('primeiroSubstituto').markAsTouched();
+  //           console.log('inner else');
+  //             return null;
+  //         }
+  //     } else {
+  //         console.log('outer else');
+  //         return null;
+  //     }
   // }
 }
