@@ -8,7 +8,8 @@ import {SaldoIndividual} from "../saldo/individual/saldo-individual";
 
 @Component({
   selector: 'app-inicio',
-  templateUrl: 'inicio.component.html'
+  templateUrl: 'inicio.component.html',
+  styleUrls: ['./inicio.component.scss']
 })
 
 
@@ -56,19 +57,30 @@ export class InicioComponent implements OnInit {
   }
 
   montaGrafico(saldo) {
+    console.log(saldo)
+    let empresas = [];
+    this.contratos.map((cont) => {
+      console.log(cont);
+      empresas.push(cont.nomeDaEmpresa);
+
+    })
+    console.log(empresas);
     this.canvas = document.getElementById('myChart');
     this.ctx = this.canvas.getContext('2d');
     const myChart = new Chart(this.ctx, {
       type: 'pie',
       data: {
-        labels: ['1', '2', '3', '4', '5'],
+        labels: empresas,
         datasets: [{
           label: '# of Votes',
           data: saldo,
           backgroundColor: [
+            'rgb(228,82,27,1)',
+            'rgb(255,234,106,1)',
+            'rgb(255,124,16, 1)',
             'rgba(255, 99, 132, 1)',
             'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)'
+            'rgba(255, 206, 86, 1)',
           ],
           borderWidth: 1
         }]
@@ -81,4 +93,7 @@ export class InicioComponent implements OnInit {
     });
   }
 
+  selecionaGrafico(value: any) {
+    console.log(value);
+  }
 }

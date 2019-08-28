@@ -1,6 +1,42 @@
 <div class="container">
   <h2 class="center">Início</h2>
-  <div id="container" style="width: 75%;">
-    <canvas id="myChart" width="700" height="400"></canvas>
+  <div id="container" style="text-align: center">
+    <div style=" margin: auto; width: 50vw; height: 40vh">
+      <canvas id="myChart"></canvas>
+    </div>
+    <div>
+      <form action="#" (change)=selecionaGrafico($event.target.id)>
+        <p>
+          <label>
+            <input name="group1" type="radio" id="1" />
+            <label for="1">Saldo acumulado</label>
+          </label>
+        </p>
+        <p>
+          <label>
+            <input name="group1" type="radio" id="2" />
+            <label for="2">Número de Empregados</label>
+          </label>
+        </p>
+        <p>
+          <label>
+            <input name="group1" type="radio" id="3"/>
+            <label for="3">Valor Restituido</label>
+          </label>
+        </p>
+        <p>
+          <label>
+            <input name="group1" type="radio" id="4"/>
+            <label for="4">Valor Movimentado</label>
+          </label>
+        </p>
+        <p>
+          <label>
+            <input name="group1" type="radio" id="5"/>
+            <label for="5">Retenção por Rúbrica</label>
+          </label>
+        </p>
+      </form>
+    </div>
   </div>
 </div>
