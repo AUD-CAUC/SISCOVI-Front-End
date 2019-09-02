@@ -5,6 +5,9 @@ import {SaldoService} from "../saldo/saldo.service";
 import {ContratosService} from "../contratos/contratos.service";
 import {Contrato} from "../contratos/contrato";
 import {SaldoIndividual} from "../saldo/individual/saldo-individual";
+import {TotalMensalService} from '../totalMensal/total-mensal.service';
+import {RubricasService} from '../rubricas/rubricas.service';
+import {Rubrica} from '../rubricas/rubrica';
 
 @Component({
   selector: 'app-inicio',
@@ -19,11 +22,20 @@ export class InicioComponent implements OnInit {
   saldos: SaldoIndividual[];
   config: ConfigService;
   somaSaldo = [];
+  somaFerias = [];
+  somaTerco = [];
+  somaDecimo = [];
+  somaIncidencia = [];
+  somaMultaFGTS = [];
+  nTerceirizados = [];
+  nomeEmpresas = [];
+  rubricas = [];
   id = 1;
   canvas: any;
   ctx: any;
 
-  constructor(config: ConfigService, private saldoService: SaldoService, private contratoService: ContratosService, private ref: ChangeDetectorRef) {
+  constructor(config: ConfigService, private saldoService: SaldoService, private contratoService: ContratosService, private tmService: TotalMensalService, private rubricaService: RubricasService,
+              private ref: ChangeDetectorRef) {
     this.config = config;
 
   }
@@ -34,6 +46,9 @@ export class InicioComponent implements OnInit {
 
   async ngOnInit() {
     this.contratos = await this.contratoService.getContratosDoUsuario().toPromise();
+    this.contratos.map(cont => {
+      this.nomeEmpresas.push(cont.nomeDaEmpresa);
+    });
 
     await Promise.all(this.contratos.map(async contrato => {
       this.saldos = await this.saldoService.getSaldoIndividual(contrato.codigo).toPromise();
@@ -42,11 +57,27 @@ export class InicioComponent implements OnInit {
         this.saldos = null;
         this.ref.markForCheck();
       } else {
-        let temp = 0;
+        let tempSaldo = 0;
+        let tempFerias = 0;
+        let tempTerco = 0;
+        let tempDecimo = 0;
+        let tempIncidencia = 0;
+        let tempMultaFGTS = 0;
         for (let i = 0; i < this.saldos.length; i++) {
-          temp = temp + this.saldos[i].saldo;
+          tempSaldo = tempSaldo + this.saldos[i].saldo;
+          tempFerias = tempFerias + this.saldos[i].feriasRetido - this.saldos[i].feriasRestituido;
+          tempTerco = tempTerco + this.saldos[i].tercoRetido - this.saldos[i].tercoRestituido;
+          tempDecimo = tempDecimo + this.saldos[i].decimoTerceiroRetido - this.saldos[i].decimoTerceiroRestituido;
+          tempIncidencia = tempIncidencia + (this.saldos[i].incidenciaRetido - this.saldos[i].incidenciaFeriasRestituido -
+            this.saldos[i].incidenciaTercoRestituido - this.saldos[i].incidenciaDecimoTerceiroRestituido);
+          tempMultaFGTS = tempMultaFGTS + this.saldos[i].multaFgtsRetido;
         }
-        this.somaSaldo.push(temp);
+        this.somaSaldo.push(tempSaldo);
+        this.somaFerias.push(tempFerias);
+        this.somaTerco.push(tempTerco);
+        this.somaDecimo.push(tempDecimo);
+        this.somaIncidencia.push(tempIncidencia);
+        this.somaMultaFGTS.push(tempMultaFGTS);
       }
     }));
     this.montaGraficoBarra();
@@ -58,21 +89,22 @@ export class InicioComponent implements OnInit {
   }
   // Gráfico pizza
   async montaGraficoPizza() {
-    const empresas = [];
-    this.contratos.map((cont) => {
-      empresas.push(cont.nomeDaEmpresa);
-
-    });
-    await this.demo();
+    if (this.nTerceirizados.length === 0) {
+      await Promise.all(this.contratos.map(async cont => {
+        const dataFim = new Date(cont.dataFim);
+        this.nTerceirizados.push(await this.tmService.getNumFuncionariosAtivos(dataFim.getMonth() + 1, dataFim.getFullYear(), cont.codigo).toPromise());
+      }));
+    }
+    await this.wait();
     this.canvas = document.getElementById('myChart2');
     this.ctx = this.canvas.getContext('2d');
     const myChart = new Chart(this.ctx, {
       type: 'pie',
       data: {
-        labels: empresas,
+        labels: this.nomeEmpresas,
         datasets: [{
           label: 'Número de Funcionários',
-          data: this.somaSaldo,
+          data: this.nTerceirizados,
           backgroundColor: [
             'rgb(40,147,85)',
             'rgb(255,95,70)',
@@ -95,13 +127,6 @@ export class InicioComponent implements OnInit {
           legend: {
             position: 'right',
         },
-        tooltips: {
-          callbacks: {
-            label: (tooltipItem, data) => {
-              return data.labels[tooltipItem.index] + ': R$ ' + data.datasets[0].data[tooltipItem.index].toFixed(2);
-            }
-          }
-        },
       }
     });
   }
@@ -110,20 +135,20 @@ export class InicioComponent implements OnInit {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
-  async demo() {
+  async wait() {
     await this.sleep(2);
   }
   // Gráfico Barra
   async montaGraficoBarra() {
     // console.log(1)
-    // await this.demo()
+    // await this.wait()
     // console.log(2)
     const empresas = [];
     this.contratos.map((cont) => {
       empresas.push(cont.nomeDaEmpresa);
 
     });
-    await this.demo();
+    await this.wait();
     this.canvas = document.getElementById('myChart');
     this.ctx = this.canvas.getContext('2d');
     const myChart = new Chart(this.ctx, {
@@ -178,34 +203,40 @@ export class InicioComponent implements OnInit {
   }
   // Gráfico Radar
   async montaGraficoRadar() {
-    // console.log(1)
-    // await this.demo()
-    // console.log(2)
-    const empresas = [];
-    this.contratos.map((cont) => {
-      empresas.push(cont.nomeDaEmpresa);
+    // this.contratos.map((cont) => {
+    //
+    //
+    // });
+    // this.rubricas = await this.rubricaService.getAllrubricas().toPromise().then(rubricas => {
+    //   const nomes = [];
+    //   rubricas.map(rubrica => {
+    //     nomes.push(rubrica.nome);
+    //   });
+    //   return nomes;
+    // });
 
-    });
-    await this.demo();
-    this.canvas = document.getElementById('myChart3');
+    await this.wait();
+    this.canvas = document.getElementById('myChart5');
     this.ctx = this.canvas.getContext('2d');
+    const color = Chart.helpers.color;
+    let i = -1;
+
     const myChart = new Chart(this.ctx, {
-      type: 'line',
+      type: 'radar',
       data: {
-        labels: empresas,
-        datasets: [{
-          label: '# of Votes',
-          data: this.somaSaldo,
-          backgroundColor: [
-            'rgb(70,255,163)',
-            'rgb(255,95,70)',
-            'rgb(255,187,70)',
-            'rgb(116,70,255)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-          ],
-          borderWidth: 1
-        }]
+        labels: ['Férias', 'Terço constitucional', 'Décimo Terceiro', 'Incidência', 'Multa do FGTS'],
+        datasets: this.nomeEmpresas.map((nomeEmpresa) => {
+          i++;
+          const randomColor = this.getRandomColor();
+          return {
+              label: nomeEmpresa,
+              data: [this.somaFerias[i], this.somaTerco[i], this.somaDecimo[i], this.somaIncidencia[i], this.somaMultaFGTS[i]],
+              backgroundColor: color(randomColor).alpha(0.2).rgbString(),
+              borderColor: randomColor,
+              pointBackgroundColor: randomColor,
+              borderWidth: 1
+            };
+        })
       },
       options: {
         legend: {
@@ -217,14 +248,14 @@ export class InicioComponent implements OnInit {
   // Gráfico Linha
   async montaGraficoLinha() {
     // console.log(1)
-    // await this.demo()
+    // await this.wait()
     // console.log(2)
     const empresas = [];
     this.contratos.map((cont) => {
       empresas.push(cont.nomeDaEmpresa);
 
     });
-    await this.demo();
+    await this.wait();
     this.canvas = document.getElementById('myChart4');
     this.ctx = this.canvas.getContext('2d');
     const myChart = new Chart(this.ctx, {
@@ -255,15 +286,15 @@ export class InicioComponent implements OnInit {
 
   async montaGraficoPolar() {
     // console.log(1)
-    // await this.demo()
+    // await this.wait()
     // console.log(2)
     const empresas = [];
     this.contratos.map((cont) => {
       empresas.push(cont.nomeDaEmpresa);
 
     });
-    await this.demo();
-    this.canvas = document.getElementById('myChart5');
+    await this.wait();
+    this.canvas = document.getElementById('myChart3');
     this.ctx = this.canvas.getContext('2d');
     const myChart = new Chart(this.ctx, {
       type: 'polarArea',
@@ -297,11 +328,21 @@ export class InicioComponent implements OnInit {
     } else if (this.id === 2) {
       this.montaGraficoPizza();
     } else if (this.id === 3) {
-      this.montaGraficoRadar();
+      this.montaGraficoPolar();
     } else if (this.id === 4) {
       this.montaGraficoLinha();
     } else if (this.id === 5) {
-      this.montaGraficoPolar();
+      this.montaGraficoRadar();
+
     }
+  }
+
+  getRandomColor() {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
   }
 }
