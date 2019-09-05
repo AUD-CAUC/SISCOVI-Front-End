@@ -41,96 +41,43 @@ export class InicioComponent implements OnInit {
 
   }
 
-  async carregaInformacoes() {
-
-  }
-
   async ngOnInit() {
     this.contratos = await this.contratoService.getContratosDoUsuario().toPromise();
     this.contratos.map(cont => {
       this.nomeEmpresas.push(cont.nomeDaEmpresa);
     });
 
-    await Promise.all(this.contratos.map(async (contrato, key) => {
-      this.saldos.push(await this.saldoService.getSaldoIndividual(contrato.codigo).toPromise());
-      console.log(this.saldos[key]);
+    for (let j = 0; j < this.contratos.length; j++) {
+      const res = await this.saldoService.getSaldoIndividual(this.contratos[j].codigo).toPromise();
+      this.saldos.push(res);
 
-      if (this.saldos.length === 0) {
-        this.saldos = null;
-        this.ref.markForCheck();
-      } else {
-        let tempSaldo = 0;
-        let tempFerias = 0;
-        let tempTerco = 0;
-        let tempDecimo = 0;
-        let tempIncidencia = 0;
-        let tempMultaFGTS = 0;
-        for (let i = 0; i < this.saldos[key].length; i++) {
-          tempSaldo = tempSaldo + this.saldos[key][i].saldo;
-          tempFerias = tempFerias + this.saldos[key][i].feriasRetido - this.saldos[key][i].feriasRestituido;
-          tempTerco = tempTerco + this.saldos[key][i].tercoRetido - this.saldos[key][i].tercoRestituido;
-          tempDecimo = tempDecimo + this.saldos[key][i].decimoTerceiroRetido - this.saldos[key][i].decimoTerceiroRestituido;
-          tempIncidencia = tempIncidencia + (this.saldos[key][i].incidenciaRetido - this.saldos[key][i].incidenciaFeriasRestituido -
-            this.saldos[key][i].incidenciaTercoRestituido - this.saldos[key][i].incidenciaDecimoTerceiroRestituido);
-          tempMultaFGTS = tempMultaFGTS + this.saldos[key][i].multaFgtsRetido;
-        }
-        this.somaSaldo.push(tempSaldo);
-        this.somaFerias.push(tempFerias);
-        this.somaTerco.push(tempTerco);
-        this.somaDecimo.push(tempDecimo);
-        this.somaIncidencia.push(tempIncidencia);
-        this.somaMultaFGTS.push(tempMultaFGTS);
+      let tempSaldo = 0;
+      let tempFerias = 0;
+      let tempTerco = 0;
+      let tempDecimo = 0;
+      let tempIncidencia = 0;
+      let tempMultaFGTS = 0;
+      for (let i = 0; i < res.length; i++) {
+        tempSaldo = tempSaldo + res[i].saldo;
+        tempFerias = tempFerias + res[i].feriasRetido - res[i].feriasRestituido;
+        tempTerco = tempTerco + res[i].tercoRetido - res[i].tercoRestituido;
+        tempDecimo = tempDecimo + res[i].decimoTerceiroRetido - res[i].decimoTerceiroRestituido;
+        tempIncidencia = tempIncidencia + (res[i].incidenciaRetido - res[i].incidenciaFeriasRestituido -
+          res[i].incidenciaTercoRestituido - res[i].incidenciaDecimoTerceiroRestituido);
+        tempMultaFGTS = tempMultaFGTS + res[i].multaFgtsRetido;
       }
-    }));
-    this.montaGraficoBarra();
-  }
+      this.somaSaldo.push(tempSaldo);
+      this.somaFerias.push(tempFerias);
+      this.somaTerco.push(tempTerco);
+      this.somaDecimo.push(tempDecimo);
+      this.somaIncidencia.push(tempIncidencia);
+      this.somaMultaFGTS.push(tempMultaFGTS);
 
-  random_rgba() {
-    const o = Math.round, r = Math.random, s = 255;
-    return 'rgba(' + o(r() * s) + ',' + o(r() * s) + ',' + o(r() * s) + ',' + r().toFixed(1) + ')';
-  }
-  // Gráfico pizza
-  async montaGraficoPizza() {
-    if (this.nTerceirizados.length === 0) {
-      await Promise.all(this.contratos.map(async cont => {
-        const dataFim = new Date(cont.dataFim);
-        this.nTerceirizados.push(await this.tmService.getNumFuncionariosAtivos(dataFim.getMonth() + 1, dataFim.getFullYear(), cont.codigo).toPromise());
-      }));
     }
-    await this.wait();
-    this.canvas = document.getElementById('myChart2');
-    this.ctx = this.canvas.getContext('2d');
-    const myChart = new Chart(this.ctx, {
-      type: 'pie',
-      data: {
-        labels: this.nomeEmpresas,
-        datasets: [{
-          label: 'Número de Funcionários',
-          data: this.nTerceirizados,
-          backgroundColor: [
-            'rgb(40,147,85)',
-            'rgb(255,95,70)',
-            'rgb(255,187,70)',
-            'rgb(116,70,255)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-          ],
-          borderWidth: 1
-        }]
-      },
-      options: {
-        title: {
-          display: true,
-          text: 'Número de Funcionários por Contrato',
-          position: 'left',
-          fontSize: 14,
-          fontFamily: 'roboto'
-        },
-          legend: {
-            position: 'right',
-        },
-      }
-    });
+    
+    console.log(this.saldos);
+    console.log(this.somaSaldo);
+    this.montaGraficoSaldoAcumulado();
   }
 
   sleep(ms) {
@@ -140,11 +87,9 @@ export class InicioComponent implements OnInit {
   async wait() {
     await this.sleep(2);
   }
+  
   // Gráfico Barra
-  async montaGraficoBarra() {
-    // console.log(1)
-    // await this.wait()
-    // console.log(2)
+  async montaGraficoSaldoAcumulado() {
     const empresas = [];
     this.contratos.map((cont) => {
       empresas.push(cont.nomeDaEmpresa);
@@ -153,6 +98,7 @@ export class InicioComponent implements OnInit {
     await this.wait();
     this.canvas = document.getElementById('myChart');
     this.ctx = this.canvas.getContext('2d');
+
     const myChart = new Chart(this.ctx, {
       type: 'bar',
       data: {
@@ -203,8 +149,53 @@ export class InicioComponent implements OnInit {
       }
     });
   }
+
+  // Gráfico pizza
+  async montaGraficoNumeroTerceirizados() {
+    if (this.nTerceirizados.length === 0) {
+      await Promise.all(this.contratos.map(async cont => {
+        const dataFim = new Date(cont.dataFim);
+        this.nTerceirizados.push(await this.tmService.getNumFuncionariosAtivos(dataFim.getMonth() + 1, dataFim.getFullYear(), cont.codigo).toPromise());
+      }));
+    }
+    await this.wait();
+    this.canvas = document.getElementById('myChart2');
+    this.ctx = this.canvas.getContext('2d');
+    const myChart = new Chart(this.ctx, {
+      type: 'pie',
+      data: {
+        labels: this.nomeEmpresas,
+        datasets: [{
+          label: 'Número de Funcionários',
+          data: this.nTerceirizados,
+          backgroundColor: [
+            'rgb(40,147,85)',
+            'rgb(255,95,70)',
+            'rgb(255,187,70)',
+            'rgb(116,70,255)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        title: {
+          display: true,
+          text: 'Número de Funcionários por Contrato',
+          position: 'left',
+          fontSize: 14,
+          fontFamily: 'roboto'
+        },
+        legend: {
+          position: 'right',
+        },
+      }
+    });
+  }
+  
   // Gráfico Radar
-  async montaGraficoRadar() {
+  async montaGraficoRetencaoRubrica() {
     // this.contratos.map((cont) => {
     //
     //
@@ -340,15 +331,15 @@ export class InicioComponent implements OnInit {
   selecionaGrafico(value: string) {
     this.id = Number(value);
     if (this.id === 1) {
-      this.montaGraficoBarra();
+      this.montaGraficoSaldoAcumulado();
     } else if (this.id === 2) {
-      this.montaGraficoPizza();
+      this.montaGraficoNumeroTerceirizados();
     } else if (this.id === 3) {
       this.montaGraficoPolar();
     } else if (this.id === 4) {
       this.montaGraficoLinha();
     } else if (this.id === 5) {
-      this.montaGraficoRadar();
+      this.montaGraficoRetencaoRubrica();
 
     }
   }
