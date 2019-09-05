@@ -83,4 +83,14 @@ export class SaldoIndividualComponent {
       });
     }
   }
+  printDiv() {
+    const divContents = document.getElementById('tabSalInd').innerHTML;
+    const a = window.open('', '', 'height=500, width=500');
+    a.document.write('<html><head></head>');
+    a.document.write('<body ><table class="striped centered responsive-table hoverable highlight bordered" style="box-shadow: none!important;"> ');
+    a.document.write(divContents);
+    a.document.write('</table></body></html>');
+    a.document.close();
+    a.print();
+  }
 }

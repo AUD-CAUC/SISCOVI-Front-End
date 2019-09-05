@@ -20,7 +20,7 @@
             </h5>
           </div>
         </div>
-        <table class="striped centered responsive-table hoverable highlight bordered" style="box-shadow: none!important;" *ngIf="saldos && codigoContrato">
+        <table id="tabSalInd" class="striped centered responsive-table hoverable highlight bordered" style="box-shadow: none!important;" *ngIf="saldos && codigoContrato">
           <thead>
           <tr>
             <th>Terceirizado</th>
@@ -58,6 +58,7 @@
           </tr>
           </tbody>
         </table>
+        <input type="button" value="click" (click)="printDiv()">
       </div>
 
     </li>
