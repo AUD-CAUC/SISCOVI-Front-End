@@ -74,9 +74,7 @@ export class InicioComponent implements OnInit {
       this.somaMultaFGTS.push(tempMultaFGTS);
 
     }
-    
-    console.log(this.saldos);
-    console.log(this.somaSaldo);
+
     this.montaGraficoSaldoAcumulado();
   }
 
@@ -103,7 +101,8 @@ export class InicioComponent implements OnInit {
       type: 'bar',
       data: {
         labels: empresas,
-        datasets: [{
+        datasets: [
+          {
           data: this.somaSaldo,
           backgroundColor: [
             'rgb(70,255,163)',
@@ -114,7 +113,9 @@ export class InicioComponent implements OnInit {
             'rgba(255, 206, 86, 1)',
           ],
           borderWidth: 1
-        }]
+        },
+
+        ]
       },
       options: {
         title: {
@@ -136,16 +137,27 @@ export class InicioComponent implements OnInit {
             }
           }
         },
-        scales: {
-          yAxes: [{
-            display: true,
-            ticks: {
-              maxTicksLimit: 10,
-              min: 0.0,
-              stepSize: 1000.0,
-            }
-          }]
-        }
+        // scales: {
+        //   yAxes: [{
+        //     stacked: true,
+        //     display: true,
+        //     ticks: {
+        //       maxTicksLimit: 10,
+        //       min: 0.0,
+        //       stepSize: 1000.0,
+        //     }
+        //   }],
+        //   xAxes: [{
+        //     stacked: true,
+        //     barPercentage: 0.8,
+        //     // barThickness: 16,
+        //     // maxBarThickness: 16,
+        //     minBarLength: 2,
+        //     gridLines: {
+        //       offsetGridLines: true
+        //     }
+        //   }]
+        // }
       }
     });
   }
@@ -182,7 +194,7 @@ export class InicioComponent implements OnInit {
       options: {
         title: {
           display: true,
-          text: 'Número de Funcionários por Contrato',
+          text: 'Número de Terceirizados por Contrato',
           position: 'left',
           fontSize: 14,
           fontFamily: 'roboto'
@@ -230,6 +242,14 @@ export class InicioComponent implements OnInit {
         })
       },
       options: {
+        title: {
+          display: true,
+          position: 'left',
+          fontFamily: 'roboto',
+          fontSize: 14,
+          fontcolor: '#000000',
+          text: 'Retenções por Rubrica'
+        },
         legend: {
           position: 'right',
         },
@@ -245,9 +265,7 @@ export class InicioComponent implements OnInit {
   }
   // Gráfico Linha
   async montaGraficoLinha() {
-    // console.log(1)
-    // await this.wait()
-    // console.log(2)
+
     const empresas = [];
     this.contratos.map((cont) => {
       empresas.push(cont.nomeDaEmpresa);
@@ -257,7 +275,7 @@ export class InicioComponent implements OnInit {
     this.canvas = document.getElementById('myChart4');
     this.ctx = this.canvas.getContext('2d');
     const myChart = new Chart(this.ctx, {
-      type: 'line',
+      type: 'bar',
       data: {
         labels: empresas,
         datasets: [{
@@ -290,7 +308,6 @@ export class InicioComponent implements OnInit {
     await Promise.all(this.contratos.map(async (cont, key1) => {
       empresas.push(cont.nomeDaEmpresa);
       temp = await this.decimoTerceiroService.getRestituicoesDecimoTerceiro(cont.codigo).toPromise();
-      console.log(temp)
       contratos[key1] = {};
       await Promise.all(temp.map((valorDec, key) => {
         const ano = temp[key].inicioContagem.split('-')[0];
@@ -301,12 +318,11 @@ export class InicioComponent implements OnInit {
       }));
     }));
     contratos[1][2016] = NaN;
-    console.log(contratos);
     await this.wait();
     this.canvas = document.getElementById('myChart3');
     this.ctx = this.canvas.getContext('2d');
     const myChart = new Chart(this.ctx, {
-      type: 'line',
+      type: 'bar',
       data: {
         labels: ['2016', '2017', '2018'],
         datasets: this.nomeEmpresas.map((nomeEmpresa, key) => {
