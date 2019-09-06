@@ -16,13 +16,16 @@
         </div>
         <div class="col" *ngIf="calculos">
           <ul materialize="collapsible" class="collapsible" data-collapsible="accordion" >
-            <li *ngFor="let calculo of calculos">
+            <li *ngFor="let calculo of calculos; let i = index">
               <div class="collapsible-header center" (click)="calculaTotais(calculo)">
                 <h5 class="center-align">Data Referência: {{calculo.dataReferencia | date: 'shortDate'}}</h5>
               </div>
               <div class="collapsible-body">
-                <div class="col xl12 offset-l6 center-align" >
-                  <table class="highlight centered responsive-table">
+                <div>
+                  <input type="button" value="CAPTURE" (click)="captureScreen(calculo.dataReferencia, cont.nomeDaEmpresa, i)"/>
+                </div>
+                <div class="col xl12 offset-l6 center-align" (click)="mostrar(this)" id="{{cont.nomeDaEmpresa + i}}">
+                  <table class="striped centered responsive-table" >
                     <thead>
                     <tr>
                       <th>Função</th>

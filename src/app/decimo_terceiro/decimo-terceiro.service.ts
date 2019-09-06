@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Http} from '@angular/http';
+import {Http, RequestOptions, Headers} from '@angular/http';
 import {ConfigService} from '../_shared/config.service';
 import {TerceirizadoDecimoTerceiro} from './terceirizado-decimo-terceiro';
 import {DecimoTerceiroPendente} from './decimo-terceiro-pendente/decimo-terceiro-pendente';
@@ -50,7 +50,8 @@ export class DecimoTerceiroService {
         const url = this.config.myApi + '/decimo-terceiro/calcularDecimoTerceiroTerceirizados';
         const data = tercerizadosDecimoTerceiro;
         const headers = new Headers({'Content-type': 'application/json'});
-        return this.http.post(url, data, headers).map(res => res.json());
+        const requestOptions = new RequestOptions({headers: headers});
+      return this.http.post(url, data, requestOptions).map(res => res.json());
     }
     protected encapsulaDatas(value: any): Date {
         const a = value.split('/');
@@ -79,7 +80,8 @@ export class DecimoTerceiroService {
             data.push(info);
         });
         const headers = new Headers({'Content-type': 'application/json'});
-        return this.http.post(url, data, headers).map(res => res.json());
+        const requestOptions = new RequestOptions({headers: headers});
+      return this.http.post(url, data, requestOptions).map(res => res.json());
     }
 
     getCalculosPendentes() {
