@@ -1,3 +1,48 @@
 <div class="container">
   <h2 class="center">Início</h2>
+  <br>
+  <div id="container" style="text-align: center">
+    <div style=" margin: auto;">
+      <canvas *ngIf="id == 1" style="width: 50vw; height: 40vh"  id="myChart"></canvas>
+      <canvas *ngIf="id == 2" style="width: 50vw; height: 40vh"  id="myChart2"></canvas>
+      <canvas *ngIf="id == 3" style="width: 50vw; height: 40vh"  id="myChart3"></canvas>
+      <canvas *ngIf="id == 4" style="width: 50vw; height: 40vh"  id="myChart4"></canvas>
+      <canvas *ngIf="id == 5" style="width: 80vw; height: 70vh"  id="myChart5"></canvas>
+    </div>
+    <br>
+    <div >
+      <form class="row" action="#" (change)=selecionaGrafico($event.target.id)>
+        <p>
+          <label>
+            <input name="group1" type="radio" id="1" checked/>
+            <label for="1">Saldo acumulado</label>
+          </label>
+        </p>
+        <p>
+          <label>
+            <input name="group1" type="radio" id="2" />
+            <label for="2">Número de Terceirizados</label>
+          </label>
+        </p>
+        <p>
+          <label>
+            <input name="group1" type="radio" id="3"/>
+            <label for="3">Valor Restituido</label>
+          </label>
+        </p>
+        <p>
+          <label>
+            <input name="group1" type="radio" id="4"/>
+            <label for="4">Valor Movimentado</label>
+          </label>
+        </p>
+        <p>
+          <label>
+            <input name="group1" type="radio" id="5"/>
+            <label for="5">Retenção por Rúbrica</label>
+          </label>
+        </p>
+      </form>
+    </div>
+  </div>
 </div>
