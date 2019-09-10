@@ -50,6 +50,7 @@ export class InicioComponent implements OnInit {
     for (let j = 0; j < this.contratos.length; j++) {
       const res = await this.saldoService.getSaldoIndividual(this.contratos[j].codigo).toPromise();
       this.saldos.push(res);
+      console.log(res);
 
       let tempSaldo = 0;
       let tempFerias = 0;
@@ -105,12 +106,12 @@ export class InicioComponent implements OnInit {
           {
           data: this.somaSaldo,
           backgroundColor: [
-            'rgb(70,255,163)',
-            'rgb(255,95,70)',
-            'rgb(255,187,70)',
-            'rgb(116,70,255)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
+            'rgb(195,215,255)',
+            'rgb(195,255,235)',
+            'rgb(176,111,85)',
+            'rgb(148,160,255)',
+            'rgb(159,155,163)',
+            'rgb(255,146,121)',
           ],
           borderWidth: 1
         },
@@ -168,8 +169,12 @@ export class InicioComponent implements OnInit {
       await Promise.all(this.contratos.map(async cont => {
         const dataFim = new Date(cont.dataFim);
         this.nTerceirizados.push(await this.tmService.getNumFuncionariosAtivos(dataFim.getMonth() + 1, dataFim.getFullYear(), cont.codigo).toPromise());
+        console.log(this.nTerceirizados);
       }));
     }
+    // for (let z = 0; z < this.contratos.length; z++) {
+    //   const res = await this.nTerceirizados.push(await this.tmService.getNumFuncionariosAtivos(dataFim.getMonth() + 1, dataFim.getFullYear(), cont.codigo).toPromise());
+    //   this.nTerceirizados.push(res);
     await this.wait();
     this.canvas = document.getElementById('myChart2');
     this.ctx = this.canvas.getContext('2d');
@@ -181,12 +186,12 @@ export class InicioComponent implements OnInit {
           label: 'Número de Funcionários',
           data: this.nTerceirizados,
           backgroundColor: [
-            'rgb(40,147,85)',
-            'rgb(255,95,70)',
-            'rgb(255,187,70)',
-            'rgb(116,70,255)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
+            'rgb(195,215,255)',
+            'rgb(195,255,235)',
+            'rgb(176,111,85)',
+            'rgb(148,160,255)',
+            'rgb(159,155,163)',
+            'rgb(255,146,121)',
           ],
           borderWidth: 1
         }]
@@ -233,11 +238,13 @@ export class InicioComponent implements OnInit {
           const randomColor = this.getRandomColor();
           return {
               label: nomeEmpresa,
+              fill: true,
+              borderWidth: 3,
+              hoverRadius: 7,
               data: [this.somaFerias[key], this.somaTerco[key], this.somaDecimo[key], this.somaIncidencia[key], this.somaMultaFGTS[key]],
-              backgroundColor: color(randomColor).alpha(0.2).rgbString(),
+              backgroundColor: color(randomColor).alpha(0.1).rgbString(),
               borderColor: randomColor,
-              pointBackgroundColor: randomColor,
-              borderWidth: 1
+              pointBackgroundColor: randomColor
             };
         })
       },
