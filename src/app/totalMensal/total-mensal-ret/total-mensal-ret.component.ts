@@ -99,23 +99,26 @@ export class TotalMensalRetComponent implements OnInit {
   captureScreen(dataReferencia, nome, id) {
       console.log(nome + id)
     const data = document.getElementById(nome + id);
-    html2canvas(data).then(canvas => {
+    html2canvas(data, {scrollX: 0, scrollY: -window.scrollY}).then(canvas => {
       // Few necessary setting options
       const imgWidth = 205;
       const pageHeight = 295;
       const imgHeight = canvas.height * imgWidth / canvas.width;
-      console.log(imgHeight)
       let heightLeft = imgHeight;
 
       const contentDataURL = canvas.toDataURL('image/png');
       const pdf = new JsPDF('p', 'mm', 'a4'); // A4 size page of PDF
       let position = 45;
+
+      dataReferencia = dataReferencia.split('-');
+
+      pdf.text('Cálculo de Retenções', 105, 15, {align: 'center'});
       pdf.text(nome, 105, 25, {align: 'center'});
-      pdf.text(dataReferencia, 105, 35, {align: 'center'});
+      pdf.text(dataReferencia[2] + '/' + dataReferencia[1] + '/' + dataReferencia[0], 105, 35, {align: 'center'});
       pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
 
       // pdf.addImage(contentDataURL, 'PNG', 0, imgHeight + 10, imgWidth, imgHeight);
-      pdf.save('MYPdf.pdf'); // Generated PDF
+      pdf.save('Retenção' + nome + '.pdf'); // Generated PDF
     });
   }
 
