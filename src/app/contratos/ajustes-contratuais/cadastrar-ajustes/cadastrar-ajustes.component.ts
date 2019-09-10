@@ -632,16 +632,25 @@ export class CadastrarAjustesComponent {
               mensagem.push('A data fim da vigência de um ajuste não pode ser anterior a data de início do contrato!');
           }
           if (fimVig <= inicioVig) {
-            mensagem.push('A data fim do ajuste deve ser posterior que a data de início do ajuste !');
-          } else if (control.parent.get('prorrogacao').value === 'S') {
+            mensagem.push('Erro: data fim da vigência menor que a data início.');
+          } else if ((control.parent.get('prorrogacao').value === 'S') && (!((ano % 4 === 0) && ((ano % 100 !== 0) || (ano % 400 === 0))))) {
+            console.log('entrou no 1');
               const diff = Math.abs(fimVig.getTime() - inicioVig.getTime());
               console.log(diff);
               const diffDay = Math.round(diff / (1000 * 3600 * 24));
               console.log(diffDay);
-              if ((diffDay <= 364) || (diffDay >= 366)) {
-                  mensagem.push('A vigência de uma prorrogação deve ter duração de 1(um) ano' +
-                      'vigência do contrato ou ajuste atual!');
+              if (diffDay < 364 || diffDay >= 365) {
+                  mensagem.push('A vigência de uma prorrogação deve ter duração de 1(um) ano');
               }
+          } else {
+            console.log('entrou no 2');
+            const diff = Math.abs(fimVig.getTime() - inicioVig.getTime());
+            console.log(diff);
+            const diffDay = Math.round(diff / (1000 * 3600 * 24));
+            console.log(diffDay);
+            if (diffDay < 365 || diffDay > 366) {
+              mensagem.push('A vigência de uma prorrogação deve ter duração de 1(um) ano');
+            }
           }
         }
       }
