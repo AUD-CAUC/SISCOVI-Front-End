@@ -99,7 +99,7 @@ export class TotalMensalRetComponent implements OnInit {
   captureScreen(dataReferencia, nome, id) {
       console.log(nome + id)
     const data = document.getElementById(nome + id);
-    html2canvas(data).then(canvas => {
+    html2canvas(data, {scrollX: 0, scrollY: -window.scrollY}).then(canvas => {
       // Few necessary setting options
       const imgWidth = 205;
       const pageHeight = 295;
@@ -111,7 +111,7 @@ export class TotalMensalRetComponent implements OnInit {
       let position = 45;
 
       dataReferencia = dataReferencia.split('-');
-      
+
       pdf.text('Cálculo de Retenções', 105, 15, {align: 'center'});
       pdf.text(nome, 105, 25, {align: 'center'});
       pdf.text(dataReferencia[2] + '/' + dataReferencia[1] + '/' + dataReferencia[0], 105, 35, {align: 'center'});
