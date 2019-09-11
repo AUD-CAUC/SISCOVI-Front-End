@@ -54,10 +54,14 @@
                         </div>
                     </td>
                     <td>{{total.totaisMensais.dataReferencia | date: 'shortDate'}}</td>
-                    <td>
-                        <table class="highlight centered responsive-table">
+                    <td style="padding: 0px">
+                      <div>
+                        <i class="material-icons-pdf right" (click)="captureScreen(total.nomeEmpresa, total.totaisMensais.dataReferencia)">picture_as_pdf</i>
+                        <p class="center-align">{{total.nomeEmpresa}} - Contrato nº: {{total.numeroContrato}}</p>
+                      </div>
+                        <table class="highlight centered responsive-table" id="{{total.nomeEmpresa}}">
                             <thead>
-                            <th>{{total.nomeEmpresa}} - Contrato nº: {{total.numeroContrato}}</th>
+<!--                            <th>{{total.nomeEmpresa}} - Contrato nº: {{total.numeroContrato}}</th>-->
                             <tr>
                                 <th>Função</th>
                                 <th>Número de Terceirizados por Função</th>

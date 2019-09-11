@@ -8,6 +8,8 @@ import {TotalMensalService} from '../total-mensal.service';
 import {ListaTotalMensalData} from '../lista-total-mensal-data';
 import {MaterializeAction} from 'angular2-materialize';
 import {Router} from '@angular/router';
+import html2canvas from 'html2canvas';
+import * as JsPDF from 'jspdf';
 
 @Component({
   selector: 'app-total-mensal-execucao-component',
@@ -204,5 +206,28 @@ export class TotalMensalExecucaoComponent implements OnInit {
 
   corrigeCalculo(dataReferencia: Date) {
     this.router.navigate(['/totalMensal', this.codigoContrato, dataReferencia], {queryParams: [this.codigoContrato], skipLocationChange: true});
+  }
+  captureScreen(nomeEmpresa, dataReferencia) {
+    const data = document.getElementById(nomeEmpresa);
+    html2canvas(data, {scrollX: 0, scrollY: -window.scrollY}).then(canvas => {
+      // Few necessary setting options
+      const imgWidth = 205;
+      const pageHeight = 295;
+      const imgHeight = canvas.height * imgWidth / canvas.width;
+      const heightLeft = imgHeight;
+
+      const contentDataURL = canvas.toDataURL('image/png');
+      const pdf = new JsPDF('p', 'mm', 'a4'); // A4 size page of PDF
+      const position = 45;
+
+      dataReferencia = dataReferencia.split('-');
+
+      pdf.text('Retenção Pendente de Execução', 105, 15, {align: 'center'});
+      pdf.text(nomeEmpresa, 105, 25, {align: 'center'});
+      pdf.text(dataReferencia[1] + '/' + dataReferencia[0], 105, 35, {align: 'center'});
+      pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
+
+      pdf.save('Relatório_Retenção' + dataReferencia[1] + '/' + dataReferencia[0] + '_Execução.pdf'); // Generated PDF
+    });
   }
 }
