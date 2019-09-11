@@ -12,7 +12,7 @@ import {Router} from '@angular/router';
 @Component({
   selector: 'app-total-mensal-execucao-component',
   templateUrl: './total-mensal-execucao.component.html',
-  styleUrls: ['../total-mensal.component.scss']
+  styleUrls: ['./total-mensal-pendente.component.scss']
 })
 export class TotalMensalExecucaoComponent implements OnInit {
   @Input() codigoContrato: number;
