@@ -37,7 +37,7 @@
 <div class="row" *ngIf="codigoContrato && totais">
   <form [formGroup]="totalMensalForm" *ngIf="totais.length > 0">
     <div class="col xl12 l12 s12 l12 m12" formArrayName="avaliacaoDeCalculo">
-      <table class="highlight centered responsive-table hoverable striped">
+      <table class="centered responsive-table hoverable bordered z-depth-2">
         <thead>
         <tr>
           <th *ngIf="config.user.perfil.sigla == 'ADMINISTRADOR'">
@@ -52,8 +52,8 @@
         </thead>
         <tbody>
         <tr *ngFor="let total of totais; let i = index"
-            [class.status]="total.status == 'NEGADO' && config.user.perfil.sigla == 'USUÁRIO'"
-            (dblclick)="corrigeCalculo(total.totaisMensais.dataReferencia)">
+            [class.status]="total.status == 'NEGADO' && config.user.perfil.sigla == 'USUÁRIO'">
+<!--          (dblclick)="corrigeCalculo(total.totaisMensais.dataReferencia)"-->
           <td *ngIf="config.user.perfil.sigla == 'ADMINISTRADOR'">
             <div [formGroupName]="i">
               <input type="checkbox" class="checkbox-black" [checked]="isSelected" [ngModel]="isSelected"
@@ -75,10 +75,13 @@
             </div>
           </td>
           <td>{{total.totaisMensais.dataReferencia | date: 'shortDate'}}</td>
-          <td>
-            <table class="highlight centered responsive-table">
+          <td style="padding: 0px">
+            <div>
+              <i class="material-icons-pdf right" (click)="captureScreen(total.nomeEmpresa, total.totaisMensais.dataReferencia)">picture_as_pdf</i>
+              <p>{{total.nomeEmpresa}} - Contrato nº: {{total.numeroContrato}}</p>
+            </div>
+            <table class="striped centered responsive-table bordered" id="{{total.nomeEmpresa}}">
               <thead>
-              <th>{{total.nomeEmpresa}} - Contrato nº: {{total.numeroContrato}}</th>
               <tr>
                 <th>Função</th>
                 <th>Número de Terceirizados por Função</th>
