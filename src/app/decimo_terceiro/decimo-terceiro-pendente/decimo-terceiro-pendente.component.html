@@ -18,9 +18,12 @@
 <div class="row" *ngIf="calculosPendentes">
   <form [formGroup]="decimoTerceiroForm">
     <div formArrayName="contratos">
-      <div class="col  l12" *ngFor="let calculoPendente of calculosPendentes; let i = index">
-        <h6><b>{{calculoPendente.titulo}}</b></h6>
-        <table class="highlight centered responsive-table" [formGroupName]="i">
+      <div class="col l10" *ngFor="let calculoPendente of calculosPendentes; let i = index">
+        <div>
+          <i class="material-icons-pdf right" (click)="captureScreen(calculoPendente.titulo)">picture_as_pdf</i>
+        </div>
+        <b></b><h5><b>{{calculoPendente.titulo}}</b></h5>
+        <table class="striped centered responsive-table bordered" [formGroupName]="i" id="{{calculoPendente.titulo}}">
           <thead>
           <tr>
             <th *ngIf="config.user.perfil.sigla == 'ADMINISTRADOR'">
