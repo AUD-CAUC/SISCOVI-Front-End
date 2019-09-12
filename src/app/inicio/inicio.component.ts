@@ -43,8 +43,10 @@ export class InicioComponent implements OnInit {
 
   async ngOnInit() {
     this.contratos = await this.contratoService.getContratosDoUsuario().toPromise();
+    console.log(this.contratos);
     this.contratos.map(cont => {
       this.nomeEmpresas.push(cont.nomeDaEmpresa);
+      console.log(this.nomeEmpresas);
     });
 
     for (let j = 0; j < this.contratos.length; j++) {
@@ -75,7 +77,6 @@ export class InicioComponent implements OnInit {
       this.somaMultaFGTS.push(tempMultaFGTS);
 
     }
-
     this.montaGraficoSaldoAcumulado();
   }
 
@@ -138,27 +139,25 @@ export class InicioComponent implements OnInit {
             }
           }
         },
-        // scales: {
-        //   yAxes: [{
-        //     stacked: true,
-        //     display: true,
-        //     ticks: {
-        //       maxTicksLimit: 10,
-        //       min: 0.0,
-        //       stepSize: 1000.0,
-        //     }
-        //   }],
-        //   xAxes: [{
-        //     stacked: true,
-        //     barPercentage: 0.8,
-        //     // barThickness: 16,
-        //     // maxBarThickness: 16,
-        //     minBarLength: 2,
-        //     gridLines: {
-        //       offsetGridLines: true
-        //     }
-        //   }]
-        // }
+        scales: {
+          yAxes: [{
+            display: true,
+            ticks: {
+              maxTicksLimit: 10,
+              min: 0.0,
+              stepSize: 1000.0,
+            }
+          }],
+          xAxes: [{
+            barPercentage: 0.8,
+            // barThickness: 16,
+            // maxBarThickness: 16,
+            minBarLength: 2,
+            gridLines: {
+              offsetGridLines: true
+            }
+          }]
+        }
       }
     });
   }
