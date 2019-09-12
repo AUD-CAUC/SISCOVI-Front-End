@@ -50,7 +50,6 @@ export class InicioComponent implements OnInit {
     for (let j = 0; j < this.contratos.length; j++) {
       const res = await this.saldoService.getSaldoIndividual(this.contratos[j].codigo).toPromise();
       this.saldos.push(res);
-      console.log(res);
 
       let tempSaldo = 0;
       let tempFerias = 0;
@@ -86,7 +85,7 @@ export class InicioComponent implements OnInit {
   async wait() {
     await this.sleep(2);
   }
-  
+
   // Gráfico Barra
   async montaGraficoSaldoAcumulado() {
     const empresas = [];
@@ -166,15 +165,12 @@ export class InicioComponent implements OnInit {
   // Gráfico pizza
   async montaGraficoNumeroTerceirizados() {
     if (this.nTerceirizados.length === 0) {
-      await Promise.all(this.contratos.map(async cont => {
-        const dataFim = new Date(cont.dataFim);
-        this.nTerceirizados.push(await this.tmService.getNumFuncionariosAtivos(dataFim.getMonth() + 1, dataFim.getFullYear(), cont.codigo).toPromise());
-        console.log(this.nTerceirizados);
-      }));
+      for (let i = 0; i < this.contratos.length; i++) {
+        const dataFim = new Date(this.contratos[i].dataFim);
+        const res = await this.tmService.getNumFuncionariosAtivos(dataFim.getMonth() + 1, dataFim.getFullYear(), this.contratos[i].codigo).toPromise();
+        this.nTerceirizados.push(res);
+      }
     }
-    // for (let z = 0; z < this.contratos.length; z++) {
-    //   const res = await this.nTerceirizados.push(await this.tmService.getNumFuncionariosAtivos(dataFim.getMonth() + 1, dataFim.getFullYear(), cont.codigo).toPromise());
-    //   this.nTerceirizados.push(res);
     await this.wait();
     this.canvas = document.getElementById('myChart2');
     this.ctx = this.canvas.getContext('2d');
@@ -210,7 +206,7 @@ export class InicioComponent implements OnInit {
       }
     });
   }
-  
+
   // Gráfico Radar
   async montaGraficoRetencaoRubrica() {
     // this.contratos.map((cont) => {
