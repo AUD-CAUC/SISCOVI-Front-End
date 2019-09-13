@@ -19,9 +19,13 @@
   <form [formGroup]="feriasForm">
     <div formArrayName="contratos">
       <div class="col  l12" *ngFor="let calculoPendente of calculosPendentesExecucao; let i = index">
-        <h6><b>{{calculoPendente.titulo}}</b></h6>
+        <div>
+          <i class="material-icons-pdf right" (click)="captureScreen(calculoPendente.titulo)">picture_as_pdf</i>
+          <h6><b>{{calculoPendente.titulo}}</b></h6>
+        </div>
+
         <table *ngIf="calculosPendentesExecucao" class="highlight centered responsive-table"
-               [formGroupName]="i">
+               [formGroupName]="i" id="{{calculoPendente.titulo}}">
           <thead>
           <tr>
             <th *ngIf="config.user.perfil.sigla == 'ADMINISTRADOR'">
