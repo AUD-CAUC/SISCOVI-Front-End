@@ -104,34 +104,32 @@ export class SaldoIndividualComponent {
       const pageHeight = 295;
       const imgHeight = canvas.height * imgWidth / canvas.width;
       let heightLeft = imgHeight;
-      console.log(imgHeight)
 
       const contentDataURL = canvas.toDataURL('image/png');
       const pdf = new JsPDF('p', 'mm', 'a4'); // A4 size page of PDF
       let position = 40;
 
-      // pdf.text('Cálculo de Retenções', 105, 15, {align: 'center'});
-      // pdf.text(nome, 105, 25, {align: 'center'});
-      // pdf.text(dataReferencia[2] + '/' + dataReferencia[1] + '/' + dataReferencia[0], 105, 35, {align: 'center'});
+      const dataAtual = new Date();
+      const mes = dataAtual.getMonth() + 1;
+      const ano = dataAtual.getFullYear();
+
+      pdf.text('Saldo Individual', 105, 15, {align: 'center'});
+      pdf.text(nomeEmpresa, 105, 25, {align: 'center'});
+      pdf.text(mes + '/' + ano, 105, 35, {align: 'center'});
       pdf.addImage(contentDataURL, 'PNG', 2.5, position, imgWidth, imgHeight);
       heightLeft -= pageHeight;
 
       while (heightLeft >= 0) {
         position = heightLeft - imgHeight + position;
-        console.log(position)
-        console.log(heightLeft)
-        console.log(imgHeight)
         pdf.addPage();
         pdf.addImage(contentDataURL, 'PNG', 2.5, position, imgWidth, imgHeight);
-        // pdf.text('Saldo Individual', 105, 15, {align: 'center'});
         heightLeft -= pageHeight;
       }
 
-      // pdf.addImage(contentDataURL, 'PNG', 0, imgHeight + 10, imgWidth, imgHeight);
       pdf.viewerPreferences({
         FitWindow: true
       });
-      pdf.save('Saldo ind' + '.pdf'); // Generated PDF
+      pdf.save('Saldo ind ' + nomeEmpresa + '.pdf'); // Generated PDF
     });
   }
 
