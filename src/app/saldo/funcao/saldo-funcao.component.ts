@@ -4,6 +4,8 @@ import {ConfigService} from '../../_shared/config.service';
 import {ContratosService} from '../../contratos/contratos.service';
 import {SaldoFuncao} from './saldo-funcao';
 import {SaldoService} from '../saldo.service';
+import html2canvas from 'html2canvas';
+import * as JsPDF from 'jspdf';
 
 @Component({
     selector: 'app-saldo-component',
@@ -86,4 +88,41 @@ export class SaldoFuncaoComponent {
             });
         }
     }
+
+  captureScreen(nomeEmpresa) {
+    const data = document.getElementById(nomeEmpresa);
+    html2canvas(data, {scrollX: 0, scrollY: -window.scrollY}).then(canvas => {
+      // Few necessary setting options
+      const imgWidth = 205;
+      const pageHeight = 295;
+      const imgHeight = canvas.height * imgWidth / canvas.width;
+      let heightLeft = imgHeight;
+
+      const contentDataURL = canvas.toDataURL('image/png');
+      const pdf = new JsPDF('p', 'mm', 'a4'); // A4 size page of PDF
+      let position = 40;
+
+      const dataAtual = new Date();
+      const mes = dataAtual.getMonth() + 1;
+      const ano = dataAtual.getFullYear();
+
+      pdf.text('Saldo por Função', 105, 15, {align: 'center'});
+      pdf.text(nomeEmpresa, 105, 25, {align: 'center'});
+      pdf.text(mes + '/' + ano, 105, 35, {align: 'center'});
+      pdf.addImage(contentDataURL, 'PNG', 2.5, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+
+      while (heightLeft >= 0) {
+        position = heightLeft - imgHeight + position;
+        pdf.addPage();
+        pdf.addImage(contentDataURL, 'PNG', 2.5, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
+
+      pdf.viewerPreferences({
+        FitWindow: true
+      });
+      pdf.save('Saldo func ' + nomeEmpresa + '.pdf'); // Generated PDF
+    });
+  }
 }

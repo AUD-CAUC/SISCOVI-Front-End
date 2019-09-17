@@ -13,13 +13,14 @@
           {{contrato.numeroDoContrato}}</h5>
       </div>
       <div class="collapsible-body">
+        <i class="material-icons right" (click)="captureScreen(contrato.nomeDaEmpresa)">picture_as_pdf</i>
         <div class="row" *ngIf="!saldos && codigoContrato">
           <div class="col s12 grey lighten-4" style="margin-top: 1em">
             <br>
             <h5 class="center-align">Não há cálculos realizados ainda ! <i class="small material-icons">mood_bad</i></h5>
           </div>
         </div>
-        <table class="striped centered responsive-table hoverable highlight bordered" style="box-shadow: none!important;" *ngIf="saldos && codigoContrato">
+        <table class="striped centered responsive-table hoverable highlight bordered" style="box-shadow: none!important;" *ngIf="saldos && codigoContrato" id="{{contrato.nomeDaEmpresa}}">
           <thead>
           <tr>
             <th>Função</th>
