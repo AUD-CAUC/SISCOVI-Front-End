@@ -32,6 +32,7 @@ export class InicioComponent implements OnInit {
   nomeEmpresas = [];
   rubricas = [];
   id = 1;
+  loading = true;
   canvas: any;
   ctx: any;
 
@@ -74,7 +75,6 @@ export class InicioComponent implements OnInit {
       this.somaDecimo.push(tempDecimo);
       this.somaIncidencia.push(tempIncidencia);
       this.somaMultaFGTS.push(tempMultaFGTS);
-
     }
     this.montaGraficoSaldoAcumulado();
   }
@@ -84,11 +84,12 @@ export class InicioComponent implements OnInit {
   }
 
   async wait() {
-    await this.sleep(2);
+    await this.sleep(1000);
   }
 
   // Gráfico Barra
   async montaGraficoSaldoAcumulado() {
+    this.loading = true;
     const empresas = [];
     this.contratos.map((cont) => {
       empresas.push(cont.nomeDaEmpresa);
@@ -159,10 +160,12 @@ export class InicioComponent implements OnInit {
         }
       }
     });
+    this.loading = false;
   }
 
   // Gráfico pizza
   async montaGraficoNumeroTerceirizados() {
+    this.loading = true;
     if (this.nTerceirizados.length === 0) {
       for (let i = 0; i < this.contratos.length; i++) {
         const dataFim = new Date(this.contratos[i].dataFim);
@@ -204,24 +207,14 @@ export class InicioComponent implements OnInit {
         },
       }
     });
+    this.loading = false;
   }
 
   // Gráfico Radar
   async montaGraficoRetencaoRubrica() {
-    // this.contratos.map((cont) => {
-    //
-    //
-    // });
-    // this.rubricas = await this.rubricaService.getAllrubricas().toPromise().then(rubricas => {
-    //   const nomes = [];
-    //   rubricas.map(rubrica => {
-    //     nomes.push(rubrica.nome);
-    //   });
-    //   return nomes;
-    // });
-
+    this.loading = true;
     await this.wait();
-    this.canvas = document.getElementById('myChart5');
+    this.canvas = document.getElementById('myChart3');
     this.ctx = this.canvas.getContext('2d');
     const color = Chart.helpers.color;
 
@@ -264,42 +257,7 @@ export class InicioComponent implements OnInit {
         },
       }
     });
-  }
-  // Gráfico Linha
-  async montaGraficoLinha() {
-
-    const empresas = [];
-    this.contratos.map((cont) => {
-      empresas.push(cont.nomeDaEmpresa);
-
-    });
-    await this.wait();
-    this.canvas = document.getElementById('myChart4');
-    this.ctx = this.canvas.getContext('2d');
-    const myChart = new Chart(this.ctx, {
-      type: 'bar',
-      data: {
-        labels: empresas,
-        datasets: [{
-          label: '# of Votes',
-          data: this.somaSaldo,
-          backgroundColor: [
-            'rgb(228,82,27,1)',
-            'rgb(255,234,106,1)',
-            'rgb(255,124,16, 1)',
-            'rgba(255, 99, 132, 1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-          ],
-          borderWidth: 1
-        }]
-      },
-      options: {
-        legend: {
-          position: 'right',
-        },
-      }
-    });
+    this.loading = false;
   }
 
   async montaGraficoPolar() {
@@ -346,6 +304,7 @@ export class InicioComponent implements OnInit {
       }
     });
   }
+
   selecionaGrafico(value: string) {
     this.id = Number(value);
     if (this.id === 1) {
@@ -353,12 +312,8 @@ export class InicioComponent implements OnInit {
     } else if (this.id === 2) {
       this.montaGraficoNumeroTerceirizados();
     } else if (this.id === 3) {
-      this.montaGraficoPolar();
-    } else if (this.id === 4) {
-      this.montaGraficoLinha();
-    } else if (this.id === 5) {
+      console.log(value)
       this.montaGraficoRetencaoRubrica();
-
     }
   }
 
