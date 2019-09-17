@@ -1,10 +1,15 @@
 .row .col{
   float: none !important;
-  //margin-left: auto;
-  //margin-right: auto;
+  margin-left: auto;
+  margin-right: auto;
 }
 table {
-  width: 115% !important;
+  display: table;
+  column-width: fit-content;
+}
+table body {
+  display: table-row-group !important;
+  width: 100% !important;
 }
 
 #modal2, #modal4 {
@@ -82,4 +87,19 @@ table {
   margin:0 15px;
   float:none; /*if you set float already */
 }
-
+.material-icons-pdf {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 26px; /* Preferred icon size */
+  color: #f43636f2;
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+  cursor: pointer;
+  padding-right: 5px;
+}

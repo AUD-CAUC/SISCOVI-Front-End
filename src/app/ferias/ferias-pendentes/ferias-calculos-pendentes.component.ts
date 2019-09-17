@@ -7,6 +7,8 @@ import {ConfigService} from '../../_shared/config.service';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MaterializeAction} from 'angular2-materialize';
 import {ListaCalculosPendentes} from './lista-calculos-pendentes';
+import html2canvas from 'html2canvas';
+import * as JsPDF from 'jspdf';
 
 @Component({
   selector: 'app-ferias-calculos-pendentes',
@@ -251,5 +253,29 @@ export class FeriasCalculosPendentesComponent implements OnInit {
   navegaViewExec() {
     this.closeModal3();
     this.nav.emit();
+  }
+  captureScreen(nomeEmpresa) {
+    const data = document.getElementById(nomeEmpresa);
+    html2canvas(data, {scrollX: 0, scrollY: -window.scrollY}).then(canvas => {
+      // Few necessary setting options
+      const imgWidth = 295;
+      const pageHeight = 205;
+      const imgHeight = canvas.height * imgWidth / canvas.width;
+      const heightLeft = imgHeight;
+
+      const contentDataURL = canvas.toDataURL('image/jpg');
+      const pdf = new JsPDF('l', 'mm', 'a4'); // A4 size page of PDF
+      const position = 45;
+
+      // dataReferencia = dataReferencia.split('-');
+
+      pdf.text('Restituição Pendente de Aprovação', 147.5, 15, {align: 'center'});
+      pdf.text(nomeEmpresa, 147.5, 25, {align: 'center'});
+      // pdf.text(dataReferencia[1] + '/' + dataReferencia[0], 105, 35, {align: 'center'});
+      pdf.addImage(contentDataURL, 'jpg', 0, position, imgWidth, imgHeight);
+
+
+      pdf.save('Relatório_Férias_' + nomeEmpresa + '_Aprovação.pdf'); // Generated PDF
+    });
   }
 }

@@ -5,6 +5,7 @@
 }
 table {
   width: 115% !important;
+  column-width: fit-content;
 }
 
 #modal2, #modal4 {
@@ -78,4 +79,20 @@ table {
   display:inline-block;
   margin:0 15px;
   float:none; /*if you set float already */
+}
+.material-icons-pdf {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 26px; /* Preferred icon size */
+  color: #f43636f2;
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+  cursor: pointer;
+  padding-right: 5px;
 }

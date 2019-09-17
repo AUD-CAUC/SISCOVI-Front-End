@@ -18,10 +18,13 @@
 <div class="row" *ngIf="calculosPendentes">
   <form [formGroup]="feriasForm">
     <div formArrayName="contratos">
-      <div class="col  l12" *ngFor="let calculoPendente of calculosPendentes; let i = index">
+      <div class="col 110" *ngFor="let calculoPendente of calculosPendentes; let i = index">
+        <div>
+          <i class="material-icons-pdf right" (click)="captureScreen(calculoPendente.titulo)">picture_as_pdf</i>
         <h6><b>{{calculoPendente.titulo}}</b></h6>
+        </div>
         <table *ngIf="calculosPendentes" class="highlight centered responsive-table"
-               [formGroupName]="i">
+               [formGroupName]="i" id="{{calculoPendente.titulo}}">
           <thead>
           <tr>
             <th *ngIf="config.user.perfil.sigla == 'ADMINISTRADOR'">
@@ -61,7 +64,7 @@
               </div>
             </td>
             <td *ngIf="config.user.perfil.sigla == 'ADMINISTRADOR'">
-              <div [formGroupName]="k">
+              <div class="col 110" [formGroupName]="k">
                 <div class="row">
                   <div class="input-field col s12">
                     <select materialize="material_select" formControlName="avaliacao">
@@ -72,7 +75,7 @@
                 </div>
               </div>
             </td>
-            <td *ngIf="config.user.perfil.sigla == 'USUÁRIO'">{{calculos.status}}</td>
+            <td *ngIf="config.user.perfil.sigla == 'USUÁRIO'" >{{calculos.status}}</td>
             <td class="hoverable">{{calculos.nomeTerceirizado}}</td>
             <td class="hoverable">{{calculos.nomeCargo}}</td>
             <td class="hoverable">{{calculos.calcularFeriasModel.tipoRestituicao}}</td>
