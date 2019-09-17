@@ -127,13 +127,6 @@ desligar funcionários clique no botão abaixo.</span> <i class="material-icons"
                         <div *ngIf="gerenciaForm.get('gerenciarTerceirizados').get('' + i).get('cpfTerceirizado').invalid &&
                                         (gerenciaForm.get('gerenciarTerceirizados').get('' + i).get('cpfTerceirizado').dirty)">
                           <div
-                            *ngIf="gerenciaForm.get('gerenciarTerceirizados').get('' + i).get('cpfTerceirizado').hasError('0')">
-                            <div
-                              *ngFor="let msg of gerenciaForm.get('gerenciarTerceirizados').get('' + i).get('cpfTerceirizado').errors">
-                              <span class="mensagem-erro">{{msg}}</span>
-                            </div>
-                          </div>
-                          <div
                             *ngIf="gerenciaForm.get('gerenciarTerceirizados').get('' + i).get('cpfTerceirizado').getError('mensagem')">
                             <div
                               *ngFor="let msg of gerenciaForm.get('gerenciarTerceirizados').get('' + i).get('cpfTerceirizado').getError('mensagem')[0]">

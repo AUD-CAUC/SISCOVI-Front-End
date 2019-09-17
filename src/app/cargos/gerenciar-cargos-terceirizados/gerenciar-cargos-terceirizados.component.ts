@@ -100,6 +100,7 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
     }
 
     TestaCPF(control: AbstractControl): { [key: string]: any } {
+      console.log(control)
         let Soma;
         let Resto;
         const mensagem = [];
@@ -138,9 +139,10 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
                 error = true;
             }
 
-            if (error === true) {
+            if (error === true && control.value.length === 11) {
                 control.parent.get('nomeTerceirizado').setValue('');
                 control.parent.get('nomeTerceirizado').disable();
+                control.parent.get('cpfTerceirizado').markAsDirty();
                 mensagem.push('CPF inválido!');
                 control.setErrors(mensagem);
             }
@@ -672,6 +674,10 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
             let row;
             row = worksheet.getRow(x);
             row.getCell(1).numFmt = '@';
+            // row.getCell(1).dataValidation = {
+            //   operator: 'notEqual',
+            //   formulae: [11],
+            // };
             row.getCell(3).dataValidation = {
                 type: 'list',
                 showErrorMessage: true,
