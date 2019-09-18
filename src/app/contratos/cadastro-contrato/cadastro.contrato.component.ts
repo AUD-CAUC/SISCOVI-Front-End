@@ -382,19 +382,28 @@ export class CadastroContratoComponent implements OnInit {
                 mes = Number(control.parent.get('inicioVigencia').value.split('/')[1]) - 1;
                 ano = Number(control.parent.get('inicioVigencia').value.split('/')[2]);
                 const inicioVig: Date = new Date(ano, mes, dia);
-                if (fimVig <= inicioVig) {
-                    console.log('entrou');
-                    mensagem.push('A data fim do contrato deve ser posterior que a data de início digitada !');
-                } else {
-                    console.log('entrou');
-                    const diff = Math.abs(fimVig.getTime() - inicioVig.getTime());
-                    console.log(diff);
-                    const diffDay = Math.round(diff / (1000 * 3600 * 24));
-                    console.log(diffDay);
-                    if ((diffDay < 364) || (diffDay >= 365)) {
-                        mensagem.push('A vigência do contrato deve ter duração de 1(um) ano!');
-                    }
+              if (fimVig <= inicioVig) {
+                console.log('entrou');
+                mensagem.push('A data fim do contrato deve ser posterior que a data de início digitada !');
+              } else if (!((ano % 4 === 0) && ((ano % 100 !== 0) || (ano % 400 === 0)))) {
+                console.log('entrou no 1');
+                const diff = Math.abs(fimVig.getTime() - inicioVig.getTime());
+                console.log(diff);
+                const diffDay = Math.round(diff / (1000 * 3600 * 24));
+                console.log(diffDay);
+                if (diffDay < 364 || diffDay >= 365) {
+                  mensagem.push('A vigência do contrato deve ter duração de 1(um) ano!');
                 }
+              } else {
+                console.log('entrou no 2');
+                const diff = Math.abs(fimVig.getTime() - inicioVig.getTime());
+                console.log(diff);
+                const diffDay = Math.round(diff / (1000 * 3600 * 24));
+                console.log(diffDay);
+                if (diffDay < 365 || diffDay >= 366 ) {
+                  mensagem.push('A vigência do contrato deve ter duração de 1(um) ano!');
+                }
+              }
             }
         }
         return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;

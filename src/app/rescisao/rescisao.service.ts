@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Http} from '@angular/http';
+import {Http, RequestOptions, Headers} from '@angular/http';
 import {ConfigService} from '../_shared/config.service';
 import {Observable} from 'rxjs/Observable';
 import {RescisaoCalcular} from './rescisao-calcular';
@@ -74,7 +74,8 @@ export class RescisaoService {
         data.push(val);
       });
       const headers = new Headers({'Content-type': 'application/json'});
-      return this.http.post(url, data, headers).map(res => res.json());
+      const requestOptions = new RequestOptions({headers: headers});
+      return this.http.post(url, data, requestOptions).map(res => res.json());
     }
     getRestituicoesRescisao(codigoContrato: number) {
       const url = this.config.myApi + '/rescisao/getRestituicoesRescisao/' + codigoContrato + '/' + this.config.user.id;

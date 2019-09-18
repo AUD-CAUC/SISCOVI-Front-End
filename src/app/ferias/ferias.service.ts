@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Http} from '@angular/http';
+import {Http, RequestOptions, Headers} from '@angular/http';
 import {ConfigService} from '../_shared/config.service';
 import {FeriasCalcular} from './ferias-calcular';
 import {ListaCalculosPendentes} from './ferias-pendentes/lista-calculos-pendentes';
@@ -47,7 +47,8 @@ export class FeriasService {
       data.push(val);
     });
     const headers = new Headers({'Content-type': 'application/json'});
-    return this.http.post(url, data, headers).map(res => res.json());
+    const requestOptions = new RequestOptions({headers: headers});
+    return this.http.post(url, data, requestOptions).map(res => res.json());
   }
 
   getValoresFeriasTerceirizado(feriasCalcular: FeriasCalcular) {

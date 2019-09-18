@@ -4,6 +4,8 @@ import {Contrato} from '../../contratos/contrato';
 import {ContratosService} from '../../contratos/contratos.service';
 import {ConfigService} from '../../_shared/config.service';
 import {ListaTotalMensalData} from '../lista-total-mensal-data';
+import * as JsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 @Component({
     selector: 'app-total-mensal-ret',
@@ -93,4 +95,32 @@ export class TotalMensalRetComponent implements OnInit {
             this.somaSaldo = this.somaSaldo + calculo.totais[i].total;
         }
     }
+
+  captureScreen(dataReferencia, nome, id) {
+    const data = document.getElementById(nome + id);
+    html2canvas(data, {scrollX: 0, scrollY: -window.scrollY}).then(canvas => {
+      // Few necessary setting options
+      const imgWidth = 205;
+      const pageHeight = 295;
+      const imgHeight = canvas.height * imgWidth / canvas.width;
+      const heightLeft = imgHeight;
+
+      const contentDataURL = canvas.toDataURL('image/png');
+      const pdf = new JsPDF('p', 'mm', 'a4'); // A4 size page of PDF
+      const position = 45;
+
+      dataReferencia = dataReferencia.split('-');
+
+      pdf.text('Cálculo de Retenções', 105, 15, {align: 'center'});
+      pdf.text(nome, 105, 25, {align: 'center'});
+      pdf.text(dataReferencia[1] + '/' + dataReferencia[0], 105, 35, {align: 'center'});
+      pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
+
+      pdf.save('Retenção' + nome + '.pdf'); // Generated PDF
+    });
+  }
+
+  mostrar(event: any) {
+    console.log(event);
+  }
 }

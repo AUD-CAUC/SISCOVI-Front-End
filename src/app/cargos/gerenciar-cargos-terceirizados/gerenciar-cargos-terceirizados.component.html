@@ -79,10 +79,21 @@ desligar funcionários clique no botão abaixo.</span> <i class="material-icons"
         <div *ngIf="modoOperacao == 'ALOCAÇÃO'">
           <div class="center-align divider"></div>
           <br>
-          <div class="center-align">
-            <button class="btn waves-effect" (click)="criarPlanilhaCadastroTerceirizado()">Dowload
-              Planilha
+          <div class="file-field input-field row" style="margin-bottom: 20px">
+            <span>Baixe a seguinte <a (click)="criarPlanilhaCadastroTerceirizado()" download>planilha aqui</a>, preencha-a e a envie preenchida pelo campo abaixo: </span>
+            <p></p>
+            <button class="btn waves-effect">
+              <span>File</span>
+              <input type="file" accept=".xlsx" (change)="sobeArquivo($event)">
             </button>
+            <div class="file-path-wrapper">
+              <input class="file-path validate" type="text">
+              </div>
+            <button class="btn waves-effect" (click)="uploadData()" [disabled]="buttonDisabled">
+              Enviar planilha
+            </button>
+          </div>
+          <div class="center-align">
             <button class="btn waves-effect" (click)="adicionaGerenciar()">Adicionar Linha</button>
             <button class="btn waves-effect" (click)="removerGerenciar()"
                     [disabled]="!(gerenciar.length > 1)">
@@ -90,20 +101,11 @@ desligar funcionários clique no botão abaixo.</span> <i class="material-icons"
               Linha
             </button>
           </div>
-          <div class="file-field input-field row">
-            <button class="btn waves-effect">
-              <span>File</span>
-              <input type="file" accept=".xlsx" (change)="sobeArquivo($event)">
-            </button>
-            <button class="btn waves-effect" (click)="uploadData()" [disabled]="buttonDisabled">
-              Enviar planilha
-            </button>
-          </div>
 
           <br>
           <form [formGroup]="gerenciaForm">
             <div formArrayName="gerenciarTerceirizados">
-              <table class="centered highlight hoverable">
+              <table class="centered highlight hoverable z-depth-2">
                 <thead>
                 <tr>
                   <th>CPF do Terceirizado</th>
@@ -121,13 +123,13 @@ desligar funcionários clique no botão abaixo.</span> <i class="material-icons"
                                placeholder="Digite o CPF" type="text"
                                class="validate"
                                formControlName="cpfTerceirizado"
-                               required autocomplete="off">
+                               required autocomplete="off"
+                               maxlength="11">
                         <label for="cpf_terceirizado_nao_alocado">CPF<span
                           class="mensagem-erro">*</span></label>
                         <div *ngIf="gerenciaForm.get('gerenciarTerceirizados').get('' + i).get('cpfTerceirizado').invalid &&
                                         (gerenciaForm.get('gerenciarTerceirizados').get('' + i).get('cpfTerceirizado').dirty)">
-                          <div
-                            *ngIf="gerenciaForm.get('gerenciarTerceirizados').get('' + i).get('cpfTerceirizado').hasError('0')">
+                          <div *ngIf="gerenciaForm.get('gerenciarTerceirizados').get('' + i).get('cpfTerceirizado').hasError('0')">
                             <div
                               *ngFor="let msg of gerenciaForm.get('gerenciarTerceirizados').get('' + i).get('cpfTerceirizado').errors">
                               <span class="mensagem-erro">{{msg}}</span>
