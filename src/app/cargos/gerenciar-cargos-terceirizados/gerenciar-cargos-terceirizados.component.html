@@ -79,24 +79,26 @@ desligar funcionários clique no botão abaixo.</span> <i class="material-icons"
         <div *ngIf="modoOperacao == 'ALOCAÇÃO'">
           <div class="center-align divider"></div>
           <br>
-          <div class="center-align">
-            <button class="btn waves-effect" (click)="criarPlanilhaCadastroTerceirizado()">Dowload
-              Planilha
+          <div class="file-field input-field row" style="margin-bottom: 20px">
+            <span>Baixe a seguinte <a (click)="criarPlanilhaCadastroTerceirizado()" download>planilha aqui</a>, preencha-a e a envie preenchida pelo campo abaixo: </span>
+            <p></p>
+            <button class="btn waves-effect">
+              <span>File</span>
+              <input type="file" accept=".xlsx" (change)="sobeArquivo($event)">
             </button>
+            <div class="file-path-wrapper">
+              <input class="file-path validate" type="text">
+              </div>
+            <button class="btn waves-effect" (click)="uploadData()" [disabled]="buttonDisabled">
+              Enviar planilha
+            </button>
+          </div>
+          <div class="center-align">
             <button class="btn waves-effect" (click)="adicionaGerenciar()">Adicionar Linha</button>
             <button class="btn waves-effect" (click)="removerGerenciar()"
                     [disabled]="!(gerenciar.length > 1)">
               Remover
               Linha
-            </button>
-          </div>
-          <div class="file-field input-field row">
-            <button class="btn waves-effect">
-              <span>File</span>
-              <input type="file" accept=".xlsx" (change)="sobeArquivo($event)">
-            </button>
-            <button class="btn waves-effect" (click)="uploadData()" [disabled]="buttonDisabled">
-              Enviar planilha
             </button>
           </div>
 
