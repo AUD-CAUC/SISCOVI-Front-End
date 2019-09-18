@@ -103,7 +103,7 @@ desligar funcionários clique no botão abaixo.</span> <i class="material-icons"
           <br>
           <form [formGroup]="gerenciaForm">
             <div formArrayName="gerenciarTerceirizados">
-              <table class="centered highlight hoverable">
+              <table class="centered highlight hoverable z-depth-2">
                 <thead>
                 <tr>
                   <th>CPF do Terceirizado</th>
@@ -121,11 +121,18 @@ desligar funcionários clique no botão abaixo.</span> <i class="material-icons"
                                placeholder="Digite o CPF" type="text"
                                class="validate"
                                formControlName="cpfTerceirizado"
-                               required autocomplete="off">
+                               required autocomplete="off"
+                               maxlength="11">
                         <label for="cpf_terceirizado_nao_alocado">CPF<span
                           class="mensagem-erro">*</span></label>
                         <div *ngIf="gerenciaForm.get('gerenciarTerceirizados').get('' + i).get('cpfTerceirizado').invalid &&
                                         (gerenciaForm.get('gerenciarTerceirizados').get('' + i).get('cpfTerceirizado').dirty)">
+                          <div *ngIf="gerenciaForm.get('gerenciarTerceirizados').get('' + i).get('cpfTerceirizado').hasError('0')">
+                            <div
+                              *ngFor="let msg of gerenciaForm.get('gerenciarTerceirizados').get('' + i).get('cpfTerceirizado').errors">
+                              <span class="mensagem-erro">{{msg}}</span>
+                            </div>
+                          </div>
                           <div
                             *ngIf="gerenciaForm.get('gerenciarTerceirizados').get('' + i).get('cpfTerceirizado').getError('mensagem')">
                             <div

@@ -100,14 +100,17 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
     }
 
     TestaCPF(control: AbstractControl): { [key: string]: any } {
-      console.log(control)
         let Soma;
         let Resto;
         const mensagem = [];
         let error = false;
         Soma = 0;
         if (control.parent) {
-            if (control.value === '00000000000') {
+          control.parent.get('nomeTerceirizado').setValue('');
+          control.parent.get('cpfTerceirizado').markAsTouched(true);
+          control.parent.get('cpfTerceirizado').markAsDirty();
+
+          if (control.value === '00000000000') {
                 error = true;
 
             }
@@ -140,9 +143,7 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
             }
 
             if (error === true && control.value.length === 11) {
-                control.parent.get('nomeTerceirizado').setValue('');
                 control.parent.get('nomeTerceirizado').disable();
-                control.parent.get('cpfTerceirizado').markAsDirty();
                 mensagem.push('CPF inválido!');
                 control.setErrors(mensagem);
             }
@@ -259,75 +260,6 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
             });
         }
     }
-
-    // selecionaModo(modoOperacao: string) {
-    //     this.modoOperacao = modoOperacao;
-    //     if (this.codigo) {
-    //         if (this.modoOperacao) {
-    //             if (this.modoOperacao === 'ALOCAÇÃO') {
-    //                 this.funcServ.getTerceirizadosNaoAlocados().subscribe(res => {
-    //                     this.terceirizados = res;
-    //                     this.ref.markForCheck();
-    //                 });
-    //             }
-    //             if (this.modoOperacao === 'ALTERAÇÃO') {
-    //                 this.cargosService.getTerceirizadosFuncao(this.codigo).subscribe(res => {
-    //                     this.listaCargosFuncionarios = res;
-    //                     this.ref.markForCheck();
-    //                     if (this.listaCargosFuncionarios) {
-    //                         this.alteracaoForm = this.fb.group({
-    //                             alterarFuncoesTerceirizados: this.fb.array([])
-    //                         });
-    //                         for (let i = 0; i < this.listaCargosFuncionarios.length; i++) {
-    //                             const formGroup = this.fb.group({
-    //                                 selected: new FormControl(this.isSelected),
-    //                                 terceirizado: new FormControl(this.listaCargosFuncionarios[i].funcionario),
-    //                                 funcao: new FormControl(this.listaCargosFuncionarios[i].funcao.codigo, [Validators.required]),
-    //                                 dataInicio: new FormControl('', [Validators.required, this.myDateValidator])
-    //                             });
-    //                             this.alteracao.push(formGroup);
-    //                             this.ref.markForCheck();
-    //                         }
-    //                         this.ref.markForCheck();
-    //                         for (let i = 0; i < this.listaCargosFuncionarios.length; i++) {
-    //                             this.alteracao.get('' + i).get('funcao').setValidators([this.alterarFuncaoTerceirizadoValidator.bind(this)]);
-    //                             this.alteracao.get('' + i).get('dataInicio').setValidators([this.validateDataInicioFuncao.bind(this), this.myDateValidator]);
-    //                         }
-    //                     }
-    //                 });
-    //             }
-    //             if (this.modoOperacao === 'DESATIVAÇÃO') {
-    //                 this.cargosService.getTerceirizadosFuncao(this.codigo).subscribe(res => {
-    //                     this.listaCargosFuncionarios = res;
-    //                     this.ref.markForCheck();
-    //                     if (this.listaCargosFuncionarios) {
-    //                           this.desativacaoForm = this.fb.group({
-    //                             desativaTerceirizado: this.fb.array([])
-    //                         });
-    //                         for (let i = 0; i < this.listaCargosFuncionarios.length; i++) {
-    //                           const formGroup = this.fb.group({
-    //                               selected: new FormControl(this.isSelected),
-    //                               terceirizado: new FormControl(this.listaCargosFuncionarios[i].funcionario),
-    //                               funcao: new FormControl(this.listaCargosFuncionarios[i].funcao.codigo),
-    //                               dataDesligamento: new FormControl('', [Validators.required, this.myDateValidator])
-    //                           });
-    //                           this.desativacao.push(formGroup);
-    //                           this.ref.markForCheck();
-    //                         }
-    //                         this.ref.markForCheck();
-    //                         for (let i = 0; i < this.listaCargosFuncionarios.length; i++) {
-    //                           this.desativacao.get('' + i).get('dataDesligamento').setValidators([this.validateDataInicioFuncao.bind(this), this.myDateValidator]);
-    //                         }
-    //                     }
-    //                 });
-    //             }
-    //             this.cargosService.getFuncoesContrato(this.codigo).subscribe(res => {
-    //                 this.funcoes = res;
-    //                 this.ref.markForCheck();
-    //             });
-    //         }
-    //     }
-    // }
 
     verificarFormularioGerencia(): void {
         if (this.gerenciaForm.valid) {
@@ -538,46 +470,18 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
     cpfAsyncValidator(control: AbstractControl) {
         const cpf: string = control.value;
         const mensagem = [];
-        // if (control.parent) {
-        //     control.parent.get('nomeTerceirizado').disable();
-        //     control.parent.get('ativo').disable();
-        //     control.parent.get('nomeTerceirizado').reset();
-        //     control.parent.get('ativo').reset();
-        // }
+
         if (cpf.length === 11) {
             this.funcServ.verificaTerceirizadoContrato(cpf, this.codigo).subscribe(res => {
                     const terceirizado: Funcionario = res;
                     if (terceirizado) {
-                        // control.parent.get('nomeTerceirizado').enable();
+                        control.parent.get('nomeTerceirizado').disable();
                         control.parent.get('nomeTerceirizado').setValue(terceirizado.nome);
-                        // control.parent.get('ativo').enable();
                         control.parent.get('ativo').setValue(terceirizado.ativo);
                         control.parent.get('codigo').setValue(terceirizado.codigo);
 
                     } else {
-                        // console.log('ENTROU AQUI')
-                        // control.parent.get('ativo').setValue('');
-                        // control.parent.get('nomeTerceirizado').setValue('');
                         control.parent.get('nomeTerceirizado').enable();
-                        // control.parent.get('ativo').enable();
-                        // control.parent.get('ativo').updateValueAndValidity();
-                        // control.parent.get('nomeTerceirizado').updateValueAndValidity();
-                        // control.parent.get('nomeTerceirizado').markAsTouched();
-                        // control.parent.get('ativo').markAsTouched();
-                        // control.parent.get('nomeTerceirizado').markAsDirty();
-                        // control.parent.get('ativo').markAsDirty();
-                        //
-                        // control.parent.get('funcao').setValue('');
-                        // control.parent.get('funcao').enable();
-                        // control.parent.get('funcao').updateValueAndValidity();
-                        // control.parent.get('funcao').markAsTouched();
-                        // control.parent.get('funcao').markAsDirty();
-                        //
-                        // control.parent.get('dataInicio').setValue('');
-                        // control.parent.get('dataInicio').enable();
-                        // control.parent.get('dataInicio').updateValueAndValidity();
-                        // control.parent.get('dataInicio').markAsTouched();
-                        // control.parent.get('dataInicio').markAsDirty();
                     }
                 },
                 error => {
@@ -674,16 +578,22 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
             let row;
             row = worksheet.getRow(x);
             row.getCell(1).numFmt = '@';
-            // row.getCell(1).dataValidation = {
-            //   operator: 'notEqual',
-            //   formulae: [11],
-            // };
+            row.getCell(1).dataValidation = {
+              type: 'textLength',
+              showErrorMessage: true,
+              errorStyle: 'error',
+              errorTitle: 'Valor inválido!',
+              error: 'O valor neste campo neste campo deve ter o tamanho 11.',
+              allowBlank: true,
+              operator: 'equal',
+              formulae: [11],
+            };
             row.getCell(3).dataValidation = {
                 type: 'list',
                 showErrorMessage: true,
                 errorStyle: 'error',
                 errorTitle: 'Valor inválido!',
-                error: 'O valor neste campo neste campo deve ser um dos da lista.',
+                error: 'O valor neste campo deve ser um dos da lista.',
                 allowBlank: true,
                 operator: 'equal',
                 formulae: [temp2],
