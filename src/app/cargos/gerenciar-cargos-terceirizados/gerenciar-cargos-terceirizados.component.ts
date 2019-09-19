@@ -106,7 +106,6 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
         let error = false;
         Soma = 0;
         if (control.parent) {
-          control.parent.get('nomeTerceirizado').setValue('');
           control.parent.get('cpfTerceirizado').markAsTouched();
           control.parent.get('cpfTerceirizado').markAsDirty();
 
@@ -143,7 +142,8 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
             }
 
             if (error === true && control.value.length === 11) {
-                control.parent.get('nomeTerceirizado').disable();
+              control.parent.get('nomeTerceirizado').setValue('');
+              control.parent.get('nomeTerceirizado').disable();
                 mensagem.push('CPF inválido!');
                 control.setErrors(mensagem);
             }
