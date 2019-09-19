@@ -622,33 +622,23 @@ export class CadastrarAjustesComponent {
           mes = Number(control.value.split('/')[1]) - 1;
           ano = Number(control.value.split('/')[2]);
           const fimVig: Date = new Date(ano, mes, dia);
+
           dia = Number(control.parent.get('inicioVigencia').value.split('/')[0]);
           mes = Number(control.parent.get('inicioVigencia').value.split('/')[1]) - 1;
           ano = Number(control.parent.get('inicioVigencia').value.split('/')[2]);
           const inicioVig: Date = new Date(ano, mes, dia);
+
           const val: Number[] = control.parent.get('dataInicioContrato').value.split('-');
           const inicioContrato: Date = new Date(Number(val[0]), Number(val[1]) - 1, Number(val[2]));
+
           if (fimVig <= inicioContrato) {
               mensagem.push('A data fim da vigência de um ajuste não pode ser anterior a data de início do contrato!');
           }
           if (fimVig <= inicioVig) {
             mensagem.push('Erro: data fim da vigência menor que a data início.');
-          } else if ((control.parent.get('prorrogacao').value === 'S') && (!((ano % 4 === 0) && ((ano % 100 !== 0) || (ano % 400 === 0))))) {
-            console.log('entrou no 1');
-              const diff = Math.abs(fimVig.getTime() - inicioVig.getTime());
-              console.log(diff);
-              const diffDay = Math.round(diff / (1000 * 3600 * 24));
-              console.log(diffDay);
-              if (diffDay < 364 || diffDay >= 365) {
-                  mensagem.push('A vigência de uma prorrogação deve ter duração de 1(um) ano');
-              }
-          } else {
-            console.log('entrou no 2');
-            const diff = Math.abs(fimVig.getTime() - inicioVig.getTime());
-            console.log(diff);
-            const diffDay = Math.round(diff / (1000 * 3600 * 24));
-            console.log(diffDay);
-            if (diffDay < 365 || diffDay > 366) {
+          } else if ((control.parent.get('prorrogacao').value === 'S')) {
+            const dataLimite = new Date(inicioVig.getFullYear() + 1, inicioVig.getMonth(), inicioVig.getDate() - 1);
+            if (fimVig.getTime() !== dataLimite.getTime()) {
               mensagem.push('A vigência de uma prorrogação deve ter duração de 1(um) ano');
             }
           }
