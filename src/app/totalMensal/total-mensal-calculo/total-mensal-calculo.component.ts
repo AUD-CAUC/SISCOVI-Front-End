@@ -43,6 +43,7 @@ export class TotalMensalCalculoComponent implements OnInit {
     private anoSelecionado: number;
     private mesSelecionado: number;
     private numFuncAtivos: number;
+    loading = false;
 
     constructor(contServ: ContratosService, fb: FormBuilder, tmService: TotalMensalService, private router: Router, private route: ActivatedRoute) {
         this.tmService = tmService;
@@ -187,6 +188,7 @@ export class TotalMensalCalculoComponent implements OnInit {
     }
 
     calculoTotalMensal() {
+        this.loading = true;
         this.tmService.calcularTotalMensal(this.codigoContrato, this.currentMonth.valor, this.currentYear).subscribe(res => {
             if (!res.error) {
                 this.resultado = res;
@@ -208,6 +210,7 @@ export class TotalMensalCalculoComponent implements OnInit {
             } else {
                 this.myForm.setErrors({'mensagem': res.error});
             }
+            this.loading = false;
         });
     }
 
@@ -241,11 +244,13 @@ export class TotalMensalCalculoComponent implements OnInit {
     }
 
     confirmaCalculo() {
+      this.loading = true;
         this.tmService.confirmarTotalMensalReter(this.currentMonth.valor, this.currentYear, this.codigoContrato).subscribe(res => {
             this.closeModal();
             if (!res.error) {
                 this.openModal2();
             }
+            this.loading = false;
         });
     }
 

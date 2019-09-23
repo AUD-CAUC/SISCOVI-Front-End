@@ -8,7 +8,7 @@
         <h5>{{cont.nomeDaEmpresa}} - {{cont.numeroDoContrato}}</h5>
       </div>
       <div class="collapsible-body center-align">
-        <div *ngIf="currentYear && currentMonth" class="row">
+        <div *ngIf="currentYear && currentMonth">
           <div style="margin-top: -2.5vh">
             <p>Próxima retenção: {{currentMonth.mes}} de {{currentYear}}</p>
           </div>
@@ -21,14 +21,19 @@
                   Alterar
                 </a>
               </p>
-
           </div>
           <div class="divider"></div>
-          <div>
-            <button class="waves-effect waves-light btn-large blue-grey darken-3" type="submit" [disabled]="validate"
-                    (click)="calculoTotalMensal()" style="margin-top: 2.5vh; margin-bottom: -3vh">Calcular</button>
+          <div style="margin-top: 2.5vh;">
+            <button *ngIf="!loading" class="waves-effect waves-light btn-large blue-grey darken-3" type="submit" [disabled]="validate"
+                    (click)="calculoTotalMensal()" >Calcular</button>
+            <div *ngIf="loading" class="preloader-wrapper big active">
+              <div class="spinner-layer">
+                <div class="circle-clipper left">
+                  <div class="circle"></div>
+                </div>
+              </div>
+            </div>
           </div>
-
         </div>
         <!--              <div *ngIf="myForm.invalid && (myForm.dirty || myForm.touched)">-->
         <!--                <div *ngIf="myForm.getError('mensagem')">-->
@@ -129,7 +134,14 @@
   </div>
   <div class="modal-footer">
     <button class="btn waves-effect left" (click)="apagarCalculo()">Cancelar</button>
-    <button class="btn waves-effect right" (click)="confirmaCalculo()">Confirmar cálculo</button>
+    <button *ngIf="!loading" class="btn waves-effect right" (click)="confirmaCalculo()">Confirmar cálculo</button>
+    <div *ngIf="loading" class="preloader-wrapper active">
+      <div class="spinner-layer">
+        <div class="circle-clipper left">
+          <div class="circle"></div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
