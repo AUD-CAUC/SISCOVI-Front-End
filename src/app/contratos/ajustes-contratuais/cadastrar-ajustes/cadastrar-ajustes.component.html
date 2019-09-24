@@ -29,9 +29,10 @@
                     <label for="tipo_ajuste">Tipo de Ajuste<span class="mensagem-erro">*</span></label>
                 </div>
                 <div class="input-field col s5">
-                    <select materialize="material_select" id="prorrogacao" formControlName="prorrogacao" required>
-                        <option value="N" selected>Não</option>
-                        <option value="S">Sim</option>
+                    <select materialize="material_select" id="prorrogacao" formControlName="prorrogacao" (change)="mudaFimVigencia($event.target.value)" required>
+                        <option disabled>Selecione a opção</option>
+                      <option value="S">Sim</option>
+                      <option value="N">Não</option>
                     </select>
                     <label for="prorrogacao">Prorrogação<span class="mensagem-erro">*</span></label>
                 </div>
