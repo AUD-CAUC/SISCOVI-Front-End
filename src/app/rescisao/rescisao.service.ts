@@ -48,7 +48,7 @@ export class RescisaoService {
           'inicioFeriasIntegrais': rescisao.getInicioFeriasIntegrais(),
           'fimFeriasIntegrais': rescisao.getFimFeriasIntegrais(),
           'inicioFeriasProporcionais': rescisao.getInicioFeriasProporcionais(),
-          'fimFeriasProporcionais': rescisao.getDataDesligamento(),
+          'fimFeriasProporcionais': rescisao.getFimFeriasProporcionais(),
           'inicioContagemDecimoTerceiro': rescisao.getInicioContagemDecimoTerceiro(),
           'valorFeriasVencidasMovimentado': rescisao.getValorFeriasVencidasMovimentado(),
           'valorFeriasProporcionaisMovimentado': rescisao.getValorFeriasProporcionaisMovimentado(),
