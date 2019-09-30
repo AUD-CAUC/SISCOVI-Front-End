@@ -53,7 +53,7 @@ export class CadastroContratoComponent implements OnInit {
     modalActions2 = new EventEmitter<string | MaterializeAction>();
     convencoesColetivas: Convencao[];
     percentuaisDinamicos: PercentualDinamico[] = [];
-    incidenciaMinima = 14.30;
+    incidenciaMinima = 9.0;
     incidenciaMaxima = 39.80;
     percDinService: PercentualDinamicoService;
     constructor(router: Router, route: ActivatedRoute, carSer: CargoService, fb: FormBuilder, fb1: FormBuilder, contratoService: ContratosService, userService: UserService,

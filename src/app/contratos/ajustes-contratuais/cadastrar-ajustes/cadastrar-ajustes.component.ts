@@ -49,7 +49,7 @@ export class CadastrarAjustesComponent {
   modalActions2 = new EventEmitter<string | MaterializeAction>();
   modalActions3 = new EventEmitter<string | MaterializeAction>();
   tempCon: Contrato;
-  incidenciaMinima = 14.30;
+  incidenciaMinima = 9.0;
   incidenciaMaxima = 39.80;
   // dataInicioVig = this.tempCon.dataFim;
   // dataFimVig: Date;
