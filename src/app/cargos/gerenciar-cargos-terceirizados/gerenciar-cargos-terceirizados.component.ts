@@ -547,7 +547,7 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
     }
 
     voltaContratos() {
-        this.router.navigate(['/contratos']);
+        this.router.navigate(['/contratos/funcoes-dos-terceirizados/' + this.codContrato]);
     }
 
     criarPlanilhaCadastroTerceirizado() {
@@ -627,13 +627,13 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
         }
 
         workbook.xlsx.writeBuffer()
-            .then(buffer => saveAs(new Blob([buffer]), 'modelo-alocar-terceirizados.xlsx'))
+            .then(buffer => saveAs(new Blob([buffer]), 'modelo-alocar-terceirizados-' + this.nomeContrato + '.xlsx'))
             .catch(err => console.log('Error writing excel export', err));
     }
 
     sobeArquivo(event: any) {
         if (event.srcElement.files[0]) {
-            if (event.srcElement.files[0].name === 'modelo-alocar-terceirizados.xlsx') {
+            if (event.srcElement.files[0].name === 'modelo-alocar-terceirizados-' + this.nomeContrato + '.xlsx') {
                 this.file = event.srcElement.files[0];
                 this.buttonDisabled = false;
             } else {

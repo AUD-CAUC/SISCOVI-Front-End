@@ -80,17 +80,18 @@ desligar funcionários clique no botão abaixo.</span> <i class="material-icons"
           <div class="center-align divider"></div>
           <br>
           <div class="file-field input-field row" style="margin-bottom: 20px">
-            <span>Baixe a seguinte <a (click)="criarPlanilhaCadastroTerceirizado()" download>planilha aqui</a>, preencha-a e a envie preenchida pelo campo abaixo: </span>
+            <span>Baixe a seguinte <a (click)="criarPlanilhaCadastroTerceirizado()" download>planilha aqui</a>, preencha-a,
+              importe-a e a envie preenchida pelo botão CARREGAR PLANILHA abaixo: </span>
             <p></p>
             <button class="btn waves-effect">
-              <span>File</span>
+              <span>Importar Planilha</span>
               <input type="file" accept=".xlsx" (change)="sobeArquivo($event)">
             </button>
             <div class="file-path-wrapper">
               <input class="file-path validate" type="text">
               </div>
-            <button class="btn waves-effect" (click)="uploadData()" [disabled]="buttonDisabled">
-              Enviar planilha
+            <button class="btn waves-effect right" (click)="uploadData()" [disabled]="buttonDisabled">
+              Carregar Planilha
             </button>
           </div>
           <div class="center-align">
