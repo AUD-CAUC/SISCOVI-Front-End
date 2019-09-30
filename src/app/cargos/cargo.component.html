@@ -1,5 +1,5 @@
 <div class="container">
-  <h2 class="center">Cargos</h2>
+  <h2 class="center">Funções</h2>
   <div class="row">
       <div class="valign-wrapper col s12">
           <div class="left-align col s6">
@@ -17,7 +17,7 @@
         </div>
           <div class="modal-footer">
               <button class="btn waves-effect left" (click)="closeModal()">Cancelar</button>
-              <button class="btn waves waves-effect right" [disabled]="!cargoService.enabled" (click)="cadastrarCargos()">Cadastrar Cargos</button>
+              <button class="btn waves waves-effect right" [disabled]="!cargoService.enabled" (click)="cadastrarCargos()">Cadastrar Funções</button>
           </div>
       </div>
   </div>
@@ -45,7 +45,7 @@
             <thead>
             <tr>
                 <th>#</th>
-                <th>Nome do Cargo</th>
+                <th>Nome da Função</th>
                 <th>Descrição</th>
                 <th>Atualizado Por...</th>
                 <th>Última Atualização</th>
