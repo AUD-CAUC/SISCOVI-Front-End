@@ -1,32 +1,32 @@
-<ul materialize="collapsible" class="collapsible" data-collapsible="accordion">
+<ul materialize=" collapsible" class="nav collapsible active" data-collapsible="accordion">
     <li class="row">
         <a routerLink="/home" class="left-align">Início<i class="material-icons left">home</i></a>
     </li>
-    <li class="row" *ngIf="admin">
+    <li class="row active" *ngIf="admin">
         <a class="collapsible-header left-align">Administração<i class="material-icons left">group</i><i
             class="material-icons right">arrow_drop_down</i>
         </a>
-        <ul class="collapsible-body">
-            <li>
+        <ul class="nav collapsible-body">
+            <li class="bold">
                 <a routerLink="/rubricas">Rubricas<i class="material-icons left">assignment</i></a>
             </li>
             <li>
                 <a routerLink="/usuarios">Usuários<i class="material-icons left">people</i></a>
             </li>
             <li>
-                <a routerLink="/cargos">Cargos<i class="material-icons left">portrait</i></a>
+                <a  routerLink="/cargos">Funções<i class="material-icons left">portrait</i></a>
             </li>
             <li>
-                <a routerLink="/terceirizados">Terceirizados<i class="material-icons left">assignment_ind</i></a>
+                <a  routerLink="/terceirizados">Terceirizados<i class="material-icons left">assignment_ind</i></a>
             </li>
             <li>
-                <a routerLink="/percentEst">Percentuais Estáticos<i class="material-icons left">local_atm</i></a>
+                <a  routerLink="/percentEst">Percentuais Estáticos<i class="material-icons left">local_atm</i></a>
             </li>
             <li>
-                <a routerLink="/percentDin">Percentuais Dinâmicos<i class="material-icons left">local_atm</i></a>
+                <a  routerLink="/percentDin">Percentuais Dinâmicos<i class="material-icons left">local_atm</i></a>
             </li>
             <li>
-                <a routerLink="/convencoes">Convenções Coletivas<i class="material-icons left">trending_up</i></a>
+                <a  routerLink="/convencoes">Convenções Coletivas<i class="material-icons left">trending_up</i></a>
             </li>
         </ul>
     </li>
@@ -64,7 +64,7 @@
     <li class="row">
         <a class="collapsible-header left-align">Restituições<i class="material-icons left">attach_money</i><i
             class="material-icons right">arrow_drop_down</i></a>
-        <ul class="collapsible-body">
+        <ul class=" nav collapsible-body">
             <li>
                 <a routerLink="/ferias">Férias<i class="material-icons left">perm_contact_calendar</i></a>
             </li>
@@ -82,7 +82,7 @@
     <li class="row">
         <a class="collapsible-header left-align">Saldos<i class="material-icons left">functions</i><i
             class="material-icons right">arrow_drop_down</i></a>
-        <ul class="collapsible-body">
+        <ul class="nav collapsible-body">
             <li>
                 <a routerLink="/saldo/individual" class="left-align">Saldo individual<i
                     class="material-icons left">grain</i></a>
