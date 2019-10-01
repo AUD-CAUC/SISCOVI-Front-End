@@ -45,7 +45,7 @@
               <td>{{saldo.incidenciaRetido - saldo.incidenciaFeriasRestituido - saldo.incidenciaTercoRestituido -
               saldo.incidenciaDecimoTerceiroRestituido | currency:'BRL':true:'1.2-2'}}
               </td>
-              <td>{{saldo.multaFgtsRetido | currency:'BRL':true:'1.2-2'}}</td>
+              <td>{{saldo.multaFgtsRetido - saldo.multaFgtsRestituido | currency:'BRL':true:'1.2-2'}}</td>
               <td>{{saldo.saldo | currency:'BRL':true:'1.2-2'}}</td>
             </tr>
             <tr>

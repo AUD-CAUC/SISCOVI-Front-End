@@ -49,7 +49,7 @@ export class SaldoIndividualComponent {
               this.somaDecimo = this.somaDecimo + this.saldos[i].decimoTerceiroRetido - this.saldos[i].decimoTerceiroRestituido;
               this.somaIncidencia = this.somaIncidencia + (this.saldos[i].incidenciaRetido - this.saldos[i].incidenciaFeriasRestituido -
                 this.saldos[i].incidenciaTercoRestituido - this.saldos[i].incidenciaDecimoTerceiroRestituido);
-              this.somaMultaFGTS = this.somaMultaFGTS + this.saldos[i].multaFgtsRetido;
+              this.somaMultaFGTS = this.somaMultaFGTS + this.saldos[i].multaFgtsRetido - this.saldos[i].multaFgtsRestituido;
               this.somaSaldo = this.somaSaldo + this.saldos[i].saldo;
             }
           }
@@ -78,7 +78,7 @@ export class SaldoIndividualComponent {
             this.somaDecimo = this.somaDecimo + this.saldos[i].decimoTerceiroRetido - this.saldos[i].decimoTerceiroRestituido;
             this.somaIncidencia = this.somaIncidencia + (this.saldos[i].incidenciaRetido - this.saldos[i].incidenciaFeriasRestituido -
               this.saldos[i].incidenciaTercoRestituido - this.saldos[i].incidenciaDecimoTerceiroRestituido);
-            this.somaMultaFGTS = this.somaMultaFGTS + this.saldos[i].multaFgtsRetido;
+            this.somaMultaFGTS = this.somaMultaFGTS + this.saldos[i].multaFgtsRetido - this.saldos[i].multaFgtsRestituido;
             this.somaSaldo = this.somaSaldo + this.saldos[i].saldo;
           }
         }
