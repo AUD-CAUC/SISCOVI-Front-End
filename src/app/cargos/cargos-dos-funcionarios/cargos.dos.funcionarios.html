@@ -1,29 +1,21 @@
 <div class="container">
   <ul>
-    <a class="tooltip right"><span class="tooltiptext">Para alocar novo funcionário, modificar/remanejar funcionários ou
-desligar um funcionário clique no botão abaixo. Selecione um de
-seus contratos na caixa de seleção abaixo para
-consultar as funções de cada contrato.</span> <i class="material-icons" style="color: black">help_outline</i></a>
+    <a class="tooltip right"><span class="tooltiptext">Para alocar novo funcionário, modificar/remanejar ou
+desligar funcionários clique no botão abaixo.</span> <i class="material-icons" style="color: black">help_outline</i></a>
   </ul>
 
-  <h2 class="center-align">Funções Dos Terceirizados</h2>
-    <div class="row center-align">
-        <button class="btn waves-effect" (click)="goToGerenciarCargos()">Gerenciar Função do Terceirizado</button>
-    </div>
+  <h2 class="center-align">Cargos Dos Terceirizados</h2>
+  <h5 class="center-align">{{nomeContrato}}</h5>
+  <div class="row center-align">
+    <button class="btn waves-effect" (click)="goToGerenciarCargos()">Gerenciar Terceirizados</button>
+  </div>
   <div class="row">
-        <div class="input-field col s12 xl4 l5 m12">
-          <select  name="contrato" materialize="material_select" [ngModel]="contratos" (change)="onChange($event.target.value)">
-            <option value="" disabled selected >Selecione...</option>
-            <option class="truncate" *ngFor="let contrato of contratos" [value]="contrato.codigo">{{contrato.nomeDaEmpresa}} - Contrato nº: {{contrato.numeroDoContrato}}/{{contrato.anoDoContrato}}</option>
-          </select>
-          <label style="font-size: 0.65vw">Selecione o contrato</label>
-        </div>
-        <div class="input-field col s6 l6 offset-l1 offset-xl2 offset-m6">
-          <i class="material-icons prefix">search</i>
-          <input placeholder="Digite um nome" id="search_name" type="text" class="validate">
-          <label for="search_name">Busca</label>
-        </div>
+    <div class="input-field col s3 l6 offset-xl10 offset-m6">
+      <i class="material-icons prefix">search</i>
+      <input placeholder="Digite um nome" id="search_name" type="text" class="validate">
+      <label for="search_name">Busca</label>
     </div>
+  </div>
 </div>
 <div class="container" *ngIf="valid">
   <ul>
@@ -31,17 +23,19 @@ consultar as funções de cada contrato.</span> <i class="material-icons" style=
 atualmente alocados neste cargo, as datas de disponibilização de cada funcionário e as datas de desligamento, caso existam.
 </span> <i class="material-icons" style="color: black">help_outline</i></a>
   </ul>
-<!--  <div class="pin-top right material-icons" title="Ao clicar em um Cargo, abrir-se-á uma lista com o(s) tercerizados-->
-<!--atualmente alocados neste cargo, as datas de disponibilização de-->
-<!--cada funcionário e as datas de desligamento, caso existam."-->
-<!--       style="cursor: help; text-align: center">help_outline</div>-->
+  <!--  <div class="pin-top right material-icons" title="Ao clicar em um Cargo, abrir-se-á uma lista com o(s) tercerizados-->
+  <!--atualmente alocados neste cargo, as datas de disponibilização de-->
+  <!--cada funcionário e as datas de desligamento, caso existam."-->
+  <!--       style="cursor: help; text-align: center">help_outline</div>-->
   <br>
-    <div class="row" *ngIf="listaCargosFuncionarios.length === 0">
-        <div class="col s12 grey lighten-4">
-            <h5 class="center-align">Não há funcionários cadastrados nas funções ainda <i class="small material-icons">mood_bad</i>. Por favor aloque funcionários nas funções !</h5>
-        </div>
+  <div class="row" *ngIf="listaCargosFuncionarios.length === 0">
+    <div class="col s12 grey lighten-4">
+      <h5 class="center-align">Não há funcionários cadastrados nas funções ainda <i class="small material-icons">mood_bad</i>.
+        Por favor aloque funcionários nas funções !</h5>
     </div>
-  <ul materialize="collapsible" class="collapsible" data-collapsible="accordion" id="cargos-funcionarios" *ngIf="listaCargosFuncionarios.length > 0">
+  </div>
+  <ul materialize="collapsible" class="collapsible" data-collapsible="accordion" id="cargos-funcionarios"
+      *ngIf="listaCargosFuncionarios.length > 0">
     <li *ngFor="let lista of listaCargosFuncionarios">
       <div class="collapsible-header">
         <h5 class="center white-text">{{lista.nomeCargo}}</h5>
@@ -49,20 +43,20 @@ atualmente alocados neste cargo, as datas de disponibilização de cada funcion�
       <div class="collapsible-body">
         <table class="centered hoverable z-depth-1 highlight bordered">
           <thead>
-            <tr>
-              <th></th>
-              <th>Funcionário</th>
-              <th>Data de Disponibilização</th>
-              <th>Data de Desligamento</th>
-            </tr>
+          <tr>
+            <th></th>
+            <th>Funcionário</th>
+            <th>Data de Disponibilização</th>
+            <th>Data de Desligamento</th>
+          </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let funcionario of lista.cargosFuncionarios; let i=index">
-              <td>{{i + 1}}</td>
-              <td>{{funcionario.funcionario.nome}}</td>
-              <td>{{funcionario.dataDisponibilizacao | datePipe}}</td>
-              <td>{{funcionario.dataDesligamento | datePipe}}</td>
-            </tr>
+          <tr *ngFor="let funcionario of lista.cargosFuncionarios; let i=index">
+            <td>{{i + 1}}</td>
+            <td>{{funcionario.funcionario.nome}}</td>
+            <td>{{funcionario.dataDisponibilizacao | datePipe}}</td>
+            <td>{{funcionario.dataDesligamento | datePipe}}</td>
+          </tr>
           </tbody>
         </table>
       </div>

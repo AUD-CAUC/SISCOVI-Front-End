@@ -15,7 +15,7 @@ import {EventoContratual} from '../evento-contratual';
 import {TipoEventoContratual} from '../tipo-evento-contratual';
 import {HistoricoGestor} from '../../../historico/historico-gestor';
 import {MaterializeAction} from 'angular2-materialize';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Rubrica} from '../../../rubricas/rubrica';
 import {init} from "protractor/built/launcher";
 
@@ -25,6 +25,7 @@ import {init} from "protractor/built/launcher";
   styleUrls: ['./cadastrar-ajustes.component.scss']
 })
 export class CadastrarAjustesComponent {
+  codContrato: number;
   contratos: Contrato[];
   field = false;
   usuarios: Usuario[];
@@ -48,17 +49,27 @@ export class CadastrarAjustesComponent {
   modalActions2 = new EventEmitter<string | MaterializeAction>();
   modalActions3 = new EventEmitter<string | MaterializeAction>();
   tempCon: Contrato;
-  incidenciaMinima = 14.30;
+  incidenciaMinima = 9.0;
   incidenciaMaxima = 39.80;
   // dataInicioVig = this.tempCon.dataFim;
   // dataFimVig: Date;
 
   constructor(private contratoService: ContratosService, private userService: UserService, private config: ConfigService,
               private  fb: FormBuilder, private percentService: PercentualService, private convService: ConvencaoService,
-              private ref: ChangeDetectorRef, private cargoService: CargoService, private router: Router) {
+              private ref: ChangeDetectorRef, private cargoService: CargoService, private router: Router, private route: ActivatedRoute) {
+    route.params.subscribe(params => {
+      this.codContrato = params['codContrato'];
+      // if (this.id) {
+      //   rubricaService.buscarRubrica(this.id).subscribe(res => {
+      //     this.rubrica = res;
+      //     this.rubricaForm.controls.nome.setValue(this.rubrica.nome);
+      //     this.rubricaForm.controls.sigla.setValue(this.rubrica.sigla);
+      //     this.rubricaForm.controls.descricao.setValue(this.rubrica.descricao);
+      //   });
+      // }
+    });
     this.contratoService.getContratosDoUsuario().subscribe(res => {
       this.contratos = res;
-      console.log(res);
     });
     this.percentService.getPercentuaisFerias().subscribe(res => {
       if (!res.error) {
@@ -88,10 +99,12 @@ export class CadastrarAjustesComponent {
     this.cargoService.getAllCargos().subscribe(res => {
       this.cargosCadastrados = res;
     }, error2 => {
+        // faz nada
     });
     this.contratoService.getTiposEventosContratuais().subscribe(res => {
       this.tiposEventosContratuais = res;
     });
+    this.enableField(this.codContrato);
   }
 
   enableField(codigo: number) {
@@ -129,7 +142,7 @@ export class CadastrarAjustesComponent {
     this.myForm = this.fb.group({
       cargos: this.fb.array([]),
       tipoAjuste: new FormControl('', [Validators.required]),
-      prorrogacao: new FormControl('S', [Validators.required]),
+      prorrogacao: new FormControl('', [Validators.required]),
       gestor: new FormControl('', [Validators.required]),
       primeiroSubstituto: new FormControl(''),
       segundoSubstituto: new FormControl(''),
@@ -524,7 +537,7 @@ export class CadastrarAjustesComponent {
   }
 
   private navToAjustes() {
-    this.router.navigate(['ajustes-contratuais'], {skipLocationChange: true});
+    this.router.navigate(['./contratos']);
   }
     public percentualValidator(control: AbstractControl): {[key: string]: any} {
         const percentual = control.value;
@@ -564,22 +577,40 @@ export class CadastrarAjustesComponent {
     const mensagem = [];
     if (control.parent) {
       if ((control.value.length === 10)) {
-        const dia = Number(control.value.split('/')[0]);
-        const mes = Number(control.value.split('/')[1]) - 1;
-        const ano = Number(control.value.split('/')[2]);
+        let dia = Number(control.value.split('/')[0]);
+        let mes = Number(control.value.split('/')[1]) - 1;
+        let ano = Number(control.value.split('/')[2]);
         const inicioVigencia: Date = new Date(ano, mes, dia);
-        // const fimVigencia: Date = new Date(ano, mes, dia);
+
+        dia = Number(control.parent.get('fimVigencia').value.split('/')[0]);
+        mes = Number(control.parent.get('fimVigencia').value.split('/')[1]) - 1;
+        ano = Number(control.parent.get('fimVigencia').value.split('/')[2]);
+        const fimVigencia: Date = new Date(ano, mes, dia);
+
         const val: Number[] = control.parent.get('dataInicioContrato').value.split('-');
         const inicioContrato: Date = new Date(Number(val[0]), Number(val[1]) - 1, Number(val[2]));
+
         const val2: Number[] = control.parent.get('dataFimContrato').value.split('-');
         const fimContrato: Date = new Date(Number(val2[0]), Number(val2[1]) - 1, Number(val2[2]));
+
         if (inicioVigencia < inicioContrato) {
-          mensagem.push('a data do ajuste não pode ser anterior ao início do contrato!');
+          mensagem.push('A data do ajuste não pode ser anterior ao início do contrato!');
+        } else if (inicioVigencia >= fimVigencia) {
+          mensagem.push('A data de início da vigência deve ser');
+          mensagem.push('anterior à data fim da vigência do ajuste');
         } else if (control.parent.get('prorrogacao').value === 'S') {
-          console.log('foi');
-          if (inicioVigencia < fimContrato) {
+          if (inicioVigencia <= fimContrato) {
             mensagem.push('Em caso de prorrogações, a data de início da vigência deve ser posterior a data de término do' +
               ' contrato ou do ajuste anterior!');
+          } else {
+              const diff = Math.abs(inicioVigencia.getTime() - fimContrato.getTime());
+              console.log(diff);
+              const diffDay = Math.round(diff / (1000 * 3600 * 24));
+              console.log(diffDay);
+              if (diffDay > 1) {
+                  mensagem.push('A vigência da nova prorrogação deve ser imediatamente 1(um) dia posterior ao fim da' +
+                      'vigência do contrato ou ajuste atual!');
+              }
           }
         }
       }
@@ -597,17 +628,28 @@ export class CadastrarAjustesComponent {
           mes = Number(control.value.split('/')[1]) - 1;
           ano = Number(control.value.split('/')[2]);
           const fimVig: Date = new Date(ano, mes, dia);
+
           dia = Number(control.parent.get('inicioVigencia').value.split('/')[0]);
           mes = Number(control.parent.get('inicioVigencia').value.split('/')[1]) - 1;
           ano = Number(control.parent.get('inicioVigencia').value.split('/')[2]);
           const inicioVig: Date = new Date(ano, mes, dia);
-          const val: Number[] = control.parent.get('dataInicioContrato').value.split('-');
+
+          let val: Number[] = control.parent.get('dataInicioContrato').value.split('-');
           const inicioContrato: Date = new Date(Number(val[0]), Number(val[1]) - 1, Number(val[2]));
-          if (fimVig <= inicioVig) {
-            mensagem.push('A data fim do ajuste deve ser posterior que a data de início do ajuste !');
-          }
+
+          val = control.parent.get('dataFimContrato').value.split('-');
+          const fimContrato: Date = new Date(Number(val[0]), Number(val[1]) - 1, Number(val[2]));
+
           if (fimVig <= inicioContrato) {
-            mensagem.push('A data fim da vigência de um ajuste não pode ser anterior a data de início do contrato!');
+              mensagem.push('A data fim da vigência de um ajuste não pode ser anterior a data de início do contrato!');
+          }
+          if (fimVig <= inicioVig) {
+            mensagem.push('Erro: data fim da vigência menor que a data início.');
+          } else if ((control.parent.get('prorrogacao').value === 'S')) {
+            const dataLimite = new Date(inicioVig.getFullYear() + 1, inicioVig.getMonth(), inicioVig.getDate() - 1);
+            if (fimVig.getTime() !== dataLimite.getTime()) {
+              mensagem.push('A vigência de uma prorrogação deve ter duração de 1(um) ano');
+            }
           }
         }
       }
@@ -628,11 +670,39 @@ export class CadastrarAjustesComponent {
         mes = Number(control.parent.get('inicioVigencia').value.split('/')[1]) - 1;
         ano = Number(control.parent.get('inicioVigencia').value.split('/')[2]);
         const inicioVig: Date = new Date(ano, mes, dia);
-        if (assinDig > inicioVig) {
-          mensagem.push('A data da assinatura de um ajuste não pode ser posterior ao início da vigência do ajuste!');
-        }
+          if (control.parent.get('prorrogacao').value === 'S') {
+              if (assinDig > inicioVig) {
+                  mensagem.push('A data da assinatura de um ajuste não pode ser posterior ao início da vigência do ajuste!');
+              } else {
+                  // faz nada
+              }
+          }
       }
     }
     return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
+  }
+  voltaContratos() {
+    this.router.navigate(['/contratos']);
+  }
+
+  mudaFimVigencia(value) {
+    this.myForm.controls.inicioVigencia.setValue('');
+    this.myForm.controls.inicioVigencia.enable();
+    this.myForm.controls.fimVigencia.setValue('');
+    this.myForm.controls.fimVigencia.enable();
+    if (value === 'S') {
+      const ano = Number(this.myForm.controls.dataFimContrato.value.split('-')[0]);
+      const mes = Number(this.myForm.controls.dataFimContrato.value.split('-')[1]) - 1;
+      const dia = Number(this.myForm.controls.dataFimContrato.value.split('-')[2]) + 1;
+      const data: Date = new Date(ano, mes, dia);
+      this.myForm.controls.inicioVigencia.setValue(data.toLocaleDateString());
+      this.myForm.controls.inicioVigencia.disable();
+      this.myForm.controls.inicioVigencia.updateValueAndValidity();
+    } else if (value === 'N') {
+      const data: Date = new Date(this.myForm.controls.dataFimContrato.value.split('-'));
+      this.myForm.controls.fimVigencia.setValue(data.toLocaleDateString());
+      this.myForm.controls.fimVigencia.disable();
+      this.myForm.controls.fimVigencia.updateValueAndValidity();
+    }
   }
 }

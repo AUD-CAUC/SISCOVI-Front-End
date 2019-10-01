@@ -23,12 +23,18 @@
     "@angular/router": "^4.4.7",
     "angular2-materialize": "^15.1.10",
     "bootstrap": "^4.3.1",
+    "chart.js": "^2.8.0",
     "core-js": "^2.6.5",
     "cpf_cnpj": "^0.2.0",
+    "exceljs": "^1.14.0",
+    "file-saver": "^2.0.2",
     "hammerjs": "^2.0.8",
     "handlebars": "^4.1.2",
     "hoek": "^5.0.4",
+    "html2canvas": "^1.0.0-rc.3",
+    "html2pdf.js": "^0.9.1",
     "jquery": "^3.4.1",
+    "jspdf": "^1.5.3",
     "materialize-css": "^0.100.2",
     "ng-pick-datetime": "^6.0.16",
     "ng2-currency-mask": "^5.3.1",
@@ -61,6 +67,6 @@
     "protractor": "^5.4.2",
     "ts-node": "~3.2.0",
     "tslint": "~5.7.0",
-    "typescript": "~2.3.3"
+    "typescript": "^2.8.4"
   }
 }

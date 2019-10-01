@@ -53,7 +53,7 @@ export class CadastroContratoComponent implements OnInit {
     modalActions2 = new EventEmitter<string | MaterializeAction>();
     convencoesColetivas: Convencao[];
     percentuaisDinamicos: PercentualDinamico[] = [];
-    incidenciaMinima = 14.30;
+    incidenciaMinima = 9.0;
     incidenciaMaxima = 39.80;
     percDinService: PercentualDinamicoService;
     constructor(router: Router, route: ActivatedRoute, carSer: CargoService, fb: FormBuilder, fb1: FormBuilder, contratoService: ContratosService, userService: UserService,
@@ -67,6 +67,7 @@ export class CadastroContratoComponent implements OnInit {
         this.percDinService = percentualDinamicoService;
         this.percDinService.getAllPercentuaisDinamicos().subscribe(res => {
             this.percentuaisDinamicos = res;
+            console.log(res);
         });
         this.carSer.getAllCargos().subscribe(res => {
             this.cargosCadastrados = res;
@@ -88,8 +89,8 @@ export class CadastroContratoComponent implements OnInit {
     ngOnInit() {
         this.myForm2 = this.fb1.group({
             inicioVigencia: new FormControl('', [Validators.required, this.myDateValidator]),
-            fimVigencia: new FormControl('', [Validators.required, this.myDateValidator]),
-            assinatura: new FormControl('', [Validators.required, this.myDateValidator]),
+            fimVigencia: new FormControl('', [Validators.required, this.myDateValidator, this.fimContratoValidator]),
+            assinatura: new FormControl('', [Validators.required, this.myDateValidator, this.assinaturaValidator]),
             nomeGestor: new FormControl('', [Validators.required, this.nameValidator]),
             nomeEmpresa: new FormControl('', [Validators.required, this.nameValidator]),
             cnpj: new FormControl('', [Validators.required, this.cnpjValidator]),
@@ -118,10 +119,10 @@ export class CadastroContratoComponent implements OnInit {
     initCargos() {
         return this.fb.group({
             nome: new FormControl('', [Validators.required]),
-            remuneracao: new FormControl('', [Validators.required]),
+            remuneracao: new FormControl('0', [Validators.required]),
             descricao: new FormControl(''),
-            adicionais: new FormControl(''),
-            trienios: new FormControl(''),
+            adicionais: new FormControl('0'),
+            trienios: new FormControl('0'),
             convencao: new FormControl(''),
             dataBase: new FormControl('')
             // dia: new FormControl('', [Validators.required]),
@@ -149,24 +150,21 @@ export class CadastroContratoComponent implements OnInit {
         const control = <FormArray>this.myForm.controls.cargos;
         control.removeAt(i);
     }
-    public myDateValidator(control: AbstractControl): {[key: string]: any} {
+    public myDateValidator(control: AbstractControl): { [key: string]: any } {
         const val = control.value;
         const mensagem = [];
         const otherRegex = new RegExp(/^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[1,3-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$/);
-        if (val.length > 0 ) {
+        if (val.length === 10) {
             const dia = Number(val.split('/')[0]);
             const mes = Number(val.split('/')[1]);
             const ano = Number(val.split('/')[2]);
-            if (dia <= 0 || dia > 31 ) {
+            if (dia <= 0 || dia > 31) {
                 mensagem.push('O dia da data é inválido.');
-            }
-            if (mes <= 0 || mes > 12) {
+            } else if (mes <= 0 || mes > 12) {
                 mensagem.push('O Mês digitado é inválido');
-            }
-            if (ano < 2000 || ano > (new Date().getFullYear() + 5)) {
+            } else if (ano < 2000 || ano > (new Date().getFullYear() + 5)) {
                 mensagem.push('O Ano digitado é inválido');
-            }
-            if (val.length === 10 ) {
+            } else if (val.length !== 10) {
                 if (!otherRegex.test(val)) {
                     mensagem.push('A data digitada é inválida');
                 }
@@ -362,4 +360,89 @@ export class CadastroContratoComponent implements OnInit {
         percentuais.push(percentual);
         return percentuais;
     }
+  voltaContratos() {
+    this.router.navigate(['/contratos']);
+  }
+    public fimContratoValidator(control: AbstractControl): { [key: string]: any} | null {
+        const mensagem = [];
+        if (control.parent) {
+            if ((control.value.length === 10)) {
+                let dia: number;
+                let mes: number;
+                let ano: number;
+                dia = Number(control.value.split('/')[0]);
+                mes = Number(control.value.split('/')[1]) - 1;
+                ano = Number(control.value.split('/')[2]);
+                const fimVig: Date = new Date(ano, mes, dia);
+                dia = Number(control.parent.get('inicioVigencia').value.split('/')[0]);
+                mes = Number(control.parent.get('inicioVigencia').value.split('/')[1]) - 1;
+                ano = Number(control.parent.get('inicioVigencia').value.split('/')[2]);
+                const inicioVig: Date = new Date(ano, mes, dia);
+              if (fimVig <= inicioVig) {
+                console.log('entrou');
+                mensagem.push('A data fim do contrato deve ser posterior que a data de início digitada !');
+              } else if (!((ano % 4 === 0) && ((ano % 100 !== 0) || (ano % 400 === 0)))) {
+                console.log('entrou no 1');
+                const diff = Math.abs(fimVig.getTime() - inicioVig.getTime());
+                console.log(diff);
+                const diffDay = Math.round(diff / (1000 * 3600 * 24));
+                console.log(diffDay);
+                if (diffDay < 364 || diffDay >= 365) {
+                  mensagem.push('A vigência do contrato deve ter duração de 1(um) ano!');
+                }
+              } else {
+                console.log('entrou no 2');
+                const diff = Math.abs(fimVig.getTime() - inicioVig.getTime());
+                console.log(diff);
+                const diffDay = Math.round(diff / (1000 * 3600 * 24));
+                console.log(diffDay);
+                if (diffDay < 365 || diffDay >= 366 ) {
+                  mensagem.push('A vigência do contrato deve ter duração de 1(um) ano!');
+                }
+              }
+            }
+        }
+        return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
+    }
+    public assinaturaValidator(control: AbstractControl): { [key: string]: any} | null {
+        const mensagem = [];
+        if (control.parent) {
+            if ((control.value.length === 10)) {
+                let dia: number;
+                let mes: number;
+                let ano: number;
+                dia = Number(control.value.split('/')[0]);
+                mes = Number(control.value.split('/')[1]) - 1;
+                ano = Number(control.value.split('/')[2]);
+                const assinDig: Date = new Date(ano, mes, dia);
+                dia = Number(control.parent.get('inicioVigencia').value.split('/')[0]);
+                mes = Number(control.parent.get('inicioVigencia').value.split('/')[1]) - 1;
+                ano = Number(control.parent.get('inicioVigencia').value.split('/')[2]);
+                const inicioVig: Date = new Date(ano, mes, dia);
+                if (assinDig > inicioVig) {
+                    mensagem.push('A data da assinatura de um ajuste não pode ser posterior ao início da vigência do ajuste!');
+                }
+            }
+        }
+        return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
+    }
+
+  // public listaParaSelecao() {
+  //   const gest = this.myForm2.parent.get('nomeGestor').value;
+  //   const fstSubs = this.myForm2.parent.get('primeiroSubstituto').value;
+  //   console.log(fstSubs);
+  //   const sndSubs = this.myForm2.parent.get('segundoSubstituto').value;
+  //   const trdSubs = this.myForm2.parent.get('terceiroSubstituto').value;
+  //   const fthSubs = this.myForm2.parent.get('quartoSubstituto').value;
+  //   if (this.usuarios) {
+  //     this.usuarios.forEach((usuario) => {
+  //       this.listaParaMostrar.push(usuario.nome);
+  //       if (usuario.nome === gest || usuario.nome === fstSubs || usuario.nome === sndSubs ||
+  //         usuario.nome === trdSubs || usuario.nome === fthSubs) {
+  //         // console.log(usuario.nome, gest);
+  //         this.listaParaMostrar.splice(this.listaParaMostrar.indexOf(usuario.nome));
+  //       }
+  //     });
+  //   }
+  // }
 }

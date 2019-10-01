@@ -7,7 +7,7 @@
           funcionário clique no atalho abaixo e siga o procedimento para desligamento de terceirizado:</h5>
       </div>
       <div class="row center-align">
-        <button class="btn waves-effect" (click)="goToGerenciarCargos()">Gerenciar Função do Terceirizado</button>
+        <button class="btn waves-effect" (click)="acessoTerceirizados(codigoContrato)">Gerenciar Função do Terceirizado</button>
       </div>
     </div>
   </div>
@@ -140,7 +140,7 @@
             <div class="row">
               <div class="input-field col m9">
                 <input type="text" class="validate" placeholder="Ex: 01/01/2000" appMaskDate
-                       formControlName="dataInicioFeriasProporcionais" maxlength="10" required>
+                       formControlName="dataInicioFeriasProporcionais" maxlength="10">
                 <div *ngIf="rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasProporcionais').invalid && (rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasProporcionais').dirty ||
                                 rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasProporcionais').touched)">
                   <div

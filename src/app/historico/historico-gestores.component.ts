@@ -4,6 +4,7 @@ import {Contrato} from '../contratos/contrato';
 import {ContratosService} from '../contratos/contratos.service';
 import {HistoricoGestor} from './historico-gestor';
 import {ActivatedRoute, Router} from '@angular/router';
+import {ConfigService} from '../_shared/config.service';
 
 @Component({
     selector: 'app-historico-gestores-component',
@@ -12,19 +13,43 @@ import {ActivatedRoute, Router} from '@angular/router';
 })
 export class HistoricoGestoresComponent {
     contratos: Contrato[];
+    admin: boolean;
     historicoGestor: HistoricoGestor[];
-    constructor(private histoService: HistoricoService, private contratoService: ContratosService, private router: Router, private route: ActivatedRoute) {
+    codigoContrato: number;
+
+    constructor(private histoService: HistoricoService, private contratoService: ContratosService, private router: Router, private route: ActivatedRoute, private config: ConfigService) {
+        if (this.config.user.perfil.sigla === 'ADMINISTRADOR') {
+            this.admin = true;
+        }
         this.contratoService.getContratosDoUsuario().subscribe(res => {
             this.contratos = res;
         });
+        route.params.subscribe(params => {
+            this.codigoContrato = params['codContrato'];
+            // if (this.id) {
+            //   rubricaService.buscarRubrica(this.id).subscribe(res => {
+            //     this.rubrica = res;
+            //     this.rubricaForm.controls.nome.setValue(this.rubrica.nome);
+            //     this.rubricaForm.controls.sigla.setValue(this.rubrica.sigla);
+            //     this.rubricaForm.controls.descricao.setValue(this.rubrica.descricao);
+            //   });
+            // }
+        });
+        this.selecionarContrato(this.codigoContrato);
     }
+
     selecionarContrato(value: number) {
         this.histoService.getHistoricoGestores(value).subscribe(res => {
-           this.historicoGestor = res;
+            this.historicoGestor = res;
         });
     }
+
     cadastroGestorContrato() {
         this.router.navigate(['./cadastro-gestor-contrato'], {relativeTo: this.route});
+    }
+
+    voltaContratos() {
+        this.router.navigate(['/contratos']);
     }
 
     editarHistoricoGestaoContrato(id: number) {

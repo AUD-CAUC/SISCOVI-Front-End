@@ -50,7 +50,7 @@ export class MovimentacaoDecimoTerceiroComponent implements OnInit {
         parcelas: new FormControl(0),
         selected: new FormControl(this.isSelected),
         tipoRestituicao: new FormControl(this.tipoRestituicao),
-        valorDisponivel: new FormControl(item.valorDisponivel),
+        valorDisponivel: new FormControl(item.valorDisponivel - item.valorMovimentado),
         inicioContagem: new FormControl(item.inicioContagem),
         emAnalise: new FormControl(item.emAnalise),
         restituidoAnoPassado: new FormControl(item.restituidoAnoPassado),

@@ -2,3 +2,10 @@
   padding-left: 25px !important;
 }
 
+.nav .open > a, .nav .open > a:focus, .nav .open > a:hover {
+  background-color: #99aaaf;
+}
+
+.nav > li > a:focus, .nav > li > a:hover {
+  background-color: #99aaaf;
+}

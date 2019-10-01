@@ -128,6 +128,7 @@ export class ResgateRescisaoComponent implements OnInit {
     this.navegaParaViewDeCalculos.emit(this.codigoContrato);
   }
   efetuarCalculo(): void {
+
     this.rescisaoService.registrarCalculoRescisao(this.calculosRescisao).subscribe(res => {
       if (res.success) {
         this.closeModal3();
@@ -149,7 +150,7 @@ export class ResgateRescisaoComponent implements OnInit {
             null,
             null,
             this.stringToDate(this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasProporcionais').value),
-            this.terceirizados[i].dataDesligamento,
+            this.terceirizados[i].pDataFimFeriasProporcionais,
             0,
             0,
             0,
@@ -232,7 +233,7 @@ export class ResgateRescisaoComponent implements OnInit {
       }
     }
   }
-  goToGerenciarCargos() {
-    this.router.navigate(['./gerenciar-funcoes-terceirizados'], {relativeTo: this.route});
-  }
+    acessoTerceirizados(codigoContrato) {
+        this.router.navigate(['./funcoes-dos-terceirizados', codigoContrato], {relativeTo: this.route});
+    }
 }

@@ -2,16 +2,16 @@
     <h2 class="center">Cadastar Ajuste</h2>
     <div class="row">
         <h4 class="center">Contrato</h4>
-        <div class="row">
-            <div class="col s8" id="selected-contrato-center">
-                <select materialize="material_select" [materializeSelectOptions]="contratos"
-                    (change)="enableField($event.target.value)" class="center center-align">
-                    <option disabled>Selecione um Contrato</option>
-                    <option *ngFor="let contrato of contratos" [value]="contrato.codigo">{{contrato.nomeDaEmpresa}} - Contrato Nº: {{contrato.numeroDoContrato}}
-                    </option>
-                </select>
-            </div>
-        </div>
+<!--        <div class="row">-->
+<!--            <div class="col s8" id="selected-contrato-center">-->
+<!--                <select materialize="material_select" [materializeSelectOptions]="contratos"-->
+<!--                    (change)="enableField($event.target.value)" class="center center-align">-->
+<!--                    <option disabled>Selecione um Contrato</option>-->
+<!--                    <option *ngFor="let contrato of contratos" [value]="contrato.codigo">{{contrato.nomeDaEmpresa}} - Contrato Nº: {{contrato.numeroDoContrato}}-->
+<!--                    </option>-->
+<!--                </select>-->
+<!--            </div>-->
+<!--        </div>-->
     </div>
 </div>
 <div class="container">
@@ -29,9 +29,10 @@
                     <label for="tipo_ajuste">Tipo de Ajuste<span class="mensagem-erro">*</span></label>
                 </div>
                 <div class="input-field col s5">
-                    <select materialize="material_select" id="prorrogacao" formControlName="prorrogacao" required>
-                        <option value="N" selected>Não</option>
-                        <option value="S">Sim</option>
+                    <select materialize="material_select" id="prorrogacao" formControlName="prorrogacao" (change)="mudaFimVigencia($event.target.value)" required>
+                        <option disabled>Selecione a opção</option>
+                      <option value="S">Sim</option>
+                      <option value="N">Não</option>
                     </select>
                     <label for="prorrogacao">Prorrogação<span class="mensagem-erro">*</span></label>
                 </div>
@@ -168,7 +169,7 @@
                 <div class="input-field col s12">
                     <textarea class="materialize-textarea" materialize
                               id="assunto" formControlName="assunto"
-                              data-length="120"></textarea>
+                              data-length="1000"></textarea>
                     <label for="assunto">Assunto</label>
                 </div>
             </div>
@@ -280,9 +281,10 @@
           Outro Cargo
       </button> -->
         </form>
-        <div class="center-align">
-            <button class="btn waves-effect" [disabled]="myForm.invalid" (click)="verificaAjusteASerCadastrado()">Cadastrar Ajuste</button>
-        </div>
+      <div class="row">
+        <button class="btn waves-effect right" [disabled]="myForm.invalid" style="margin-right: 13vw" (click)="verificaAjusteASerCadastrado()">Cadastrar Ajuste</button>
+        <button class="waves-effect btn left" style="margin-left: 13vw" (click)="voltaContratos()">Voltar</button>
+      </div>
     </div>
 </div>
 <div *ngIf="tempCon" id="modal1" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]"

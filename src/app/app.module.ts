@@ -51,6 +51,7 @@ import {CadastrarRubricaComponent} from './rubricas/cadastrar-rubrica/cadastrar-
 import {CadastroCargosComponent} from './cargos/cadastro-cargos/cadastro-cargos.component';
 import {VisualizaCargoCadastroComponent} from './cargos/cadastro-cargos/visualiza-cargo-cadastro.component';
 import {AjusteContratoComponent} from './contratos/ajustes-contratuais/ajuste-contrato.component';
+import {VisualizarAjusteComponent} from './contratos/visualizar-ajuste/visualizar-ajuste.component';
 import {KzMaskDirective} from './_shared/kz-mask.directive';
 import {TitlecaseMaskDirective} from './_shared/titlecase-mask.directive';
 import {PagerService} from './_shared/pager.service';
@@ -153,6 +154,7 @@ import {CadastrarConvencaoComponent} from './convencoes-coletivas/cadastrar-conv
     CadastroCargosComponent,
     VisualizaCargoCadastroComponent,
     AjusteContratoComponent,
+    VisualizarAjusteComponent,
     CadastrarAjustesComponent,
     HistoricoGestoresComponent,
     TotalMensalComponent,

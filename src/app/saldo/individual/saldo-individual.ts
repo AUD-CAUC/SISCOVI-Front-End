@@ -7,6 +7,7 @@ export class SaldoIndividual {
   decimoTerceiroRetido: number;
   incidenciaRetido: number;
   multaFgtsRetido: number;
+  multaFgtsRestituido: number;
   feriasRestituido: number;
   tercoRestituido: number;
   incidenciaFeriasRestituido: number;

@@ -21,6 +21,7 @@ export class Contrato {
   public loginAtualizacao: string;
   public dataAtualizacao: Date;
   public eventoContratual: EventoContratual;
+  public eventosContratuais: EventoContratual[];
 
   constructor(nomeDaEmpresa: string, cnpj: string, codigo: number, numeroDoContrato: string, anoDoContrato: number, dataInicio: Date, dataFim: Date, objeto: string,
               seAtivo: string, historicoGestao: HistoricoGestor[], funcoes: Cargo[]) {
