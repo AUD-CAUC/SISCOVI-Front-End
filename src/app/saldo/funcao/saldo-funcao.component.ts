@@ -47,7 +47,7 @@ export class SaldoFuncaoComponent {
                         this.somaDecimo = this.somaDecimo + this.saldos[i].valorDecimoTerceiroRetido - this.saldos[i].valorDecimoTerceiroRestituido;
                         this.somaIncidencia = this.somaIncidencia + (this.saldos[i].valorIncidenciaRetido - this.saldos[i].valorIncidenciaFeriasRestituido -
                           this.saldos[i].valorIncidenciaTercoRestituido - this.saldos[i].valorIncidenciaDecimoTerceiroRestituido);
-                        this.somaMultaFGTS = this.somaMultaFGTS + this.saldos[i].valorMultaFGTSRetido;
+                        this.somaMultaFGTS = this.somaMultaFGTS + this.saldos[i].valorMultaFGTSRetido - this.saldos[i].valorMultaFGTSRestituido;
                         this.somaSaldo = this.somaSaldo + this.saldos[i].valorSaldo;
 
                       }
@@ -78,7 +78,7 @@ export class SaldoFuncaoComponent {
                     this.somaDecimo = this.somaDecimo + this.saldos[i].valorDecimoTerceiroRetido - this.saldos[i].valorDecimoTerceiroRestituido;
                     this.somaIncidencia = this.somaIncidencia + (this.saldos[i].valorIncidenciaRetido - this.saldos[i].valorIncidenciaFeriasRestituido -
                       this.saldos[i].valorIncidenciaTercoRestituido - this.saldos[i].valorIncidenciaDecimoTerceiroRestituido);
-                    this.somaMultaFGTS = this.somaMultaFGTS + this.saldos[i].valorMultaFGTSRetido;
+                    this.somaMultaFGTS = this.somaMultaFGTS + this.saldos[i].valorMultaFGTSRetido - this.saldos[i].valorMultaFGTSRestituido;
                     this.somaSaldo = this.somaSaldo + this.saldos[i].valorSaldo;
 
                   }
