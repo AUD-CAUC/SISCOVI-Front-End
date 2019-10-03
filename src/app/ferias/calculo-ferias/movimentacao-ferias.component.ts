@@ -482,7 +482,7 @@ export class MovimentacaoFeriasComponent implements OnInit {
           mensagem.push('A data de início do usufruto deve ser maior que a data fim do período aquisitivo !');
         } else if (inicioUsufruto <= inicioPeriodoAquisitivo) {
           mensagem.push('A data de início do usufruto deve ser maior que a data inicio do período aquisitivo !');
-        } else if (inicioUsufruto >= fimContrato) {
+        } else if (fimPeriodoAquisitivo >= fimContrato) {
           mensagem.push('Por este período aquisitivo ser o último do contrato, ele deve ser restituído na rescisão');
         } else if (control.parent.get('dataDesligamento').value) {
           const aux: Number[] = control.parent.get('dataDesligamento').value.split('-');
