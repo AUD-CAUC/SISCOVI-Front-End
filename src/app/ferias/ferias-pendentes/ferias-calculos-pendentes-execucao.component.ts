@@ -235,28 +235,88 @@ export class FeriasCalculosPendentesExecucaoComponent implements OnInit {
         this.openModal5();
       });
   }
-  captureScreen(nomeEmpresa) {
-    const data = document.getElementById(nomeEmpresa);
-    html2canvas(data, {scrollX: 0, scrollY: -window.scrollY}).then(canvas => {
-      // Few necessary setting options
-      const imgWidth = 295;
-      const pageHeight = 205;
-      const imgHeight = canvas.height * imgWidth / canvas.width;
-      const heightLeft = imgHeight;
+  captureScreen(nomeEmpresa, existeNegados) {
 
-      const contentDataURL = canvas.toDataURL('image/jpg');
-      const pdf = new JsPDF('l', 'mm', 'a4'); // A4 size page of PDF
-      const position = 45;
+    if (this.calculosNegados && existeNegados === 1) {
+      const data1 = document.getElementById(nomeEmpresa);
+      html2canvas(data1, {scrollX: 0, scrollY: -window.scrollY}).then(canvas => {
+        // Few necessary setting options
+        const imgWidth = 295;
+        const pageHeight = 205;
+        const imgHeight = canvas.height * imgWidth / canvas.width;
+        let heightLeft = imgHeight;
 
-      // dataReferencia = dataReferencia.split('-');
+        const contentDataURL = canvas.toDataURL('image/jpg');
+        const pdf = new JsPDF('l', 'mm', 'a4'); // A4 size page of PDF
+        let position = 40;
 
-      pdf.text('Restituição Pendente de Execução', 147.5, 15, {align: 'center'});
-      pdf.text(nomeEmpresa, 147.5, 25, {align: 'center'});
-      // pdf.text(dataReferencia[1] + '/' + dataReferencia[0], 105, 35, {align: 'center'});
-      pdf.addImage(contentDataURL, 'jpg', 0, position, imgWidth, imgHeight);
+        pdf.setFontSize(12);
+        pdf.text('Relatório de Cálculos de Execução Negados', 147.5, 15, {align: 'center'});
+        pdf.text(nomeEmpresa, 147.5, 25, {align: 'center'});
+        // pdf.text(dataReferencia[1] + '/' + dataReferencia[0], 105, 35, {align: 'center'});
+        pdf.addImage(contentDataURL, 'jpg', 5, position, imgWidth - 5, imgHeight);
+        heightLeft -= pageHeight;
+
+        while (heightLeft >= 0) {
+          position = heightLeft - imgHeight + position;
+          console.log(position)
+          console.log(heightLeft)
+          console.log(imgHeight)
+          pdf.addPage();
+          pdf.addImage(contentDataURL, 'jpg', 5, position, imgWidth - 5, imgHeight);
+          // pdf.text('Saldo Individual', 105, 15, {align: 'center'});
+          heightLeft -= pageHeight;
+        }
+
+        pdf.viewerPreferences({
+          FitWindow: true
+        });
+
+        // dataReferencia = dataReferencia.split('-');
 
 
-      pdf.save('Relatório_Férias_' + nomeEmpresa + '_Execução.pdf'); // Generated PDF
-    });
+        pdf.save('Relatório_Férias_' + nomeEmpresa + ' Negadas_Execução.pdf'); // Generated PDF
+      });
+    } else {
+      const data2 = document.getElementById(nomeEmpresa);
+      html2canvas(data2, {scrollX: 0, scrollY: -window.scrollY}).then(canvas => {
+        // Few necessary setting options
+        const imgWidth = 205;
+        const pageHeight = 295;
+        const imgHeight = canvas.height * imgWidth / canvas.width;
+        let heightLeft = imgHeight;
+
+        const contentDataURL = canvas.toDataURL('image/jpg');
+        const pdf = new JsPDF('p', 'mm', 'a4'); // A4 size page of PDF
+        let position = 35;
+
+        // dataReferencia = dataReferencia.split('-');
+
+        pdf.setFontSize(12);
+        pdf.text('Restituição Pendente de Execução', 102.5, 15, {align: 'center'});
+        pdf.text(nomeEmpresa, 102.5, 25, {align: 'center'});
+        // pdf.text(dataReferencia[1] + '/' + dataReferencia[0], 105, 35, {align: 'center'});
+        pdf.addImage(contentDataURL, 'jpg', 5, position, imgWidth - 5, imgHeight);
+        heightLeft -= pageHeight;
+
+        while (heightLeft >= 0) {
+          position = heightLeft - imgHeight + position;
+          console.log(position)
+          console.log(heightLeft)
+          console.log(imgHeight)
+          pdf.addPage();
+          pdf.addImage(contentDataURL, 'jpg', 5, position, imgWidth - 5, imgHeight);
+          // pdf.text('Saldo Individual', 105, 15, {align: 'center'});
+          heightLeft -= pageHeight;
+        }
+
+        pdf.viewerPreferences({
+          FitWindow: true
+        });
+
+
+        pdf.save('Relatório_Férias_' + nomeEmpresa + '_Execução.pdf'); // Generated PDF
+      });
+    }
   }
 }

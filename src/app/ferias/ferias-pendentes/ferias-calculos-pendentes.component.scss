@@ -3,14 +3,12 @@
   margin-left: auto;
   margin-right: auto;
 }
-table {
-  display: table;
-  column-width: fit-content;
+
+.input-field {
+  width: 115% !important;
 }
-table body {
-  display: table-row-group !important;
-  width: 100% !important;
-}
+
+
 
 #modal2, #modal4 {
   width: 90% !important ;

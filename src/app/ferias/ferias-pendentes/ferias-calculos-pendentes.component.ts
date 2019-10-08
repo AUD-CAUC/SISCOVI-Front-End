@@ -9,6 +9,7 @@ import {MaterializeAction} from 'angular2-materialize';
 import {ListaCalculosPendentes} from './lista-calculos-pendentes';
 import html2canvas from 'html2canvas';
 import * as JsPDF from 'jspdf';
+import {fontSize} from "html2canvas/dist/types/css/property-descriptors/font-size";
 
 @Component({
   selector: 'app-ferias-calculos-pendentes',
@@ -18,6 +19,7 @@ import * as JsPDF from 'jspdf';
 export class FeriasCalculosPendentesComponent implements OnInit {
   contratos: Contrato[];
   isSelected: boolean[] = [];
+  isRated: string[] = [];
   @Input() calculosPendentes: ListaCalculosPendentes[];
   calculosAvaliados: ListaCalculosPendentes[];
   calculosNegados: ListaCalculosPendentes[];
@@ -73,6 +75,7 @@ export class FeriasCalculosPendentesComponent implements OnInit {
         this.somaIncidenciaFerias = new Array(this.calculosPendentes.length).fill(0);
         this.somaIncidenciaTerco = new Array(this.calculosPendentes.length).fill(0);
         this.somaSaldo = new Array(this.calculosPendentes.length).fill(0);
+        this.isRated = new Array(this.calculosPendentes.length).fill('N');
         for (let i = 0; i < this.calculosPendentes.length; i++) {
           for (let j = 0; j < this.calculosPendentes[i].calculos.length; j++) {
             this.somaFerias[i] = this.somaFerias[i] +
@@ -89,10 +92,13 @@ export class FeriasCalculosPendentesComponent implements OnInit {
         this.ref.markForCheck();
       }
       this.formInit();
+      console.log(this.isRated);
+      console.log(this.isSelected);
     }
   }
 
   formInit() {
+
     if (this.calculosPendentes) {
       this.feriasForm = this.fb.group({
         contratos: this.fb.array([])
@@ -112,6 +118,8 @@ export class FeriasCalculosPendentesComponent implements OnInit {
               avaliacao: new FormControl('S')
             });
             newControl2.push(addControl);
+            console.log(this.isRated);
+            console.log(this.isSelected);
           });
           control.push(newControl);
         });
@@ -121,7 +129,6 @@ export class FeriasCalculosPendentesComponent implements OnInit {
       calculosAvaliados: this.fb.array([])
     });
     this.ref.detectChanges();
-
   }
 
   openModal() {
@@ -254,28 +261,88 @@ export class FeriasCalculosPendentesComponent implements OnInit {
     this.closeModal3();
     this.nav.emit();
   }
-  captureScreen(nomeEmpresa) {
-    const data = document.getElementById(nomeEmpresa);
-    html2canvas(data, {scrollX: 0, scrollY: -window.scrollY}).then(canvas => {
-      // Few necessary setting options
-      const imgWidth = 295;
-      const pageHeight = 205;
-      const imgHeight = canvas.height * imgWidth / canvas.width;
-      const heightLeft = imgHeight;
+  captureScreen(nomeEmpresa, existeNegados) {
+    console.log(nomeEmpresa);
+    console.log(existeNegados);
+    if (this.calculosNegados && existeNegados === 1) {
+          const data1 = document.getElementById(nomeEmpresa);
+          console.log(data1);
+          html2canvas(data1, {scrollX: 0, scrollY: -window.scrollY}).then(canvas => {
+            // Few necessary setting options
+            const imgWidth = 205;
+            const pageHeight = 295;
+            const imgHeight = canvas.height * imgWidth / canvas.width;
+            let heightLeft = imgHeight;
 
-      const contentDataURL = canvas.toDataURL('image/jpg');
-      const pdf = new JsPDF('l', 'mm', 'a4'); // A4 size page of PDF
-      const position = 45;
+            const contentDataURL = canvas.toDataURL('image/jpg');
+            const pdf = new JsPDF('p', 'mm', 'a4'); // A4 size page of PDF
+            let position = 35;
+            heightLeft -= pageHeight;
 
-      // dataReferencia = dataReferencia.split('-');
+            while (heightLeft >= 0) {
+              position = heightLeft - imgHeight + position;
+              pdf.addPage();
+              pdf.addImage(contentDataURL, 'jpg', 5, position, imgWidth - 5, imgHeight);
+              // pdf.text('Saldo Individual', 105, 15, {align: 'center'});
+              heightLeft -= pageHeight;
+            }
 
-      pdf.text('Restituição Pendente de Aprovação', 147.5, 15, {align: 'center'});
-      pdf.text(nomeEmpresa, 147.5, 25, {align: 'center'});
-      // pdf.text(dataReferencia[1] + '/' + dataReferencia[0], 105, 35, {align: 'center'});
-      pdf.addImage(contentDataURL, 'jpg', 0, position, imgWidth, imgHeight);
+            pdf.viewerPreferences({
+              FitWindow: true
+            });
+
+            // dataReferencia = dataReferencia.split('-');
+            pdf.setFontSize(12);
+            pdf.text('Relatório de Cáculos Negados', 102.5, 15, {align: 'center'});
+            pdf.text(nomeEmpresa, 102.5, 25, {align: 'center'});
+            // pdf.text(dataReferencia[1] + '/' + dataReferencia[0], 105, 35, {align: 'center'});
+            pdf.addImage(contentDataURL, 'jpg', 5, position, imgWidth - 5, imgHeight);
 
 
-      pdf.save('Relatório_Férias_' + nomeEmpresa + '_Aprovação.pdf'); // Generated PDF
-    });
+            pdf.save('Relatório_Férias_' + nomeEmpresa + '_Negadas.pdf'); // Generated PDF
+          });
+    } else {
+      console.log('entrou no else')
+      const data2 = document.getElementById(nomeEmpresa);
+      console.log(data2);
+      html2canvas(data2, {scrollX: 0, scrollY: -window.scrollY}).then(canvas => {
+        // Few necessary setting options
+        const imgWidth = 205;
+        const pageHeight = 295;
+        const imgHeight = canvas.height * imgWidth / canvas.width;
+        let heightLeft = imgHeight;
+
+        const contentDataURL = canvas.toDataURL('image/jpg');
+        const pdf = new JsPDF('p', 'mm', 'a4'); // A4 size page of PDF
+        let position = 35;
+
+
+
+        // dataReferencia = dataReferencia.split('-');
+        pdf.setFontSize(12);
+        pdf.text('Restituição Pendente de Aprovação', 102.5, 15, {align: 'center'});
+        pdf.text(nomeEmpresa, 102.5, 25, {align: 'center'});
+        // pdf.text(dataReferencia[1] + '/' + dataReferencia[0], 105, 35, {align: 'center'});
+        pdf.addImage(contentDataURL, 'jpg', 5, position, imgWidth - 5, imgHeight);
+        heightLeft -= pageHeight;
+
+        while (heightLeft >= 0) {
+          position = heightLeft - imgHeight + position;
+          pdf.addPage();
+          pdf.addImage(contentDataURL, 'jpg', 5, position, imgWidth - 5, imgHeight);
+          // pdf.text('Saldo Individual', 105, 15, {align: 'center'});
+          heightLeft -= pageHeight;
+        }
+
+        pdf.viewerPreferences({
+          FitWindow: true
+        });
+
+        pdf.save('Relatório_Férias_' + nomeEmpresa + '_Aprovação.pdf'); // Generated PDF
+      });
+    }
+  }
+  rejeitaTodos() {
+
   }
 }
