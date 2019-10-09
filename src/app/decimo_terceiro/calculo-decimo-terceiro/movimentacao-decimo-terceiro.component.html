@@ -114,12 +114,17 @@
     <h4 class="center">Atenção</h4>
     <h5 class="center">Deseja Confirmar o cálculo realizado ?</h5>
     <p>Obs.: Esta ação não poderá ser desfeita futuramente *</p>
+    <div>
+      <i class="fas fa-file-excel right" style="color: #249d76; font-size: 26px; cursor: pointer" title="Gerar relatório em Excel"
+         (click)="gerarRelatorioExcel()"></i>
+    </div>
     <table *ngIf="calculosDecimoTerceiro" class="highlight centered responsive-table hoverable">
       <thead>
       <tr>
         <th>Terceirizado</th>
         <th>Parcela</th>
         <th>Inicio da Contagem</th>
+        <th>Valor Disponível</th>
         <th>Valor a Movimentar</th>
       </tr>
       </thead>
@@ -128,10 +133,12 @@
         <td>{{decimoTerceiro.nomeTerceirizado}}</td>
         <td>{{decimoTerceiro.parcelas | parcelaPipe}}</td>
         <td>{{decimoTerceiro.inicioContagem | date: 'shortDate'}}</td>
+        <td>{{decimoTerceiro.valorDisponivel | currency:'BRL':true:'1.2-2'}}</td>
         <td>{{decimoTerceiro.valorMovimentado | currency:'BRL':true:'1.2-2'}}</td>
       </tr>
       <tr>
         <td><b>Total</b></td>
+        <td></td>
         <td></td>
         <td></td>
         <td><b>{{somaDecimo | currency:'BRL':true:'1.2-2'}}</b></td>
