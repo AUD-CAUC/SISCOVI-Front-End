@@ -16,10 +16,11 @@ export class TerceirizadoDecimoTerceiro {
     restituidoAnoPassado: boolean;
     parcelaAnterior: string;
 
-    constructor(codigoTerceirizadoContrato: number, nomeTerceirizado: string, inicioContagem: Date, valorMovimentado: number, parcelas: number) {
+    constructor(codigoTerceirizadoContrato: number, nomeTerceirizado: string, inicioContagem: Date, valorDisponivel: number, valorMovimentado: number, parcelas: number) {
         this.codigoTerceirizadoContrato = codigoTerceirizadoContrato;
         this.nomeTerceirizado = nomeTerceirizado;
         this.inicioContagem = inicioContagem;
+        this.valorDisponivel = valorDisponivel;
         this.valorMovimentado = valorMovimentado;
         this.parcelas = parcelas;
     }
