@@ -5,7 +5,7 @@ desligar funcionários clique no botão abaixo.</span> <i class="material-icons"
   </ul>
   <h2 class="center">Gerenciar Funções</h2>
   <div class="row">
-    <h5 class="center-align">{{nomeContrato}}</h5>
+    <h5 *ngIf="contrato" class="center-align">{{contrato.nomeDaEmpresa}}</h5>
     <div class="container">
       <div class="row">
         <!--        <div class="input-field col l7">-->
@@ -225,6 +225,17 @@ desligar funcionários clique no botão abaixo.</span> <i class="material-icons"
                                required maxlength="10" minlength="10">
                         <label for="data_inicio_funcao">Data de Início na Função<span
                           class="mensagem-erro">*</span></label>
+                        <div *ngIf="gerenciaForm.get('gerenciarTerceirizados').get('' + i).get('dataInicio').invalid &&
+                                        (gerenciaForm.get('gerenciarTerceirizados').get('' + i).get('dataInicio').dirty ||
+                                        gerenciaForm.get('gerenciarTerceirizados').get('' + i).get('dataInicio').touched)">
+                          <div *ngIf="gerenciaForm.get('gerenciarTerceirizados').get('' + i).get('dataInicio').getError('mensagem') &&
+                                          !gerenciaForm.get('gerenciarTerceirizados').get('' + i).get('dataInicio').errors.required">
+                            <div
+                              *ngFor="let msg of gerenciaForm.get('gerenciarTerceirizados').get('' + i).get('dataInicio').getError('mensagem')[0]">
+                              <span class="mensagem-erro">{{msg}}</span>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </td>

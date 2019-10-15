@@ -15,6 +15,7 @@ import {ListaCargosFuncionarios} from '../cargos-dos-funcionarios/lista.cargos.f
 import * as XLSX from 'xlsx';
 import {Workbook} from 'exceljs';
 import {saveAs} from 'file-saver';
+import {Contrato} from '../../contratos/contrato';
 
 @Component({
     selector: 'app-gerenciar-cargos-terceirizados-component',
@@ -23,7 +24,7 @@ import {saveAs} from 'file-saver';
 })
 export class GerenciarCargosTerceirizadosComponent implements OnInit {
     modoOperacao: string;
-    nomeContrato: string;
+    contrato: Contrato;
     codigo: number;
     codContrato: number;
     terceirizadosNaoAlocados: Funcionario[];
@@ -54,7 +55,7 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
         });
         this.defineValor(this.codContrato);
         this.contServ.getContratoCompletoUsuario(this.codContrato).subscribe(res => {
-            this.nomeContrato = res.nomeDaEmpresa;
+            this.contrato = res;
         });
     }
 
@@ -94,9 +95,31 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
             nomeTerceirizado: new FormControl('', [Validators.required]).disable(),
             ativo: new FormControl('', [Validators.required]).disable(),
             funcao: new FormControl('', [Validators.required]),
-            dataInicio: new FormControl('', [Validators.required, this.myDateValidator]),
+            dataInicio: new FormControl('', [Validators.required, this.myDateValidator, this.ValidaDataDeInicio.bind(this)]),
             codigo: new FormControl(0)
         });
+    }
+
+    ValidaDataDeInicio(control: AbstractControl): { [key: string]: any } {
+      const mensagem = [];
+      if (control.parent) {
+        control.parent.get('dataInicio').markAsTouched();
+        control.parent.get('dataInicio').markAsDirty();
+        if ((control.value.length === 10)) {
+          const dia = Number(control.value.split('/')[0]);
+          const mes = Number(control.value.split('/')[1]) - 1;
+          const ano = Number(control.value.split('/')[2]);
+          const inicioFuncao: Date = new Date(ano, mes, dia); /*início do ajuste*/
+          const inicioContrato: Date = new Date(this.contrato.dataInicio);
+          const fimContrato: Date = new Date(this.contrato.dataFim);
+          if (inicioFuncao < inicioContrato) {
+            mensagem.push('A data de início do terceirizado deve ser maior que a data de início do contrato! Data de início: ' + inicioContrato.toLocaleDateString());
+          } else if (inicioFuncao >= fimContrato) {
+            mensagem.push('A data de início do terceirizado deve ser menor que a data fim do contrato! Data fim: ' + fimContrato.toLocaleDateString());
+          }
+        }
+      }
+      return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
     }
 
     TestaCPF(control: AbstractControl): { [key: string]: any } {
@@ -560,7 +583,7 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
         worksheet.columns = [
             {header: 'CPF', key: 'cpf', width: 57},
             {header: 'Nome', key: 'nome', width: 57},
-            {header: 'Cargos', key: 'cargos', width: 57},
+            {header: 'Função', key: 'funcao', width: 57},
             {header: 'Data de início', key: 'dataInicio', width: 57}
         ];
         worksheet.getRow(1).font = {name: 'Arial', size: 18};
@@ -627,13 +650,13 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
         }
 
         workbook.xlsx.writeBuffer()
-            .then(buffer => saveAs(new Blob([buffer]), 'modelo-alocar-terceirizados-' + this.nomeContrato + '.xlsx'))
+            .then(buffer => saveAs(new Blob([buffer]), 'modelo-alocar-terceirizados-' + this.contrato.nomeDaEmpresa + '.xlsx'))
             .catch(err => console.log('Error writing excel export', err));
     }
 
     sobeArquivo(event: any) {
         if (event.srcElement.files[0]) {
-            if (event.srcElement.files[0].name === 'modelo-alocar-terceirizados-' + this.nomeContrato + '.xlsx') {
+            if (event.srcElement.files[0].name === 'modelo-alocar-terceirizados-' + this.contrato.nomeDaEmpresa + '.xlsx') {
                 this.file = event.srcElement.files[0];
                 this.buttonDisabled = false;
             } else {
@@ -692,7 +715,7 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
                             nomeTerceirizado: new FormControl(terceirizado.funcionario.nome, [Validators.required]),
                             ativo: new FormControl(''),
                             funcao: new FormControl(codFuncao.toString(), [Validators.required]),
-                            dataInicio: new FormControl(disp.toLocaleDateString(), [Validators.required, this.myDateValidator]),
+                            dataInicio: new FormControl(disp.toLocaleDateString(), [Validators.required, this.myDateValidator, this.ValidaDataDeInicio.bind(this)]),
                             codigo: new FormControl(0),
                         }));
                     });
