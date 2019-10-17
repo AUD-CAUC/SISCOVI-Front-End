@@ -29,6 +29,11 @@ desligar funcionários clique no botão abaixo.</span> <i class="material-icons"
             <option value="DESATIVAÇÃO">Desligar Terceirizado</option>
           </select>
         </div>
+        <div *ngIf="!modoOperacao" class="container">
+          <div class="row center col s6">
+            <button class="waves-effect btn" (click)="voltaContratos()">Voltar</button>
+          </div>
+        </div>
       </div>
       <div class="row" *ngIf="cargosFuncionarios && modoOperacao">
         <div *ngIf="modoOperacao == 'LISTAR'">

@@ -570,7 +570,7 @@ export class GerenciarCargosTerceirizadosComponent implements OnInit {
     }
 
     voltaContratos() {
-        this.router.navigate(['/contratos/funcoes-dos-terceirizados/' + this.codContrato]);
+        this.router.navigate(['/contratos']);
     }
 
     criarPlanilhaCadastroTerceirizado() {
