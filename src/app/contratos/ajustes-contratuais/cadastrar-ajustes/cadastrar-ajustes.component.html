@@ -51,48 +51,93 @@
                         </option>
                     </select>
                     <label for="nome_gestor">Nome Do Gestor</label>
+                    <div
+                        *ngIf="myForm.get('gestor').invalid">
+                        <div
+                            *ngIf="myForm.get('gestor').getError('mensagem') && !myForm.get('gestor').errors.required">
+                            <div *ngFor="let msg of myForm.get('gestor').getError('mensagem')[0]">
+                                <span class="mensagem-erro">{{msg}}</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="input-field col s4">
                     <select materialize="material_select" id="nome_substituto_1" [materializeSelectOptions]="usuarios"
                     formControlName="primeiroSubstituto">
-                        <option disabled>Opcional</option>
+                        <option value="">Selecione um Substituto</option>
                         <option *ngFor="let usuario of usuarios" [value]="usuario.nome"
                         [selected]="usuario.nome == primeiroSubstituto">{{usuario.nome}}
                         </option>
                     </select>
                     <label for="nome_substituto_1">Primeiro Substituto</label>
+                    <div
+                        *ngIf="myForm.get('primeiroSubstituto').invalid">
+                        <div
+                            *ngIf="myForm.get('primeiroSubstituto').getError('mensagem') && !myForm.get('primeiroSubstituto').errors.required">
+                            <div *ngFor="let msg of myForm.get('primeiroSubstituto').getError('mensagem')[0]">
+                                <span class="mensagem-erro">{{msg}}</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="input-field col s4">
                     <select materialize="material_select" id="nome_substituto_2" class="validate"
                     [materializeSelectOptions]="usuarios" formControlName="segundoSubstituto">
-                        <option disabled>Opcional</option>
+                        <option value="">Selecione um Substituto</option>
                         <option *ngFor="let usuario of usuarios" [value]="usuario.nome"
                         [selected]="usuario.nome == segundoSubstituto">{{usuario.nome}}
                         </option>
                     </select>
                     <label for="nome_substituto_2">Segundo Substituto</label>
+                    <div
+                        *ngIf="myForm.get('segundoSubstituto').invalid">
+                        <div
+                            *ngIf="myForm.get('segundoSubstituto').getError('mensagem') && !myForm.get('segundoSubstituto').errors.required">
+                            <div *ngFor="let msg of myForm.get('segundoSubstituto').getError('mensagem')[0]">
+                                <span class="mensagem-erro">{{msg}}</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class='row'>
                 <div class="input-field col s4">
                     <select materialize="material_select" id="nome_substituto_3" class="validate"
                     [materializeSelectOptions]="usuarios" formControlName="terceiroSubstituto">
-                        <option disabled>Opcional</option>
+                        <option value="">Selecione um Substituto</option>
                         <option *ngFor="let usuario of usuarios" [value]="usuario.nome"
                                 [selected]="usuario.nome == terceiroSubstituto">{{usuario.nome}}
                         </option>
                     </select>
-                    <label for="nome_substituto_2">Terceiro Substituto</label>
+                    <label for="nome_substituto_3">Terceiro Substituto</label>
+                    <div
+                        *ngIf="myForm.get('terceiroSubstituto').invalid">
+                        <div
+                            *ngIf="myForm.get('terceiroSubstituto').getError('mensagem') && !myForm.get('terceiroSubstituto').errors.required">
+                            <div *ngFor="let msg of myForm.get('terceiroSubstituto').getError('mensagem')[0]">
+                                <span class="mensagem-erro">{{msg}}</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="input-field col s4">
                     <select materialize="material_select" id="nome_substituto_4" class="validate"
                     [materializeSelectOptions]="usuarios" formControlName="quartoSubstituto">
-                        <option disabled>Opcional</option>
+                        <option value="">Selecione um Substituto</option>
                         <option *ngFor="let usuario of usuarios" [value]="usuario.nome"
                         [selected]="usuario.nome == quartoSubstituto">{{usuario.nome}}
                         </option>
                     </select>
-                    <label for="nome_substituto_2">Quarto Substituto</label>
+                    <label for="nome_substituto_4">Quarto Substituto</label>
+                    <div
+                        *ngIf="myForm.get('quartoSubstituto').invalid">
+                        <div
+                            *ngIf="myForm.get('quartoSubstituto').getError('mensagem') && !myForm.get('quartoSubstituto').errors.required">
+                            <div *ngFor="let msg of myForm.get('quartoSubstituto').getError('mensagem')[0]">
+                                <span class="mensagem-erro">{{msg}}</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="row">
