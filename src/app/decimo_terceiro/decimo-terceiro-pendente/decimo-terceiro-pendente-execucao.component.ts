@@ -7,6 +7,8 @@ import {DecimoTerceiroService} from '../decimo-terceiro.service';
 import {ListaCalculosPendentes} from './lista-calculos-pendentes';
 import html2canvas from 'html2canvas';
 import * as JsPDF from 'jspdf';
+import {Workbook} from 'exceljs';
+import {saveAs} from 'file-saver';
 
 @Component({
   selector: 'app-decimo-terceiro-execucao-component',
@@ -238,5 +240,103 @@ export class DecimoTerceiroPendenteExecucaoComponent implements OnInit {
 
       pdf.save('Relatório_Décimo_Terceiro_' + nomeEmpresa + '_Execução.pdf'); // Generated PDF
     });
+  }
+
+  formatDate(str) {
+    return str.split('-').reverse().join('/');
+  }
+
+  formatParcela(num) {
+    console.log(num);
+    let parcela: string;
+    if (num === 0) {
+      parcela = 'Única';
+    } else if (num === 1) {
+      parcela = 'Primeira';
+    } else if (num === 2) {
+      parcela = 'Segunda';
+    }
+    return parcela;
+  }
+
+  gerarRelatorioExcel(nomeEmpresa) {
+    const workbookDtExec = new Workbook();
+    const worksheetDtExec = workbookDtExec.addWorksheet('Relatório 13º Pend Exec', {
+      pageSetup: {
+        fitToPage: true,
+        fitToHeight: 5,
+        fitToWidth: 7
+      }
+    });
+
+    worksheetDtExec.pageSetup.margins = {
+      left: 0.7, right: 0.7,
+      top: 0.5, bottom: 0.5,
+      header: 0.3, footer: 0.3
+    };
+
+    worksheetDtExec.mergeCells('A1:H1'); /* merge de A1 até H1 */
+    const rowEmpresa = worksheetDtExec.getCell('A1').value = nomeEmpresa; /*Traz o contrato do front*/
+    worksheetDtExec.getCell('A1').font = {name: 'Arial', size: 18}; /*formatação da celula merjada*/
+    worksheetDtExec.getCell('A1').alignment = {vertical: 'middle', horizontal: 'center'}; /*formatação da celula merjada*/
+    worksheetDtExec.addRow(rowEmpresa); /*adiciona o contrato na linha merjada*/
+
+    worksheetDtExec.mergeCells('A2:H2'); /* merge de A1 até H1 */
+    const rowRelExec = worksheetDtExec.getCell('A2').value = 'Relatório de Pendências de Execução'; /*Traz o contrato do front*/
+    worksheetDtExec.getCell('A2').font = {name: 'Arial', size: 18}; /*formatação da celula merjada*/
+    worksheetDtExec.getCell('A2').alignment = {vertical: 'middle', horizontal: 'center'}; /*formatação da celula merjada*/
+    worksheetDtExec.addRow(rowRelExec); /*adiciona o contrato na linha merjada*/
+
+    const rowHeaders = [
+      ['Terceirizado', 'Função', 'Tipo de Restituição', 'Parcela', 'Data de Início para Contagem', 'Valor de Décimo Terceiro', 'Valor de Incidência', 'Total'], // row by array
+    ];
+    worksheetDtExec.addRows(rowHeaders);
+
+    worksheetDtExec.columns = [
+      {header: rowHeaders[1], key: 'terceirizado', width: 57},
+      {header: rowHeaders[2], key: 'funcao', width: 50},
+      {header: rowHeaders[3], key: 'tipo', width: 35},
+      {header: rowHeaders[4], key: 'parcela', width: 30},
+      {header: rowHeaders[5], key: 'dataInicio', width: 57},
+      {header: rowHeaders[6], key: 'valorDecTer', width: 57},
+      {header: rowHeaders[7], key: 'valorIncid', width: 40},
+      {header: rowHeaders[8], key: 'total', width: 25},
+      {header: nomeEmpresa, key: 'movimentado', width: 57}
+    ];
+    worksheetDtExec.getRow(3).font = {name: 'Arial', size: 18};
+    worksheetDtExec.getRow(3).alignment = {vertical: 'middle', horizontal: 'center'};
+
+
+    for (let i = 0; i < this.calculosPendentesExecucao.length; i++) {
+      if (this.calculosPendentesExecucao[i].titulo === nomeEmpresa) {
+        for (let j = 0; j < this.calculosPendentesExecucao[i].calculos.length; j++) {
+          let row;
+          row = worksheetDtExec.getRow(j + 4);
+          row.getCell(1).value = this.calculosPendentesExecucao[i].calculos[j].terceirizadoDecTer.nomeTerceirizado;
+          row.getCell(2).value = this.calculosPendentesExecucao[i].calculos[j].terceirizadoDecTer.nomeCargo;
+          row.getCell(3).value = this.calculosPendentesExecucao[i].calculos[j].terceirizadoDecTer.tipoRestituicao;
+          row.getCell(4).value = this.formatParcela(this.calculosPendentesExecucao[i].calculos[j].terceirizadoDecTer.parcelas);
+          row.getCell(5).value = this.formatDate(this.calculosPendentesExecucao[i].calculos[j].terceirizadoDecTer.inicioContagem);
+          row.getCell(6).value = this.calculosPendentesExecucao[i].calculos[j].terceirizadoDecTer.valoresDecimoTerceiro.
+          valorDecimoTerceiro.toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
+          row.getCell(7).value = this.calculosPendentesExecucao[i].calculos[j].terceirizadoDecTer.valoresDecimoTerceiro.
+          valorIncidenciaDecimoTerceiro.toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
+          row.getCell(8).value = (this.calculosPendentesExecucao[i].calculos[j].terceirizadoDecTer.valoresDecimoTerceiro.
+            valorDecimoTerceiro + this.calculosPendentesExecucao[i].calculos[j].terceirizadoDecTer.valoresDecimoTerceiro.
+            valorIncidenciaDecimoTerceiro).toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
+        }
+      }
+    }
+
+    let j = 9;
+    while (j <= 16384) {
+      const dobCol = worksheetDtExec.getColumn(j);
+      dobCol.hidden = true;
+      j++;
+    }
+
+    workbookDtExec.xlsx.writeBuffer()
+      .then(buffer => saveAs(new Blob([buffer]), 'Relatório-Calculos-Pendentes-Execução.xlsx'))
+      .catch(err => console.log('Error writing excel export', err));
   }
 }

@@ -91,7 +91,7 @@ export class CadastroContratoComponent implements OnInit {
             inicioVigencia: new FormControl('', [Validators.required, this.myDateValidator]),
             fimVigencia: new FormControl('', [Validators.required, this.myDateValidator, this.fimContratoValidator]),
             assinatura: new FormControl('', [Validators.required, this.myDateValidator, this.assinaturaValidator]),
-            nomeGestor: new FormControl('', [Validators.required, this.nameValidator]),
+            nomeGestor: new FormControl('', [Validators.required, this.nameValidator, this.repeticaoGestorValidator]),
             nomeEmpresa: new FormControl('', [Validators.required, this.nameValidator]),
             cnpj: new FormControl('', [Validators.required, this.cnpjValidator]),
             ativo: new FormControl('S', [Validators.required]),
@@ -100,10 +100,10 @@ export class CadastroContratoComponent implements OnInit {
             percentualDecimoTerceiro: new FormControl('', [Validators.required]),
             percentualIncidencia: new FormControl('', [Validators.required, this.percentualValidator.bind(this)]),
             numeroContrato: new FormControl('', [Validators.required]),
-            primeiroSubstituto: new FormControl(''),
-            segundoSubstituto: new FormControl(''),
-            terceiroSubstituto: new FormControl(''),
-            quartoSubstituto: new FormControl(''),
+            primeiroSubstituto: new FormControl('', this.repeticao1Validator),
+            segundoSubstituto: new FormControl('', this.repeticao2Validator),
+            terceiroSubstituto: new FormControl('', this.repeticao3Validator),
+            quartoSubstituto: new FormControl('', this.repeticao4Validator),
             numeroProcessoSTJ: new FormControl('')
         });
         this.myForm = this.fb.group({
@@ -150,6 +150,176 @@ export class CadastroContratoComponent implements OnInit {
         const control = <FormArray>this.myForm.controls.cargos;
         control.removeAt(i);
     }
+    public repeticaoGestorValidator(control: AbstractControl): { [key: string]: any } {
+      const mensagem = [];
+
+      if (control.parent) {
+
+        const PS = control.parent.get('primeiroSubstituto').value;
+        const SS = control.parent.get('segundoSubstituto').value;
+        const TS = control.parent.get('terceiroSubstituto').value;
+        const QS = control.parent.get('quartoSubstituto').value;
+
+        if (control.value === PS && control.value !== '' && PS !== '') {
+          mensagem.push('Os nomes devem ser diferentes!');
+        } else if (control.value === SS && control.value !== '' && SS !== '') {
+          mensagem.push('Os nomes devem ser diferentes!');
+        } else if (control.value === TS && control.value !== '' && TS !== '') {
+          mensagem.push('Os nomes devem ser diferentes!');
+        } else if (control.value === QS && control.value !== '' && QS !== '') {
+          mensagem.push('Os nomes devem ser diferentes!');
+        }
+
+        control.parent.get('primeiroSubstituto').markAsPristine();
+        control.parent.get('segundoSubstituto').markAsPristine();
+        control.parent.get('terceiroSubstituto').markAsPristine();
+        control.parent.get('quartoSubstituto').markAsPristine();
+        if (!control.pristine) {
+          control.parent.get('primeiroSubstituto').updateValueAndValidity();
+          control.parent.get('segundoSubstituto').updateValueAndValidity();
+          control.parent.get('terceiroSubstituto').updateValueAndValidity();
+          control.parent.get('quartoSubstituto').updateValueAndValidity();
+        }
+      }
+      return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
+    }
+
+  public repeticao1Validator(control: AbstractControl): { [key: string]: any } {
+    const mensagem = [];
+
+    if (control.parent) {
+
+      const gestor = control.parent.get('nomeGestor').value;
+      const SS = control.parent.get('segundoSubstituto').value;
+      const TS = control.parent.get('terceiroSubstituto').value;
+      const QS = control.parent.get('quartoSubstituto').value;
+
+      if (control.value === gestor && control.value !== '' && gestor !== '') {
+        mensagem.push('Os nomes devem ser diferentes!');
+      } else if (control.value === SS && control.value !== '' && SS !== '') {
+        mensagem.push('Os nomes devem ser diferentes!');
+      } else if (control.value === TS && control.value !== '' && TS !== '') {
+        mensagem.push('Os nomes devem ser diferentes!');
+      } else if (control.value === QS && control.value !== '' && QS !== '') {
+        mensagem.push('Os nomes devem ser diferentes!');
+      }
+
+      control.parent.get('nomeGestor').markAsPristine();
+      control.parent.get('segundoSubstituto').markAsPristine();
+      control.parent.get('terceiroSubstituto').markAsPristine();
+      control.parent.get('quartoSubstituto').markAsPristine();
+      if (!control.pristine) {
+        control.parent.get('nomeGestor').updateValueAndValidity();
+        control.parent.get('segundoSubstituto').updateValueAndValidity();
+        control.parent.get('terceiroSubstituto').updateValueAndValidity();
+        control.parent.get('quartoSubstituto').updateValueAndValidity();
+      }
+    }
+    return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
+  }
+
+  public repeticao2Validator(control: AbstractControl): { [key: string]: any } {
+    const mensagem = [];
+
+    if (control.parent) {
+
+      const gestor = control.parent.get('nomeGestor').value;
+      const PS = control.parent.get('primeiroSubstituto').value;
+      const TS = control.parent.get('terceiroSubstituto').value;
+      const QS = control.parent.get('quartoSubstituto').value;
+
+      if (control.value === gestor && control.value !== '' && gestor !== '') {
+        mensagem.push('Os nomes devem ser diferentes!');
+      } else if (control.value === PS && PS !== '' && control.value !== '') {
+        mensagem.push('Os nomes devem ser diferentes!');
+      } else if (control.value === TS && TS !== '' && control.value !== '') {
+        mensagem.push('Os nomes devem ser diferentes!');
+      } else if (control.value === QS && QS !== '' && control.value !== '') {
+        mensagem.push('Os nomes devem ser diferentes!');
+      }
+
+      control.parent.get('nomeGestor').markAsPristine();
+      control.parent.get('primeiroSubstituto').markAsPristine();
+      control.parent.get('terceiroSubstituto').markAsPristine();
+      control.parent.get('quartoSubstituto').markAsPristine();
+      if (!control.pristine) {
+        control.parent.get('nomeGestor').updateValueAndValidity();
+        control.parent.get('primeiroSubstituto').updateValueAndValidity();
+        control.parent.get('terceiroSubstituto').updateValueAndValidity();
+        control.parent.get('quartoSubstituto').updateValueAndValidity();
+      }
+    }
+    return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
+  }
+
+  public repeticao3Validator(control: AbstractControl): { [key: string]: any } {
+    const mensagem = [];
+
+    if (control.parent) {
+
+      const gestor = control.parent.get('nomeGestor').value;
+      const PS = control.parent.get('primeiroSubstituto').value;
+      const SS = control.parent.get('segundoSubstituto').value;
+      const QS = control.parent.get('quartoSubstituto').value;
+
+      if (control.value === gestor && control.value !== '' && gestor !== '') {
+        mensagem.push('Os nomes devem ser diferentes!');
+      } else if (control.value === PS && PS !== '' && control.value !== '') {
+        mensagem.push('Os nomes devem ser diferentes!');
+      } else if (control.value === SS && SS !== '' && control.value !== '') {
+        mensagem.push('Os nomes devem ser diferentes!');
+      } else if (control.value === QS && QS !== '' && control.value !== '') {
+        mensagem.push('Os nomes devem ser diferentes!');
+      }
+
+      control.parent.get('nomeGestor').markAsPristine();
+      control.parent.get('primeiroSubstituto').markAsPristine();
+      control.parent.get('segundoSubstituto').markAsPristine();
+      control.parent.get('quartoSubstituto').markAsPristine();
+      if (!control.pristine) {
+        control.parent.get('nomeGestor').updateValueAndValidity();
+        control.parent.get('primeiroSubstituto').updateValueAndValidity();
+        control.parent.get('segundoSubstituto').updateValueAndValidity();
+        control.parent.get('quartoSubstituto').updateValueAndValidity();
+      }
+    }
+    return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
+  }
+
+  public repeticao4Validator(control: AbstractControl): { [key: string]: any } {
+    const mensagem = [];
+
+    if (control.parent) {
+
+      const gestor = control.parent.get('nomeGestor').value;
+      const PS = control.parent.get('primeiroSubstituto').value;
+      const SS = control.parent.get('segundoSubstituto').value;
+      const TS = control.parent.get('terceiroSubstituto').value;
+
+      if (control.value === gestor && control.value !== '' && gestor !== '') {
+        mensagem.push('Os nomes devem ser diferentes!');
+      } else if (control.value === PS && PS !== '' && control.value !== '') {
+        mensagem.push('Os nomes devem ser diferentes!');
+      } else if (control.value === SS && SS !== '' && control.value !== '') {
+        mensagem.push('Os nomes devem ser diferentes!');
+      } else if (control.value === TS && TS !== '' && control.value !== '') {
+        mensagem.push('Os nomes devem ser diferentes!');
+      }
+
+      control.parent.get('nomeGestor').markAsPristine();
+      control.parent.get('primeiroSubstituto').markAsPristine();
+      control.parent.get('segundoSubstituto').markAsPristine();
+      control.parent.get('terceiroSubstituto').markAsPristine();
+      if (!control.pristine) {
+        control.parent.get('nomeGestor').updateValueAndValidity();
+        control.parent.get('primeiroSubstituto').updateValueAndValidity();
+        control.parent.get('segundoSubstituto').updateValueAndValidity();
+        control.parent.get('terceiroSubstituto').updateValueAndValidity();
+      }
+    }
+    return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
+  }
+
     public myDateValidator(control: AbstractControl): { [key: string]: any } {
         const val = control.value;
         const mensagem = [];

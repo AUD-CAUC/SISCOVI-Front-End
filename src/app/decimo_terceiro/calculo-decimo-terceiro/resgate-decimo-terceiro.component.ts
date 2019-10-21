@@ -163,6 +163,7 @@ export class ResgateDecimoTerceiroComponent implements OnInit {
             this.terceirizados[i].nomeTerceirizado,
             this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('inicioContagem').value,
             0,
+            0,
             this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('parcelas').value);
           objeto.tipoRestituicao = this.tipoRestituicao;
           let index = -1;

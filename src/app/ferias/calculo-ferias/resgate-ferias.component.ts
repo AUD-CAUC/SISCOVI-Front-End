@@ -62,6 +62,7 @@ export class ResgateFeriasComponent implements OnInit {
         ultimoFimUsufruto: new FormControl(item.ultimoFimUsufruto),
         emAnalise: new FormControl(item.emAnalise),
         dataDesligamento: new FormControl(item.dataDesligamento),
+        dataFimContrato: new FormControl(item.dataFimContrato)
       });
       control2.push(addCtrl);
     });
@@ -404,10 +405,15 @@ export class ResgateFeriasComponent implements OnInit {
         const fimPeriodoAquisitivo: Date = new Date(Number(val[0]), Number(val[1]) - 1, Number(val[2]));
         const val2: Number[] = control.parent.get('inicioPeriodoAquisitivo').value.split('-');
         const inicioPeriodoAquisitivo: Date = new Date(Number(val2[0]), Number(val2[1]) - 1, Number(val2[2]));
+        const val3: Number[] = control.parent.get('dataFimContrato').value.split('-');
+        const fimContrato: Date = new Date(Number(val3[0]), Number(val3[1]) - 1, Number(val3[2]));
+
         if (inicioUsufruto <= fimPeriodoAquisitivo && control.parent.get('existeCalculoAnterior').value === true) {
           mensagem.push('A data de início do usufruto deve ser maior que a data fim do período aquisitivo !');
         } else if (inicioUsufruto <= inicioPeriodoAquisitivo) {
             mensagem.push('A data de início do usufruto deve ser maior que a data inicio do período aquisitivo !');
+        } else if (fimPeriodoAquisitivo >= fimContrato) {
+          mensagem.push('Por este período aquisitivo ser o último do contrato, ele deve ser restituído na rescisão');
         } else if (control.parent.get('dataDesligamento').value) {
           const aux: Number[] = control.parent.get('dataDesligamento').value.split('-');
           const dataDesligamento: Date = new Date(Number(aux[0]), Number(aux[1]) - 1, Number(aux[2]));
