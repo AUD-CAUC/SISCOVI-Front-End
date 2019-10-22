@@ -22,6 +22,10 @@
         <div>
           <i class="material-icons-pdf right" (click)="captureScreen(calculoPendente.titulo)">picture_as_pdf</i>
         </div>
+        <div>
+          <i class="fas fa-file-excel right" style="color: #249d76; font-size: 26px; cursor: pointer" title="Gerar relatório em Excel"
+             (click)="gerarRelatorioExcel(calculoPendente.titulo)"></i>
+        </div>
         <h6><b>{{calculoPendente.titulo}}</b></h6>
         <table *ngIf="calculosPendentesExecucao" class="highlight centered responsive-table"
                [formGroupName]="i" id="{{calculoPendente.titulo}}">

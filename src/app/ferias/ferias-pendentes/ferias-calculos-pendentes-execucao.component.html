@@ -21,6 +21,8 @@
       <div class="col  l12" *ngFor="let calculoPendente of calculosPendentesExecucao; let i = index">
         <div>
           <i class="material-icons-pdf right" (click)="captureScreen(calculoPendente.titulo, 0)">picture_as_pdf</i>
+          <i class="fas fa-file-excel right" style="color: #249d76; font-size: 26px; cursor: pointer" title="Gerar relatório em Excel"
+             (click)="gerarRelatorioExcel(calculoPendente.titulo)"></i>
           <h6><b>{{calculoPendente.titulo}}</b></h6>
         </div>
         <table *ngIf="calculosPendentesExecucao" class="highlight centered responsive-table"

@@ -9,6 +9,8 @@ import {MaterializeAction} from 'angular2-materialize';
 import {ListaCalculosPendentes} from './lista-calculos-pendentes';
 import html2canvas from 'html2canvas';
 import * as JsPDF from 'jspdf';
+import {Workbook} from 'exceljs';
+import {saveAs} from 'file-saver';
 
 @Component({
   selector: 'app-rescisao-calculos-pendentes-execucao',
@@ -283,5 +285,145 @@ export class RescisaoCalculosPendentesExecucaoComponent implements OnInit {
 
       pdf.save('Relatório_Rescisão_' + nomeEmpresa + '_Execução.pdf'); // Generated PDF
     });
+  }
+
+  formatDate(str) {
+    const mensagem = [];
+    if (str === null || str === undefined) {
+      str = 'Não pedido/Não possui';
+      console.log(str)
+      return str;
+    } else {
+      console.log(str)
+      return str.split('-').reverse().join('/');
+    }
+  }
+
+  gerarRelatorioExcel(nomeEmpresa) {
+    const workbookRescisExec = new Workbook();
+    const worksheetRescisExec = workbookRescisExec.addWorksheet('Relatório 13º Restituição Exec', {
+      pageSetup: {
+        fitToPage: true,
+        fitToHeight: 2,
+        fitToWidth: 1,
+        paperSize: 9
+      }
+    });
+
+    worksheetRescisExec.mergeCells('A1:AA1');
+    const rowEmpresa = worksheetRescisExec.getCell('A1').value = nomeEmpresa;
+    worksheetRescisExec.getCell('A1').font = {name: 'Arial', size: 18};
+    worksheetRescisExec.getCell('A1').alignment = {vertical: 'middle', horizontal: 'center'};
+    worksheetRescisExec.addRow(rowEmpresa);
+    worksheetRescisExec.getRow(1).height = 30;
+
+    const nomeRelatorio = 'Relatório de Pendências de Execução - Rescisão';
+    worksheetRescisExec.mergeCells('A2:AA2');
+    const rowRelAprov = worksheetRescisExec.getCell('A2').value = nomeRelatorio;
+    worksheetRescisExec.getCell('A2').font = {name: 'Arial', size: 18};
+    worksheetRescisExec.getCell('A2').alignment = {vertical: 'middle', horizontal: 'center'};
+    worksheetRescisExec.addRow(rowRelAprov);
+    worksheetRescisExec.getRow(2).height = 30;
+
+    const rowHeaders = [
+      ['Terceirizado', 'Função', 'Tipo' + '\n' + 'de' + '\n' + 'Restituição', 'Tipo' + '\n' + 'de' + '\n' + 'Rescisão', 'Data\ndo\nDesligamento', 'Início da\nContagem do 13º',
+        'Valor\ndo 13º', 'Incidência\nSobre\no 13º', 'Multa do\nFGTS Sobre\no 13º', 'Início de\nFérias Vencidas', 'Fim de\nFérias Vencidas',
+        'Valor de\nFérias Vencidas', 'Valor do\nTerço de\nFérias Vencido', 'Incidência Sobre\nFérias Vencidas', 'Incidência Sobre\nTerço de\nFérias Vencido',
+        'Multa do FGTS\nSobre\nFérias Vencidas', 'Multa do FGTS\nSobre o Terço\nde Férias Vencido', 'Início de\nFérias Proporcionais', 'Fim de Férias\nProporcionais',
+        'Valor de Férias\nProporcionais', 'Terço de Férias\nProporcional', 'Incidência Sobre\nFérias Proporcionais', 'Incidência Sobre\no Terço de Férias\nProporcional',
+        'Multa do FGTS\nSobre Férias\nProporcionais', 'Multa do FGTS\nSobre o Terço de\nFérias Proporcional', 'Multa do FGTS\nSobre o Salário', 'Total']
+    ];
+
+    worksheetRescisExec.addRows(rowHeaders);
+
+    worksheetRescisExec.columns = [
+      {header: rowHeaders[1], key: 'terceirizado', width: 40},
+      {header: rowHeaders[2], key: 'funcao', width: 65},
+      {header: rowHeaders[3], key: 'tipoRestituicao', width: 20},
+      {header: rowHeaders[4], key: 'tipoRescisao', width: 20},
+      {header: rowHeaders[5], key: 'desligamento', width: 25},
+      {header: rowHeaders[6], key: 'inicioContagem13', width: 27},
+      {header: rowHeaders[7], key: 'valor13', width: 20},
+      {header: rowHeaders[8], key: 'incidencia13', width: 20},
+      {header: rowHeaders[9], key: 'multaFgts13', width: 25},
+      {header: rowHeaders[10], key: 'inicioFeriasVencidas', width: 25},
+      {header: rowHeaders[11], key: 'fimFeriasVencidas', width: 25},
+      {header: rowHeaders[12], key: 'valorFeriasVencidas', width: 25},
+      {header: rowHeaders[13], key: 'valorTercoVencido', width: 25},
+      {header: rowHeaders[14], key: 'incidFeriasVencidas', width: 27},
+      {header: rowHeaders[15], key: 'incidTercoVencido', width: 27},
+      {header: rowHeaders[16], key: 'MultaFgtsFeriasVenc', width: 27},
+      {header: rowHeaders[17], key: 'MultaFgtsTercoVenc', width: 27},
+      {header: rowHeaders[18], key: 'inicioFeriasProp', width: 30},
+      {header: rowHeaders[19], key: 'fimFeriasProp', width: 25},
+      {header: rowHeaders[20], key: 'valorFeriasProp', width: 25},
+      {header: rowHeaders[21], key: 'valorTercoProp', width: 25},
+      {header: rowHeaders[22], key: 'incidFeriasProp', width: 30},
+      {header: rowHeaders[23], key: 'incidTercoProp', width: 30},
+      {header: rowHeaders[24], key: 'multaFgtsFeriasProp', width: 25},
+      {header: rowHeaders[25], key: 'multaFgtsTercoProp', width: 27},
+      {header: rowHeaders[26], key: 'multaFgtsSalario', width: 25},
+      {header: rowHeaders[27], key: 'Total', width: 20},
+    ];
+    worksheetRescisExec.getRow(4).font = {name: 'Arial', size: 18};
+    worksheetRescisExec.getRow(4).alignment = {vertical: 'middle', horizontal: 'center', wrapText: true};
+    worksheetRescisExec.getRow(4).height = 70;
+
+    let row;
+    for (let i = 0; i < this.calculosPendentesExecucao.length; i++) {
+      if (this.calculosPendentesExecucao[i].titulo === nomeEmpresa) {
+        for (let j = 0; j < this.calculosPendentesExecucao[i].calculos.length; j++) {
+          row = worksheetRescisExec.getRow(j + 5);
+          row.getCell(1).value = this.calculosPendentesExecucao[i].calculos[j].nomeTerceirizado;
+          row.getCell(2).value = this.calculosPendentesExecucao[i].calculos[j].nomeCargo;
+          row.getCell(3).value = this.calculosPendentesExecucao[i].calculos[j].calcularRescisaoModel.tipoRestituicao;
+          row.getCell(4).value = this.calculosPendentesExecucao[i].calculos[j].calcularRescisaoModel.tipoRescisao;
+          row.getCell(5).value = this.formatDate(this.calculosPendentesExecucao[i].calculos[j].calcularRescisaoModel.dataDesligamento);
+          row.getCell(6).value = this.formatDate(this.calculosPendentesExecucao[i].calculos[j].calcularRescisaoModel.inicioContagemDecimoTerceiro);
+          row.getCell(7).value = this.calculosPendentesExecucao[i].calculos[j].calcularRescisaoModel.totalDecimoTerceiro.
+          toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
+          row.getCell(8).value = this.calculosPendentesExecucao[i].calculos[j].calcularRescisaoModel.totalIncidenciaDecimoTerceiro.
+          toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
+          row.getCell(9).value = this.calculosPendentesExecucao[i].calculos[j].calcularRescisaoModel.totalMultaFgtsDecimoTerceiro.
+          toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
+          row.getCell(10).value = this.formatDate(this.calculosPendentesExecucao[i].calculos[j].calcularRescisaoModel.inicioFeriasIntegrais);
+          row.getCell(11).value = this.formatDate(this.calculosPendentesExecucao[i].calculos[j].calcularRescisaoModel.fimFeriasIntegrais);
+          row.getCell(12).value = this.calculosPendentesExecucao[i].calculos[j].calcularRescisaoModel.totalFeriasVencidas.
+          toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
+          row.getCell(13).value = this.calculosPendentesExecucao[i].calculos[j].calcularRescisaoModel.totalTercoConstitucionalvencido.
+          toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
+          row.getCell(14).value = this.calculosPendentesExecucao[i].calculos[j].calcularRescisaoModel.totalIncidenciaFeriasVencidas.
+          toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
+          row.getCell(15).value = this.calculosPendentesExecucao[i].calculos[j].calcularRescisaoModel.totalIncidenciaTercoVencido.
+          toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
+          row.getCell(16).value = this.calculosPendentesExecucao[i].calculos[j].calcularRescisaoModel.totalMultaFgtsFeriasVencidas.
+          toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
+          row.getCell(17).value = this.calculosPendentesExecucao[i].calculos[j].calcularRescisaoModel.totalMultaFgtsTercoVencido.
+          toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
+          row.getCell(18).value = this.formatDate(this.calculosPendentesExecucao[i].calculos[j].calcularRescisaoModel.inicioFeriasProporcionais);
+          row.getCell(19).value = this.formatDate(this.calculosPendentesExecucao[i].calculos[j].calcularRescisaoModel.fimFeriasProporcionais);
+          row.getCell(20).value = this.calculosPendentesExecucao[i].calculos[j].calcularRescisaoModel.totalFeriasProporcionais.
+          toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
+          row.getCell(21).value = this.calculosPendentesExecucao[i].calculos[j].calcularRescisaoModel.totalTercoProporcional.
+          toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
+          row.getCell(22).value = this.calculosPendentesExecucao[i].calculos[j].calcularRescisaoModel.totalIncidenciaFeriasProporcionais.
+          toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
+          row.getCell(23).value = this.calculosPendentesExecucao[i].calculos[j].calcularRescisaoModel.totalIncidenciaTercoProporcional.
+          toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
+          row.getCell(24).value = this.calculosPendentesExecucao[i].calculos[j].calcularRescisaoModel.totalMultaFgtsFeriasProporcionais.
+          toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
+          row.getCell(25).value = this.calculosPendentesExecucao[i].calculos[j].calcularRescisaoModel.totalMultaFgtsTercoProporcional.
+          toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
+          row.getCell(26).value = this.calculosPendentesExecucao[i].calculos[j].calcularRescisaoModel.totalMultaFgtsSalario.
+          toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
+          row.getCell(27).value = this.calculosPendentesExecucao[i].calculos[j].total.
+          toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
+        }
+      }
+    }
+
+    workbookRescisExec.xlsx.writeBuffer()
+      .then(buffer => saveAs(new Blob([buffer]), 'Relatório-Calculos-Pendentes-Rescisão-Execução.xlsx'))
+      .catch(err => console.log('Error writing excel export', err));
   }
 }
