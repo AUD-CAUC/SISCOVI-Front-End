@@ -168,7 +168,14 @@
 <div class="container" *ngIf="tipoRestituicao == 'RESGATE'">
   <div class="row" *ngIf="terceirizados && tipoRestituicao">
     <div class="center-align">
-      <button class="btn waves-effect center" (click)="verificaDadosFormulario()" *ngIf="terceirizados.length !== 0">Calcular</button>
+      <button  class="btn waves-effect center" (click)="verificaDadosFormulario()" *ngIf="terceirizados.length !== 0 && !isLoading">Calcular</button>
+      <div *ngIf="isLoading" class="preloader-wrapper big active">
+        <div class="spinner-layer">
+          <div class="circle-clipper left">
+            <div class="circle"></div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

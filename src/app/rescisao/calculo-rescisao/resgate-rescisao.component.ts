@@ -30,6 +30,7 @@ export class ResgateRescisaoComponent implements OnInit {
   modalActions2 = new EventEmitter<string | MaterializeAction>();
   modalActions3 = new EventEmitter<string | MaterializeAction>();
   modalActions4 = new EventEmitter<string | MaterializeAction>();
+  isLoading = false;
   @Output() navegaParaViewDeCalculos = new EventEmitter();
 
   constructor(private fb: FormBuilder, private rescisaoService: RescisaoService, private router: Router, private route: ActivatedRoute) {
@@ -137,6 +138,7 @@ export class ResgateRescisaoComponent implements OnInit {
     });
   }
   verificaDadosFormulario() {
+    this.isLoading = true;
     this.calculosRescisao = [];
     let aux = 0;
     for (let i = 0; i < this.terceirizados.length; i++) {
@@ -191,11 +193,13 @@ export class ResgateRescisaoComponent implements OnInit {
           this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasVencidas').markAsDirty();
           this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasVencidas').markAsTouched();
           aux = null;
+          this.isLoading = false;
           this.openModal2();
         }
       }
     }
     if (aux === 0) {
+      this.isLoading = false;
       this.openModal1();
     }
     if ((this.calculosRescisao.length > 0) && aux) {
@@ -224,6 +228,7 @@ export class ResgateRescisaoComponent implements OnInit {
                 this.calculosRescisao[i].totalMultaFgtsSalario = terceirizado.valorRestituicaoRescisao.valorFGTSSalario;
 
                 if (i === (this.calculosRescisao.length - 1)) {
+                  this.isLoading = false;
                   this.openModal3();
                 }
               }
