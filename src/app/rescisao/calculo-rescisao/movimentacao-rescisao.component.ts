@@ -58,7 +58,8 @@ export class MovimentacaoRescisaoComponent implements OnInit {
         resgateFeriasVencidas: new FormControl('T', [Validators.required, this.resgateValidatore]),
         valorFeriasVencidasMovimentado: new FormControl(0),
         valorFeriasProporcionaisMovimentado: new FormControl(0),
-        valorDecimoTerceiroMovimentado: new FormControl(0)
+        valorDecimoTerceiroMovimentado: new FormControl(0),
+        emAnalise: new FormControl(item.emAnalise),
       });
       control.push(addCtrl);
     });
@@ -81,6 +82,10 @@ export class MovimentacaoRescisaoComponent implements OnInit {
         this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasIntegrais').setValue(this.dateToString(this.terceirizados[i].pDataInicioFeriasIntegrais));
         this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataFimFeriasIntegrais').setValue(this.dateToString(this.terceirizados[i].pDataFimFeriasIntegrais));
         this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasVencidas').setValidators([Validators.required, this.resgateValidatore]);
+      }
+      const emAnalise = this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('emAnalise').value;
+      if (emAnalise) {
+        this.rescisaoForm.get('calcularTerceirizados').get('' + i).disable();
       }
     }
   }
