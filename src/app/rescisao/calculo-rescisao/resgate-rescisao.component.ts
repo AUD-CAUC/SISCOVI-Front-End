@@ -129,9 +129,10 @@ export class ResgateRescisaoComponent implements OnInit {
     this.navegaParaViewDeCalculos.emit(this.codigoContrato);
   }
   efetuarCalculo(): void {
-
+    this.isLoading = true;
     this.rescisaoService.registrarCalculoRescisao(this.calculosRescisao).subscribe(res => {
       if (res.success) {
+        this.isLoading = false;
         this.closeModal3();
         this.openModal4();
       }

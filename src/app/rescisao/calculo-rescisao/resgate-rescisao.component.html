@@ -257,10 +257,15 @@
     </table>
   </div>
   <div class="modal-footer">
-    <div class="center-align">
-      <button class="btn waves-effect right" (click)="efetuarCalculo()">Confirmar</button>
       <button class="btn waves-effect left" (click)="closeModal3()">Cancelar</button>
-    </div>
+      <button *ngIf="!isLoading" class="btn waves-effect right" (click)="efetuarCalculo()">Confirmar</button>
+      <div *ngIf="isLoading" class="preloader-wrapper active">
+        <div class="spinner-layer">
+          <div class="circle-clipper right">
+            <div class="circle"></div>
+          </div>
+        </div>
+      </div>
   </div>
 </div>
 <div id="modal4" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]"
