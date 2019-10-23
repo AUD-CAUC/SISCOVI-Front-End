@@ -10,6 +10,7 @@ import {Funcionario} from '../../funcionarios/funcionario';
 import {Error} from '../../_shared/error';
 import {Observable} from 'rxjs/Observable';
 import {map} from 'rxjs/operators';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-movimentacao-rescisao-component',
@@ -29,9 +30,10 @@ export class MovimentacaoRescisaoComponent implements OnInit {
   modalActions2 = new EventEmitter<string | MaterializeAction>();
   modalActions3 = new EventEmitter<string | MaterializeAction>();
   modalActions4 = new EventEmitter<string | MaterializeAction>();
+  isLoading = false;
   @Output() navegaParaViewDeCalculos = new EventEmitter();
 
-  constructor(private fb: FormBuilder, private rescisaoService: RescisaoService) {
+  constructor(private fb: FormBuilder, private rescisaoService: RescisaoService, private router: Router, private route: ActivatedRoute) {
   }
 
   ngOnInit() {
@@ -57,7 +59,8 @@ export class MovimentacaoRescisaoComponent implements OnInit {
         resgateFeriasVencidas: new FormControl('T', [Validators.required, this.resgateValidatore]),
         valorFeriasVencidasMovimentado: new FormControl(0),
         valorFeriasProporcionaisMovimentado: new FormControl(0),
-        valorDecimoTerceiroMovimentado: new FormControl(0)
+        valorDecimoTerceiroMovimentado: new FormControl(0),
+        emAnalise: new FormControl(item.emAnalise),
       });
       control.push(addCtrl);
     });
@@ -80,6 +83,10 @@ export class MovimentacaoRescisaoComponent implements OnInit {
         this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasIntegrais').setValue(this.dateToString(this.terceirizados[i].pDataInicioFeriasIntegrais));
         this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataFimFeriasIntegrais').setValue(this.dateToString(this.terceirizados[i].pDataFimFeriasIntegrais));
         this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasVencidas').setValidators([Validators.required, this.resgateValidatore]);
+      }
+      const emAnalise = this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('emAnalise').value;
+      if (emAnalise) {
+        this.rescisaoForm.get('calcularTerceirizados').get('' + i).disable();
       }
     }
   }
@@ -140,8 +147,10 @@ export class MovimentacaoRescisaoComponent implements OnInit {
   }
 
   efetuarCalculo(): void {
+    this.isLoading = true;
     this.rescisaoService.registrarCalculoRescisao(this.calculosRescisao).subscribe(res => {
       if (res.success) {
+        this.isLoading = false;
         this.closeModal3();
         this.openModal4();
       }
@@ -149,6 +158,7 @@ export class MovimentacaoRescisaoComponent implements OnInit {
   }
 
   verificaDadosFormulario() {
+    this.isLoading = true;
     this.calculosRescisao = [];
     let aux = 0;
     for (let i = 0; i < this.terceirizados.length; i++) {
@@ -200,15 +210,16 @@ export class MovimentacaoRescisaoComponent implements OnInit {
             this.calculosRescisao.push(objeto);
           }
         } else {
-          console.log(this.rescisaoForm);
           this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasVencidas').markAsDirty();
           this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasVencidas').markAsTouched();
           aux = null;
+          this.isLoading = false;
           this.openModal2();
         }
       }
     }
     if (aux === 0) {
+      this.isLoading = false;
       this.openModal1();
     }
     if ((this.calculosRescisao.length > 0) && aux) {
@@ -236,6 +247,7 @@ export class MovimentacaoRescisaoComponent implements OnInit {
                 this.calculosRescisao[i].totalIncidenciaTercoProporcional = terceirizado.valorRestituicaoRescisao.valorFGTSTercoProporcional;
                 this.calculosRescisao[i].totalMultaFgtsSalario = terceirizado.valorRestituicaoRescisao.valorFGTSSalario;
                 if (i === (this.calculosRescisao.length - 1)) {
+                  this.isLoading = false;
                   this.openModal3();
                 }
               }
@@ -245,4 +257,7 @@ export class MovimentacaoRescisaoComponent implements OnInit {
       }
     }
   }
+    acessoTerceirizados(codigoContrato) {
+        this.router.navigate(['./funcoes-dos-terceirizados', codigoContrato], {relativeTo: this.route});
+    }
 }

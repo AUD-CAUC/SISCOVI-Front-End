@@ -42,6 +42,8 @@ import {CadastrarPercentualEstaticoComponent} from './percentuais-estaticos/cada
 import {ResidualComponent} from './residual/residual.component';
 import {CadastrarPercentualDinamicoComponent} from './percentuais-dinamicos/cadastrar-percentual-dinamico/cadastrar-percentual-dinamico.component';
 import {ResidualFeriasPendentesResolver} from './residual/residual-ferias-pendentes.resolver';
+import {VisualizarAjusteComponent} from './contratos/visualizar-ajuste/visualizar-ajuste.component';
+
 
 const routes: Routes = [
   {path: '', pathMatch: 'full', redirectTo: 'home'},
@@ -60,6 +62,8 @@ const routes: Routes = [
       {path: 'cargos', component: CargoComponent, canActivate: [LoggedInGuard, ProfileGuard]},
       {path: 'gerenciar', component: IndicadoresComponent, canActivate: [LoggedInGuard]},
       {path: 'contratos', component: ContratosComponent, canActivate: [LoggedInGuard]},
+      {path: 'contratos/cadastrar-ajuste/:codContrato', component: CadastrarAjustesComponent, canActivate: [LoggedInGuard]},
+      {path: 'contratos/visualizar-evento/:codContrato/:codAjuste', component: VisualizarAjusteComponent, canActivate: [LoggedInGuard]},
       {path: 'percentuais', component: PercentuaisComponent, canActivate: [LoggedInGuard]},
       {path: 'cargosContrato', component: CargosDoContratoComponent, canActivate: [LoggedInGuard]},
       {path: 'convencoes', component: ConvencoesColetivasComponent, canActivate: [LoggedInGuard]},
@@ -75,7 +79,7 @@ const routes: Routes = [
         component: CadastrarTerceirizadoComponent,
         canActivate: [LoggedInGuard, ProfileGuard]
       },
-      {path: 'funcoes-dos-terceirizados', component: CargosDosFuncionariosComponent, canActivate: [LoggedInGuard]},
+      {path: 'contratos/funcoes-dos-terceirizados/:codContrato', component: GerenciarCargosTerceirizadosComponent, canActivate: [LoggedInGuard]},
       {path: 'vigencias', component: VigenciaDosContratosComponent, canActivate: [LoggedInGuard]},
       {path: 'home', component: InicioComponent, canActivate: [LoggedInGuard]},
       {
@@ -88,15 +92,13 @@ const routes: Routes = [
         }
       },
       {path: 'decTer', component: DecimoTerceiroComponent, canActivate: [LoggedInGuard]},
-      {
-        path: 'rescisao',
-        component: RescisaoComponent,
-        canActivate: [LoggedInGuard],
+      {path: 'rescisao', component: RescisaoComponent, canActivate: [LoggedInGuard],
         resolve: {
           calculosPendentes: RescisaoPendenteResolver,
           calculosPendentesExecucao: RescisaoPendenteExecucaoResolver
         }
       },
+      {path: 'rescisao/funcoes-dos-terceirizados/:codContrato', component: GerenciarCargosTerceirizadosComponent, canActivate: [LoggedInGuard]},
       {
         path: 'residual',
         component: ResidualComponent,
@@ -106,6 +108,7 @@ const routes: Routes = [
         }
       },
       {path: 'totalMensal', component: TotalMensalComponent, canActivate: [LoggedInGuard]},
+      {path: 'totalMensal/funcoes-dos-terceirizados/:codContrato', component: GerenciarCargosTerceirizadosComponent, canActivate: [LoggedInGuard]},
       {path: 'totalMensal/:id/:dataReferencia', component: RecalculoTotalMensalComponent, canActivate: [LoggedInGuard]},
       {path: 'saldoConta', component: InicioComponent, canActivate: [LoggedInGuard]},
       {path: 'percentEst', component: PercentuaisEstaticosComponent, canActivate: [LoggedInGuard, ProfileGuard]},
@@ -113,26 +116,17 @@ const routes: Routes = [
       {path: 'percentDin', component: PercentualDinamicoComponent, canActivate: [LoggedInGuard, ProfileGuard]},
       {path: 'percentDin/:id', component: CadastrarPercentualDinamicoComponent, canActivate: [LoggedInGuard, ProfileGuard]},
       {path: 'ajustes-contratuais', component: AjusteContratoComponent, canActivate: [LoggedInGuard]},
+      {path: 'ajustes-contratuais/cadastrar-ajuste', component: CadastrarAjustesComponent, canActivate: [LoggedInGuard]},
+      {path: 'contratos/historico-gestores/:codContrato', component: HistoricoGestoresComponent, canActivate: [LoggedInGuard]},
+      // {
+      //   path: 'contratos/historico-gestores/:id',
+      //   component: CadastrarGestorContratoComponent,
+      //   canActivate: [LoggedInGuard, ProfileGuard]
+      // },
       {
-        path: 'ajustes-contratuais/cadastrar-ajuste',
-        component: CadastrarAjustesComponent,
-        canActivate: [LoggedInGuard]
-      },
-      {path: 'historico-gestores', component: HistoricoGestoresComponent, canActivate: [LoggedInGuard]},
-      {
-        path: 'historico-gestores/:id',
+        path: 'contratos/historico-gestores/:codContrato/cadastro-gestor-contrato',
         component: CadastrarGestorContratoComponent,
         canActivate: [LoggedInGuard, ProfileGuard]
-      },
-      {
-        path: 'historico-gestores/cadastro-gestor-contrato',
-        component: CadastrarGestorContratoComponent,
-        canActivate: [LoggedInGuard, ProfileGuard]
-      },
-      {
-        path: 'funcoes-dos-terceirizados/gerenciar-funcoes-terceirizados',
-        component: GerenciarCargosTerceirizadosComponent,
-        canActivate: [LoggedInGuard]
       },
       {path: 'contratos/cadastro-contrato', component: CadastroContratoComponent, canActivate: [LoggedInGuard]},
       {path: 'saldo/individual', component: SaldoIndividualComponent, canActivate: [LoggedInGuard]},

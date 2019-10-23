@@ -65,7 +65,6 @@ export class FuncionariosComponent {
         this.router.navigate(['terceirizados', cod], {skipLocationChange: true});
   }
   deletarTerceirizado() {
-    console.log(this.codigo)
     this.funcServ.apagarTerceirizado(this.codigo).subscribe(res => {
       if (res === 'Terceirizado Apagado Com sucesso !') {
         this.funcServ.getAllTerceirizados().subscribe(res2 => {

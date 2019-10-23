@@ -1,3 +1,4 @@
+
 .tab a.active {
   color: white!important;
   background-color: #eceff1!important;
@@ -17,9 +18,18 @@ ul > .tabs > li > .indicator {
   margin-left: auto;
   margin-right: auto;
 }
+
+//table {
+//  width: 120%;
+//}
 .status {
   cursor: pointer !important;
 }
+
+th, td {
+  padding: 5px 5px;
+}
+
 .material-icons {
   color: rgba(0,0,0,0.54)
 }
@@ -40,48 +50,66 @@ ul > .tabs > li > .indicator {
   border-radius:50%;
   box-shadow:0 0 1px #333;
 }
-.tooltip {
-  position: relative;
-  display: inline-block;
-  border-bottom: 1px black;
-}
 
-.tooltip .tooltiptext{
-  visibility: hidden;
-  width: 120px;
-  background-color: #555;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 5px 0;
-  position: absolute;
-  z-index: 1;
-  bottom: 125%;
-  left: 50%;
-  margin-left: -60px;
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-.tooltip .tooltiptext::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  margin-left: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: #555 transparent transparent transparent;
-}
-.tooltip:hover .tooltiptext{
-  visibility: visible;
-  opacity: 100;
-}
 .modal-footer {
-  text-align:center;
+  padding-bottom: 72px;
 }
 .modal-footer button {
   display:inline-block;
   margin:0 15px;
   float:none; /*if you set float already */
 }
+/*
+****** TOOLTIPS ******
+*/
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  cursor: help;
+}
+.tooltip .tooltiptext {
+  visibility: hidden;
+  min-width: 560px;
+  max-height: 560px;
+  background-color: #555;
+  color: #fff;
+  text-align: left;
+  border-radius: 6px;
+  padding: 8px 3px 3px 8px;
+  position: absolute;
+  z-index: 98;
+  top: 125%;
+  right: 50%;
+  margin-left: -40px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+.material-icons-pdf {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 26px; /* Preferred icon size */
+  color: #f43636f2;
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+  cursor: pointer;
+  padding-right: 5px;
+}
+.preloader-wrapper {
+  margin: 0 20px;
+}
+
+.spinner-layer {
+  border-color: #414e54;
+}
+

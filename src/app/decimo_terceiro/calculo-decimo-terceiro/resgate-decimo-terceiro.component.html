@@ -30,6 +30,11 @@
                   <option value="1">Primeira</option>
                   <option value="2">Segunda</option>
                 </select>
+                <div *ngIf="decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('parcelas').getError('mensagem')">
+                  <div *ngFor="let msg of decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('parcelas').getError('mensagem')[0]">
+                      <span class="mensagem-erro">{{msg}}</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -44,7 +49,14 @@
 <div class="container" *ngIf="tipoRestituicao == 'RESGATE'">
   <div class="row" *ngIf="terceirizados && tipoRestituicao">
     <div class="center-align">
-      <button class="btn waves-effect center" (click)="verificaDadosFormulario()">Calcular</button>
+      <button *ngIf="!isLoading" class="btn waves-effect center" (click)="verificaDadosFormulario()">Calcular</button>
+      <div *ngIf="isLoading" class="preloader-wrapper active">
+        <div class="spinner-layer">
+          <div class="circle-clipper left">
+            <div class="circle"></div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -118,9 +130,14 @@
     </table>
   </div>
   <div class="modal-footer">
-    <div class="center-align">
-      <button class="btn waves-effect right" (click)="efetuarCalculo()">Confirmar</button>
-      <button class="btn waves-effect left" (click)="closeModal3()">Cancelar</button>
+    <button class="btn waves-effect left" (click)="closeModal3()">Cancelar</button>
+    <button *ngIf="!isLoading" class="btn waves-effect right" (click)="efetuarCalculo()">Confirmar</button>
+    <div *ngIf="isLoading" class="preloader-wrapper active">
+      <div class="spinner-layer">
+        <div class="circle-clipper left">
+          <div class="circle"></div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

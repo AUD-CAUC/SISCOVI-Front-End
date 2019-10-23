@@ -1,5 +1,6 @@
 <br>
 <div class="row">
+  <br>
     <div class="input-field col l7">
         <select id="selecao_contrato"materialize="material_select" [materializeSelectOptions]="contratos" (change)="defineCodigoContrato($event.target.value)">
             <option disabled>Selecione um Contrato</option>
@@ -11,7 +12,7 @@
 <div class="row" *ngIf="!calculos && codigoContrato">
     <div class="col s12 grey lighten-4" style="margin-top: 1em">
         <br>
-        <h5 class="center-align">Não há cálculos realizados ainda ! <i class="small material-icons">mood_bad</i></h5>
+        <h5 class="center-align">Não há restituições feitas ainda ! <i class="small material-icons">mood_bad</i></h5>
     </div>
 </div>
 <table  class="highlight centered responsive-table" *ngIf="calculos && codigoContrato">

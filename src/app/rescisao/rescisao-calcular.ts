@@ -125,7 +125,7 @@ export class RescisaoCalcular {
 
   public getTotalIncidenciaFeriasVencidas(): number { return this.totalIncidenciaFeriasVencidas; }
 
-  public getTotalIncidenciaTercoVencido(): number { return this.totalTercoConstitucionalvencido; }
+  public getTotalIncidenciaTercoVencido(): number { return this.totalIncidenciaTercoVencido; }
 
   public getTotalMultaFgtsFeriasVencidas(): number { return this.totalMultaFgtsFeriasVencidas; }
 

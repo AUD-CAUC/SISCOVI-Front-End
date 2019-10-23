@@ -17,3 +17,34 @@ ul > .tabs > li > .indicator {
   margin-left: auto;
   margin-right: auto;
 }
+
+/*
+****** TOOLTIPS ******
+*/
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  cursor: help;
+}
+.tooltip .tooltiptext {
+  visibility: hidden;
+  min-width: 560px;
+  max-height: 560px;
+  background-color: #555;
+  color: #fff;
+  text-align: left;
+  border-radius: 6px;
+  padding: 8px 3px 3px 8px;
+  position: absolute;
+  z-index: 98;
+  top: 125%;
+  right: 50%;
+  margin-left: -40px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}

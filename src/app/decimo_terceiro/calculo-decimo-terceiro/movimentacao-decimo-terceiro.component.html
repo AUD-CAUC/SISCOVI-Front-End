@@ -32,12 +32,17 @@
                   <option value="1">Primeira</option>
                   <option value="2">Segunda</option>
                 </select>
+                <div *ngIf="decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('parcelas').getError('mensagem')">
+                    <div *ngFor="let msg of decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('parcelas').getError('mensagem')[0]">
+                        <span class="mensagem-erro">{{msg}}</span>
+                    </div>
+                </div>
               </div>
             </div>
           </div>
         </td>
         <td>{{terceirizado.inicioContagem | date: 'shortDate'}}</td>
-        <td>{{terceirizado.valorDisponivel | currency:'BRL':true:'1.2-2'}}</td>
+        <td>{{terceirizado.valorDisponivel - terceirizado.valorMovimentado | currency:'BRL':true:'1.2-2'}}</td>
         <td>
           <div [formGroupName]="i">
             <div class="row">
@@ -72,7 +77,14 @@
 <div class="container" *ngIf="tipoRestituicao == 'MOVIMENTACAO'">
   <div class="row" *ngIf="terceirizados && tipoRestituicao">
     <div class="center-align">
-      <button class="btn waves-effect center" (click)="verificaDadosFormulario()">Calcular</button>
+      <button *ngIf="!isLoading" class="btn waves-effect center" (click)="verificaDadosFormulario()">Calcular</button>
+      <div *ngIf="isLoading" class="preloader-wrapper active">
+        <div class="spinner-layer">
+          <div class="circle-clipper left">
+            <div class="circle"></div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -109,12 +121,17 @@
     <h4 class="center">Atenção</h4>
     <h5 class="center">Deseja Confirmar o cálculo realizado ?</h5>
     <p>Obs.: Esta ação não poderá ser desfeita futuramente *</p>
+    <div>
+      <i class="fas fa-file-excel right" style="color: #249d76; font-size: 26px; cursor: pointer" title="Gerar relatório em Excel"
+         (click)="gerarRelatorioExcel()"></i>
+    </div>
     <table *ngIf="calculosDecimoTerceiro" class="highlight centered responsive-table hoverable">
       <thead>
       <tr>
         <th>Terceirizado</th>
         <th>Parcela</th>
         <th>Inicio da Contagem</th>
+        <th>Valor Disponível</th>
         <th>Valor a Movimentar</th>
       </tr>
       </thead>
@@ -123,10 +140,12 @@
         <td>{{decimoTerceiro.nomeTerceirizado}}</td>
         <td>{{decimoTerceiro.parcelas | parcelaPipe}}</td>
         <td>{{decimoTerceiro.inicioContagem | date: 'shortDate'}}</td>
+        <td>{{decimoTerceiro.valorDisponivel | currency:'BRL':true:'1.2-2'}}</td>
         <td>{{decimoTerceiro.valorMovimentado | currency:'BRL':true:'1.2-2'}}</td>
       </tr>
       <tr>
         <td><b>Total</b></td>
+        <td></td>
         <td></td>
         <td></td>
         <td><b>{{somaDecimo | currency:'BRL':true:'1.2-2'}}</b></td>
@@ -135,9 +154,14 @@
     </table>
   </div>
   <div class="modal-footer">
-    <div class="center-align">
-      <button class="btn waves-effect right" (click)="efetuarCalculo()">Confirmar</button>
-      <button class="btn waves-effect left" (click)="closeModal3()">Cancelar</button>
+    <button class="btn waves-effect left" (click)="closeModal3()">Cancelar</button>
+    <button *ngIf="!isLoading" class="btn waves-effect right" (click)="efetuarCalculo()">Confirmar</button>
+    <div *ngIf="isLoading" class="preloader-wrapper active">
+      <div class="spinner-layer">
+        <div class="circle-clipper left">
+          <div class="circle"></div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

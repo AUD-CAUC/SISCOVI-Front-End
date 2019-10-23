@@ -13,6 +13,8 @@ export class TerceirizadoFeriasMovimentacao {
     private _parcelaAnterior: string;
     private _ultimoFimUsufruto: Date;
     private _emAnalise: boolean;
+    private _dataDesligamento: Date;
+    private _dataFimContrato: Date;
 
     get emAnalise(): boolean {
       return this._emAnalise;
@@ -63,5 +65,13 @@ export class TerceirizadoFeriasMovimentacao {
 
     get parcela14Dias(): boolean {
       return this._parcela14Dias;
+    }
+
+    get dataDesligamento(): Date {
+      return this._dataDesligamento;
+    }
+
+    get dataFimContrato(): Date {
+      return this._dataFimContrato;
     }
 }

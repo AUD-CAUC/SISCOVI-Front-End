@@ -18,29 +18,36 @@
 <div class="row" *ngIf="calculosPendentes">
   <form [formGroup]="feriasForm">
     <div formArrayName="contratos">
-      <div class="col  l12" *ngFor="let calculoPendente of calculosPendentes; let i = index">
+      <div class="col 110" *ngFor="let calculoPendente of calculosPendentes; let i = index">
+        <div>
+          <i class="material-icons-pdf right" (click)="captureScreen(calculoPendente.titulo, 0)">picture_as_pdf</i>
+        </div>
+        <div>
+          <i class="fas fa-file-excel right" style="color: #249d76; font-size: 26px; cursor: pointer" title="Gerar relatório em Excel"
+             (click)="gerarRelatorioExcel(calculoPendente.titulo)"></i>
+        </div>
         <h6><b>{{calculoPendente.titulo}}</b></h6>
         <table *ngIf="calculosPendentes" class="highlight centered responsive-table"
-               [formGroupName]="i">
+               [formGroupName]="i" id="{{calculoPendente.titulo}}">
           <thead>
           <tr>
             <th *ngIf="config.user.perfil.sigla == 'ADMINISTRADOR'">
               <input type="checkbox" class="checkbox-black" id="test5{{i}}" (change)="isSelected[i] = !isSelected[i]"/>
               <label for="test5{{i}}"></label>
             </th>
-            <th *ngIf="config.user.perfil.sigla == 'ADMINISTRADOR'">Avaliação</th>
+            <th *ngIf="config.user.perfil.sigla == 'ADMINISTRADOR'" style="margin-left: -1.3rem; margin-right: -0.50rem;">Avaliação</th>
             <th *ngIf="config.user.perfil.sigla == 'USUÁRIO'">Status</th>
             <th>Terceirizado</th>
             <th>Função</th>
-            <th>Tipo de Restituição</th>
+            <th>Tipo Restituição</th>
             <th>Parcela</th>
-            <th>Início do Periodo Aquisitivo</th>
-            <th>Fim do Periodo Aquisitivo</th>
+            <th>Início Periodo Aquisitivo</th>
+            <th>Fim Periodo Aquisitivo</th>
             <th>Início do Usufruto</th>
             <th>Fim do Usufruto</th>
             <th>Dias Vendidos</th>
-            <th>Valor de Férias</th>
-            <th>Valor de 1/3</th>
+            <th>Valor Férias</th>
+            <th>Valor 1/3</th>
             <th>Incidência Sobre Férias</th>
             <th>Incidência Sobre 1/3</th>
             <th>Total</th>
@@ -60,10 +67,10 @@
                 </div>
               </div>
             </td>
-            <td *ngIf="config.user.perfil.sigla == 'ADMINISTRADOR'">
+            <td *ngIf="config.user.perfil.sigla == 'ADMINISTRADOR'" class="left">
               <div [formGroupName]="k">
-                <div class="row">
-                  <div class="input-field col s12">
+                <div class="row left" style="margin-left: -1.3rem; margin-right: -0.50rem;">
+                  <div class="input-field col s12 left">
                     <select materialize="material_select" formControlName="avaliacao">
                       <option value="S">APROVAR</option>
                       <option value="N">REJEITAR</option>
@@ -72,7 +79,7 @@
                 </div>
               </div>
             </td>
-            <td *ngIf="config.user.perfil.sigla == 'USUÁRIO'">{{calculos.status}}</td>
+            <td *ngIf="config.user.perfil.sigla == 'USUÁRIO'" >{{calculos.status}}</td>
             <td class="hoverable">{{calculos.nomeTerceirizado}}</td>
             <td class="hoverable">{{calculos.nomeCargo}}</td>
             <td class="hoverable">{{calculos.calcularFeriasModel.tipoRestituicao}}</td>
@@ -91,6 +98,7 @@
             <td class="hoverable">{{calculos.calcularFeriasModel.pTotalIncidenciaTerco | currency:'BRL':true:'1.2-2'}}
             </td>
             <td class="hoverable"><b>{{calculos.total | currency:'BRL':true:'1.2-2'}}</b></td>
+
           </tr>
           <tr>
             <td></td>
@@ -155,7 +163,7 @@
 <div id="modal2" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]"
      [materializeActions]="modalActions2">
   <div class="modal-content">
-    <h4 class="center">Confirma Operação</h4>
+    <h4 class="center">Confirma Operação </h4>
     <br>
     <div *ngFor="let calcAval of calculosAvaliados; let i = index">
       <h6><b>{{calcAval.titulo}}</b></h6>
@@ -222,7 +230,14 @@
   </div>
   <div class="modal-footer">
     <button class="btn waves-effect left" (click)="closeModal2()">Cancelar</button>
-    <button class="btn waves-effect right" (click)="salvarAlteracoes()">Confirmar</button>
+    <button *ngIf="!isLoading" class="btn waves-effect right" (click)="salvarAlteracoes()">Confirmar</button>
+    <div *ngIf="isLoading" class="preloader-wrapper active">
+      <div class="spinner-layer">
+        <div class="circle-clipper left">
+          <div class="circle"></div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 <div id="modal3" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]"
@@ -241,8 +256,11 @@
   <div class="modal-content">
     <h4 class="center">Histórico de Cálculos Negados</h4>
     <div *ngFor="let calculoNegado of calculosNegados">
+      <div>
+        <i class="material-icons-pdf right" (click)="captureScreen(calculoNegado.titulo, 1)">picture_as_pdf</i>
+      </div>
       <h6><b>{{calculoNegado.titulo}}</b></h6>
-      <table class="highlight centered responsive-table">
+      <table class="highlight centered responsive-table" id="{{calculoNegado.titulo}}">
         <thead>
         <tr>
           <th>Status</th>

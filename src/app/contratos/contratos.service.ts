@@ -116,7 +116,6 @@ export class ContratosService {
             historico.push(hist);
         });
         contrato.percentuais.forEach(item => {
-            console.log(item.percentual);
             const perc = {
                 percentual: item.percentual,
                 dataInicio: this.convertDate(item.dataInicio),
@@ -174,6 +173,11 @@ export class ContratosService {
     getContratoCompletoUsuario(value: number): Observable<Contrato> {
         const url = this.config.myApi + '/contrato/getContratoCompleto/' + this.config.user.username + '/' + value;
         return this.http.get(url).map(res => res.json() as Contrato);
+    }
+
+    getAjusteCompleto(codContrato: number, codAjuste: number) {
+      const url = this.config.myApi + '/contrato/getAjusteCompleto/' + this.config.user.username + '/' + codContrato + '/' + codAjuste;
+      return this.http.get(url).map(res => res.json() as Contrato);
     }
 
     getTiposEventosContratuais(): Observable<TipoEventoContratual[]> {

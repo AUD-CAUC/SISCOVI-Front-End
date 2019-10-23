@@ -1,6 +1,5 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {LOCALE_ID, NgModule} from '@angular/core';
-
 import {AppComponent} from './app.component';
 import {HttpModule} from '@angular/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -52,6 +51,7 @@ import {CadastrarRubricaComponent} from './rubricas/cadastrar-rubrica/cadastrar-
 import {CadastroCargosComponent} from './cargos/cadastro-cargos/cadastro-cargos.component';
 import {VisualizaCargoCadastroComponent} from './cargos/cadastro-cargos/visualiza-cargo-cadastro.component';
 import {AjusteContratoComponent} from './contratos/ajustes-contratuais/ajuste-contrato.component';
+import {VisualizarAjusteComponent} from './contratos/visualizar-ajuste/visualizar-ajuste.component';
 import {KzMaskDirective} from './_shared/kz-mask.directive';
 import {TitlecaseMaskDirective} from './_shared/titlecase-mask.directive';
 import {PagerService} from './_shared/pager.service';
@@ -117,6 +117,7 @@ import {MovimentacaoResidualDecimoTerceiroComponent} from './residual/calculo-re
 import {MovimentacaoResidualRescisaoComponent} from './residual/calculo-residuais/movimentacao-residual-rescisao.component';
 import {ResiduaisCalculosPendentesComponent} from './residual/residuais-pendentes/residuais-calculos-pendentes.component';
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -160,6 +161,7 @@ import {ResiduaisCalculosPendentesComponent} from './residual/residuais-pendente
     CadastroCargosComponent,
     VisualizaCargoCadastroComponent,
     AjusteContratoComponent,
+    VisualizarAjusteComponent,
     CadastrarAjustesComponent,
     HistoricoGestoresComponent,
     TotalMensalComponent,

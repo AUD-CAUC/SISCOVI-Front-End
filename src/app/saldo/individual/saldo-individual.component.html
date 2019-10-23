@@ -1,85 +1,91 @@
 <div class="container">
-    <h2 class="center">Saldo Individual</h2>
-    <br>
-    <div class="row">
-        <div class="input-field col l7">
-            <select id="selecao_contrato" materialize="material_select" [materializeSelectOptions]="contratos"
-                    (change)="defineCodigoContrato($event.target.value)">
-                <option disabled>Selecione um contrato</option>
-                <option *ngFor="let contrato of contratos" [value]="contrato.codigo"
-                        [selected]="codigoContrato == contrato.codigo">{{contrato.nomeDaEmpresa}} - Contrato nº:
-                    {{contrato.numeroDoContrato}}
-                </option>
-            </select>
-            <label for="selecao_contrato">Contrato<span class="red-text"> *</span></label>
-        </div>
-    </div>
-    <div class="row" *ngIf="!saldos && codigoContrato">
-        <div class="col s12 grey lighten-4" style="margin-top: 1em">
+  <ul>
+    <a class="tooltip right"><span class="tooltiptext">Aqui são descritos os saldos de cada funcionário no contrato.
+    Caso queira consultar os saldos totais por cargo, selecione a opção Saldo por Função na aba Saldos.
+    </span> <i class="material-icons small" style="color: black">help_outline</i></a>
+  </ul>
+  <h2 class="center">Saldo Individual</h2>
+  <br>
+  <ul materialize="collapsible" class="collapsible" data-collapsible="accordion">
+    <li *ngFor="let contrato of contratos">
+      <div class="collapsible-header center" (click)="defineCodigoContrato(contrato.codigo)">
+        <h5>{{contrato.nomeDaEmpresa}} - Contrato nº:
+          {{contrato.numeroDoContrato}}</h5>
+      </div>
+      <div class="collapsible-body" >
+        <i class="material-icons right" (click)="captureScreen(contrato.nomeDaEmpresa)">picture_as_pdf</i>
+        <div class="row" *ngIf="!saldos && codigoContrato">
+          <div class="col s12 grey lighten-4" style="margin-top: 1em">
             <br>
             <h5 class="center-align">Não há retenções realizadas ainda! <i class="small material-icons">mood_bad</i>
             </h5>
+          </div>
         </div>
-    </div>
-    <table class="highlight centered responsive-table" *ngIf="saldos && codigoContrato">
-        <thead>
-        <tr>
-            <th>Terceirizado</th>
-            <th>CPF</th>
-            <th>Férias</th>
-            <th>Terço constitucional</th>
-            <th>Décimo terceiro</th>
-            <th>Incidência</th>
-            <th>MULTA do FGTS</th>
-            <!--
-            <th >Terço const. restituído</th>
-            <th >Incid. de férias restituído</th>
-            <th >Incid. de terço restituído</th>
-            <th >Total de férias restituído</th>
-            <th >Décimo terceiro restituído</th>
-            <th >Incid. sobre 13° restituído</th>
-            <th >Total de 13º restituído</th>
-            <th >Total retido</th>
-            <th >Total restituído</th>
-            -->
-            <th>Saldo</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let saldo of saldos; let k = index">
-            <td>{{saldo.nomeFuncionario}}</td>
-            <td>{{saldo.Cpf}}</td>
-            <td>{{saldo.feriasRetido - saldo.feriasRestituido | currency:'BRL':true:'1.2-2'}}</td>
-            <td>{{saldo.tercoRetido - saldo.tercoRestituido | currency:'BRL':true:'1.2-2'}}</td>
-            <td>{{saldo.decimoTerceiroRetido - saldo.decimoTerceiroRestituido | currency:'BRL':true:'1.2-2'}}</td>
-            <td>{{saldo.incidenciaRetido - saldo.incidenciaFeriasRestituido - saldo.incidenciaTercoRestituido -
-                saldo.incidenciaDecimoTerceiroRestituido | currency:'BRL':true:'1.2-2'}}
-            </td>
-            <td>{{saldo.multaFgtsRetido | currency:'BRL':true:'1.2-2'}}</td>
-            <!--
-            <td >{{saldo.feriasRestituido | currency:'BRL':true:'1.2-2'}}</td>
-            <td >{{saldo.tercoRestituido | currency:'BRL':true:'1.2-2'}}</td>
-            <td >{{saldo.incidenciaFeriasRestituido | currency:'BRL':true:'1.2-2'}}</td>
-            <td >{{saldo.incidenciaTercoRestituido | currency:'BRL':true:'1.2-2'}}</td>
-            <td >{{saldo.totalFeriasRestituido | currency:'BRL':true:'1.2-2'}}</td>
-            <td >{{saldo.decimoTerceiroRestituido | currency:'BRL':true:'1.2-2'}}</td>
-            <td >{{saldo.incidenciaDecimoTerceiroRestituido | currency:'BRL':true:'1.2-2'}}</td>
-            <td >{{saldo.totalDecimoTerceiroRestituido | currency:'BRL':true:'1.2-2'}}</td>
-            <td >{{saldo.totalRetido | currency:'BRL':true:'1.2-2'}}</td>
-            <td >{{saldo.totalRestituido | currency:'BRL':true:'1.2-2'}}</td>
-            -->
-            <td>{{saldo.saldo | currency:'BRL':true:'1.2-2'}}</td>
-        </tr>
-        <tr>
-          <td ><b>Somatório</b></td>
-          <td ><b> </b></td>
-          <td ><b>{{somaFerias| currency:'BRL':true:'1.2-2'}}</b></td>
-          <td ><b>{{somaTerco| currency:'BRL':true:'1.2-2'}}</b></td>
-          <td ><b>{{somaDecimo| currency:'BRL':true:'1.2-2'}}</b></td>
-          <td ><b>{{somaIncidencia| currency:'BRL':true:'1.2-2'}}</b></td>
-          <td ><b>{{somaMultaFGTS| currency:'BRL':true:'1.2-2'}}</b></td>
-          <td ><b>{{somaSaldo| currency:'BRL':true:'1.2-2'}}</b></td>
-        </tr>
-        </tbody>
-    </table>
+        <div >
+          <table class="striped centered responsive-table hoverable highlight bordered" style="box-shadow: none!important;" *ngIf="saldos && codigoContrato" id="{{contrato.nomeDaEmpresa}}">
+            <thead>
+            <tr>
+              <th>Terceirizado</th>
+              <th>CPF</th>
+              <th>Férias</th>
+              <th>Terço constitucional</th>
+              <th>Décimo terceiro</th>
+              <th>Incidência</th>
+              <th>MULTA do FGTS</th>
+              <th>Saldo</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let saldo of saldos; let k = index">
+              <td>{{saldo.nomeFuncionario}}</td>
+              <td>{{saldo.Cpf}}</td>
+              <td>{{saldo.feriasRetido - saldo.feriasRestituido | currency:'BRL':true:'1.2-2'}}</td>
+              <td>{{saldo.tercoRetido - saldo.tercoRestituido | currency:'BRL':true:'1.2-2'}}</td>
+              <td>{{saldo.decimoTerceiroRetido - saldo.decimoTerceiroRestituido | currency:'BRL':true:'1.2-2'}}</td>
+              <td>{{saldo.incidenciaRetido - saldo.incidenciaFeriasRestituido - saldo.incidenciaTercoRestituido -
+              saldo.incidenciaDecimoTerceiroRestituido | currency:'BRL':true:'1.2-2'}}
+              </td>
+              <td>{{saldo.multaFgtsRetido - saldo.multaFgtsRestituido | currency:'BRL':true:'1.2-2'}}</td>
+              <td>{{saldo.saldo | currency:'BRL':true:'1.2-2'}}</td>
+            </tr>
+            <tr>
+              <td ><b>Somatório</b></td>
+              <td ><b> </b></td>
+              <td ><b>{{somaFerias| currency:'BRL':true:'1.2-2'}}</b></td>
+              <td ><b>{{somaTerco| currency:'BRL':true:'1.2-2'}}</b></td>
+              <td ><b>{{somaDecimo| currency:'BRL':true:'1.2-2'}}</b></td>
+              <td ><b>{{somaIncidencia| currency:'BRL':true:'1.2-2'}}</b></td>
+              <td ><b>{{somaMultaFGTS| currency:'BRL':true:'1.2-2'}}</b></td>
+              <td ><b>{{somaSaldo| currency:'BRL':true:'1.2-2'}}</b></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </li>
+  </ul>
 </div>
+<!--
+           <th >Terço const. restituído</th>
+           <th >Incid. de férias restituído</th>
+           <th >Incid. de terço restituído</th>
+           <th >Total de férias restituído</th>
+           <th >Décimo terceiro restituído</th>
+           <th >Incid. sobre 13° restituído</th>
+           <th >Total de 13º restituído</th>
+           <th >Total retido</th>
+           <th >Total restituído</th>
+           -->
+
+<!--
+<td >{{saldo.feriasRestituido | currency:'BRL':true:'1.2-2'}}</td>
+<td >{{saldo.tercoRestituido | currency:'BRL':true:'1.2-2'}}</td>
+<td >{{saldo.incidenciaFeriasRestituido | currency:'BRL':true:'1.2-2'}}</td>
+<td >{{saldo.incidenciaTercoRestituido | currency:'BRL':true:'1.2-2'}}</td>
+<td >{{saldo.totalFeriasRestituido | currency:'BRL':true:'1.2-2'}}</td>
+<td >{{saldo.decimoTerceiroRestituido | currency:'BRL':true:'1.2-2'}}</td>
+<td >{{saldo.incidenciaDecimoTerceiroRestituido | currency:'BRL':true:'1.2-2'}}</td>
+<td >{{saldo.totalDecimoTerceiroRestituido | currency:'BRL':true:'1.2-2'}}</td>
+<td >{{saldo.totalRetido | currency:'BRL':true:'1.2-2'}}</td>
+<td >{{saldo.totalRestituido | currency:'BRL':true:'1.2-2'}}</td>
+-->

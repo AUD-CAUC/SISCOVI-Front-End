@@ -2,6 +2,7 @@ import {ChangeDetectorRef, Component, EventEmitter, Output} from '@angular/core'
 import {Contrato} from '../../contratos/contrato';
 import {ContratosService} from '../../contratos/contratos.service';
 import {DecimoTerceiroService} from '../decimo-terceiro.service';
+import {TerceirizadoDecimoTerceiro} from '../terceirizado-decimo-terceiro';
 
 @Component({
   selector: 'app-calculo-decimo-terceiro-component',
@@ -10,7 +11,7 @@ import {DecimoTerceiroService} from '../decimo-terceiro.service';
 })
 export class CalculoDecimoTerceiroComponent {
   protected contratos: Contrato[];
-  protected terceirizados: Object[];
+  protected terceirizados: TerceirizadoDecimoTerceiro[];
   codigo: number;
   tipoRestituicao: string;
   @Output() navegaParaViewDeCalculos = new EventEmitter();
@@ -24,18 +25,13 @@ export class CalculoDecimoTerceiroComponent {
   }
 
   defineCodigoContrato(codigoContrato: number): void {
-    this.terceirizados = null;
     this.codigo = codigoContrato;
     if (this.tipoRestituicao && this.codigo) {
       this.decimoTerceiroService.getAnos(this.codigo).subscribe(res => {
         this.listaAnos = res;
       });
     }
-    if (this.codigo && this.tipoRestituicao && this.anoCalculo) {
-      this.decimoTerceiroService.getFuncionariosDecimoTerceiro(this.codigo, this.tipoRestituicao, this.anoCalculo).subscribe(res => {
-        this.terceirizados = res;
-      });
-    }
+    this.defineTerceirizados();
   }
 
   defineTipoMovimentacao(tipoMovimentacao: string): void {
@@ -45,15 +41,16 @@ export class CalculoDecimoTerceiroComponent {
         this.listaAnos = res;
       });
     }
-    if (this.codigo && this.tipoRestituicao && this.anoCalculo) {
-      this.decimoTerceiroService.getFuncionariosDecimoTerceiro(this.codigo, this.tipoRestituicao, this.anoCalculo).subscribe(res => {
-        this.terceirizados = res;
-      });
-    }
+    this.defineTerceirizados();
   }
 
   defineAnoCalculo(ano: number): void {
     this.anoCalculo = ano;
+    this.defineTerceirizados();
+  }
+
+  defineTerceirizados(): void {
+    this.terceirizados = null;
     if (this.codigo && this.tipoRestituicao && this.anoCalculo) {
       this.decimoTerceiroService.getFuncionariosDecimoTerceiro(this.codigo, this.tipoRestituicao, this.anoCalculo).subscribe(res => {
         this.terceirizados = res;

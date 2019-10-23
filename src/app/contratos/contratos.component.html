@@ -11,30 +11,82 @@
   </div>
 </div>
 <div class="container">
-  <table class="centered highlight responsive-table bordered z-depth-2 hoverable">
-    <thead>
-      <tr>
-        <th>Empresa</th>
-        <th>CNPJ</th>
-        <th>Número do Contrato</th>
-        <th>Ano do Contrato</th>
-        <th>Objeto</th>
-        <th>Início</th>
-        <th>Fim</th>
-        <th>Ativo</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let contrato of contratos">
-        <td>{{contrato.nomeDaEmpresa}}</td>
-        <td>{{contrato.cnpj | cnpjPipe}}</td>
-        <td>{{contrato.numeroDoContrato}}</td>
-        <td>{{contrato.anoDoContrato}}</td>
-        <td>{{contrato.objeto}}</td>
-        <td>{{contrato.dataInicio | date: 'shortDate'}}</td>
-        <td>{{contrato.dataFim | date: 'shortDate'}}</td>
-        <td>{{contrato.seAtivo}}</td>
-      </tr>
-    </tbody>
-  </table>
+<!--  <table class="centered highlight responsive-table bordered z-depth-2 hoverable">-->
+<!--    <thead>-->
+<!--      <tr>-->
+<!--        <th>Contratos</th>-->
+<!--        <th>CNPJ</th>-->
+<!--        <th>Número do Contrato</th>-->
+<!--        <th>Ano do Contrato</th>-->
+<!--        <th>Objeto</th>-->
+<!--        <th>Início da Vigência</th>-->
+<!--        <th>Fim da Vigência</th>-->
+<!--        <th>Ativo?</th>-->
+<!--      </tr>-->
+<!--    </thead>-->
+<!--    <tbody>-->
+      <ul materialize="collapsible" class="collapsible" data-collapsible="accordion">
+          <li *ngFor="let cont of contratos">
+            <div class="collapsible-header center">
+              <h5>{{cont.nomeDaEmpresa}} - {{cont.numeroDoContrato}}</h5>
+            </div>
+            <div class="collapsible-body">
+              <div class="center-align" style="padding-right: 2vw; padding-left: 2vw; margin-bottom: 1.5vh">
+                <button class="left waves-effect btn large blue-grey darken-3" (click)="cadastrarAjuste(cont.codigo)">
+                  <a class="white-text">Novo Ajuste<i class="material-icons right">add</i></a>
+                </button>
+
+                <button class="center waves-effect btn large blue-grey darken-3" (click)="acessoTerceirizados(cont.codigo)">
+                  <a class="white-text">Gerenciar Terceirizado</a>
+                </button>
+                <button class="right col s0 waves-effect btn large blue-grey darken-3" (click)="acessoHistorico(cont.codigo)">
+                  <a class="white-text">Histórico de Gestores</a>
+                </button>
+              </div>
+              <div class="divider"></div>
+              <div style="padding-left: 0; padding-right: 0">
+                <table class="striped centered responsive-table hoverable highlight bordered" style="box-shadow: none!important;">
+                  <thead>
+                  <tr>
+                    <th>Tipo de Evento</th>
+                    <th>Assunto</th>
+                    <th>Data de Início da Vigência</th>
+                    <th>Data Fim da Vigência</th>
+                    <th>Data de Assinatura</th>
+                  </tr>
+                  </thead>
+
+                  <tbody>
+                  <tr>
+                      <td>CONTRATO</td>
+                      <td></td>
+                      <td>{{cont.dataInicio | date: 'shortDate'}}</td>
+                      <td>{{cont.dataFim | date: 'shortDate'}}</td>
+                      <td>{{cont.dataAssinatura | date: 'shortDate'}}</td>
+                      <td class="foo"><i class="material-icons rounded" (click)="visualizarContrato(cont.codigo)" title="Visualizar Contrato">description</i></td>
+                  </tr>
+                  <tr *ngFor="let evento of cont.eventosContratuais">
+                    <td>{{evento.tipo.tipo}}</td>
+                    <td>{{evento.assunto}}</td>
+                    <td>{{evento.dataInicioVigencia | date: 'shortDate'}}</td>
+                    <td>{{evento.dataFimVigencia | date: 'shortDate'}}</td>
+                    <td>{{evento.dataAssinatura | date: 'shortDate'}}</td>
+                    <td class="foo"><i class="material-icons rounded" (click)="visualizarAjuste(cont.codigo, evento.codigo)" title="Visualizar Ajuste">description</i></td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </li>
+<!--        <td>{{contrato.cnpj | cnpjPipe}}</td>-->
+<!--        <td>{{contrato.numeroDoContrato}}</td>-->
+<!--        <td>{{contrato.anoDoContrato}}</td>-->
+<!--        <td>{{contrato.objeto}}</td>-->
+<!--        <td>{{contrato.dataInicio | date: 'shortDate'}}</td>-->
+<!--        <td>{{contrato.dataFim | date: 'shortDate'}}</td>-->
+<!--        <td>{{contrato.seAtivo}}</td>-->
+      </ul>
+<!--    </tbody>-->
+<!--  </table>-->
 </div>
+

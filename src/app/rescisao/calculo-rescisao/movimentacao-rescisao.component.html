@@ -1,6 +1,20 @@
+<div class="row">
+  <div class="container" *ngIf="terceirizados.length === 0">
+    <div class="row">
+      <div class="col s12 grey lighten-4" style="margin-top: 1em">
+        <br>
+        <h5 class="center-align">Não há registros de funcionários desligados no sistema! Caso deseje desligar algum
+          funcionário clique no atalho abaixo e siga o procedimento para desligamento de terceirizado:</h5>
+      </div>
+      <div class="row center-align">
+        <button class="btn waves-effect" (click)="acessoTerceirizados(codigoContrato)()">Gerenciar Função do Terceirizado</button>
+      </div>
+    </div>
+  </div>
+</div>
 <form [formGroup]="rescisaoForm" >
     <div formArrayName="calcularTerceirizados">
-        <table class="highlight centered responsive-table hoverable">
+        <table class="highlight centered responsive-table hoverable"*ngIf="terceirizados.length !== 0">
             <thead>
             <tr>
                 <th>
@@ -13,9 +27,9 @@
                 <th>Início de férias vencidas</th>
                 <th>Fim de férias vencidas</th>
                 <th>Resgatar férias vencidas</th>
-                <th>Valor de féria Vencidas</th>
+                <th>Valor de férias vencidas</th>
                 <th>Início de férias proporcionais</th>
-                <th>Valor de féria proporcionais</th>
+                <th>Valor de férias proporcionais</th>
                 <th>Valor de décimo terceiro</th>
             </tr>
             </thead>
@@ -200,8 +214,15 @@
 <div class="container" *ngIf="tipoRestituicao == 'MOVIMENTACAO'">
     <div class="row" *ngIf="terceirizados && tipoRestituicao">
         <div class="center-align">
-            <button class="btn waves-effect center" (click)="verificaDadosFormulario()">Calcular</button>
+            <button class="btn waves-effect center" (click)="verificaDadosFormulario()" *ngIf="terceirizados.length !== 0 && !isLoading">Calcular</button>
+        <div *ngIf="isLoading" class="preloader-wrapper big active">
+            <div class="spinner-layer">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div>
+            </div>
         </div>
+      </div>
     </div>
 </div>
 <div id="modal1" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions">
@@ -266,10 +287,15 @@
     </table>
   </div>
     <div class="modal-footer">
-        <div class="center-align">
-            <button class="btn waves-effect right" (click)="efetuarCalculo()">Confirmar</button>
-            <button class="btn waves-effect left" (click)="closeModal3()">Cancelar</button>
+      <button class="btn waves-effect left" (click)="closeModal3()">Cancelar</button>
+      <button *ngIf="!isLoading" class="btn waves-effect right" (click)="efetuarCalculo()">Confirmar</button>
+      <div *ngIf="isLoading" class="preloader-wrapper active">
+        <div class="spinner-layer">
+          <div class="circle-clipper right">
+            <div class="circle"></div>
+          </div>
         </div>
+      </div>
     </div>
 </div>
 <div id="modal4" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions4">

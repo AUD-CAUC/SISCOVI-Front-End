@@ -1,8 +1,10 @@
 import {ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {TerceirizadoDecimoTerceiro} from '../terceirizado-decimo-terceiro';
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MaterializeAction} from 'angular2-materialize';
 import {DecimoTerceiroService} from '../decimo-terceiro.service';
+import {isLoop} from 'tslint';
+import {isProtractorLocator} from 'protractor/built/locators';
 
 @Component({
   selector: 'app-resgate-decimo-terceiro-component',
@@ -26,6 +28,7 @@ export class ResgateDecimoTerceiroComponent implements OnInit {
   @Output() navegaParaViewDeCalculos = new EventEmitter();
   somaDecimo = 0;
   somaIncidencia = 0;
+  isLoading = false;
 
   constructor(private fb: FormBuilder, private decimoTerceiroService: DecimoTerceiroService, private ref: ChangeDetectorRef) {
   }
@@ -46,18 +49,66 @@ export class ResgateDecimoTerceiroComponent implements OnInit {
         parcelas: new FormControl(0),
         selected: new FormControl(this.isSelected),
         tipoRestituicao: new FormControl(this.tipoRestituicao),
-        inicioContagem: new FormControl(item.inicioContagem)
+        inicioContagem: new FormControl(item.inicioContagem),
+        emAnalise: new FormControl(item.emAnalise),
+        restituidoAnoPassado: new FormControl(item.restituidoAnoPassado),
+        parcelaAnterior: new FormControl(item.parcelaAnterior),
       });
       control.push(addCtrl);
     });
     for (let i = 0; i < this.terceirizados.length; i++) {
       this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('codTerceirizadoContrato').setValidators(Validators.required);
-      this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('parcelas').setValidators(Validators.required);
-      this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('parcelas').setValue(0);
+      this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('parcelas').setValidators([Validators.required, this.parcelaValidator]);
       this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('tipoRestituicao').setValidators(Validators.required);
       this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('inicioContagem');
+      const emAnalise = this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('emAnalise').value;
+      const restituidoAnoPassado = this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('restituidoAnoPassado').value;
+      let ultimaParcela = this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('parcelaAnterior').value;
+
+      if (ultimaParcela === null) {
+          ultimaParcela = '0';
+      } else if (!emAnalise) {
+          ultimaParcela++;
+          ultimaParcela.toString();
+      }
+      this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('parcelas').setValue(ultimaParcela);
+
+      if (emAnalise || !restituidoAnoPassado) {
+        this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).disable();
+      }
     }
     this.ref.markForCheck();
+  }
+
+  public parcelaValidator(control: AbstractControl): { [key: string]: any } {
+      const mensagem = [];
+      let error = false;
+      const parcelaSelecionada: string = control.value;
+      const parcelaAnt: string = control.parent.get('parcelaAnterior').value;
+      if (parcelaAnt === null) {
+          if (parcelaSelecionada === '2') {
+              mensagem.push('Deve realizar a Primeira parcela');
+              error = true;
+          }
+      } else if (parcelaAnt === '1' && !error) {
+          if (parcelaSelecionada === '0') {
+              // Não pode realizar parcela única.
+              mensagem.push('Não é possível realizar a parcela única');
+              error = true;
+          } else if (parcelaSelecionada === '1') {
+              // Já realizou essa parcela.
+              mensagem.push('Primeira parcela já realizada');
+              error = true;
+          }
+      }
+
+      if (error) {
+          control.parent.get('parcelas').markAsUntouched();
+      } else if (control.dirty) {
+          control.parent.get('parcelas').markAsUntouched();
+      }
+
+      return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
   }
 
   closeModal1() {
@@ -95,8 +146,10 @@ export class ResgateDecimoTerceiroComponent implements OnInit {
   }
 
   efetuarCalculo(): void {
+    this.isLoading = true;
     this.decimoTerceiroService.registrarCalculoDecimoTerceiro(this.calculosDecimoTerceiro).subscribe(res => {
       if (res.success) {
+        this.isLoading = false;
         this.closeModal3();
         this.openModal4();
       }
@@ -104,6 +157,7 @@ export class ResgateDecimoTerceiroComponent implements OnInit {
   }
 
   verificaDadosFormulario() {
+    this.isLoading = true;
     this.calculosDecimoTerceiro = [];
     let aux = 0;
     this.vmsm = false;
@@ -114,6 +168,7 @@ export class ResgateDecimoTerceiroComponent implements OnInit {
           const objeto = new TerceirizadoDecimoTerceiro(this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('codTerceirizadoContrato').value,
             this.terceirizados[i].nomeTerceirizado,
             this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('inicioContagem').value,
+            0,
             0,
             this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('parcelas').value);
           objeto.tipoRestituicao = this.tipoRestituicao;
@@ -132,22 +187,20 @@ export class ResgateDecimoTerceiroComponent implements OnInit {
           }
         } else {
           aux = undefined;
+          this.isLoading = false;
           this.openModal2();
         }
       }
     }
     if (aux === 0) {
+      this.isLoading = false;
       this.openModal1();
     }
     if ((this.calculosDecimoTerceiro.length > 0) && aux) {
       this.diasConcedidos = [];
-      console.log('antes req:');
-      console.log(this.calculosDecimoTerceiro);
       this.decimoTerceiroService.calculaDecimoTerceiroTerceirizados(this.calculosDecimoTerceiro).subscribe(res => {
         if (!res.error) {
           this.calculosDecimoTerceiro = res;
-          console.log('depois req:');
-          console.log(this.calculosDecimoTerceiro);
           this.somaDecimo = 0;
           this.somaIncidencia = 0;
 
@@ -155,6 +208,7 @@ export class ResgateDecimoTerceiroComponent implements OnInit {
             this.somaDecimo = this.somaDecimo + this.calculosDecimoTerceiro[i].valoresDecimoTerceiro.valorDecimoTerceiro;
             this.somaIncidencia = this.somaIncidencia + this.calculosDecimoTerceiro[i].valoresDecimoTerceiro.valorIncidenciaDecimoTerceiro;
           }
+          this.isLoading = false;
           this.openModal3();
           this.vmsm = true;
         }
@@ -174,6 +228,5 @@ export class ResgateDecimoTerceiroComponent implements OnInit {
     const diffTime = Math.abs(finalDate.getTime() - initDate.getTime());
     const diffDay = Math.round(diffTime / (1000 * 3600 * 24)) + 1;
     this.diasConcedidos[indice] = diffDay + diasVendidos;
-    console.log(this.diasConcedidos);
   }
 }

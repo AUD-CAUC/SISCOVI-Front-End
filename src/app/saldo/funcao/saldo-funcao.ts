@@ -6,6 +6,7 @@ export class SaldoFuncao {
     valorDecimoTerceiroRetido: number;
     valorIncidenciaRetido: number;
     valorMultaFGTSRetido: number;
+    valorMultaFGTSRestituido: number;
     valorTotalRetido: number;
     valorFeriasRestituido: number;
     valorTercoRestituido: number;

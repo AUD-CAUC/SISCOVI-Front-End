@@ -26,6 +26,7 @@ export class MovimentacaoFeriasComponent implements OnInit {
   modalActions2 = new EventEmitter<string | MaterializeAction>();
   modalActions3 = new EventEmitter<string | MaterializeAction>();
   modalActions4 = new EventEmitter<string | MaterializeAction>();
+  isLoading = false;
   vmsm = false;
   protected diasConcedidos: number[] = [];
   @Output() navegaParaViewDeCalculos = new EventEmitter();
@@ -66,7 +67,8 @@ export class MovimentacaoFeriasComponent implements OnInit {
         parcelaAnterior: new FormControl(item.parcelaAnterior),
         ultimoFimUsufruto: new FormControl(item.ultimoFimUsufruto),
         emAnalise: new FormControl(item.emAnalise),
-
+        dataDesligamento: new FormControl(item.dataDesligamento),
+        dataFimContrato: new FormControl(item.dataFimContrato)
       });
       control.push(addCtrl);
     });
@@ -129,7 +131,11 @@ export class MovimentacaoFeriasComponent implements OnInit {
         error = true;
       }
     } else if (parcelaAnt === '1' && !error) {
-      if (parcelaSelecionada === '1') {
+      if (parcelaSelecionada === '0') {
+        // Não pode realizar parcela única.
+        mensagem.push('Não é possível realizar a parcela única');
+        error = true;
+      } else if (parcelaSelecionada === '1') {
         // Já realizou essa parcela.
         mensagem.push('Primeira parcela já realizada');
         error = true;
@@ -198,68 +204,67 @@ export class MovimentacaoFeriasComponent implements OnInit {
   }
 
   public myDateValidator(control: AbstractControl): { [key: string]: any } {
-    const val = control.value;
-    const mensagem = [];
-    const otherRegex = new RegExp(/^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[1,3-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$/);
-    if (val.length > 0) {
-      const dia = Number(val.split('/')[0]);
-      const mes = Number(val.split('/')[1]);
-      const ano = Number(val.split('/')[2]);
-      if (dia <= 0 || dia > 31) {
-        mensagem.push('O dia da data é inválido.');
-      }
-      if (mes <= 0 || mes > 12) {
-        mensagem.push('O Mês digitado é inválido');
-      }
-      if (ano < 2000 || ano > (new Date().getFullYear() + 5)) {
-        mensagem.push('O Ano digitado é inválido');
-      }
-      if (val.length === 10) {
-        if (!otherRegex.test(val)) {
-          mensagem.push('A data digitada é inválida');
+        const val = control.value;
+        const mensagem = [];
+        const otherRegex = new RegExp(/^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[1,3-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$/);
+        if (val.length === 10) {
+            const dia = Number(val.split('/')[0]);
+            const mes = Number(val.split('/')[1]);
+            const ano = Number(val.split('/')[2]);
+            if (dia <= 0 || dia > 31) {
+                mensagem.push('O dia da data é inválido.');
+            } else if (mes <= 0 || mes > 12) {
+                mensagem.push('O Mês digitado é inválido');
+            } else if (ano < 2000 || ano > (new Date().getFullYear() + 5)) {
+                mensagem.push('O Ano digitado é inválido');
+            } else if (val.length === 10) {
+                if (!otherRegex.test(val)) {
+                    mensagem.push('A data digitada é inválida');
+                }
+            }
         }
-      }
+        return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
     }
-    return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
-  }
 
   public diasVendidosValidator(control: AbstractControl): { [key: string]: any } | null {
-    const mensagem = [];
-    if (control.value) {
-      if (control.value < 0) {
-        mensagem.push('O valor de dias vendidos não pode ser menor que zero !');
-      } else if (control.value > 10) {
-        mensagem.push('O máximo de dias a serem vendidos são 10');
-      }
+        const mensagem = [];
+        if (control.value) {
+            if (control.value < 0) {
+                mensagem.push('O valor de dias vendidos não pode ser menor que zero !');
+            } else if (control.value > 10) {
+                mensagem.push('O máximo de dias a serem vendidos são 10');
+            }
+        }
+        if (control.parent) {
+            const somaDiasVendidos = control.parent.get('somaDiasVendidos').value;
+            if (control.parent.get('fimFerias').value === 10 && control.parent.get('inicioFerias').value === 10) {
+                let dia: number;
+                let mes: number;
+                let ano: number;
+                dia = Number(control.parent.get('fimFerias').value.split('/')[0]);
+                mes = Number(control.parent.get('fimFerias').value.split('/')[1]) - 1;
+                ano = Number(control.parent.get('fimFerias').value.split('/')[2]);
+                const fimUsufruto: Date = new Date(ano, mes, dia);
+                dia = Number(control.parent.get('inicioFerias').value.split('/')[0]);
+                mes = Number(control.parent.get('inicioFerias').value.split('/')[1]) - 1;
+                ano = Number(control.parent.get('inicioFerias').value.split('/')[2]);
+                const inicioUsufruto: Date = new Date(ano, mes, dia);
+                const diff = Math.abs(fimUsufruto.getTime() - inicioUsufruto.getTime());
+                const diffDay: number = Math.round(diff / (1000 * 3600 * 24)) + 1;
+                if ((diffDay + Number(control.value)) > 30) {
+                    mensagem.push('A quantidade de dias vendidos mais o período de usufruto de férias não pode ser maior que trinta dias !');
+                }
+                if (somaDiasVendidos + control.value > 10) {
+                    mensagem.push('A soma dos dias vendidios neste período não deve ultrapassar 10 dias' + '\n' + 'Dias vendidos utilizados: ' + somaDiasVendidos);
+                }
+            }
+            if (control.touched || control.dirty) {
+                control.parent.get('inicioFerias').updateValueAndValidity();
+                control.parent.get('fimFerias').updateValueAndValidity();
+            }
+        }
+        return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
     }
-    if (control.parent) {
-      const somaDiasVendidos = control.parent.get('somaDiasVendidos').value;
-      let dia: number;
-      let mes: number;
-      let ano: number;
-      dia = Number(control.parent.get('fimFerias').value.split('/')[0]);
-      mes = Number(control.parent.get('fimFerias').value.split('/')[1]) - 1;
-      ano = Number(control.parent.get('fimFerias').value.split('/')[2]);
-      const fimUsufruto: Date = new Date(ano, mes, dia);
-      dia = Number(control.parent.get('inicioFerias').value.split('/')[0]);
-      mes = Number(control.parent.get('inicioFerias').value.split('/')[1]) - 1;
-      ano = Number(control.parent.get('inicioFerias').value.split('/')[2]);
-      const inicioUsufruto: Date = new Date(ano, mes, dia);
-      const diff = Math.abs(fimUsufruto.getTime() - inicioUsufruto.getTime());
-      const diffDay: number = Math.round(diff / (1000 * 3600 * 24)) + 1;
-      if ((diffDay + Number(control.value)) > 30) {
-        mensagem.push('A quantidade de dias vendidos mais o período de usufruto de férias não pode ser maior que trinta dias !');
-      }
-      if (somaDiasVendidos + control.value > 10) {
-        mensagem.push('A soma dos dias vendidios neste período não deve ultrapassar 10 dias' + '\n' + 'Dias vendidos utilizados: ' + somaDiasVendidos);
-      }
-      if (control.touched || control.dirty) {
-        control.parent.get('inicioFerias').updateValueAndValidity();
-        control.parent.get('fimFerias').updateValueAndValidity();
-      }
-    }
-    return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
-  }
 
   public operacaoValidator(control: AbstractControl): { [key: string]: any } | null {
     const mensagem = [];
@@ -430,14 +435,22 @@ export class MovimentacaoFeriasComponent implements OnInit {
         const inicioUsufruto: Date = new Date(ano, mes, dia);
         if (fimUsufruto <= inicioUsufruto) {
           mensagem.push('A Data Fim do Usufruto deve ser maior que a Data de Início do Usufruto !');
-        }
-        const diff = Math.abs(fimUsufruto.getTime() - inicioUsufruto.getTime());
-        const diffDay = Math.round(diff / (1000 * 3600 * 24)) + 1;
-        if (diffDay > 30) {
-          mensagem.push('O período de férias não pode ser maior que 30 dias !');
+        } else if (control.parent.get('dataDesligamento').value) {
+          const aux: Number[] = control.parent.get('dataDesligamento').value.split('-');
+          const dataDesligamento: Date = new Date(Number(aux[0]), Number(aux[1]) - 1, Number(aux[2]));
+          if (fimUsufruto > dataDesligamento) {
+            mensagem.push('A data fim do usufruto deve ser menor que a data de desligamento do terceirizado que é ' + dataDesligamento.getDate() + '/' +
+              (dataDesligamento.getMonth() + 1) + '/' + dataDesligamento.getFullYear() + ' !');
+          }
+        } else {
+          const diff = Math.abs(fimUsufruto.getTime() - inicioUsufruto.getTime());
+          const diffDay = Math.round(diff / (1000 * 3600 * 24)) + 1;
+          if (diffDay > 30) {
+            mensagem.push('O período de férias não pode ser maior que 30 dias !');
+          }
         }
       }
-      if ((control.touched || control.dirty) && (control.value.length === 10) && !control.pristine) {
+      if ((control.touched || control.dirty) && !control.pristine) {
         if ((control.parent.get('inicioFerias').touched || control.parent.get('inicioFerias').dirty) && control.parent.get('inicioFerias').valid) {
           // control.parent.get('diasVendidos').updateValueAndValidity();
         }
@@ -461,9 +474,24 @@ export class MovimentacaoFeriasComponent implements OnInit {
         const inicioUsufruto: Date = new Date(ano, mes, dia);
         const val: Number[] = control.parent.get('fimPeriodoAquisitivo').value.split('-');
         const fimPeriodoAquisitivo: Date = new Date(Number(val[0]), Number(val[1]) - 1, Number(val[2]));
+        const val2: Number[] = control.parent.get('inicioPeriodoAquisitivo').value.split('-');
+        const inicioPeriodoAquisitivo: Date = new Date(Number(val2[0]), Number(val2[1]) - 1, Number(val2[2]));
+        const val3: Number[] = control.parent.get('dataFimContrato').value.split('-');
+        const fimContrato: Date = new Date(Number(val3[0]), Number(val3[1]) - 1, Number(val3[2]));
 
         if (inicioUsufruto <= fimPeriodoAquisitivo && control.parent.get('existeCalculoAnterior').value === true) {
           mensagem.push('A data de início do usufruto deve ser maior que a data fim do período aquisitivo !');
+        } else if (inicioUsufruto <= inicioPeriodoAquisitivo) {
+          mensagem.push('A data de início do usufruto deve ser maior que a data inicio do período aquisitivo !');
+        } else if (fimPeriodoAquisitivo >= fimContrato) {
+          mensagem.push('Por este período aquisitivo ser o último do contrato, ele deve ser restituído na rescisão');
+        } else if (control.parent.get('dataDesligamento').value) {
+          const aux: Number[] = control.parent.get('dataDesligamento').value.split('-');
+          const dataDesligamento: Date = new Date(Number(aux[0]), Number(aux[1]) - 1, Number(aux[2]));
+          if (inicioUsufruto > dataDesligamento) {
+            mensagem.push('A data de início do usufruto deve ser menor que a data de desligamento do terceirizado que é ' + dataDesligamento.getDate() + '/' +
+              (dataDesligamento.getMonth() + 1) + '/' + dataDesligamento.getFullYear() + ' !');
+          }
         } else if (control.parent.get('ultimoFimUsufruto').value) {
           ano = Number(control.parent.get('ultimoFimUsufruto').value.split('-')[0]);
           mes = Number(control.parent.get('ultimoFimUsufruto').value.split('-')[1]) - 1;
@@ -474,15 +502,15 @@ export class MovimentacaoFeriasComponent implements OnInit {
               ultimoFimUsufruto.getFullYear() + ' !');
           }
         }
-        if ((control.touched || control.dirty) && (control.value.length === 10) && !control.pristine) {
-          if (control.parent.get('fimFerias').touched || control.parent.get('fimFerias').dirty) {
+      }
+      if ((control.touched || control.dirty) && !control.pristine) {
+        if (control.parent.get('fimFerias').touched || control.parent.get('fimFerias').dirty) {
             // control.parent.get('diasVendidos').updateValueAndValidity();
-          }
-          if (control.valid && control.parent.get('fimFerias')) {
-            control.markAsPristine();
-            control.parent.get('diasVendidos').updateValueAndValidity();
-            control.parent.get('fimFerias').updateValueAndValidity();
-          }
+        }
+        if (control.valid && control.parent.get('fimFerias')) {
+           control.markAsPristine();
+           control.parent.get('diasVendidos').updateValueAndValidity();
+           control.parent.get('fimFerias').updateValueAndValidity();
         }
       }
     }
@@ -535,8 +563,10 @@ export class MovimentacaoFeriasComponent implements OnInit {
   }
 
   efetuarCalculo(): void {
+    this.isLoading = true;
     this.feriasService.calculaFeriasTerceirizados(this.feriasCalcular).subscribe(res => {
       if (res.success) {
+        this.isLoading = false;
         this.closeModal3();
         this.openModal4();
       }
@@ -626,6 +656,5 @@ export class MovimentacaoFeriasComponent implements OnInit {
     const diffTime = Math.abs(finalDate.getTime() - initDate.getTime());
     const diffDay = Math.round(diffTime / (1000 * 3600 * 24)) + 1;
     this.diasConcedidos[indice] = diffDay + diasVendidos;
-    console.log(this.diasConcedidos);
   }
 }

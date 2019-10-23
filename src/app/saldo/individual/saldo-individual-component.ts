@@ -4,6 +4,8 @@ import {ConfigService} from '../../_shared/config.service';
 import {ContratosService} from '../../contratos/contratos.service';
 import {SaldoIndividual} from './saldo-individual';
 import {SaldoService} from '../saldo.service';
+import html2canvas from 'html2canvas';
+import * as JsPDF from 'jspdf';
 
 @Component({
   selector: 'app-saldo-component',
@@ -47,7 +49,7 @@ export class SaldoIndividualComponent {
               this.somaDecimo = this.somaDecimo + this.saldos[i].decimoTerceiroRetido - this.saldos[i].decimoTerceiroRestituido;
               this.somaIncidencia = this.somaIncidencia + (this.saldos[i].incidenciaRetido - this.saldos[i].incidenciaFeriasRestituido -
                 this.saldos[i].incidenciaTercoRestituido - this.saldos[i].incidenciaDecimoTerceiroRestituido);
-              this.somaMultaFGTS = this.somaMultaFGTS + this.saldos[i].multaFgtsRetido;
+              this.somaMultaFGTS = this.somaMultaFGTS + this.saldos[i].multaFgtsRetido - this.saldos[i].multaFgtsRestituido;
               this.somaSaldo = this.somaSaldo + this.saldos[i].saldo;
             }
           }
@@ -76,11 +78,64 @@ export class SaldoIndividualComponent {
             this.somaDecimo = this.somaDecimo + this.saldos[i].decimoTerceiroRetido - this.saldos[i].decimoTerceiroRestituido;
             this.somaIncidencia = this.somaIncidencia + (this.saldos[i].incidenciaRetido - this.saldos[i].incidenciaFeriasRestituido -
               this.saldos[i].incidenciaTercoRestituido - this.saldos[i].incidenciaDecimoTerceiroRestituido);
-            this.somaMultaFGTS = this.somaMultaFGTS + this.saldos[i].multaFgtsRetido;
+            this.somaMultaFGTS = this.somaMultaFGTS + this.saldos[i].multaFgtsRetido - this.saldos[i].multaFgtsRestituido;
             this.somaSaldo = this.somaSaldo + this.saldos[i].saldo;
           }
         }
       });
     }
+  }
+  printDiv() {
+    const divContents = document.getElementById('tabSalInd').innerHTML;
+    const a = window.open('', '', 'height=500, width=500');
+    a.document.write('<html><head></head>');
+    a.document.write('<body ><table class="striped centered responsive-table hoverable highlight bordered" style="box-shadow: none!important;"> ');
+    a.document.write(divContents);
+    a.document.write('</table></body></html>');
+    a.document.close();
+    a.print();
+  }
+
+  captureScreen(nomeEmpresa) {
+    const data = document.getElementById(nomeEmpresa);
+    html2canvas(data, {scrollX: 0, scrollY: -window.scrollY}).then(canvas => {
+      // Few necessary setting options
+      const imgWidth = 205;
+      const pageHeight = 295;
+      const imgHeight = canvas.height * imgWidth / canvas.width;
+      let heightLeft = imgHeight;
+      console.log(imgHeight)
+
+      const contentDataURL = canvas.toDataURL('image/png');
+      const pdf = new JsPDF('p', 'mm', 'a4'); // A4 size page of PDF
+      let position = 40;
+
+      // pdf.text('Cálculo de Retenções', 105, 15, {align: 'center'});
+      // pdf.text(nome, 105, 25, {align: 'center'});
+      // pdf.text(dataReferencia[2] + '/' + dataReferencia[1] + '/' + dataReferencia[0], 105, 35, {align: 'center'});
+      pdf.addImage(contentDataURL, 'PNG', 2.5, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+
+      while (heightLeft >= 0) {
+        position = heightLeft - imgHeight + position;
+        console.log(position)
+        console.log(heightLeft)
+        console.log(imgHeight)
+        pdf.addPage();
+        pdf.addImage(contentDataURL, 'PNG', 2.5, position, imgWidth, imgHeight);
+        // pdf.text('Saldo Individual', 105, 15, {align: 'center'});
+        heightLeft -= pageHeight;
+      }
+
+      // pdf.addImage(contentDataURL, 'PNG', 0, imgHeight + 10, imgWidth, imgHeight);
+      pdf.viewerPreferences({
+        FitWindow: true
+      });
+      pdf.save('Saldo ind' + '.pdf'); // Generated PDF
+    });
+  }
+
+  mostrar(event: any) {
+    console.log(event);
   }
 }

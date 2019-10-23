@@ -7,14 +7,14 @@
    margin-left: auto;
    margin-right: auto;
  }
-table.highlight tbody tr:hover {
-   background-color: #bdbdbd;
-   cursor: context-menu;
- }
-table.highlight tbody tr:hover .total-calculo{
-  background-color: #bdbdbd;
-  cursor: context-menu;
-}
+//table.highlight tbody tr:hover {
+//   background-color: #bdbdbd;
+//   cursor: context-menu;
+// }
+//table.highlight tbody tr:hover .total-calculo{
+//  background-color: #bdbdbd;
+//  cursor: context-menu;
+//}
 .checkbox-black[type="checkbox"] + label:before{
   border: 2px solid black;
   background: transparent;
@@ -84,4 +84,25 @@ table.highlight tbody tr:hover .total-calculo{
 .tooltip:hover .tooltiptext{
   visibility: visible;
   opacity: 100;
+}
+
+.material-icons-pdf {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 26px; /* Preferred icon size */
+  color: #f43636f2;
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+  cursor: pointer;
+  padding-right: 5px;
+}
+
+#modal2 {
+  width: 75vw;
 }

@@ -19,9 +19,16 @@
   <form [formGroup]="rescisaoForm">
     <div formArrayName="contratos">
       <div class="col  l12" *ngFor="let calculoPendente of calculosPendentes; let i = index">
+        <div>
+          <i class="material-icons-pdf right" (click)="captureScreen(calculoPendente.titulo)">picture_as_pdf</i>
+        </div>
+        <div>
+          <i class="fas fa-file-excel right" style="color: #249d76; font-size: 26px; cursor: pointer" title="Gerar relatório em Excel"
+             (click)="gerarRelatorioExcel(calculoPendente.titulo)"></i>
+        </div>
         <h6><b>{{calculoPendente.titulo}}</b></h6>
         <table *ngIf="calculosPendentes" class="highlight centered responsive-table"
-               [formGroupName]="i">
+               [formGroupName]="i" id="{{calculoPendente.titulo}}">
           <thead>
           <tr>
             <th *ngIf="config.user.perfil.sigla == 'ADMINISTRADOR'">
@@ -291,7 +298,14 @@
   </div>
   <div class="modal-footer">
     <button class="btn waves-effect left" (click)="closeModal2()">Cancelar</button>
-    <button class="btn waves-effect right" (click)="salvarAlteracoes()">Confirmar</button>
+    <button *ngIf="!isLoading" class="btn waves-effect right" (click)="salvarAlteracoes()">Confirmar</button>
+    <div *ngIf="isLoading" class="preloader-wrapper active">
+      <div class="spinner-layer">
+        <div class="circle-clipper right">
+          <div class="circle"></div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 <div id="modal3" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]"

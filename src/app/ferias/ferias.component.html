@@ -1,21 +1,51 @@
 <div class="container">
-  <h2 class="center">Férias</h2>
+  <ul *ngIf="testeRetencoes()">
+    <a class="tooltip right"><span class="tooltiptext">Nesta aba você pode consultar o histórico de todas as restituições
+    de férias já executadas de seus contratos. Cada contrato possui seu histórico próprio, então basta selecionar o contrato
+      específico para consultar o seu histórico.</span> <i class="material-icons small" style="color: black">help_outline</i></a>
+  </ul>
+  <ul *ngIf="testeCalculo()">
+    <a class="tooltip right"><span class="tooltiptext">PARA CALCULAR O RESGATE: Primeiro, selecione o contrato para
+      cálculo, em seguida, selecione resgate. Marque o(s) funcionário(s) que deseja realizar o cálculo, especifique
+    o parcelamento da restituição, o início e o fim das férias do terceirizado e, se existir, informe a quantidade de dias
+    que foram vendidos e por fim clique em<button class="btn waves-effect center">Calcular</button>. PARA CALCULAR A MOVIMENTAÇÃO:
+      Marque o(s) funcionário(s), especifique o parcelamento da restituição, o início e o fim das férias do terceirizado,
+      os dias que foram vendidos, o montante a ser movimentado e clique em<button class="btn waves-effect center">Calcular</button>.
+    </span> <i class="material-icons small" style="color: black">help_outline</i></a>
+  </ul>
+  <ul *ngIf="testePendentes()">
+    <a class="tooltip right"><span class="tooltiptext">Nesta aba os funcionários da SAD terão acesso aos pedidos de cálculo
+    feitos pelos gestores, podendo aprovar ou reprovar esses cálculos. Caso aprovados, os cálculos serão enviados para aba
+    CÁLCULOS PENDENTES DE EXECUÇÃO administrada pela SOF, caso contrário os serão devolvidos para aba CALCULAR com as
+    devidas observações e justificativas.</span> <i class="material-icons small" style="color: black">help_outline</i></a>
+  </ul>
+  <ul *ngIf="testeExecutados()">
+    <a class="tooltip right"><span class="tooltiptext">Nesta aba os funcionários da SOF terão acesso aos cáculos aprovados
+    pela SAD, podendo excutá-los de fato ou rejeitá-los. Caso seja executado, para efeito dessa ferramenta, o cálculo será
+    confirmado e um histórico será criado na aba RESTITUIÇÕES DE FÉRIAS</span> <i class="material-icons small" style="color: black">help_outline</i></a>
+  </ul>
+      <h2 class="center">Férias</h2>
+  <br>
   <div class="row">
     <br>
     <div class="col s12">
       <ul class="tabs tabs-fixed-width" materialize="tabs" [materializeParams]="tabSelectionParams">
-        <li class="tab col s3 text-grey text-darken-1"><a [class.active]="testeRetencoes()"
-                                                          (click)="setRetencoesActive()">Restituições</a></li>
-        <li class="tab col s3 text-grey text-darken-1"><a [class.active]="testeCalculo()" (click)="setCalcularActive()">Calcular</a>
+        <li class="tab col s3 text-grey text-darken-1"><a [class.active]="testeRetencoes()" (click)="setRetencoesActive()">
+          Restituições de férias</a>
         </li>
-        <li class="tab col s3 text-grey text-darken-1"><a [class.active]="testePendentes()"
-                                                          (click)="setPendentesActive()">Cálculos Pendentes de
-          Aprovação</a></li>
-        <li class="tab col s3 text-grey text-darken-1"><a [class.active]="testeExecutados()"
-                                                          (click)="setExecutadosActive()">Cálculos Pendentes de
-          Execução</a></li>
+        <li class="tab col s3 text-grey text-darken-1"><a [class.active]="testeCalculo()" (click)="setCalcularActive()">
+          Calcular</a>
+        </li>
+        <li class="tab col s3 text-grey text-darken-1"><a [class.active]="testePendentes()" (click)="setPendentesActive()">
+          Cálculos Pendentes de Aprovação</a>
+        </li>
+        <li class="tab col s3 text-grey text-darken-1"><a [class.active]="testeExecutados()" (click)="setExecutadosActive()">
+          Cálculos Pendentes de Execução</a>
+        </li>
       </ul>
     </div>
+    <div class="divider"></div>
+
     <div id="test1" class="col s12" active="testeRetencoes()">
       <app-relatorio-retencoes-ferias-component *ngIf="testeRetencoes()"></app-relatorio-retencoes-ferias-component>
     </div>

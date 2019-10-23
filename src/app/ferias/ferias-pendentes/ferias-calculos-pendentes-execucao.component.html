@@ -19,9 +19,14 @@
   <form [formGroup]="feriasForm">
     <div formArrayName="contratos">
       <div class="col  l12" *ngFor="let calculoPendente of calculosPendentesExecucao; let i = index">
-        <h6><b>{{calculoPendente.titulo}}</b></h6>
+        <div>
+          <i class="material-icons-pdf right" (click)="captureScreen(calculoPendente.titulo, 0)">picture_as_pdf</i>
+          <i class="fas fa-file-excel right" style="color: #249d76; font-size: 26px; cursor: pointer" title="Gerar relatório em Excel"
+             (click)="gerarRelatorioExcel(calculoPendente.titulo)"></i>
+          <h6><b>{{calculoPendente.titulo}}</b></h6>
+        </div>
         <table *ngIf="calculosPendentesExecucao" class="highlight centered responsive-table"
-               [formGroupName]="i">
+               [formGroupName]="i" id="{{calculoPendente.titulo}}">
           <thead>
           <tr>
             <th *ngIf="config.user.perfil.sigla == 'ADMINISTRADOR'">
@@ -60,12 +65,12 @@
                 </div>
               </div>
             </td>
-            <td *ngIf="config.user.perfil.sigla == 'ADMINISTRADOR'">
+            <td *ngIf="config.user.perfil.sigla == 'ADMINISTRADOR'" class="left">
               <div [formGroupName]="k">
-                <div class="row">
-                  <div class="input-field col s12">
+                <div class="row left" style="margin-left: -1.3rem; margin-right: -0.50rem;">
+                  <div class="input-field col s12 left">
                     <select materialize="material_select" formControlName="avaliacao">
-                      <option value="S">APROVAR</option>
+                      <option value="S">EXECUTAR</option>
                       <option value="N">REJEITAR</option>
                     </select>
                   </div>
@@ -222,7 +227,14 @@
   </div>
   <div class="modal-footer">
     <button class="btn waves-effect left" (click)="closeModal2()">Cancelar</button>
-    <button class="btn waves-effect right" (click)="salvarAlteracoes()">Confirmar</button>
+    <button *ngIf="!isLoading" class="btn waves-effect right" (click)="salvarAlteracoes()">Confirmar</button>
+    <div *ngIf="isLoading" class="preloader-wrapper active">
+      <div class="spinner-layer">
+        <div class="circle-clipper left">
+          <div class="circle"></div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 <div id="modal3" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]"
@@ -241,8 +253,11 @@
   <div class="modal-content">
     <h4 class="center">Histórico de Cálculos Negados</h4>
     <div *ngFor="let calculoNegado of calculosNegados">
+      <div>
+        <i class="material-icons-pdf right" (click)="captureScreen(calculoNegado.titulo, 1)">picture_as_pdf</i>
+      </div>
       <h6><b>{{calculoNegado.titulo}}</b></h6>
-      <table class="highlight centered responsive-table">
+      <table class="highlight centered responsive-table" id="{{calculoNegado.titulo}}">
         <thead>
         <tr>
           <th>Status</th>

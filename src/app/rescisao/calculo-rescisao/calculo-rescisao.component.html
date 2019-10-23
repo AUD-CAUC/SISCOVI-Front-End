@@ -22,6 +22,19 @@
    <app-movimentacao-rescisao-component [tipoRestituicao]="tipoRestituicao" [codigoContrato]="codigo" [terceirizados]="terceirizados" (navegaParaViewDeCalculos)="eventNav($event)">
     </app-movimentacao-rescisao-component>
 </div>
+<!--<div *ngIf="!terceirizados && (tipoRestituicao == 'MOVIMENTACAO')" class="row">-->
+<!--  <div class="col s12 grey lighten-4" style="margin-top: 1em">-->
+<!--    <br>-->
+<!--    <h5 class="center-align">Você não desligou nenhum funcionário! Deseja desligar agora?</h5>-->
+<!--  </div>-->
+<!--</div>-->
+
 <div *ngIf="terceirizados && (tipoRestituicao == 'RESGATE')">
     <app-resgate-rescisao-component [tipoRestituicao]="tipoRestituicao" [codigoContrato]="codigo" [terceirizados]="terceirizados" (navegaParaViewDeCalculos)="eventNav($event)"></app-resgate-rescisao-component>
 </div>
+<!--<div *ngIf="!terceirizados && (tipoRestituicao == 'RESGATE')" class="row">-->
+<!--  <div class="col s12 grey lighten-4" style="margin-top: 1em">-->
+<!--    <br>-->
+<!--    <h5 class="center-align">Você ainda não desligou nenhum funcionário! Deseja desligar agora?</h5>-->
+<!--  </div>-->
+<!--</div>-->

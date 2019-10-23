@@ -1,5 +1,5 @@
 import {Component, EventEmitter, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {CargoService} from '../../cargos/cargo.service';
 import {Cargo} from '../../cargos/cargo';
@@ -23,8 +23,8 @@ import {PercentualDinamicoService} from '../../percentuais-dinamicos/percentual-
   styleUrls: ['./cadastro.contrato.component.scss']
 })
 export class CadastroContratoComponent implements OnInit {
-
     router: Router;
+    route: ActivatedRoute;
     carSer: CargoService;
     cargosCadastrados: Cargo[];
     myForm: FormGroup;
@@ -49,15 +49,25 @@ export class CadastroContratoComponent implements OnInit {
         {valor: 12, mes: 'Dezembro'}
     ];
     modalActions = new EventEmitter<string | MaterializeAction>();
+    modalActions2 = new EventEmitter<string | MaterializeAction>();
     convencoesColetivas: Convencao[];
     percentuaisDinamicos: PercentualDinamico[] = [];
-    constructor(router: Router, carSer: CargoService, fb: FormBuilder, fb1: FormBuilder, contratoService: ContratosService, userService: UserService,
+    incidenciaMinima = 9.0;
+    incidenciaMaxima = 39.80;
+    percDinService: PercentualDinamicoService;
+    constructor(router: Router, route: ActivatedRoute, carSer: CargoService, fb: FormBuilder, fb1: FormBuilder, contratoService: ContratosService, userService: UserService,
                 percentualDinamicoService: PercentualDinamicoService, config: ConfigService, private convServ: ConvencaoService) {
         this.router = router;
+        this.route = route;
         this.fb = fb;
         this.fb1 = fb1;
         this.contratoService = contratoService;
         this.carSer = carSer;
+        this.percDinService = percentualDinamicoService;
+        this.percDinService.getAllPercentuaisDinamicos().subscribe(res => {
+            this.percentuaisDinamicos = res;
+            console.log(res);
+        });
         this.carSer.getAllCargos().subscribe(res => {
             this.cargosCadastrados = res;
             this.initCargos();
@@ -82,19 +92,21 @@ export class CadastroContratoComponent implements OnInit {
     ngOnInit() {
         this.myForm2 = this.fb1.group({
             inicioVigencia: new FormControl('', [Validators.required, this.myDateValidator]),
-            fimVigencia: new FormControl('', [Validators.required, this.myDateValidator]),
-            assinatura: new FormControl('', [Validators.required, this.myDateValidator]),
-            nomeGestor: new FormControl('', [Validators.required, this.nameValidator]),
+            fimVigencia: new FormControl('', [Validators.required, this.myDateValidator, this.fimContratoValidator]),
+            assinatura: new FormControl('', [Validators.required, this.myDateValidator, this.assinaturaValidator]),
+            nomeGestor: new FormControl('', [Validators.required, this.nameValidator, this.repeticaoGestorValidator]),
             nomeEmpresa: new FormControl('', [Validators.required, this.nameValidator]),
             cnpj: new FormControl('', [Validators.required, this.cnpjValidator]),
             ativo: new FormControl('S', [Validators.required]),
             objeto: new FormControl(''),
             percentualFerias: new FormControl('', [Validators.required]),
             percentualDecimoTerceiro: new FormControl('', [Validators.required]),
-            percentualIncidencia: new FormControl('', [Validators.required, this.percentualValidator]),
+            percentualIncidencia: new FormControl('', [Validators.required, this.percentualValidator.bind(this)]),
             numeroContrato: new FormControl('', [Validators.required]),
-            primeiroSubstituto: new FormControl(''),
-            segundoSubstituto: new FormControl(''),
+            primeiroSubstituto: new FormControl('', this.repeticao1Validator),
+            segundoSubstituto: new FormControl('', this.repeticao2Validator),
+            terceiroSubstituto: new FormControl('', this.repeticao3Validator),
+            quartoSubstituto: new FormControl('', this.repeticao4Validator),
             numeroProcessoSTJ: new FormControl('')
         });
         this.myForm = this.fb.group({
@@ -110,10 +122,10 @@ export class CadastroContratoComponent implements OnInit {
     initCargos() {
         return this.fb.group({
             nome: new FormControl('', [Validators.required]),
-            remuneracao: new FormControl('', [Validators.required]),
+            remuneracao: new FormControl('0', [Validators.required]),
             descricao: new FormControl(''),
-            adicionais: new FormControl(''),
-            trienios: new FormControl(''),
+            adicionais: new FormControl('0'),
+            trienios: new FormControl('0'),
             convencao: new FormControl(''),
             dataBase: new FormControl('')
             // dia: new FormControl('', [Validators.required]),
@@ -126,6 +138,12 @@ export class CadastroContratoComponent implements OnInit {
     closeModal() {
         this.modalActions.emit({action: 'modal', params: ['close']});
     }
+    openModal2() {
+      this.modalActions2.emit({action: 'modal', params: ['open']});
+    }
+    closeModal2() {
+      this.modalActions2.emit({action: 'modal', params: ['close']});
+    }
     adicionaCargo(): void {
         const control = <FormArray>this.myForm.controls.cargos;
         const addCtrl = this.initCargos();
@@ -135,24 +153,191 @@ export class CadastroContratoComponent implements OnInit {
         const control = <FormArray>this.myForm.controls.cargos;
         control.removeAt(i);
     }
-    public myDateValidator(control: AbstractControl): {[key: string]: any} {
+    public repeticaoGestorValidator(control: AbstractControl): { [key: string]: any } {
+      const mensagem = [];
+
+      if (control.parent) {
+
+        const PS = control.parent.get('primeiroSubstituto').value;
+        const SS = control.parent.get('segundoSubstituto').value;
+        const TS = control.parent.get('terceiroSubstituto').value;
+        const QS = control.parent.get('quartoSubstituto').value;
+
+        if (control.value === PS && control.value !== '' && PS !== '') {
+          mensagem.push('Os nomes devem ser diferentes!');
+        } else if (control.value === SS && control.value !== '' && SS !== '') {
+          mensagem.push('Os nomes devem ser diferentes!');
+        } else if (control.value === TS && control.value !== '' && TS !== '') {
+          mensagem.push('Os nomes devem ser diferentes!');
+        } else if (control.value === QS && control.value !== '' && QS !== '') {
+          mensagem.push('Os nomes devem ser diferentes!');
+        }
+
+        control.parent.get('primeiroSubstituto').markAsPristine();
+        control.parent.get('segundoSubstituto').markAsPristine();
+        control.parent.get('terceiroSubstituto').markAsPristine();
+        control.parent.get('quartoSubstituto').markAsPristine();
+        if (!control.pristine) {
+          control.parent.get('primeiroSubstituto').updateValueAndValidity();
+          control.parent.get('segundoSubstituto').updateValueAndValidity();
+          control.parent.get('terceiroSubstituto').updateValueAndValidity();
+          control.parent.get('quartoSubstituto').updateValueAndValidity();
+        }
+      }
+      return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
+    }
+
+  public repeticao1Validator(control: AbstractControl): { [key: string]: any } {
+    const mensagem = [];
+
+    if (control.parent) {
+
+      const gestor = control.parent.get('nomeGestor').value;
+      const SS = control.parent.get('segundoSubstituto').value;
+      const TS = control.parent.get('terceiroSubstituto').value;
+      const QS = control.parent.get('quartoSubstituto').value;
+
+      if (control.value === gestor && control.value !== '' && gestor !== '') {
+        mensagem.push('Os nomes devem ser diferentes!');
+      } else if (control.value === SS && control.value !== '' && SS !== '') {
+        mensagem.push('Os nomes devem ser diferentes!');
+      } else if (control.value === TS && control.value !== '' && TS !== '') {
+        mensagem.push('Os nomes devem ser diferentes!');
+      } else if (control.value === QS && control.value !== '' && QS !== '') {
+        mensagem.push('Os nomes devem ser diferentes!');
+      }
+
+      control.parent.get('nomeGestor').markAsPristine();
+      control.parent.get('segundoSubstituto').markAsPristine();
+      control.parent.get('terceiroSubstituto').markAsPristine();
+      control.parent.get('quartoSubstituto').markAsPristine();
+      if (!control.pristine) {
+        control.parent.get('nomeGestor').updateValueAndValidity();
+        control.parent.get('segundoSubstituto').updateValueAndValidity();
+        control.parent.get('terceiroSubstituto').updateValueAndValidity();
+        control.parent.get('quartoSubstituto').updateValueAndValidity();
+      }
+    }
+    return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
+  }
+
+  public repeticao2Validator(control: AbstractControl): { [key: string]: any } {
+    const mensagem = [];
+
+    if (control.parent) {
+
+      const gestor = control.parent.get('nomeGestor').value;
+      const PS = control.parent.get('primeiroSubstituto').value;
+      const TS = control.parent.get('terceiroSubstituto').value;
+      const QS = control.parent.get('quartoSubstituto').value;
+
+      if (control.value === gestor && control.value !== '' && gestor !== '') {
+        mensagem.push('Os nomes devem ser diferentes!');
+      } else if (control.value === PS && PS !== '' && control.value !== '') {
+        mensagem.push('Os nomes devem ser diferentes!');
+      } else if (control.value === TS && TS !== '' && control.value !== '') {
+        mensagem.push('Os nomes devem ser diferentes!');
+      } else if (control.value === QS && QS !== '' && control.value !== '') {
+        mensagem.push('Os nomes devem ser diferentes!');
+      }
+
+      control.parent.get('nomeGestor').markAsPristine();
+      control.parent.get('primeiroSubstituto').markAsPristine();
+      control.parent.get('terceiroSubstituto').markAsPristine();
+      control.parent.get('quartoSubstituto').markAsPristine();
+      if (!control.pristine) {
+        control.parent.get('nomeGestor').updateValueAndValidity();
+        control.parent.get('primeiroSubstituto').updateValueAndValidity();
+        control.parent.get('terceiroSubstituto').updateValueAndValidity();
+        control.parent.get('quartoSubstituto').updateValueAndValidity();
+      }
+    }
+    return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
+  }
+
+  public repeticao3Validator(control: AbstractControl): { [key: string]: any } {
+    const mensagem = [];
+
+    if (control.parent) {
+
+      const gestor = control.parent.get('nomeGestor').value;
+      const PS = control.parent.get('primeiroSubstituto').value;
+      const SS = control.parent.get('segundoSubstituto').value;
+      const QS = control.parent.get('quartoSubstituto').value;
+
+      if (control.value === gestor && control.value !== '' && gestor !== '') {
+        mensagem.push('Os nomes devem ser diferentes!');
+      } else if (control.value === PS && PS !== '' && control.value !== '') {
+        mensagem.push('Os nomes devem ser diferentes!');
+      } else if (control.value === SS && SS !== '' && control.value !== '') {
+        mensagem.push('Os nomes devem ser diferentes!');
+      } else if (control.value === QS && QS !== '' && control.value !== '') {
+        mensagem.push('Os nomes devem ser diferentes!');
+      }
+
+      control.parent.get('nomeGestor').markAsPristine();
+      control.parent.get('primeiroSubstituto').markAsPristine();
+      control.parent.get('segundoSubstituto').markAsPristine();
+      control.parent.get('quartoSubstituto').markAsPristine();
+      if (!control.pristine) {
+        control.parent.get('nomeGestor').updateValueAndValidity();
+        control.parent.get('primeiroSubstituto').updateValueAndValidity();
+        control.parent.get('segundoSubstituto').updateValueAndValidity();
+        control.parent.get('quartoSubstituto').updateValueAndValidity();
+      }
+    }
+    return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
+  }
+
+  public repeticao4Validator(control: AbstractControl): { [key: string]: any } {
+    const mensagem = [];
+
+    if (control.parent) {
+
+      const gestor = control.parent.get('nomeGestor').value;
+      const PS = control.parent.get('primeiroSubstituto').value;
+      const SS = control.parent.get('segundoSubstituto').value;
+      const TS = control.parent.get('terceiroSubstituto').value;
+
+      if (control.value === gestor && control.value !== '' && gestor !== '') {
+        mensagem.push('Os nomes devem ser diferentes!');
+      } else if (control.value === PS && PS !== '' && control.value !== '') {
+        mensagem.push('Os nomes devem ser diferentes!');
+      } else if (control.value === SS && SS !== '' && control.value !== '') {
+        mensagem.push('Os nomes devem ser diferentes!');
+      } else if (control.value === TS && TS !== '' && control.value !== '') {
+        mensagem.push('Os nomes devem ser diferentes!');
+      }
+
+      control.parent.get('nomeGestor').markAsPristine();
+      control.parent.get('primeiroSubstituto').markAsPristine();
+      control.parent.get('segundoSubstituto').markAsPristine();
+      control.parent.get('terceiroSubstituto').markAsPristine();
+      if (!control.pristine) {
+        control.parent.get('nomeGestor').updateValueAndValidity();
+        control.parent.get('primeiroSubstituto').updateValueAndValidity();
+        control.parent.get('segundoSubstituto').updateValueAndValidity();
+        control.parent.get('terceiroSubstituto').updateValueAndValidity();
+      }
+    }
+    return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
+  }
+
+    public myDateValidator(control: AbstractControl): { [key: string]: any } {
         const val = control.value;
         const mensagem = [];
         const otherRegex = new RegExp(/^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[1,3-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$/);
-        if (val.length > 0 ) {
+        if (val.length === 10) {
             const dia = Number(val.split('/')[0]);
             const mes = Number(val.split('/')[1]);
             const ano = Number(val.split('/')[2]);
-            if (dia <= 0 || dia > 31 ) {
+            if (dia <= 0 || dia > 31) {
                 mensagem.push('O dia da data é inválido.');
-            }
-            if (mes <= 0 || mes > 12) {
+            } else if (mes <= 0 || mes > 12) {
                 mensagem.push('O Mês digitado é inválido');
-            }
-            if (ano < 2000 || ano > (new Date().getFullYear() + 5)) {
+            } else if (ano < 2000 || ano > (new Date().getFullYear() + 5)) {
                 mensagem.push('O Ano digitado é inválido');
-            }
-            if (val.length === 10 ) {
+            } else if (val.length !== 10) {
                 if (!otherRegex.test(val)) {
                     mensagem.push('A data digitada é inválida');
                 }
@@ -161,12 +346,14 @@ export class CadastroContratoComponent implements OnInit {
         return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
     }
     public percentualValidator(control: AbstractControl): {[key: string]: any} {
-        const val = control.value;
+        const percentual = control.value;
         const mensagem = [];
         if (control.value) {
-            if (val === 0) {
-                mensagem.push('Digite um valor para o percentual de incidência. Valores comuns para este percentual são  36,8 e 35,6');
+            if (percentual > this.incidenciaMaxima || percentual < this.incidenciaMinima) {
+                mensagem.push('Percentual inválido. O percentual mínimo para esse campo é ' + this.incidenciaMinima + '% e o máximo é ' + this.incidenciaMaxima + '%');
             }
+        } else if (percentual === 0) {
+            mensagem.push('O percentual deve ser diferente de 0%');
         }
         return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
     }
@@ -225,7 +412,9 @@ export class CadastroContratoComponent implements OnInit {
         contrato.percentuais = percentuais;
         this.contratoService.cadastrarContrato(contrato).subscribe(res => {
             if (res.success) {
+              this.openModal();
             }else {
+              this.openModal2();
             }
         });
     }
@@ -252,6 +441,22 @@ export class CadastroContratoComponent implements OnInit {
             historico.gestor = this.myForm2.get('segundoSubstituto').value;
             historico.fim = this.converteDateFormat(this.myForm2.get('fimVigencia').value);
             historico.codigoPerfilGestao = 3;
+            lista.push(historico);
+            historico = new HistoricoGestor();
+        }
+        if (this.myForm2.get('terceiroSubstituto').value.length > 0) {
+            historico.inicio = this.converteDateFormat(this.myForm2.get('inicioVigencia').value);
+            historico.gestor = this.myForm2.get('terceiroSubstituto').value;
+            historico.fim = this.converteDateFormat(this.myForm2.get('fimVigencia').value);
+            historico.codigoPerfilGestao = 4;
+            lista.push(historico);
+            historico = new HistoricoGestor();
+        }
+        if (this.myForm2.get('quartoSubstituto').value.length > 0) {
+            historico.inicio = this.converteDateFormat(this.myForm2.get('inicioVigencia').value);
+            historico.gestor = this.myForm2.get('quartoSubstituto').value;
+            historico.fim = this.converteDateFormat(this.myForm2.get('fimVigencia').value);
+            historico.codigoPerfilGestao = 5;
             lista.push(historico);
         }
         return lista;
@@ -328,4 +533,89 @@ export class CadastroContratoComponent implements OnInit {
         percentuais.push(percentual);
         return percentuais;
     }
+  voltaContratos() {
+    this.router.navigate(['/contratos']);
+  }
+    public fimContratoValidator(control: AbstractControl): { [key: string]: any} | null {
+        const mensagem = [];
+        if (control.parent) {
+            if ((control.value.length === 10)) {
+                let dia: number;
+                let mes: number;
+                let ano: number;
+                dia = Number(control.value.split('/')[0]);
+                mes = Number(control.value.split('/')[1]) - 1;
+                ano = Number(control.value.split('/')[2]);
+                const fimVig: Date = new Date(ano, mes, dia);
+                dia = Number(control.parent.get('inicioVigencia').value.split('/')[0]);
+                mes = Number(control.parent.get('inicioVigencia').value.split('/')[1]) - 1;
+                ano = Number(control.parent.get('inicioVigencia').value.split('/')[2]);
+                const inicioVig: Date = new Date(ano, mes, dia);
+              if (fimVig <= inicioVig) {
+                console.log('entrou');
+                mensagem.push('A data fim do contrato deve ser posterior que a data de início digitada !');
+              } else if (!((ano % 4 === 0) && ((ano % 100 !== 0) || (ano % 400 === 0)))) {
+                console.log('entrou no 1');
+                const diff = Math.abs(fimVig.getTime() - inicioVig.getTime());
+                console.log(diff);
+                const diffDay = Math.round(diff / (1000 * 3600 * 24));
+                console.log(diffDay);
+                if (diffDay < 364 || diffDay >= 365) {
+                  mensagem.push('A vigência do contrato deve ter duração de 1(um) ano!');
+                }
+              } else {
+                console.log('entrou no 2');
+                const diff = Math.abs(fimVig.getTime() - inicioVig.getTime());
+                console.log(diff);
+                const diffDay = Math.round(diff / (1000 * 3600 * 24));
+                console.log(diffDay);
+                if (diffDay < 365 || diffDay >= 366 ) {
+                  mensagem.push('A vigência do contrato deve ter duração de 1(um) ano!');
+                }
+              }
+            }
+        }
+        return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
+    }
+    public assinaturaValidator(control: AbstractControl): { [key: string]: any} | null {
+        const mensagem = [];
+        if (control.parent) {
+            if ((control.value.length === 10)) {
+                let dia: number;
+                let mes: number;
+                let ano: number;
+                dia = Number(control.value.split('/')[0]);
+                mes = Number(control.value.split('/')[1]) - 1;
+                ano = Number(control.value.split('/')[2]);
+                const assinDig: Date = new Date(ano, mes, dia);
+                dia = Number(control.parent.get('inicioVigencia').value.split('/')[0]);
+                mes = Number(control.parent.get('inicioVigencia').value.split('/')[1]) - 1;
+                ano = Number(control.parent.get('inicioVigencia').value.split('/')[2]);
+                const inicioVig: Date = new Date(ano, mes, dia);
+                if (assinDig > inicioVig) {
+                    mensagem.push('A data da assinatura de um ajuste não pode ser posterior ao início da vigência do ajuste!');
+                }
+            }
+        }
+        return (mensagem.length > 0) ? {'mensagem': [mensagem]} : null;
+    }
+
+  // public listaParaSelecao() {
+  //   const gest = this.myForm2.parent.get('nomeGestor').value;
+  //   const fstSubs = this.myForm2.parent.get('primeiroSubstituto').value;
+  //   console.log(fstSubs);
+  //   const sndSubs = this.myForm2.parent.get('segundoSubstituto').value;
+  //   const trdSubs = this.myForm2.parent.get('terceiroSubstituto').value;
+  //   const fthSubs = this.myForm2.parent.get('quartoSubstituto').value;
+  //   if (this.usuarios) {
+  //     this.usuarios.forEach((usuario) => {
+  //       this.listaParaMostrar.push(usuario.nome);
+  //       if (usuario.nome === gest || usuario.nome === fstSubs || usuario.nome === sndSubs ||
+  //         usuario.nome === trdSubs || usuario.nome === fthSubs) {
+  //         // console.log(usuario.nome, gest);
+  //         this.listaParaMostrar.splice(this.listaParaMostrar.indexOf(usuario.nome));
+  //       }
+  //     });
+  //   }
+  // }
 }
