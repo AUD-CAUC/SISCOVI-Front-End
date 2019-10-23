@@ -298,7 +298,14 @@
   </div>
   <div class="modal-footer">
     <button class="btn waves-effect left" (click)="closeModal2()">Cancelar</button>
-    <button class="btn waves-effect right" (click)="salvarAlteracoes()">Confirmar</button>
+    <button *ngIf="!isLoading" class="btn waves-effect right" (click)="salvarAlteracoes()">Confirmar</button>
+    <div *ngIf="isLoading" class="preloader-wrapper active">
+      <div class="spinner-layer">
+        <div class="circle-clipper right">
+          <div class="circle"></div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 <div id="modal3" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]"

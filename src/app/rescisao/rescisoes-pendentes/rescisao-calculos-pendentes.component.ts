@@ -50,6 +50,7 @@ export class RescisaoCalculosPendentesComponent implements OnInit {
   somaMultaFgtsDecimoTerceiro: number[] = [];
   somaMultaFgtsSalario: number[] = [];
   somaSaldo: number[] = [];
+  isLoading = false;
   @Output() nav = new EventEmitter();
 
   constructor(private rescisaoService: RescisaoService, private contratoService: ContratosService, config: ConfigService, private fb: FormBuilder, private ref: ChangeDetectorRef) {
@@ -265,16 +266,19 @@ export class RescisaoCalculosPendentesComponent implements OnInit {
     }
   }
   salvarAlteracoes() {
+    this.isLoading = true;
     for (let i = 0; i < this.calculosAvaliados.length; i++) {
       for (let j = 0; j < this.calculosAvaliados[i].calculos.length; j++) {
         this.calculosAvaliados[i].calculos[j].observacoes = this.rescisaoFormAfter.get('calculosAvaliados').get('' + i).get('observacoes').value;
       }
     }
     this.rescisaoService.salvarRescisoesAvaliadasLista(this.calculosAvaliados).subscribe(res => {
+        this.isLoading = false;
         this.closeModal2();
         this.openModal3();
       },
       error1 => {
+        this.isLoading = false;
         this.closeModal2();
         this.openModal5();
       });
