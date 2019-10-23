@@ -36,6 +36,7 @@ export class DecimoTerceiroPendenteComponent implements OnInit {
   somaSaldo: number[] = [];
   @Output() nav = new EventEmitter();
   view = false;
+  isLoading = false;
   private coluna;
 
   constructor(config: ConfigService, private  fb: FormBuilder, private  ref: ChangeDetectorRef,
@@ -201,6 +202,7 @@ export class DecimoTerceiroPendenteComponent implements OnInit {
   }
 
   salvarAlteracoes() {
+    this.isLoading = true;
     for (let i = 0; i < this.calculosAvaliados.length; i++) {
       for (let j = 0; j < this.calculosAvaliados[i].calculos.length; j++) {
         this.calculosAvaliados[i].calculos[j].observacoes = this.decimoTerceiroFormAfter
@@ -211,10 +213,12 @@ export class DecimoTerceiroPendenteComponent implements OnInit {
       }
     }
     this.decimoTerceiroService.salvarDecimoTerceiroAvaliados(this.calculosAvaliados).subscribe(res => {
+        this.isLoading = false;
         this.closeModal2();
         this.openModal3();
       },
       error1 => {
+        this.isLoading = false;
         this.closeModal2();
         this.openModal5();
       });

@@ -34,6 +34,7 @@ export class DecimoTerceiroPendenteExecucaoComponent implements OnInit {
   somaSaldo: number[] = [];
   config: ConfigService;
   view = false;
+  isLoading = false;
 
   constructor(config: ConfigService, private  fb: FormBuilder, private  ref: ChangeDetectorRef, private decimoTerceiroService: DecimoTerceiroService) {
     this.config = config;
@@ -194,6 +195,7 @@ export class DecimoTerceiroPendenteExecucaoComponent implements OnInit {
   }
 
   salvarAlteracoes() {
+    this.isLoading = true;
     for (let i = 0; i < this.calculosAvaliados.length; i++) {
       for (let j = 0; j < this.calculosAvaliados[i].calculos.length; j++) {
         this.calculosAvaliados[i].calculos[j].observacoes = this.decimoTerceiroFormAfter
@@ -204,10 +206,12 @@ export class DecimoTerceiroPendenteExecucaoComponent implements OnInit {
       }
     }
     this.decimoTerceiroService.executarDecimoTerceiroAvaliados(this.calculosAvaliados).subscribe(res => {
+        this.isLoading = false;
         this.closeModal2();
         this.openModal3();
       },
       error1 => {
+        this.isLoading = false;
         this.closeModal2();
         this.openModal5();
       });

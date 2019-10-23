@@ -24,10 +24,18 @@
   color: red;
 }
 .modal-footer {
-  text-align:center;
+  padding-bottom: 72px;
 }
 .modal-footer button {
   display:inline-block;
   margin:0 15px;
   float:none; /*if you set float already */
+}
+
+.preloader-wrapper {
+  margin: 0 20px;
+}
+
+.spinner-layer {
+  border-color: #414e54;
 }

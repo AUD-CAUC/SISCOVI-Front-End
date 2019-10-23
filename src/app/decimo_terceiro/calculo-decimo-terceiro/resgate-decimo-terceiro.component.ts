@@ -3,6 +3,8 @@ import {TerceirizadoDecimoTerceiro} from '../terceirizado-decimo-terceiro';
 import {AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MaterializeAction} from 'angular2-materialize';
 import {DecimoTerceiroService} from '../decimo-terceiro.service';
+import {isLoop} from 'tslint';
+import {isProtractorLocator} from 'protractor/built/locators';
 
 @Component({
   selector: 'app-resgate-decimo-terceiro-component',
@@ -26,6 +28,7 @@ export class ResgateDecimoTerceiroComponent implements OnInit {
   @Output() navegaParaViewDeCalculos = new EventEmitter();
   somaDecimo = 0;
   somaIncidencia = 0;
+  isLoading = false;
 
   constructor(private fb: FormBuilder, private decimoTerceiroService: DecimoTerceiroService, private ref: ChangeDetectorRef) {
   }
@@ -143,8 +146,10 @@ export class ResgateDecimoTerceiroComponent implements OnInit {
   }
 
   efetuarCalculo(): void {
+    this.isLoading = true;
     this.decimoTerceiroService.registrarCalculoDecimoTerceiro(this.calculosDecimoTerceiro).subscribe(res => {
       if (res.success) {
+        this.isLoading = false;
         this.closeModal3();
         this.openModal4();
       }
@@ -152,6 +157,7 @@ export class ResgateDecimoTerceiroComponent implements OnInit {
   }
 
   verificaDadosFormulario() {
+    this.isLoading = true;
     this.calculosDecimoTerceiro = [];
     let aux = 0;
     this.vmsm = false;
@@ -181,11 +187,13 @@ export class ResgateDecimoTerceiroComponent implements OnInit {
           }
         } else {
           aux = undefined;
+          this.isLoading = false;
           this.openModal2();
         }
       }
     }
     if (aux === 0) {
+      this.isLoading = false;
       this.openModal1();
     }
     if ((this.calculosDecimoTerceiro.length > 0) && aux) {
@@ -200,6 +208,7 @@ export class ResgateDecimoTerceiroComponent implements OnInit {
             this.somaDecimo = this.somaDecimo + this.calculosDecimoTerceiro[i].valoresDecimoTerceiro.valorDecimoTerceiro;
             this.somaIncidencia = this.somaIncidencia + this.calculosDecimoTerceiro[i].valoresDecimoTerceiro.valorIncidenciaDecimoTerceiro;
           }
+          this.isLoading = false;
           this.openModal3();
           this.vmsm = true;
         }
