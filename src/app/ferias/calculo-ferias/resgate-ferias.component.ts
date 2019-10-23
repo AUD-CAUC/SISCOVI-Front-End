@@ -29,6 +29,7 @@ export class ResgateFeriasComponent implements OnInit {
   modalActions2 = new EventEmitter<string | MaterializeAction>();
   modalActions3 = new EventEmitter<string | MaterializeAction>();
   modalActions4 = new EventEmitter<string | MaterializeAction>();
+  isLoading = false;
   @Output() navegaParaViewDeCalculos = new EventEmitter();
 
   constructor(private feriasService: FeriasService, private fb2: FormBuilder) {
@@ -492,8 +493,10 @@ export class ResgateFeriasComponent implements OnInit {
   }
 
   efetuarCalculo(): void {
+    this.isLoading = true;
     this.feriasService.calculaFeriasTerceirizados(this.feriasCalcular).subscribe(res => {
       if (res.success) {
+        this.isLoading = false;
         this.closeModal3();
         this.openModal4();
       }
@@ -501,6 +504,7 @@ export class ResgateFeriasComponent implements OnInit {
   }
 
   verificaDadosFormularioResgate() {
+    this.isLoading = true;
     this.feriasCalcular = [];
     let aux = 0;
     for (let i = 0; i < this.terceirizados.length; i++) {
@@ -541,11 +545,13 @@ export class ResgateFeriasComponent implements OnInit {
           this.feriasResgate.get('calcularTerceirizados').get('' + i).get('diasVendidos').markAsTouched();
           this.feriasResgate.get('calcularTerceirizados').get('' + i).get('diasVendidos').markAsDirty();
           aux = null;
+          this.isLoading = false;
           this.openModal2();
         }
       }
     }
     if (aux === 0) {
+      this.isLoading = false;
       this.openModal1();
       /* for (let i = 0; i < this.terceirizados.length; i++) {
           this.feriasResgate.get('calcularTerceirizados').get('' + i).get('inicioFerias').markAsTouched();
@@ -585,6 +591,7 @@ export class ResgateFeriasComponent implements OnInit {
                 this.somaIncidenciaTerco = this.somaIncidenciaTerco + terceirizado.valorRestituicaoFerias.valorIncidenciaTercoConstitucional;
 
                 if (i === (this.feriasCalcular.length - 1)) {
+                  this.isLoading = false;
                   this.openModal3();
                 }
               }

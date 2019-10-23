@@ -12,6 +12,7 @@ import * as JsPDF from 'jspdf';
 import {fontSize} from "html2canvas/dist/types/css/property-descriptors/font-size";
 import {Workbook} from 'exceljs';
 import {saveAs} from 'file-saver';
+import {isLoop} from 'tslint';
 
 @Component({
   selector: 'app-ferias-calculos-pendentes',
@@ -39,6 +40,7 @@ export class FeriasCalculosPendentesComponent implements OnInit {
   somaIncidenciaFerias: number[] = [];
   somaIncidenciaTerco: number[] = [];
   somaSaldo: number[] = [];
+  isLoading = false;
   @Output() nav = new EventEmitter();
 
   constructor(private feriasService: FeriasService, private contratoService: ContratosService, config: ConfigService,
@@ -235,6 +237,7 @@ export class FeriasCalculosPendentesComponent implements OnInit {
   }
 
   salvarAlteracoes() {
+    this.isLoading = true;
     for (let i = 0; i < this.calculosAvaliados.length; i++) {
       for (let j = 0; j < this.calculosAvaliados[i].calculos.length; j++) {
         this.calculosAvaliados[i].calculos[j].observacoes = this.feriasFormAfter
@@ -245,10 +248,12 @@ export class FeriasCalculosPendentesComponent implements OnInit {
       }
     }
     this.feriasService.salvarFeriasAvaliadasLista(this.calculosAvaliados).subscribe(() => {
+      this.isLoading = false;
       this.closeModal2();
       this.openModal3();
     },
       () => {
+      this.isLoading = false;
         this.closeModal2();
         this.openModal5();
       });

@@ -40,6 +40,7 @@ export class FeriasCalculosPendentesExecucaoComponent implements OnInit {
   somaIncidenciaFerias: number[];
   somaIncidenciaTerco: number[];
   somaSaldo: number[];
+  isLoading = false;
 
   constructor(private feriasService: FeriasService, private contratoService: ContratosService, config: ConfigService,
               private fb: FormBuilder, private ref: ChangeDetectorRef) {
@@ -219,6 +220,7 @@ export class FeriasCalculosPendentesExecucaoComponent implements OnInit {
   }
 
   salvarAlteracoes() {
+    this.isLoading = true;
     for (let i = 0; i < this.calculosAvaliados.length; i++) {
       for (let j = 0; j < this.calculosAvaliados[i].calculos.length; j++) {
         this.calculosAvaliados[i].calculos[j].observacoes = this.feriasFormAfter
@@ -229,10 +231,12 @@ export class FeriasCalculosPendentesExecucaoComponent implements OnInit {
       }
     }
     this.feriasService.salvarExecucaoFerias(this.calculosAvaliados).subscribe(res => {
+        this.isLoading = false;
         this.closeModal2();
         this.openModal3();
       },
       error1 => {
+        this.isLoading = false;
         this.closeModal2();
         this.openModal5();
       });
