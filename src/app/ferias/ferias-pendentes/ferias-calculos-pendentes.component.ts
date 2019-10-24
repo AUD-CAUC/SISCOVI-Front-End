@@ -424,7 +424,7 @@ export class FeriasCalculosPendentesComponent implements OnInit {
       // {header: nomeEmpresa, key: 'contrato', width: 57}
     ];
 
-    worksheetFeriasAprov.getRow(4).font = {name: 'Arial', size: 18};
+    worksheetFeriasAprov.getRow(4).font = {name: 'Arial', size: 18, bold: true};
     worksheetFeriasAprov.getRow(4).alignment = {vertical: 'middle', horizontal: 'center'};
     worksheetFeriasAprov.getRow(4).height = 30;
 
@@ -435,28 +435,42 @@ export class FeriasCalculosPendentesComponent implements OnInit {
     worksheetFeriasAprov.getColumn('Total').numFmt = 'R$ #,##0.00';
 
     let row;
+    let i, k;
 
-    for (let i = 0; i < this.calculosPendentes.length; i++) {
+    for (i = 0; i < this.calculosPendentes.length; i++) {
       if (this.calculosPendentes[i].titulo === nomeEmpresa) {
-        for (let j = 0; j < this.calculosPendentes[i].calculos.length; j++) {
-          row = worksheetFeriasAprov.getRow(j + 5);
-          row.getCell(1).value = this.calculosPendentes[i].calculos[j].nomeTerceirizado;
-          row.getCell(2).value = this.calculosPendentes[i].calculos[j].nomeCargo;
-          row.getCell(3).value = this.calculosPendentes[i].calculos[j].calcularFeriasModel.tipoRestituicao;
-          row.getCell(4).value = this.formatParcela(this.calculosPendentes[i].calculos[j].calcularFeriasModel.parcelas);
-          row.getCell(5).value = this.formatDate(this.calculosPendentes[i].calculos[j].calcularFeriasModel.inicioPeriodoAquisitivo);
-          row.getCell(6).value = this.formatDate(this.calculosPendentes[i].calculos[j].calcularFeriasModel.fimPeriodoAquisitivo);
-          row.getCell(7).value = this.formatDate(this.calculosPendentes[i].calculos[j].calcularFeriasModel.inicioFerias);
-          row.getCell(8).value = this.formatDate(this.calculosPendentes[i].calculos[j].calcularFeriasModel.fimFerias);
-          row.getCell(9).value = this.calculosPendentes[i].calculos[j].calcularFeriasModel.diasVendidos;
-          row.getCell(10).value = this.calculosPendentes[i].calculos[j].calcularFeriasModel.pTotalFerias;
-          row.getCell(11).value = this.calculosPendentes[i].calculos[j].calcularFeriasModel.pTotalTercoConstitucional;
-          row.getCell(12).value = this.calculosPendentes[i].calculos[j].calcularFeriasModel.pTotalIncidenciaFerias;
-          row.getCell(13).value = this.calculosPendentes[i].calculos[j].calcularFeriasModel.pTotalIncidenciaTerco;
-          row.getCell(14).value = this.calculosPendentes[i].calculos[j].total;
+        for (k = 0; k < this.calculosPendentes[i].calculos.length; k++) {
+          row = worksheetFeriasAprov.getRow(k + 5);
+          row.getCell(1).value = this.calculosPendentes[i].calculos[k].nomeTerceirizado;
+          row.getCell(2).value = this.calculosPendentes[i].calculos[k].nomeCargo;
+          row.getCell(3).value = this.calculosPendentes[i].calculos[k].calcularFeriasModel.tipoRestituicao;
+          row.getCell(4).value = this.formatParcela(this.calculosPendentes[i].calculos[k].calcularFeriasModel.parcelas);
+          row.getCell(5).value = this.formatDate(this.calculosPendentes[i].calculos[k].calcularFeriasModel.inicioPeriodoAquisitivo);
+          row.getCell(6).value = this.formatDate(this.calculosPendentes[i].calculos[k].calcularFeriasModel.fimPeriodoAquisitivo);
+          row.getCell(7).value = this.formatDate(this.calculosPendentes[i].calculos[k].calcularFeriasModel.inicioFerias);
+          row.getCell(8).value = this.formatDate(this.calculosPendentes[i].calculos[k].calcularFeriasModel.fimFerias);
+          row.getCell(9).value = this.calculosPendentes[i].calculos[k].calcularFeriasModel.diasVendidos;
+          row.getCell(10).value = this.calculosPendentes[i].calculos[k].calcularFeriasModel.pTotalFerias;
+          row.getCell(11).value = this.calculosPendentes[i].calculos[k].calcularFeriasModel.pTotalTercoConstitucional;
+          row.getCell(12).value = this.calculosPendentes[i].calculos[k].calcularFeriasModel.pTotalIncidenciaFerias;
+          row.getCell(13).value = this.calculosPendentes[i].calculos[k].calcularFeriasModel.pTotalIncidenciaTerco;
+          row.getCell(14).value = this.calculosPendentes[i].calculos[k].total;
         }
+        break;
       }
     }
+
+    worksheetFeriasAprov.getRow(k + 6).getCell(9).value = 'Subtotal';
+    worksheetFeriasAprov.getRow(k + 6).getCell(10).value = this.somaFerias[i];
+    worksheetFeriasAprov.getRow(k + 6).getCell(11).value = this.somaTerco[i];
+    worksheetFeriasAprov.getRow(k + 6).getCell(12).value = this.somaIncidenciaFerias[i];
+    worksheetFeriasAprov.getRow(k + 6).getCell(13).value = this.somaIncidenciaTerco[i];
+
+    worksheetFeriasAprov.getRow(k + 7).getCell(9).value = 'Total';
+    worksheetFeriasAprov.getRow(k + 7).getCell(14).value = this.somaSaldo[i];
+
+
+
     for (let x = 5; x <= 200; x++) {
       let rowTable;
       rowTable = worksheetFeriasAprov.getRow(x);
