@@ -118,7 +118,6 @@ export class FeriasCalculosPendentesComponent implements OnInit {
               avaliacao: new FormControl('S')
             });
             newControl2.push(addControl);
-            console.log(this.isSelected);
           });
           control.push(newControl);
         });
@@ -264,11 +263,8 @@ export class FeriasCalculosPendentesComponent implements OnInit {
     this.nav.emit();
   }
   captureScreen(nomeEmpresa, existeNegados) {
-    console.log(nomeEmpresa);
-    console.log(existeNegados);
     if (this.calculosNegados && existeNegados === 1) {
           const data1 = document.getElementById(nomeEmpresa);
-          console.log(data1);
           html2canvas(data1, {scrollX: 0, scrollY: -window.scrollY}).then(canvas => {
             // Few necessary setting options
             const imgWidth = 205;
@@ -304,9 +300,7 @@ export class FeriasCalculosPendentesComponent implements OnInit {
             pdf.save('Relatório_Férias_' + nomeEmpresa + '_Negadas.pdf'); // Generated PDF
           });
     } else {
-      console.log('entrou no else')
       const data2 = document.getElementById(nomeEmpresa);
-      console.log(data2);
       html2canvas(data2, {scrollX: 0, scrollY: -window.scrollY}).then(canvas => {
         // Few necessary setting options
         const imgWidth = 205;
@@ -350,7 +344,6 @@ export class FeriasCalculosPendentesComponent implements OnInit {
   }
 
   formatParcela(num) {
-    console.log(num);
     let parcela: string;
     if (num === 0) {
       parcela = 'Única';
@@ -430,9 +423,16 @@ export class FeriasCalculosPendentesComponent implements OnInit {
       {header: rowHeaders[14], key: 'Total', width: 20},
       // {header: nomeEmpresa, key: 'contrato', width: 57}
     ];
+
     worksheetFeriasAprov.getRow(4).font = {name: 'Arial', size: 18};
     worksheetFeriasAprov.getRow(4).alignment = {vertical: 'middle', horizontal: 'center'};
     worksheetFeriasAprov.getRow(4).height = 30;
+
+    worksheetFeriasAprov.getColumn('valorFerias').numFmt = 'R$ #,##0.00';
+    worksheetFeriasAprov.getColumn('valorTerco').numFmt = 'R$ #,##0.00';
+    worksheetFeriasAprov.getColumn('incidFerias').numFmt = 'R$ #,##0.00';
+    worksheetFeriasAprov.getColumn('incidTerco').numFmt = 'R$ #,##0.00';
+    worksheetFeriasAprov.getColumn('Total').numFmt = 'R$ #,##0.00';
 
     let row;
 
@@ -440,7 +440,6 @@ export class FeriasCalculosPendentesComponent implements OnInit {
       if (this.calculosPendentes[i].titulo === nomeEmpresa) {
         for (let j = 0; j < this.calculosPendentes[i].calculos.length; j++) {
           row = worksheetFeriasAprov.getRow(j + 5);
-          console.log(this.calculosPendentes[i].calculos[j].nomeTerceirizado);
           row.getCell(1).value = this.calculosPendentes[i].calculos[j].nomeTerceirizado;
           row.getCell(2).value = this.calculosPendentes[i].calculos[j].nomeCargo;
           row.getCell(3).value = this.calculosPendentes[i].calculos[j].calcularFeriasModel.tipoRestituicao;
@@ -450,16 +449,11 @@ export class FeriasCalculosPendentesComponent implements OnInit {
           row.getCell(7).value = this.formatDate(this.calculosPendentes[i].calculos[j].calcularFeriasModel.inicioFerias);
           row.getCell(8).value = this.formatDate(this.calculosPendentes[i].calculos[j].calcularFeriasModel.fimFerias);
           row.getCell(9).value = this.calculosPendentes[i].calculos[j].calcularFeriasModel.diasVendidos;
-          row.getCell(10).value = this.calculosPendentes[i].calculos[j].calcularFeriasModel.
-            pTotalFerias.toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
-          row.getCell(11).value = this.calculosPendentes[i].calculos[j].calcularFeriasModel.
-            pTotalTercoConstitucional.toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
-          row.getCell(12).value = this.calculosPendentes[i].calculos[j].calcularFeriasModel.
-            pTotalIncidenciaFerias.toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
-          row.getCell(13).value = this.calculosPendentes[i].calculos[j].calcularFeriasModel.
-            pTotalIncidenciaTerco.toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
-          row.getCell(14).value = this.calculosPendentes[i].calculos[j].calcularFeriasModel.
-            pTotalFerias.toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
+          row.getCell(10).value = this.calculosPendentes[i].calculos[j].calcularFeriasModel.pTotalFerias;
+          row.getCell(11).value = this.calculosPendentes[i].calculos[j].calcularFeriasModel.pTotalTercoConstitucional;
+          row.getCell(12).value = this.calculosPendentes[i].calculos[j].calcularFeriasModel.pTotalIncidenciaFerias;
+          row.getCell(13).value = this.calculosPendentes[i].calculos[j].calcularFeriasModel.pTotalIncidenciaTerco;
+          row.getCell(14).value = this.calculosPendentes[i].calculos[j].total;
         }
       }
     }
