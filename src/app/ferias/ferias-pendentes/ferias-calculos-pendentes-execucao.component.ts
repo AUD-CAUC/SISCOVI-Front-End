@@ -325,7 +325,6 @@ export class FeriasCalculosPendentesExecucaoComponent implements OnInit {
   }
 
   formatParcela(num) {
-    console.log(num);
     let parcela: string;
     if (num === 0) {
       parcela = 'Única';
@@ -355,7 +354,6 @@ export class FeriasCalculosPendentesExecucaoComponent implements OnInit {
       header: 0.3, footer: 0.3
     };
 
-    console.log(typeof nomeEmpresa);
     worksheetFeriasExec.mergeCells('A1:N1');
     const rowEmpresa = worksheetFeriasExec.getCell('A1').value = nomeEmpresa;
     worksheetFeriasExec.getCell('A1').font = {name: 'Arial', size: 18};
@@ -372,9 +370,9 @@ export class FeriasCalculosPendentesExecucaoComponent implements OnInit {
     worksheetFeriasExec.getRow(2).height = 30;
 
     const rowHeaders = [
-      ['Terceirizado', 'Função', 'Tipo de Restituição', 'Parcela', 'Início do Período Aquisitivo', 'Fim do Período Aquisitivo',
-        'Início do Usufruto', 'Fim do Usufruto', 'Dias Vendidos', 'Valor de Férias', 'Valor do Terço', 'Incidência Sobre Férias',
-        'Incidência Sobre o Terço', 'Total']
+      ['Terceirizado', 'Função', 'Tipo de\nRestituição', 'Parcela', 'Início do\nPeríodo Aquisitivo', 'Fim do\nPeríodo Aquisitivo',
+        'Início do\nUsufruto', 'Fim do\nUsufruto', 'Dias\nVendidos', 'Valor de\nFérias', 'Valor do\nTerço', 'Incidência\nSobre Férias',
+        'Incidência\nSobre o Terço', 'Total']
     ];
 
     worksheetFeriasExec.addRows(rowHeaders);
@@ -382,28 +380,35 @@ export class FeriasCalculosPendentesExecucaoComponent implements OnInit {
     worksheetFeriasExec.columns = [
       {header: rowHeaders[1], key: 'terceirizado', width: 40},
       {header: rowHeaders[2], key: 'funcao', width: 65},
-      {header: rowHeaders[3], key: 'tipo', width: 30},
+      {header: rowHeaders[3], key: 'tipo', width: 20},
       {header: rowHeaders[4], key: 'parcela', width: 15},
-      {header: rowHeaders[5], key: 'inicioPA', width: 45},
-      {header: rowHeaders[6], key: 'Fim PA', width: 40},
-      {header: rowHeaders[7], key: 'inicioUsufruto', width: 30},
-      {header: rowHeaders[8], key: 'fimUsufruto', width: 27},
-      {header: rowHeaders[9], key: 'diasVendidos', width: 23},
-      {header: rowHeaders[10], key: 'valorFerias', width: 25},
-      {header: rowHeaders[11], key: 'valorTerco', width: 25},
-      {header: rowHeaders[12], key: 'incidFerias', width: 40},
-      {header: rowHeaders[13], key: 'incidTerco', width: 45},
+      {header: rowHeaders[5], key: 'inicioPA', width: 35},
+      {header: rowHeaders[6], key: 'Fim PA', width: 35},
+      {header: rowHeaders[7], key: 'inicioUsufruto', width: 20},
+      {header: rowHeaders[8], key: 'fimUsufruto', width: 20},
+      {header: rowHeaders[9], key: 'diasVendidos', width: 17},
+      {header: rowHeaders[10], key: 'valorFerias', width: 20},
+      {header: rowHeaders[11], key: 'valorTerco', width: 20},
+      {header: rowHeaders[12], key: 'incidFerias', width: 25},
+      {header: rowHeaders[13], key: 'incidTerco', width: 25},
       {header: rowHeaders[14], key: 'Total', width: 20},
     ];
 
     worksheetFeriasExec.getRow(4).font = {name: 'Arial', size: 18};
-    worksheetFeriasExec.getRow(4).alignment = {vertical: 'middle', horizontal: 'center'};
-    worksheetFeriasExec.getRow(4).height = 30;
+    worksheetFeriasExec.getRow(4).alignment = {vertical: 'middle', horizontal: 'center', wrapText: true};
+    worksheetFeriasExec.getRow(4).height = 70;
+
+    worksheetFeriasExec.getColumn('valorFerias').numFmt = 'R$ #,##0.00';
+    worksheetFeriasExec.getColumn('valorTerco').numFmt = 'R$ #,##0.00';
+    worksheetFeriasExec.getColumn('incidFerias').numFmt = 'R$ #,##0.00';
+    worksheetFeriasExec.getColumn('incidTerco').numFmt = 'R$ #,##0.00';
+    worksheetFeriasExec.getColumn('Total').numFmt = 'R$ #,##0.00';
 
     let row;
-    for (let i = 0; i < this.calculosPendentesExecucao.length; i++) {
+    let i, j;
+    for (i = 0; i < this.calculosPendentesExecucao.length; i++) {
       if (this.calculosPendentesExecucao[i].titulo === nomeEmpresa) {
-        for (let j = 0; j < this.calculosPendentesExecucao[i].calculos.length; j++) {
+        for (j = 0; j < this.calculosPendentesExecucao[i].calculos.length; j++) {
           row = worksheetFeriasExec.getRow(j + 5);
           row.getCell(1).value = this.calculosPendentesExecucao[i].calculos[j].nomeTerceirizado;
           row.getCell(2).value = this.calculosPendentesExecucao[i].calculos[j].nomeCargo;
@@ -414,32 +419,37 @@ export class FeriasCalculosPendentesExecucaoComponent implements OnInit {
           row.getCell(7).value = this.formatDate(this.calculosPendentesExecucao[i].calculos[j].calcularFeriasModel.inicioFerias);
           row.getCell(8).value = this.formatDate(this.calculosPendentesExecucao[i].calculos[j].calcularFeriasModel.fimFerias);
           row.getCell(9).value = this.calculosPendentesExecucao[i].calculos[j].calcularFeriasModel.diasVendidos;
-          row.getCell(10).value = this.calculosPendentesExecucao[i].calculos[j].calcularFeriasModel.
-          pTotalFerias.toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
-          row.getCell(11).value = this.calculosPendentesExecucao[i].calculos[j].calcularFeriasModel.
-          pTotalTercoConstitucional.toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
-          row.getCell(12).value = this.calculosPendentesExecucao[i].calculos[j].calcularFeriasModel.
-          pTotalIncidenciaFerias.toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
-          row.getCell(13).value = this.calculosPendentesExecucao[i].calculos[j].calcularFeriasModel.
-          pTotalIncidenciaTerco.toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
-          row.getCell(14).value = this.calculosPendentesExecucao[i].calculos[j].calcularFeriasModel.
-          pTotalFerias.toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
+          row.getCell(10).value = this.calculosPendentesExecucao[i].calculos[j].calcularFeriasModel.pTotalFerias;
+          row.getCell(11).value = this.calculosPendentesExecucao[i].calculos[j].calcularFeriasModel.pTotalTercoConstitucional;
+          row.getCell(12).value = this.calculosPendentesExecucao[i].calculos[j].calcularFeriasModel.pTotalIncidenciaFerias;
+          row.getCell(13).value = this.calculosPendentesExecucao[i].calculos[j].calcularFeriasModel.pTotalIncidenciaTerco;
+          row.getCell(14).value = this.calculosPendentesExecucao[i].calculos[j].total;
         }
+        break;
       }
     }
+
+    worksheetFeriasExec.getRow(j + 6).getCell(9).value = 'Subtotais';
+    worksheetFeriasExec.getRow(j + 6).font = {name: 'Arial', bold: true};
+    worksheetFeriasExec.getRow(j + 6).getCell(10).value = this.somaFerias[i];
+    worksheetFeriasExec.getRow(j + 6).getCell(11).value = this.somaTerco[i];
+    worksheetFeriasExec.getRow(j + 6).getCell(12).value = this.somaIncidenciaFerias[i];
+    worksheetFeriasExec.getRow(j + 6).getCell(13).value = this.somaIncidenciaTerco[i];
+
+    worksheetFeriasExec.getRow(j + 7).getCell(9).value = 'Total';
+    worksheetFeriasExec.getRow(j + 7).font = {name: 'Arial', bold: true};
+    worksheetFeriasExec.getRow(j + 7).getCell(14).value = this.somaSaldo[i];
+
     for (let x = 5; x <= 200; x++) {
-      let rowTable;
-      rowTable = worksheetFeriasExec.getRow(x);
-      worksheetFeriasExec.getRow(x).font = {name: 'Arial', size: 16};
-      worksheetFeriasExec.getRow(x).alignment = {vertical: 'middle', horizontal: 'center'};
-      rowTable.height = 50;
+      worksheetFeriasExec.getRow(x).height = 30;
+      worksheetFeriasExec.getRow(x).alignment = {vertical: 'middle', horizontal: 'center', wrapText: true};
     }
 
-    let j = 15;
-    while (j <= 16384) {
-      const dobCol = worksheetFeriasExec.getColumn(j);
+    let k = 15;
+    while (k <= 16384) {
+      const dobCol = worksheetFeriasExec.getColumn(k);
       dobCol.hidden = true;
-      j++;
+      k++;
     }
 
     workbookFeriasExec.xlsx.writeBuffer()

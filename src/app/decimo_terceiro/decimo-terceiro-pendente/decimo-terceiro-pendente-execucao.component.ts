@@ -279,64 +279,87 @@ export class DecimoTerceiroPendenteExecucaoComponent implements OnInit {
       header: 0.3, footer: 0.3
     };
 
-    worksheetDtExec.mergeCells('A1:H1'); /* merge de A1 até H1 */
-    const rowEmpresa = worksheetDtExec.getCell('A1').value = nomeEmpresa; /*Traz o contrato do front*/
-    worksheetDtExec.getCell('A1').font = {name: 'Arial', size: 18}; /*formatação da celula merjada*/
-    worksheetDtExec.getCell('A1').alignment = {vertical: 'middle', horizontal: 'center'}; /*formatação da celula merjada*/
-    worksheetDtExec.addRow(rowEmpresa); /*adiciona o contrato na linha merjada*/
+    worksheetDtExec.mergeCells('A1:H1');
+    const rowEmpresa = worksheetDtExec.getCell('A1').value = nomeEmpresa;
+    worksheetDtExec.getCell('A1').font = {name: 'Arial', size: 18};
+    worksheetDtExec.getCell('A1').alignment = {vertical: 'middle', horizontal: 'center'};
+    worksheetDtExec.addRow(rowEmpresa);
+    worksheetDtExec.getRow(1).height = 30;
 
-    worksheetDtExec.mergeCells('A2:H2'); /* merge de A1 até H1 */
-    const rowRelExec = worksheetDtExec.getCell('A2').value = 'Relatório de Pendências de Execução'; /*Traz o contrato do front*/
-    worksheetDtExec.getCell('A2').font = {name: 'Arial', size: 18}; /*formatação da celula merjada*/
-    worksheetDtExec.getCell('A2').alignment = {vertical: 'middle', horizontal: 'center'}; /*formatação da celula merjada*/
-    worksheetDtExec.addRow(rowRelExec); /*adiciona o contrato na linha merjada*/
+    worksheetDtExec.mergeCells('A2:H2');
+    const rowRelExec = worksheetDtExec.getCell('A2').value = 'Relatório de Pendências de Execução';
+    worksheetDtExec.getCell('A2').font = {name: 'Arial', size: 18};
+    worksheetDtExec.getCell('A2').alignment = {vertical: 'middle', horizontal: 'center'};
+    worksheetDtExec.addRow(rowRelExec);
+    worksheetDtExec.getRow(1).height = 30;
 
     const rowHeaders = [
-      ['Terceirizado', 'Função', 'Tipo de Restituição', 'Parcela', 'Data de Início para Contagem', 'Valor de Décimo Terceiro', 'Valor de Incidência', 'Total'], // row by array
+      ['Terceirizado', 'Função', 'Tipo de\nRestituição', 'Parcela', 'Data de Início\npara Contagem', 'Valor de\nDécimo Terceiro',
+        'Valor de\nIncidência', 'Valor Resgatado/\nMovimentado'],
     ];
     worksheetDtExec.addRows(rowHeaders);
 
     worksheetDtExec.columns = [
-      {header: rowHeaders[1], key: 'terceirizado', width: 57},
+      {header: rowHeaders[1], key: 'terceirizado', width: 47},
       {header: rowHeaders[2], key: 'funcao', width: 50},
-      {header: rowHeaders[3], key: 'tipo', width: 35},
-      {header: rowHeaders[4], key: 'parcela', width: 30},
-      {header: rowHeaders[5], key: 'dataInicio', width: 57},
-      {header: rowHeaders[6], key: 'valorDecTer', width: 57},
-      {header: rowHeaders[7], key: 'valorIncid', width: 40},
-      {header: rowHeaders[8], key: 'total', width: 25},
-      {header: nomeEmpresa, key: 'movimentado', width: 57}
+      {header: rowHeaders[3], key: 'tipo', width: 20},
+      {header: rowHeaders[4], key: 'parcela', width: 15},
+      {header: rowHeaders[5], key: 'dataInicio', width: 30},
+      {header: rowHeaders[6], key: 'valorDecTer', width: 30},
+      {header: rowHeaders[7], key: 'valorIncid', width: 20},
+      {header: rowHeaders[8], key: 'resMov', width: 30}
+      // {header: nomeEmpresa, key: 'movimentado', width: 57}
     ];
-    worksheetDtExec.getRow(3).font = {name: 'Arial', size: 18};
-    worksheetDtExec.getRow(3).alignment = {vertical: 'middle', horizontal: 'center'};
+    worksheetDtExec.getRow(4).font = {name: 'Arial', size: 18};
+    worksheetDtExec.getRow(4).alignment = {vertical: 'middle', horizontal: 'center', wrapText: true};
+    worksheetDtExec.getRow(4).height = 70;
 
+    worksheetDtExec.getColumn('valorDecTer').numFmt = 'R$ #,##0.00';
+    worksheetDtExec.getColumn('valorIncid').numFmt = 'R$ #,##0.00';
+    worksheetDtExec.getColumn('resMov').numFmt = 'R$ #,##0.00';
 
-    for (let i = 0; i < this.calculosPendentesExecucao.length; i++) {
+    let row;
+    let i, j;
+
+    for (i = 0; i < this.calculosPendentesExecucao.length; i++) {
       if (this.calculosPendentesExecucao[i].titulo === nomeEmpresa) {
-        for (let j = 0; j < this.calculosPendentesExecucao[i].calculos.length; j++) {
-          let row;
-          row = worksheetDtExec.getRow(j + 4);
+        for (j = 0; j < this.calculosPendentesExecucao[i].calculos.length; j++) {
+          row = worksheetDtExec.getRow(j + 5);
           row.getCell(1).value = this.calculosPendentesExecucao[i].calculos[j].terceirizadoDecTer.nomeTerceirizado;
           row.getCell(2).value = this.calculosPendentesExecucao[i].calculos[j].terceirizadoDecTer.nomeCargo;
           row.getCell(3).value = this.calculosPendentesExecucao[i].calculos[j].terceirizadoDecTer.tipoRestituicao;
           row.getCell(4).value = this.formatParcela(this.calculosPendentesExecucao[i].calculos[j].terceirizadoDecTer.parcelas);
           row.getCell(5).value = this.formatDate(this.calculosPendentesExecucao[i].calculos[j].terceirizadoDecTer.inicioContagem);
           row.getCell(6).value = this.calculosPendentesExecucao[i].calculos[j].terceirizadoDecTer.valoresDecimoTerceiro.
-          valorDecimoTerceiro.toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
+          valorDecimoTerceiro;
           row.getCell(7).value = this.calculosPendentesExecucao[i].calculos[j].terceirizadoDecTer.valoresDecimoTerceiro.
-          valorIncidenciaDecimoTerceiro.toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
+          valorIncidenciaDecimoTerceiro;
           row.getCell(8).value = (this.calculosPendentesExecucao[i].calculos[j].terceirizadoDecTer.valoresDecimoTerceiro.
             valorDecimoTerceiro + this.calculosPendentesExecucao[i].calculos[j].terceirizadoDecTer.valoresDecimoTerceiro.
-            valorIncidenciaDecimoTerceiro).toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
+            valorIncidenciaDecimoTerceiro);
         }
+        break;
       }
     }
 
-    let j = 9;
-    while (j <= 16384) {
-      const dobCol = worksheetDtExec.getColumn(j);
+    worksheetDtExec.getRow(j + 6).getCell(5).value = 'Subtotais';
+    worksheetDtExec.getRow(j + 6).font = {name: 'Arial', bold: true};
+    worksheetDtExec.getRow(j + 6).getCell(6).value = this.somaDecimo[i];
+    worksheetDtExec.getRow(j + 6).getCell(7).value = this.somaIncidencia[i];
+    worksheetDtExec.getRow(j + 7).getCell(5).value = 'Total';
+    worksheetDtExec.getRow(j + 7).font = {name: 'Arial', bold: true};
+    worksheetDtExec.getRow(j + 7).getCell(8).value = this.somaSaldo[i];
+
+    for (let x = 5; x <= 200; x++) {
+      worksheetDtExec.getRow(x).height = 30;
+      worksheetDtExec.getRow(x).alignment = {vertical: 'middle', horizontal: 'center', wrapText: true};
+    }
+
+    let k = 9;
+    while (k <= 16384) {
+      const dobCol = worksheetDtExec.getColumn(k);
       dobCol.hidden = true;
-      j++;
+      k++;
     }
 
     workbookDtExec.xlsx.writeBuffer()

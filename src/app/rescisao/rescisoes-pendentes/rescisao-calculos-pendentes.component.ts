@@ -364,14 +364,14 @@ export class RescisaoCalculosPendentesComponent implements OnInit {
       top: 0.5, bottom: 0.5,
       header: 0.3, footer: 0.3
     };
-
+    // Insere e Formata o título da planilha:
     worksheetRescisAprov.mergeCells('A1:AA1');
     const rowEmpresa = worksheetRescisAprov.getCell('A1').value = nomeEmpresa;
     worksheetRescisAprov.getCell('A1').font = {name: 'Arial', size: 18};
     worksheetRescisAprov.getCell('A1').alignment = {vertical: 'middle', horizontal: 'center'};
     worksheetRescisAprov.addRow(rowEmpresa);
     worksheetRescisAprov.getRow(1).height = 30;
-
+    // Insere e Formata o subtítulo da planilha
     const nomeRelatorio = 'Relatório de Pendências de Aprovação - Rescisão';
     worksheetRescisAprov.mergeCells('A2:AA2');
     const rowRelAprov = worksheetRescisAprov.getCell('A2').value = nomeRelatorio;
@@ -388,9 +388,8 @@ export class RescisaoCalculosPendentesComponent implements OnInit {
       'Valor de Férias\nProporcionais', 'Terço de Férias\nProporcional', 'Incidência Sobre\nFérias Proporcionais', 'Incidência Sobre\no Terço de Férias\nProporcional',
       'Multa do FGTS\nSobre Férias\nProporcionais', 'Multa do FGTS\nSobre o Terço de\nFérias Proporcional', 'Multa do FGTS\nSobre o Salário', 'Total']
     ];
-
+    // Bloco que adiciona os headers das colunas:
     worksheetRescisAprov.addRows(rowHeaders);
-
     worksheetRescisAprov.columns = [
       {header: rowHeaders[1], key: 'terceirizado', width: 40},
       {header: rowHeaders[2], key: 'funcao', width: 65},
@@ -423,11 +422,30 @@ export class RescisaoCalculosPendentesComponent implements OnInit {
     worksheetRescisAprov.getRow(4).font = {name: 'Arial', size: 18};
     worksheetRescisAprov.getRow(4).alignment = {vertical: 'middle', horizontal: 'center', wrapText: true};
     worksheetRescisAprov.getRow(4).height = 70;
+    // Bloco que formata os dados das colunas abaixo em modo moeda
+    worksheetRescisAprov.getColumn('valor13').numFmt = 'R$ #,##0.00';
+    worksheetRescisAprov.getColumn('incidencia13').numFmt = 'R$ #,##0.00';
+    worksheetRescisAprov.getColumn('multaFgts13').numFmt = 'R$ #,##0.00';
+    worksheetRescisAprov.getColumn('valorFeriasVencidas').numFmt = 'R$ #,##0.00';
+    worksheetRescisAprov.getColumn('valorTercoVencido').numFmt = 'R$ #,##0.00';
+    worksheetRescisAprov.getColumn('incidFeriasVencidas').numFmt = 'R$ #,##0.00';
+    worksheetRescisAprov.getColumn('incidTercoVencido').numFmt = 'R$ #,##0.00';
+    worksheetRescisAprov.getColumn('MultaFgtsFeriasVenc').numFmt = 'R$ #,##0.00';
+    worksheetRescisAprov.getColumn('MultaFgtsTercoVenc').numFmt = 'R$ #,##0.00';
+    worksheetRescisAprov.getColumn('valorFeriasProp').numFmt = 'R$ #,##0.00';
+    worksheetRescisAprov.getColumn('valorTercoProp').numFmt = 'R$ #,##0.00';
+    worksheetRescisAprov.getColumn('incidFeriasProp').numFmt = 'R$ #,##0.00';
+    worksheetRescisAprov.getColumn('incidTercoProp').numFmt = 'R$ #,##0.00';
+    worksheetRescisAprov.getColumn('multaFgtsFeriasProp').numFmt = 'R$ #,##0.00';
+    worksheetRescisAprov.getColumn('multaFgtsTercoProp').numFmt = 'R$ #,##0.00';
+    worksheetRescisAprov.getColumn('multaFgtsSalario').numFmt = 'R$ #,##0.00';
+    worksheetRescisAprov.getColumn('Total').numFmt = 'R$ #,##0.00';
 
     let row;
-    for (let i = 0; i < this.calculosPendentes.length; i++) {
+    let i, j;
+    for (i = 0; i < this.calculosPendentes.length; i++) {
       if (this.calculosPendentes[i].titulo === nomeEmpresa) {
-        for (let j = 0; j < this.calculosPendentes[i].calculos.length; j++) {
+        for (j = 0; j < this.calculosPendentes[i].calculos.length; j++) {
           row = worksheetRescisAprov.getRow(j + 5);
           row.getCell(1).value = this.calculosPendentes[i].calculos[j].nomeTerceirizado;
           row.getCell(2).value = this.calculosPendentes[i].calculos[j].nomeCargo;
@@ -435,48 +453,69 @@ export class RescisaoCalculosPendentesComponent implements OnInit {
           row.getCell(4).value = this.calculosPendentes[i].calculos[j].calcularRescisaoModel.tipoRescisao;
           row.getCell(5).value = this.formatDate(this.calculosPendentes[i].calculos[j].calcularRescisaoModel.dataDesligamento);
           row.getCell(6).value = this.formatDate(this.calculosPendentes[i].calculos[j].calcularRescisaoModel.inicioContagemDecimoTerceiro);
-          row.getCell(7).value = this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalDecimoTerceiro.
-          toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
-          row.getCell(8).value = this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalIncidenciaDecimoTerceiro.
-          toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
-          row.getCell(9).value = this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalMultaFgtsDecimoTerceiro.
-          toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
+          row.getCell(7).value = this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalDecimoTerceiro;
+          row.getCell(8).value = this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalIncidenciaDecimoTerceiro;
+          row.getCell(9).value = this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalMultaFgtsDecimoTerceiro;
           row.getCell(10).value = this.formatDate(this.calculosPendentes[i].calculos[j].calcularRescisaoModel.inicioFeriasIntegrais);
           row.getCell(11).value = this.formatDate(this.calculosPendentes[i].calculos[j].calcularRescisaoModel.fimFeriasIntegrais);
-          row.getCell(12).value = this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalFeriasVencidas.
-          toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
-          row.getCell(13).value = this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalTercoConstitucionalvencido.
-          toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
-          row.getCell(14).value = this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalIncidenciaFeriasVencidas.
-          toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
-          row.getCell(15).value = this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalIncidenciaTercoVencido.
-          toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
-          row.getCell(16).value = this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalMultaFgtsFeriasVencidas.
-          toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
-          row.getCell(17).value = this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalMultaFgtsTercoVencido.
-          toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
+          row.getCell(12).value = this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalFeriasVencidas;
+          row.getCell(13).value = this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalTercoConstitucionalvencido;
+          row.getCell(14).value = this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalIncidenciaFeriasVencidas;
+          row.getCell(15).value = this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalIncidenciaTercoVencido;
+          row.getCell(16).value = this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalMultaFgtsFeriasVencidas;
+          row.getCell(17).value = this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalMultaFgtsTercoVencido;
           row.getCell(18).value = this.formatDate(this.calculosPendentes[i].calculos[j].calcularRescisaoModel.inicioFeriasProporcionais);
           row.getCell(19).value = this.formatDate(this.calculosPendentes[i].calculos[j].calcularRescisaoModel.fimFeriasProporcionais);
-          row.getCell(20).value = this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalFeriasProporcionais.
-          toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
-          row.getCell(21).value = this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalTercoProporcional.
-          toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
-          row.getCell(22).value = this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalIncidenciaFeriasProporcionais.
-          toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
-          row.getCell(23).value = this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalIncidenciaTercoProporcional.
-          toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
-          row.getCell(24).value = this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalMultaFgtsFeriasProporcionais.
-          toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
-          row.getCell(25).value = this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalMultaFgtsTercoProporcional.
-          toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
-          row.getCell(26).value = this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalMultaFgtsSalario.
-          toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
-          row.getCell(27).value = this.calculosPendentes[i].calculos[j].total.
-          toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
+          row.getCell(20).value = this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalFeriasProporcionais;
+          row.getCell(21).value = this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalTercoProporcional;
+          row.getCell(22).value = this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalIncidenciaFeriasProporcionais;
+          row.getCell(23).value = this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalIncidenciaTercoProporcional;
+          row.getCell(24).value = this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalMultaFgtsFeriasProporcionais;
+          row.getCell(25).value = this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalMultaFgtsTercoProporcional;
+          row.getCell(26).value = this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalMultaFgtsSalario;
+          row.getCell(27).value = this.calculosPendentes[i].calculos[j].total;
         }
+        break;
       }
     }
+    // Subtotais e Totais em negrito
+    worksheetRescisAprov.getRow(j + 6).getCell(6).value = 'Subtotais';
+    worksheetRescisAprov.getRow(j + 6).font = {name: 'Arial', bold: true};
+    // Subtotais 13º
+    worksheetRescisAprov.getRow(j + 6).getCell(7).value = this.somaDecimoTerceiro[i];
+    worksheetRescisAprov.getRow(j + 6).getCell(8).value = this.somaIncidenciaDecimoTerceiro[i];
+    worksheetRescisAprov.getRow(j + 6).getCell(9).value = this.somaMultaFgtsDecimoTerceiro[i];
+    // Subtotais Férias e 1/3
+    worksheetRescisAprov.getRow(j + 6).getCell(12).value = this.somaFeriasVencidas[i];
+    worksheetRescisAprov.getRow(j + 6).getCell(13).value = this.somaTercoVencido[i];
+    worksheetRescisAprov.getRow(j + 6).getCell(14).value = this.somaIncidenciaFeriasVencidas[i];
+    worksheetRescisAprov.getRow(j + 6).getCell(15).value = this.somaIncidenciaTercoVencido[i];
+    worksheetRescisAprov.getRow(j + 6).getCell(16).value = this.somaFgtsFeriasVencidas[i];
+    worksheetRescisAprov.getRow(j + 6).getCell(17).value = this.somaFgtsTercoVencido[i];
+    // Subtotais proporcionais
+    worksheetRescisAprov.getRow(j + 6).getCell(20).value = this.somaFeriasProporcionais[i];
+    worksheetRescisAprov.getRow(j + 6).getCell(21).value = this.somaTercoProporcional[i];
+    worksheetRescisAprov.getRow(j + 6).getCell(22).value = this.somaIncidenciaFeriasProporcionais[i];
+    worksheetRescisAprov.getRow(j + 6).getCell(23).value = this.somaIncidenciaTercoProporcional[i];
+    worksheetRescisAprov.getRow(j + 6).getCell(24).value = this.somaFgtsFeriasProporcionais[i];
+    worksheetRescisAprov.getRow(j + 6).getCell(25).value = this.somaFgtsTercoProporcional[i];
+    worksheetRescisAprov.getRow(j + 6).getCell(26).value = this.somaMultaFgtsSalario[i];
+    // Totais
+    worksheetRescisAprov.getRow(j + 7).getCell(6).value = 'Total';
+    worksheetRescisAprov.getRow(j + 7).font = {name: 'Arial', bold: true};
+    worksheetRescisAprov.getRow(j + 7).getCell(27).value = this.somaSaldo[i];
+    // bloco para formatação dos dados da tabela
+    for (let x = 5; x <= 200; x++) {
+      worksheetRescisAprov.getRow(x).height = 30;
+      worksheetRescisAprov.getRow(x).alignment = {vertical: 'middle', horizontal: 'center', wrapText: true};
+    }
 
+    let k = 28;
+    while (k <= 16384) {
+      const dobCol = worksheetRescisAprov.getColumn(k);
+      dobCol.hidden = true;
+      k++;
+    }
 
     workbookRescisAprov.xlsx.writeBuffer()
       .then(buffer => saveAs(new Blob([buffer]), 'Relatório-Calculos-Pendentes-Rescisão-Aprovação.xlsx'))

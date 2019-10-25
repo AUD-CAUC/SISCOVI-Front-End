@@ -315,13 +315,13 @@ export class DecimoTerceiroPendenteComponent implements OnInit {
     worksheetDtAprov.addRows(rowHeaders);
 
     worksheetDtAprov.columns = [
-      {header: rowHeaders[1], key: 'terceirizado', width: 57},
+      {header: rowHeaders[1], key: 'terceirizado', width: 47},
       {header: rowHeaders[2], key: 'funcao', width: 50},
-      {header: rowHeaders[3], key: 'tipo', width: 25},
-      {header: rowHeaders[4], key: 'parcela', width: 20},
+      {header: rowHeaders[3], key: 'tipo', width: 20},
+      {header: rowHeaders[4], key: 'parcela', width: 15},
       {header: rowHeaders[5], key: 'dataInicio', width: 30},
       {header: rowHeaders[6], key: 'valorDecTer', width: 30},
-      {header: rowHeaders[7], key: 'valorIncid', width: 30},
+      {header: rowHeaders[7], key: 'valorIncid', width: 20},
       {header: rowHeaders[8], key: 'resMov', width: 30}
       // {header: nomeEmpresa, key: 'movimentado', width: 57}
     ];
@@ -332,6 +332,7 @@ export class DecimoTerceiroPendenteComponent implements OnInit {
     worksheetDtAprov.getColumn('valorDecTer').numFmt = 'R$ #,##0.00';
     worksheetDtAprov.getColumn('valorIncid').numFmt = 'R$ #,##0.00';
     worksheetDtAprov.getColumn('resMov').numFmt = 'R$ #,##0.00';
+
 
     let row;
     let i, j;
@@ -354,11 +355,18 @@ export class DecimoTerceiroPendenteComponent implements OnInit {
       }
     }
 
-    worksheetDtAprov.getRow(j + 6).getCell(5).value = 'Subtotal';
+    worksheetDtAprov.getRow(j + 6).getCell(5).value = 'Subtotais';
+    worksheetDtAprov.getRow(j + 6).font = {name: 'Arial', bold: true};
     worksheetDtAprov.getRow(j + 6).getCell(6).value = this.somaDecimo[i];
     worksheetDtAprov.getRow(j + 6).getCell(7).value = this.somaIncidencia[i];
     worksheetDtAprov.getRow(j + 7).getCell(5).value = 'Total';
+    worksheetDtAprov.getRow(j + 7).font = {name: 'Arial', bold: true};
     worksheetDtAprov.getRow(j + 7).getCell(8).value = this.somaSaldo[i];
+
+    for (let x = 5; x <= 200; x++) {
+      worksheetDtAprov.getRow(x).height = 30;
+      worksheetDtAprov.getRow(x).alignment = {vertical: 'middle', horizontal: 'center', wrapText: true};
+    }
 
     let k = 9;
     while (k <= 16384) {

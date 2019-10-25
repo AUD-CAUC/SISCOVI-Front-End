@@ -383,7 +383,7 @@ export class FeriasCalculosPendentesComponent implements OnInit {
       header: 0.3, footer: 0.3
     };
 
-    worksheetFeriasAprov.mergeCells('A1:N1'); /* merge de A1 até H1 */
+    worksheetFeriasAprov.mergeCells('A1:N1');
     const rowEmpresa = worksheetFeriasAprov.getCell('A1').value = nomeEmpresa;
     worksheetFeriasAprov.getCell('A1').font = {name: 'Arial', size: 18};
     worksheetFeriasAprov.getCell('A1').alignment = {vertical: 'middle', horizontal: 'center'};
@@ -391,17 +391,17 @@ export class FeriasCalculosPendentesComponent implements OnInit {
     worksheetFeriasAprov.getRow(1).height = 30;
 
     const nomeRelatorio = 'Relatório de Pendências de Aprovação - Férias';
-    worksheetFeriasAprov.mergeCells('A2:N2'); /* merge de A1 até H1 */
-    const rowRelAprov = worksheetFeriasAprov.getCell('A2').value = nomeRelatorio; /*Traz o contrato do front*/
-    worksheetFeriasAprov.getCell('A2').font = {name: 'Arial', size: 18}; /*formatação da celula merjada*/
-    worksheetFeriasAprov.getCell('A2').alignment = {vertical: 'middle', horizontal: 'center'}; /*formatação da celula merjada*/
-    worksheetFeriasAprov.addRow(rowRelAprov); /*adiciona o contrato na linha merjada*/
+    worksheetFeriasAprov.mergeCells('A2:N2');
+    const rowRelAprov = worksheetFeriasAprov.getCell('A2').value = nomeRelatorio;
+    worksheetFeriasAprov.getCell('A2').font = {name: 'Arial', size: 18};
+    worksheetFeriasAprov.getCell('A2').alignment = {vertical: 'middle', horizontal: 'center'};
+    worksheetFeriasAprov.addRow(rowRelAprov);
     worksheetFeriasAprov.getRow(2).height = 30;
 
     const rowHeaders = [
-      ['Terceirizado', 'Função', 'Tipo de Restituição', 'Parcela', 'Início do Período Aquisitivo', 'Fim do Período Aquisitivo',
-        'Início do Usufruto', 'Fim do Usufruto', 'Dias Vendidos', 'Valor de Férias', 'Valor do Terço', 'Incidência Sobre Férias',
-        'Incidência Sobre o Terço', 'Total']
+      ['Terceirizado', 'Função', 'Tipo de\nRestituição', 'Parcela', 'Início do\nPeríodo Aquisitivo', 'Fim do\nPeríodo Aquisitivo',
+        'Início do\nUsufruto', 'Fim do\nUsufruto', 'Dias\nVendidos', 'Valor de\nFérias', 'Valor do\nTerço', 'Incidência\nSobre Férias',
+        'Incidência\nSobre o Terço', 'Total']
     ];
 
     worksheetFeriasAprov.addRows(rowHeaders);
@@ -409,24 +409,24 @@ export class FeriasCalculosPendentesComponent implements OnInit {
     worksheetFeriasAprov.columns = [
       {header: rowHeaders[1], key: 'terceirizado', width: 40},
       {header: rowHeaders[2], key: 'funcao', width: 65},
-      {header: rowHeaders[3], key: 'tipo', width: 30},
+      {header: rowHeaders[3], key: 'tipo', width: 20},
       {header: rowHeaders[4], key: 'parcela', width: 15},
-      {header: rowHeaders[5], key: 'inicioPA', width: 45},
-      {header: rowHeaders[6], key: 'Fim PA', width: 40},
-      {header: rowHeaders[7], key: 'inicioUsufruto', width: 30},
-      {header: rowHeaders[8], key: 'fimUsufruto', width: 27},
-      {header: rowHeaders[9], key: 'diasVendidos', width: 23},
-      {header: rowHeaders[10], key: 'valorFerias', width: 25},
-      {header: rowHeaders[11], key: 'valorTerco', width: 25},
-      {header: rowHeaders[12], key: 'incidFerias', width: 40},
-      {header: rowHeaders[13], key: 'incidTerco', width: 45},
+      {header: rowHeaders[5], key: 'inicioPA', width: 35},
+      {header: rowHeaders[6], key: 'Fim PA', width: 35},
+      {header: rowHeaders[7], key: 'inicioUsufruto', width: 20},
+      {header: rowHeaders[8], key: 'fimUsufruto', width: 20},
+      {header: rowHeaders[9], key: 'diasVendidos', width: 17},
+      {header: rowHeaders[10], key: 'valorFerias', width: 20},
+      {header: rowHeaders[11], key: 'valorTerco', width: 20},
+      {header: rowHeaders[12], key: 'incidFerias', width: 25},
+      {header: rowHeaders[13], key: 'incidTerco', width: 25},
       {header: rowHeaders[14], key: 'Total', width: 20},
       // {header: nomeEmpresa, key: 'contrato', width: 57}
     ];
 
-    worksheetFeriasAprov.getRow(4).font = {name: 'Arial', size: 18, bold: true};
-    worksheetFeriasAprov.getRow(4).alignment = {vertical: 'middle', horizontal: 'center'};
-    worksheetFeriasAprov.getRow(4).height = 30;
+    worksheetFeriasAprov.getRow(4).font = {name: 'Arial', size: 18};
+    worksheetFeriasAprov.getRow(4).alignment = {vertical: 'middle', horizontal: 'center', wrapText: true};
+    worksheetFeriasAprov.getRow(4).height = 70;
 
     worksheetFeriasAprov.getColumn('valorFerias').numFmt = 'R$ #,##0.00';
     worksheetFeriasAprov.getColumn('valorTerco').numFmt = 'R$ #,##0.00';
@@ -461,22 +461,19 @@ export class FeriasCalculosPendentesComponent implements OnInit {
     }
 
     worksheetFeriasAprov.getRow(k + 6).getCell(9).value = 'Subtotal';
+    worksheetFeriasAprov.getRow(k + 6).font = {name: 'Arial', bold: true};
     worksheetFeriasAprov.getRow(k + 6).getCell(10).value = this.somaFerias[i];
     worksheetFeriasAprov.getRow(k + 6).getCell(11).value = this.somaTerco[i];
     worksheetFeriasAprov.getRow(k + 6).getCell(12).value = this.somaIncidenciaFerias[i];
     worksheetFeriasAprov.getRow(k + 6).getCell(13).value = this.somaIncidenciaTerco[i];
 
     worksheetFeriasAprov.getRow(k + 7).getCell(9).value = 'Total';
+    worksheetFeriasAprov.getRow(k + 7).font = {name: 'Arial', bold: true};
     worksheetFeriasAprov.getRow(k + 7).getCell(14).value = this.somaSaldo[i];
 
-
-
     for (let x = 5; x <= 200; x++) {
-      let rowTable;
-      rowTable = worksheetFeriasAprov.getRow(x);
-      worksheetFeriasAprov.getRow(x).font = {name: 'Arial', size: 16};
-      worksheetFeriasAprov.getRow(x).alignment = {vertical: 'middle', horizontal: 'center'};
-      rowTable.height = 50;
+      worksheetFeriasAprov.getRow(x).height = 30;
+      worksheetFeriasAprov.getRow(x).alignment = {vertical: 'middle', horizontal: 'center', wrapText: true};
     }
 
     let j = 15;
