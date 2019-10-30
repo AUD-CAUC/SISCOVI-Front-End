@@ -177,10 +177,11 @@ export class MovimentacaoRescisaoComponent implements OnInit {
             null,
             null,
             this.stringToDate(this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasProporcionais').value),
-            this.terceirizados[i].dataDesligamento,
+            this.terceirizados[i].pDataFimFeriasProporcionais,
             this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorFeriasVencidasMovimentado').value,
             this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorFeriasProporcionaisMovimentado').value,
             this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorDecimoTerceiroMovimentado').value,
+            0,
             0,
             0,
             0,
@@ -251,6 +252,7 @@ export class MovimentacaoRescisaoComponent implements OnInit {
                 this.calculosRescisao[i].totalMultaFgtsFeriasProporcionais = terceirizado.valorRestituicaoRescisao.valorFGTSFeriasProporcional;
                 this.calculosRescisao[i].totalIncidenciaTercoProporcional = terceirizado.valorRestituicaoRescisao.valorFGTSTercoProporcional;
                 this.calculosRescisao[i].totalMultaFgtsSalario = terceirizado.valorRestituicaoRescisao.valorFGTSSalario;
+                this.calculosRescisao[i].totalMultaFGTSRestante = terceirizado.valorRestituicaoRescisao.valorFGTSRestante;
                 if (i === (this.calculosRescisao.length - 1)) {
                   this.isLoading = false;
                   this.openModal3();
