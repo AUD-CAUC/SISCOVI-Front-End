@@ -28,6 +28,7 @@ export class RescisaoCalcular {
   totalMultaFgtsFeriasProporcionais: number;
   totalMultaFgtsTercoProporcional: number;
   totalMultaFgtsSalario: number;
+  totalMultaFgtsRestante: number;
   totalRescisao: number;
 
   constructor(codTerceirizadoContrato: number,
@@ -56,7 +57,8 @@ export class RescisaoCalcular {
               totalIncidenciaTercoProporcional: number,
               totalMultaFgtsFeriasProporcionais: number,
               totalMultaFgtsTercoProporcional: number,
-              totalMultaFgtsSalario: number) {
+              totalMultaFgtsSalario: number,
+              totalMultaFgtsRestante: number) {
 
       this.codTerceirizadoContrato = codTerceirizadoContrato;
       this.tipoRestituicao = tipoRestituicao;
@@ -85,6 +87,7 @@ export class RescisaoCalcular {
       this.totalMultaFgtsFeriasProporcionais = totalMultaFgtsFeriasProporcionais;
       this.totalMultaFgtsTercoProporcional = totalMultaFgtsTercoProporcional;
       this.totalMultaFgtsSalario = totalMultaFgtsSalario;
+      this.totalMultaFgtsRestante = totalMultaFgtsRestante;
 
   }
 
@@ -144,6 +147,8 @@ export class RescisaoCalcular {
   public getTotalMultaFgtsTercoProporcional(): number { return this.totalMultaFgtsTercoProporcional; }
 
   public getTotalMultaFgtsSalario(): number { return this.totalMultaFgtsSalario; }
+
+  public getTotalMultaFgtsRestante(): number { return this.totalMultaFgtsRestante; }
 
   public setNomeTerceirizado(nomeTerceirizado: string): void { this.nomeTerceirizado = nomeTerceirizado; }
 

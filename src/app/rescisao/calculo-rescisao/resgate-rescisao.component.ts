@@ -63,7 +63,11 @@ export class ResgateRescisaoComponent implements OnInit {
       this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('tipoRescisao');
       this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('tipoRestituicao');
       this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataDesligamento');
-      this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasProporcionais').setValue(this.dateToString(this.terceirizados[i].pDataInicioFeriasProporcionais));
+      if (this.dateToString(this.terceirizados[i].pDataInicioFeriasProporcionais)) {
+        this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasProporcionais').setValue(this.dateToString(this.terceirizados[i].pDataInicioFeriasProporcionais));
+      } else {
+        this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasProporcionais').disable();
+      }
       this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasVencidas').setValidators([Validators.required, this.resgateValidatore]);
       if (!this.terceirizados[i].pDataInicioFeriasIntegrais || !this.terceirizados[i].pDataFimFeriasIntegrais) {
         this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasVencidas').setValue('N');
@@ -172,6 +176,7 @@ export class ResgateRescisaoComponent implements OnInit {
             0,
             0,
             0,
+            0,
             0);
           let index = -1;
           for (let j = 0; j < this.calculosRescisao.length; j++) {
@@ -227,6 +232,7 @@ export class ResgateRescisaoComponent implements OnInit {
                 this.calculosRescisao[i].totalMultaFgtsFeriasProporcionais = terceirizado.valorRestituicaoRescisao.valorFGTSFeriasProporcional;
                 this.calculosRescisao[i].totalMultaFgtsTercoProporcional = terceirizado.valorRestituicaoRescisao.valorFGTSTercoProporcional;
                 this.calculosRescisao[i].totalMultaFgtsSalario = terceirizado.valorRestituicaoRescisao.valorFGTSSalario;
+                this.calculosRescisao[i].totalMultaFgtsRestante = terceirizado.valorRestituicaoRescisao.valorFGTSRestante;
 
                 if (i === (this.calculosRescisao.length - 1)) {
                   this.isLoading = false;

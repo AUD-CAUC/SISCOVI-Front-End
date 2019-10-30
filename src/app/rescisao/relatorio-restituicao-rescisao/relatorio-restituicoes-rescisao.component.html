@@ -47,6 +47,7 @@
         <th>Multa do FGTS sobre o férias proporcional</th>
         <th>Multa do FGTS sobre o terço proporcional</th>
         <th>Multa do FGTS sobre o salário</th>
+        <th>Multa do FGTS Restante</th>
         <th>Total</th>
       </tr>
       </thead>
@@ -77,6 +78,7 @@
         <td class="hoverable">{{calculos.calcularRescisaoModel.totalMultaFgtsFeriasProporcionais | currency:'BRL':true:'1.2-2'}}</td>
         <td class="hoverable">{{calculos.calcularRescisaoModel.totalMultaFgtsTercoProporcional | currency:'BRL':true:'1.2-2'}}</td>
         <td class="hoverable">{{calculos.calcularRescisaoModel.totalMultaFgtsSalario | currency:'BRL':true:'1.2-2'}}</td>
+        <td class="hoverable">{{calculos.calcularRescisaoModel.totalMultaFgtsRestante | currency:'BRL':true:'1.2-2'}}</td>
         <td class="hoverable">{{calculos.total | currency:'BRL':true:'1.2-2'}}</td>
       </tr>
       </tbody>
