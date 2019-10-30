@@ -49,6 +49,7 @@ export class RescisaoCalculosPendentesExecucaoComponent implements OnInit {
   somaIncidenciaDecimoTerceiro: number[] = [];
   somaMultaFgtsDecimoTerceiro: number[] = [];
   somaMultaFgtsSalario: number[] = [];
+  somaMultaFgtsRestante: number[] = [];
   somaSaldo: number[] = [];
   isLoading = false;
   @Output() nav = new EventEmitter();
@@ -94,6 +95,7 @@ export class RescisaoCalculosPendentesExecucaoComponent implements OnInit {
         this.somaIncidenciaDecimoTerceiro = new Array(this.calculosPendentesExecucao.length).fill(0);
         this.somaMultaFgtsDecimoTerceiro = new Array(this.calculosPendentesExecucao.length).fill(0);
         this.somaMultaFgtsSalario = new Array(this.calculosPendentesExecucao.length).fill(0);
+        this.somaMultaFgtsRestante = new Array(this.calculosPendentesExecucao.length).fill(0);
         this.somaSaldo = new Array(this.calculosPendentesExecucao.length).fill(0);
         for (let i = 0; i < this.calculosPendentesExecucao.length; i++) {
           for (let j = 0; j < this.calculosPendentesExecucao[i].calculos.length; j++) {
@@ -129,6 +131,8 @@ export class RescisaoCalculosPendentesExecucaoComponent implements OnInit {
               this.calculosPendentesExecucao[i].calculos[j].calcularRescisaoModel.totalMultaFgtsDecimoTerceiro;
             this.somaMultaFgtsSalario[i] = this.somaMultaFgtsSalario[i] +
               this.calculosPendentesExecucao[i].calculos[j].calcularRescisaoModel.totalMultaFgtsSalario;
+            this.somaMultaFgtsRestante[i] = this.somaMultaFgtsRestante[i] +
+              this.calculosPendentesExecucao[i].calculos[j].calcularRescisaoModel.totalMultaFgtsRestante;
             this.somaSaldo[i] = this.somaSaldo[i] + this.calculosPendentesExecucao[i].calculos[j].total;
           }
         }
