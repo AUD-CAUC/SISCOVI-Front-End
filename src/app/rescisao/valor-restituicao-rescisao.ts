@@ -17,6 +17,7 @@ export class ValorRestituicaoRescisao {
     valorIncidenciaTercoIntegral: number;
     valorFGTSFeriasIntegral: number;
     valorFGTSTercoIntegral: number;
+    valorFGTSRestante: number;
     valorFeriasProporcional: number;
     valorTercoProporcional: number;
     valorIncidenciaFeriasProporcional: number;

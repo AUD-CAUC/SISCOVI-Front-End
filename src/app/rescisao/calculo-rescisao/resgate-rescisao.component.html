@@ -229,6 +229,7 @@
         <th>Incidência sobre Férias + 1/3 Proporcional</th>
         <th>Multa do FGTS sobre Férias + 1/3 Proporcional</th>
         <th>Multa do FGTS sobre o salário</th>
+        <th>Multa do FGTS restante</th>
       </tr>
       </thead>
       <tbody>
@@ -252,6 +253,7 @@
         <td>{{calculo.totalIncidenciaFeriasProporcionais + calculo.totalIncidenciaTercoProporcional | currency:'BRL':true:'1.2-2'}}</td>
         <td>{{calculo.totalMultaFgtsFeriasProporcionais + calculo.totalMultaFgtsTercoProporcional | currency:'BRL':true:'1.2-2'}}</td>
         <td>{{calculo.totalMultaFgtsSalario | currency:'BRL':true:'1.2-2'}}</td>
+        <td>{{calculo.totalMultaFGTSRestante | currency:'BRL':true:'1.2-2'}}</td>
       </tr>
       </tbody>
     </table>

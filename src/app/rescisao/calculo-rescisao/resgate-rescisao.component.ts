@@ -172,6 +172,7 @@ export class ResgateRescisaoComponent implements OnInit {
             0,
             0,
             0,
+            0,
             0);
           let index = -1;
           for (let j = 0; j < this.calculosRescisao.length; j++) {
@@ -227,6 +228,7 @@ export class ResgateRescisaoComponent implements OnInit {
                 this.calculosRescisao[i].totalMultaFgtsFeriasProporcionais = terceirizado.valorRestituicaoRescisao.valorFGTSFeriasProporcional;
                 this.calculosRescisao[i].totalMultaFgtsTercoProporcional = terceirizado.valorRestituicaoRescisao.valorFGTSTercoProporcional;
                 this.calculosRescisao[i].totalMultaFgtsSalario = terceirizado.valorRestituicaoRescisao.valorFGTSSalario;
+                this.calculosRescisao[i].totalMultaFGTSRestante = terceirizado.valorRestituicaoRescisao.valorFGTSRestante;
 
                 if (i === (this.calculosRescisao.length - 1)) {
                   this.isLoading = false;

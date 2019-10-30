@@ -21,6 +21,7 @@ export class RescisaoCalcular {
   totalIncidenciaTercoVencido: number;
   totalMultaFgtsFeriasVencidas: number;
   totalMultaFgtsTercoVencido: number;
+  totalMultaFGTSRestante: number;
   totalFeriasProporcionais: number;
   totalTercoProporcional: number;
   totalIncidenciaFeriasProporcionais: number;
@@ -50,6 +51,7 @@ export class RescisaoCalcular {
               totalIncidenciaTercoVencido: number,
               totalMultaFgtsFeriasVencidas: number,
               totalMultaFgtsTercoVencido: number,
+              totalMultaFGTSRestante: number,
               totalFeriasProporcionais: number,
               totalTercoProporcional: number,
               totalIncidenciaFeriasProporcionais: number,
@@ -78,6 +80,7 @@ export class RescisaoCalcular {
       this.totalIncidenciaTercoVencido = totalIncidenciaTercoVencido;
       this.totalMultaFgtsFeriasVencidas = totalMultaFgtsFeriasVencidas;
       this.totalMultaFgtsTercoVencido = totalMultaFgtsTercoVencido;
+      this.totalMultaFGTSRestante = totalMultaFGTSRestante;
       this.totalFeriasProporcionais = totalFeriasProporcionais;
       this.totalTercoProporcional = totalTercoProporcional;
       this.totalIncidenciaFeriasProporcionais = totalIncidenciaFeriasProporcionais;
@@ -144,6 +147,8 @@ export class RescisaoCalcular {
   public getTotalMultaFgtsTercoProporcional(): number { return this.totalMultaFgtsTercoProporcional; }
 
   public getTotalMultaFgtsSalario(): number { return this.totalMultaFgtsSalario; }
+
+  public getTotalMultaFGTSRestante(): number { return this.totalMultaFGTSRestante; }
 
   public setNomeTerceirizado(nomeTerceirizado: string): void { this.nomeTerceirizado = nomeTerceirizado; }
 

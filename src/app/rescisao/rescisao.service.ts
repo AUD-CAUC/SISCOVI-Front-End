@@ -69,6 +69,7 @@ export class RescisaoService {
           'totalMultaFgtsFeriasProporcionais': rescisao.getTotalMultaFgtsFeriasProporcionais(),
           'totalMultaFgtsTercoProporcional': rescisao.getTotalMultaFgtsTercoProporcional(),
           'totalMultaFgtsSalario': rescisao.getTotalMultaFgtsSalario(),
+          'totalMultaFgtsRestante': rescisao.getTotalMultaFGTSRestante(),
           'username': this.config.user.username
         };
         data.push(val);
