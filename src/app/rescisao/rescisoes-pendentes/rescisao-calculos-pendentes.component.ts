@@ -316,16 +316,13 @@ export class RescisaoCalculosPendentesComponent implements OnInit {
     const mensagem = [];
     if (str === null || str === undefined) {
       str = 'Não pedido/Não possui';
-      console.log(str)
       return str;
     } else {
-      console.log(str)
       return str.split('-').reverse().join('/');
     }
   }
 
   // formatParcela(num) {
-  //   console.log(num);
   //   let parcela: string;
   //   if (num === 0) {
   //     parcela = 'Única';
@@ -407,7 +404,7 @@ export class RescisaoCalculosPendentesComponent implements OnInit {
       {header: rowHeaders[14], key: 'incidFeriasVencidas', width: 27},
       {header: rowHeaders[15], key: 'incidTercoVencido', width: 27},
       {header: rowHeaders[16], key: 'MultaFgtsFeriasVenc', width: 27},
-      {header: rowHeaders[17], key: 'MultaFgtsTercoVenc', width: 27},
+      {header: rowHeaders[17], key: 'MultaFgtsTercoVenc', width: 35},
       {header: rowHeaders[18], key: 'inicioFeriasProp', width: 30},
       {header: rowHeaders[19], key: 'fimFeriasProp', width: 25},
       {header: rowHeaders[20], key: 'valorFeriasProp', width: 25},
@@ -415,7 +412,7 @@ export class RescisaoCalculosPendentesComponent implements OnInit {
       {header: rowHeaders[22], key: 'incidFeriasProp', width: 30},
       {header: rowHeaders[23], key: 'incidTercoProp', width: 30},
       {header: rowHeaders[24], key: 'multaFgtsFeriasProp', width: 25},
-      {header: rowHeaders[25], key: 'multaFgtsTercoProp', width: 27},
+      {header: rowHeaders[25], key: 'multaFgtsTercoProp', width: 35},
       {header: rowHeaders[26], key: 'multaFgtsSalario', width: 25},
       {header: rowHeaders[27], key: 'Total', width: 20},
     ];
@@ -518,7 +515,7 @@ export class RescisaoCalculosPendentesComponent implements OnInit {
     }
 
     workbookRescisAprov.xlsx.writeBuffer()
-      .then(buffer => saveAs(new Blob([buffer]), 'Relatório-Calculos-Pendentes-Rescisão-Aprovação.xlsx'))
+      .then(buffer => saveAs(new Blob([buffer]), 'Relatório-Rescisão-Pendentes-Aprovação.xlsx'))
       .catch(err => console.log('Error writing excel export', err));
   }
 }

@@ -294,18 +294,18 @@ export class DecimoTerceiroPendenteComponent implements OnInit {
     };
 
 
-    worksheetDtAprov.mergeCells('A1:H1'); /* merge de A1 até H1 */
-    const rowEmpresa = worksheetDtAprov.getCell('A1').value = nomeEmpresa; /*Traz o contrato do front*/
-    worksheetDtAprov.getCell('A1').font = {name: 'Arial', size: 18}; /*formatação da celula merjada*/
-    worksheetDtAprov.getCell('A1').alignment = {vertical: 'middle', horizontal: 'center'}; /*formatação da celula merjada*/
-    worksheetDtAprov.addRow(rowEmpresa); /*adiciona o contrato na linha merjada*/
+    worksheetDtAprov.mergeCells('A1:H1');
+    const rowEmpresa = worksheetDtAprov.getCell('A1').value = nomeEmpresa;
+    worksheetDtAprov.getCell('A1').font = {name: 'Arial', size: 18};
+    worksheetDtAprov.getCell('A1').alignment = {vertical: 'middle', horizontal: 'center'};
+    worksheetDtAprov.addRow(rowEmpresa);
     worksheetDtAprov.getRow(1).height = 30;
 
-    worksheetDtAprov.mergeCells('A2:H2'); /* merge de A1 até H1 */
-    const rowRelAprov = worksheetDtAprov.getCell('A2').value = 'Relatório de Pendências de Aprovação'; /*Traz o contrato do front*/
-    worksheetDtAprov.getCell('A2').font = {name: 'Arial', size: 18}; /*formatação da celula merjada*/
-    worksheetDtAprov.getCell('A2').alignment = {vertical: 'middle', horizontal: 'center'}; /*formatação da celula merjada*/
-    worksheetDtAprov.addRow(rowRelAprov); /*adiciona o contrato na linha merjada*/
+    worksheetDtAprov.mergeCells('A2:H2');
+    const rowRelAprov = worksheetDtAprov.getCell('A2').value = 'Relatório de Pendências de Aprovação - Décimo Terceiro Salário';
+    worksheetDtAprov.getCell('A2').font = {name: 'Arial', size: 18};
+    worksheetDtAprov.getCell('A2').alignment = {vertical: 'middle', horizontal: 'center'};
+    worksheetDtAprov.addRow(rowRelAprov);
     worksheetDtAprov.getRow(2).height = 30;
 
     const rowHeaders = [

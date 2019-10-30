@@ -295,10 +295,8 @@ export class RescisaoCalculosPendentesExecucaoComponent implements OnInit {
     const mensagem = [];
     if (str === null || str === undefined) {
       str = 'Não pedido/Não possui';
-      console.log(str)
       return str;
     } else {
-      console.log(str)
       return str.split('-').reverse().join('/');
     }
   }
@@ -357,7 +355,7 @@ export class RescisaoCalculosPendentesExecucaoComponent implements OnInit {
       {header: rowHeaders[14], key: 'incidFeriasVencidas', width: 27},
       {header: rowHeaders[15], key: 'incidTercoVencido', width: 27},
       {header: rowHeaders[16], key: 'MultaFgtsFeriasVenc', width: 27},
-      {header: rowHeaders[17], key: 'MultaFgtsTercoVenc', width: 27},
+      {header: rowHeaders[17], key: 'MultaFgtsTercoVenc', width: 35},
       {header: rowHeaders[18], key: 'inicioFeriasProp', width: 30},
       {header: rowHeaders[19], key: 'fimFeriasProp', width: 25},
       {header: rowHeaders[20], key: 'valorFeriasProp', width: 25},
@@ -365,7 +363,7 @@ export class RescisaoCalculosPendentesExecucaoComponent implements OnInit {
       {header: rowHeaders[22], key: 'incidFeriasProp', width: 30},
       {header: rowHeaders[23], key: 'incidTercoProp', width: 30},
       {header: rowHeaders[24], key: 'multaFgtsFeriasProp', width: 25},
-      {header: rowHeaders[25], key: 'multaFgtsTercoProp', width: 27},
+      {header: rowHeaders[25], key: 'multaFgtsTercoProp', width: 35},
       {header: rowHeaders[26], key: 'multaFgtsSalario', width: 25},
       {header: rowHeaders[27], key: 'Total', width: 20},
     ];

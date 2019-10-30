@@ -287,11 +287,11 @@ export class DecimoTerceiroPendenteExecucaoComponent implements OnInit {
     worksheetDtExec.getRow(1).height = 30;
 
     worksheetDtExec.mergeCells('A2:H2');
-    const rowRelExec = worksheetDtExec.getCell('A2').value = 'Relatório de Pendências de Execução';
+    const rowRelExec = worksheetDtExec.getCell('A2').value = 'Relatório de Pendências de Execução - Décimo Terceiro Salário';
     worksheetDtExec.getCell('A2').font = {name: 'Arial', size: 18};
     worksheetDtExec.getCell('A2').alignment = {vertical: 'middle', horizontal: 'center'};
     worksheetDtExec.addRow(rowRelExec);
-    worksheetDtExec.getRow(1).height = 30;
+    worksheetDtExec.getRow(2).height = 30;
 
     const rowHeaders = [
       ['Terceirizado', 'Função', 'Tipo de\nRestituição', 'Parcela', 'Data de Início\npara Contagem', 'Valor de\nDécimo Terceiro',
@@ -363,7 +363,7 @@ export class DecimoTerceiroPendenteExecucaoComponent implements OnInit {
     }
 
     workbookDtExec.xlsx.writeBuffer()
-      .then(buffer => saveAs(new Blob([buffer]), 'Relatório-Calculos-Pendentes-Execução.xlsx'))
+      .then(buffer => saveAs(new Blob([buffer]), 'Relatório-Décimo-Terceiro-Pendentes-Execução.xlsx'))
       .catch(err => console.log('Error writing excel export', err));
   }
 }
