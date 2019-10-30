@@ -6,6 +6,8 @@ import {SaldoIndividual} from './saldo-individual';
 import {SaldoService} from '../saldo.service';
 import html2canvas from 'html2canvas';
 import * as JsPDF from 'jspdf';
+import {Workbook} from 'exceljs';
+import {saveAs} from 'file-saver';
 
 @Component({
   selector: 'app-saldo-component',
@@ -104,7 +106,6 @@ export class SaldoIndividualComponent {
       const pageHeight = 295;
       const imgHeight = canvas.height * imgWidth / canvas.width;
       let heightLeft = imgHeight;
-      console.log(imgHeight)
 
       const contentDataURL = canvas.toDataURL('image/png');
       const pdf = new JsPDF('p', 'mm', 'a4'); // A4 size page of PDF
@@ -118,9 +119,6 @@ export class SaldoIndividualComponent {
 
       while (heightLeft >= 0) {
         position = heightLeft - imgHeight + position;
-        console.log(position)
-        console.log(heightLeft)
-        console.log(imgHeight)
         pdf.addPage();
         pdf.addImage(contentDataURL, 'PNG', 2.5, position, imgWidth, imgHeight);
         // pdf.text('Saldo Individual', 105, 15, {align: 'center'});
@@ -137,5 +135,93 @@ export class SaldoIndividualComponent {
 
   mostrar(event: any) {
     console.log(event);
+  }
+
+  gerarRelatorioExcel(nomeEmpresa, cod) {
+    const workbookSaldoInd = new Workbook();
+    const worksheetSaldoInd = workbookSaldoInd.addWorksheet('Relatório-Saldo-Individual', {
+      pageSetup: {
+        fitToPage: true,
+        fitToHeight: 2,
+        fitToWidth: 1,
+        paperSize: 9
+      }
+    });
+    worksheetSaldoInd.mergeCells('A1:H1');
+    const rowEmpresa = worksheetSaldoInd.getCell('A1').value = nomeEmpresa;
+    worksheetSaldoInd.getCell('A1').font = {name: 'Arial', size: 18};
+    worksheetSaldoInd.getCell('A1').alignment = {vertical: 'middle', horizontal: 'center'};
+    worksheetSaldoInd.addRow(rowEmpresa);
+    worksheetSaldoInd.getRow(1).height = 30;
+
+    const nomeRelatorio = 'Relatório de Saldos por Terceirizado';
+    worksheetSaldoInd.mergeCells('A2:H2');
+    const rowRel = worksheetSaldoInd.getCell('A2').value = nomeRelatorio;
+    worksheetSaldoInd.getCell('A2').font = {name: 'Arial', size: 18};
+    worksheetSaldoInd.getCell('A2').alignment = {vertical: 'middle', horizontal: 'center'};
+    worksheetSaldoInd.addRow(rowRel);
+    worksheetSaldoInd.getRow(2).height = 30;
+
+    const rowHeaders = [
+      ['Terceirizado', 'CPF', 'Saldo Férias', 'Saldo Terço Constitucional', 'Saldo Décimo Terceiro', 'Saldo Incidência', 'Saldo Multa do FGTS', 'Saldo Total']
+    ];
+
+    worksheetSaldoInd.addRows(rowHeaders);
+
+    worksheetSaldoInd.columns = [
+      {header: rowHeaders[1], key: 'terceirizado', width: 40},
+      {header: rowHeaders[2], key: 'cpf', width: 20},
+      {header: rowHeaders[3], key: 'ferias', width: 20},
+      {header: rowHeaders[4], key: 'terco', width: 25},
+      {header: rowHeaders[5], key: 'decterc', width: 25},
+      {header: rowHeaders[6], key: 'incidencia', width: 20},
+      {header: rowHeaders[7], key: 'fgts', width: 20},
+      {header: rowHeaders[8], key: 'total', width: 20},
+    ];
+
+    worksheetSaldoInd.getRow(4).font = {name: 'Arial', size: 18};
+    worksheetSaldoInd.getRow(4).alignment = {vertical: 'middle', horizontal: 'center', wrapText: true};
+    worksheetSaldoInd.getRow(4).height = 70;
+
+    worksheetSaldoInd.getColumn('ferias').numFmt = 'R$ #,##0.00';
+    worksheetSaldoInd.getColumn('terco').numFmt = 'R$ #,##0.00';
+    worksheetSaldoInd.getColumn('decterc').numFmt = 'R$ #,##0.00';
+    worksheetSaldoInd.getColumn('incidencia').numFmt = 'R$ #,##0.00';
+    worksheetSaldoInd.getColumn('fgts').numFmt = 'R$ #,##0.00';
+    worksheetSaldoInd.getColumn('total').numFmt = 'R$ #,##0.00';
+
+    let row;
+    let i;
+
+    if (cod) {
+      for (i = 0; i < this.saldos.length; i++) {
+        row = worksheetSaldoInd.getRow(i + 5);
+        row.getCell(1).value = this.saldos[i].nomeFuncionario;
+        row.getCell(2).value = this.saldos[i].Cpf;
+        row.getCell(3).value = this.saldos[i].feriasRetido - this.saldos[i].feriasRestituido;
+        row.getCell(4).value = this.saldos[i].tercoRetido - this.saldos[i].tercoRestituido;
+        row.getCell(5).value = this.saldos[i].decimoTerceiroRetido - this.saldos[i].decimoTerceiroRestituido;
+        row.getCell(6).value = this.saldos[i].incidenciaRetido - this.saldos[i].incidenciaFeriasRestituido -
+          this.saldos[i].incidenciaTercoRestituido - this.saldos[i].incidenciaDecimoTerceiroRestituido;
+        row.getCell(7).value = this.saldos[i].multaFgtsRetido - this.saldos[i].multaFgtsRestituido;
+        row.getCell(8).value = this.saldos[i].saldo;
+      }
+    }
+
+    for (let x = 5; x <= 200; x++) {
+      worksheetSaldoInd.getRow(x).height = 20;
+      worksheetSaldoInd.getRow(x).alignment = {vertical: 'middle', horizontal: 'center', wrapText: true};
+    }
+
+    let k = 9;
+    while (k <= 16384) {
+      const dobCol = worksheetSaldoInd.getColumn(k);
+      dobCol.hidden = true;
+      k++;
+    }
+
+    workbookSaldoInd.xlsx.writeBuffer()
+      .then(buffer => saveAs(new Blob([buffer]), 'Relatório-Saldo-Por-Terceirizado.xlsx'))
+      .catch(err => console.log('Error writing excel export', err));
   }
 }
