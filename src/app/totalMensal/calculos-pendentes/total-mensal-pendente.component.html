@@ -78,6 +78,8 @@
           <td style="padding: 0px">
             <div>
               <i class="material-icons-pdf right" (click)="captureScreen(total.nomeEmpresa, total.totaisMensais.dataReferencia)">picture_as_pdf</i>
+              <i class="fas fa-file-excel right" style="color: #249d76; font-size: 26px; cursor: pointer" title="Gerar relatório em Excel"
+                 (click)="gerarRelatorioExcel(total.nomeEmpresa, total.totaisMensais.dataReferencia)"></i>
               <p class="center-align">{{total.nomeEmpresa}} - Contrato nº: {{total.numeroContrato}}</p>
             </div>
             <table class="striped centered responsive-table bordered" id="{{total.nomeEmpresa}}">

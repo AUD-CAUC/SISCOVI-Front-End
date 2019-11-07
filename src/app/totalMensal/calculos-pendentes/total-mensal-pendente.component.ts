@@ -10,6 +10,8 @@ import {MaterializeAction} from 'angular2-materialize';
 import {Router} from '@angular/router';
 import html2canvas from 'html2canvas';
 import * as JsPDF from 'jspdf';
+import {Workbook} from 'exceljs';
+import {saveAs} from 'file-saver';
 
 @Component({
   selector: 'app-total-mensal-pendente-component',
@@ -124,8 +126,10 @@ export class TotalMensalPendenteComponent implements OnInit {
         this.somaMultaFGTS = new Array(this.totais.length).fill(0);
         this.somaSaldo = new Array(this.totais.length).fill(0);
 
-        for (let i = 0; i < this.totais.length; i++) {
-          for (let j = 0; j < this.totais[i].totaisMensais.totais.length; j++) {
+        let i;
+        let j;
+        for (i = 0; i < this.totais.length; i++) {
+          for (j = 0; j < this.totais[i].totaisMensais.totais.length; j++) {
             this.somaFerias[i] = this.somaFerias[i] + this.totais[i].totaisMensais.totais[j].ferias;
             this.somaTerco[i] = this.somaTerco[i] + this.totais[i].totaisMensais.totais[j].tercoConstitucional;
             this.somaDecimo[i] = this.somaDecimo[i] + this.totais[i].totaisMensais.totais[j].decimoTerceiro;
@@ -166,6 +170,7 @@ export class TotalMensalPendenteComponent implements OnInit {
           res[i].numeroContrato = contrato.numeroDoContrato;
           this.totais[this.totais.length] = res[i];
         }
+
       }
       this.notifications = this.historicoPendente.length;
       this.formInit();
@@ -287,8 +292,132 @@ export class TotalMensalPendenteComponent implements OnInit {
       pdf.text(dataReferencia[1] + '/' + dataReferencia[0], 105, 35, {align: 'center'});
       pdf.addImage(contentDataURL, 'jpg', 0, position, imgWidth, imgHeight);
 
-      
+
       pdf.save('Relatório_Retenção_' + dataReferencia[1] + '/' + dataReferencia[0] + '_Aprovação.pdf'); // Generated PDF
     });
+  }
+
+  gerarRelatorioExcel(nomeEmpresa, dataReferencia) {
+    dataReferencia = dataReferencia.split('-');
+    const dataEditada = (dataReferencia[1] + '/' + dataReferencia[0]).toString();
+    const workbookRetAprov = new Workbook();
+    const worksheetRetAprov = workbookRetAprov.addWorksheet('Relatório Retenções Aprovação', {
+      pageSetup: {
+        fitToPage: true,
+        fitToHeight: 2,
+        fitToWidth: 1,
+        paperSize: 9
+      }
+    });
+
+    worksheetRetAprov.eachRow({includeEmpty: true}, function (rowW) {
+      rowW.border = {
+        top: {style: 'thin'},
+        left: {style: 'thin'},
+        bottom: {style: 'thin'},
+        right: {style: 'thin'}
+      };
+    });
+
+    worksheetRetAprov.pageSetup.margins = {
+      left: 0.7, right: 0.7,
+      top: 0.5, bottom: 0.5,
+      header: 0.3, footer: 0.3
+    };
+    // Título
+    worksheetRetAprov.mergeCells('A1:H1');
+    const rowEmpresa = worksheetRetAprov.getCell('A1').value = nomeEmpresa;
+    worksheetRetAprov.getCell('A1').font = {name: 'Arial', size: 18};
+    worksheetRetAprov.getCell('A1').alignment = {vertical: 'middle', horizontal: 'center'};
+    worksheetRetAprov.addRow(rowEmpresa);
+    worksheetRetAprov.getRow(1).height = 30;
+
+    // Subtítulo
+    worksheetRetAprov.mergeCells('A2:H2');
+    const rowRelAprov = worksheetRetAprov.getCell('A2').value = 'Cálculos Pendentes de Aprovação - Mês de Referência: ' + dataReferencia[1] + '/' + dataReferencia[0];
+    worksheetRetAprov.getCell('A2').font = {name: 'Arial', size: 18};
+    worksheetRetAprov.getCell('A2').alignment = {vertical: 'middle', horizontal: 'center'};
+    worksheetRetAprov.addRow(rowRelAprov);
+    worksheetRetAprov.getRow(2).height = 30;
+
+    const rowHeaders = [
+      ['Função', 'Número de\nTerceirizados por\nFunção', 'Férias', 'Terço\nConstitucional', 'Décimo\nTerceiro', 'Incidência\nRetido',
+        'Multa do\nFGTS', 'Total']
+    ];
+
+    worksheetRetAprov.addRows(rowHeaders);
+
+    worksheetRetAprov.columns = [
+      {header: rowHeaders[1], key: 'funcao', width: 40},
+      {header: rowHeaders[2], key: 'numTerceirizados', width: 30},
+      {header: rowHeaders[3], key: 'ferias', width: 20},
+      {header: rowHeaders[4], key: 'terco', width: 20},
+      {header: rowHeaders[5], key: 'decimoTerc', width: 25},
+      {header: rowHeaders[6], key: 'incidencia', width: 20},
+      {header: rowHeaders[7], key: 'multaFgts', width: 20},
+      {header: rowHeaders[8], key: 'total', width: 20},
+    ];
+    worksheetRetAprov.getRow(4).font = {name: 'Arial', size: 18};
+    worksheetRetAprov.getRow(4).alignment = {vertical: 'middle', horizontal: 'center', wrapText: true};
+    worksheetRetAprov.getRow(4).height = 70;
+
+    worksheetRetAprov.getColumn('ferias').numFmt = 'R$ #,##0.00';
+    worksheetRetAprov.getColumn('terco').numFmt = 'R$ #,##0.00';
+    worksheetRetAprov.getColumn('decimoTerc').numFmt = 'R$ #,##0.00';
+    worksheetRetAprov.getColumn('incidencia').numFmt = 'R$ #,##0.00';
+    worksheetRetAprov.getColumn('multaFgts').numFmt = 'R$ #,##0.00';
+    worksheetRetAprov.getColumn('total').numFmt = 'R$ #,##0.00';
+
+    let row;
+    let i;
+    let j;
+    for (i = 0; i < this.totais.length; i++) {
+      if (this.totais[i].nomeEmpresa === nomeEmpresa) {
+        for (j = 0; j < this.totais[i].totaisMensais.totais.length; j++) {
+          row = worksheetRetAprov.getRow(j + 5);
+          row.getCell(1).value = this.totais[i].totaisMensais.totais[j].funcao;
+          row.getCell(2).value = this.totais[i].totaisMensais.totais[j].numeroTerceirizados;
+          row.getCell(3).value = this.totais[i].totaisMensais.totais[j].ferias;
+          row.getCell(4).value = this.totais[i].totaisMensais.totais[j].tercoConstitucional;
+          row.getCell(5).value = this.totais[i].totaisMensais.totais[j].decimoTerceiro;
+          row.getCell(6).value = this.totais[i].totaisMensais.totais[j].incidencia;
+          row.getCell(7).value = this.totais[i].totaisMensais.totais[j].multaFGTS;
+          row.getCell(8).value = this.totais[i].totaisMensais.totais[j].total;
+        }
+      }
+    }
+    for (let m = 0; m < this.totais.length; m++) {
+      if (this.totais[m].nomeEmpresa === nomeEmpresa) {
+        for (let k = 0; k < this.totais[m].totaisMensais.totais.length; k++) {
+          row = worksheetRetAprov.getRow(j + 6);
+          row.getCell(1).value = '';
+          row.getCell(2).value = 'Somatórios';
+          row.getCell(3).value = this.somaFerias[m];
+          row.getCell(4).value = this.somaTerco[m];
+          row.getCell(5).value = this.somaDecimo[m];
+          row.getCell(6).value = this.somaIncidencia[m];
+          row.getCell(7).value = this.somaMultaFGTS[m];
+          row.getCell(8).value = this.somaSaldo[m];
+        }
+      }
+    }
+    worksheetRetAprov.getRow(j + 6).font = {name: 'Arial', bold: true};
+
+    for (let x = 5; x <= 200; x++) {
+      worksheetRetAprov.getRow(x).height = 30;
+      worksheetRetAprov.getRow(x).alignment = {vertical: 'middle', horizontal: 'center', wrapText: true};
+    }
+
+
+    let l = 9;
+    while (l <= 16384) {
+      const dobCol = worksheetRetAprov.getColumn(l);
+      dobCol.hidden = true;
+      l++;
+    }
+
+    workbookRetAprov.xlsx.writeBuffer()
+      .then(buffer => saveAs(new Blob([buffer]), 'Relatório-Calculos-Retençôes-Pendentes-Aprovação.xlsx'))
+      .catch(err => console.log('Error writing excel export', err));
   }
 }

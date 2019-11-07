@@ -146,7 +146,7 @@ export class TotalMensalRetComponent implements OnInit {
     worksheetRet.addRow(rowEmpresa);
     worksheetRet.getRow(1).height = 30;
 
-    // const nomeRelatorio = dataRef;
+
     worksheetRet.mergeCells('A2:H2');
     const rowRel = worksheetRet.getCell('A2').value = 'Relatório de Retenções Mensais - Data de Referência - ' + this.formatDate(dataRef);
     worksheetRet.getCell('A2').font = {name: 'Arial', size: 18};
