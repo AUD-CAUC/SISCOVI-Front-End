@@ -1,170 +1,175 @@
-<div *ngIf="contrato" class="container">
-  <h4 class="center">Visualizar Ajuste</h4>
-  <div class="divider">
-  </div>
-  <br>
-  <div class="row">
-    <div class="col s12">
-      <h4 class="left-align">Contrato:
-        <small>{{contrato.nomeDaEmpresa}} - {{contrato.numeroDoContrato}}</small>
-      </h4>
-      <div class="row" *ngIf="codAjuste != 0">
-        <ul>
-          <li class="active">
-            <div class="">
-              <h5>Vigência</h5>
-            </div>
-            <div class="col s3 offset-s1 highlight">
-              <h5>De
-                <small>{{contrato.eventoContratual.dataInicioVigencia | date:'shortDate'}}</small>
-                a
-                <small>{{contrato.eventoContratual.dataFimVigencia | date: 'shortDate'}}</small>
-              </h5>
-            </div>
-            <div class=" col s3 highlight">
-              <h5>Assinado em:
-                <small>{{contrato.eventoContratual.dataAssinatura | date: 'shortDate'}}</small>
-              </h5>
-            </div>
-          </li>
-        </ul>
-      </div>
-      <div class="row" *ngIf="codAjuste == 0">
-        <ul>
-          <li class="active">
-            <div class="">
-              <h5>Vigência</h5>
-            </div>
-            <div class="col s3 offset-s1 highlight">
-              <h5>De
-                <small>{{contrato.dataInicio | date:'shortDate'}}</small>
-                a
-                <small>{{contrato.dataFim | date: 'shortDate'}}</small>
-              </h5>
-            </div>
-            <div class=" col s3 highlight">
-              <h5>Assinado em:
-                <small>{{contrato.dataAssinatura | date: 'shortDate'}}</small>
-              </h5>
-            </div>
-          </li>
-        </ul>
-      </div>
-      <div class="row" *ngIf="codAjuste != 0">
-        <ul>
-          <li class="active">
-            <div class="">
-              <h5>Ajuste</h5>
-            </div>
-            <div class="col s3 offset-s1 highlight">
-              <h5>Tipo de Ajuste:
-                <small>{{contrato.eventoContratual.tipo.tipo}}</small>
-              </h5>
-            </div>
-            <div class=" col s3 highlight">
-              <h5>Prorrogação:
-                <small>{{contrato.eventoContratual.prorrogacao | afirimativePipe}}</small>
-              </h5>
-            </div>
-          </li>
-        </ul>
-      </div>
-      <div class="row" *ngIf="contrato.historicoGestao.length > 0">
-        <ul>
-          <li class="active">
-            <div>
-              <h5>Gestão do Contrato</h5>
-            </div>
-            <div class="row highlight" *ngFor="let historico of contrato.historicoGestao">
-              <div class="col s3 offset-s1">
-                <h5 *ngIf="historico.codigoPerfilGestao == 1">Gestor:
-                  <small>{{historico.gestor}}</small>
-                </h5>
-                <h5 *ngIf="historico.codigoPerfilGestao == 2">Primeiro Substituto:
-                  <small>{{historico.gestor}}</small>
-                </h5>
-                <h5 *ngIf="historico.codigoPerfilGestao == 3">Segundo Substituto:
-                  <small>{{historico.gestor}}</small>
-                </h5>
-                <h5 *ngIf="historico.codigoPerfilGestao == 4">Terceiro Substituto:
-                  <small>{{historico.gestor}}</small>
-                </h5>
-                <h5 *ngIf="historico.codigoPerfilGestao == 5">Quarto Substituto:
-                  <small>{{historico.gestor}}</small>
-                </h5>
-              </div>
-            </div>
-          </li>
-        </ul>
-      </div>
-      <div class="row" *ngIf="contrato.percentuais.length > 0">
-        <ul>
-          <li class="active">
-            <div class="">
-              <h5>Percentuais</h5>
-            </div>
-            <div class="row highlight" *ngFor="let percentual of contrato.percentuais">
-              <div class="col s5 offset-s1">
-                <h5>Percentual:
-                  <small>{{percentual.nome}}</small>
-                </h5>
-              </div>
-              <div class=" col s3">
-                <h5>Valor:
-                  <small>{{percentual.percentual / 100 | percent:'1.2-2'}}</small>
-                </h5>
-              </div>
-            </div>
-          </li>
-        </ul>
-      </div>
-      <div class="row" *ngIf="contrato.funcoes.length > 0">
-        <ul>
-          <li class="active">
-            <div class="">
-              <h2>Funções</h2>
-            </div>
-            <div class="row highlight" *ngFor="let funcao of contrato.funcoes">
-              <div class="col s4 offset-s1">
-                <h5>Função:
-                  <small>{{funcao.nome}}</small>
-                </h5>
-              </div>
-              <div class=" col s2">
-                <h5>Salário Base:
-                  <small>{{funcao.remuneracao | currency:'BRL':true:'1.2-2'}}</small>
-                </h5>
-              </div>
-              <div class="col s2">
-                <h5>Adicionais:
-                  <small>{{funcao.adicionais | currency:'BRL':true:'1.2-2'}}</small>
-                </h5>
-              </div>
-              <div class=" col s2">
-                <h5>Triênios:
-                  <small>{{funcao.trienios | currency:'BRL':true:'1.2-2'}}</small>
-                </h5>
-              </div>
-              <div class=" col s6 offset-s1" *ngIf="funcao.convencao">
-                <h5>Convenção Coletiva:
-                  <small>{{funcao.convencao.sigla}}</small>
-                </h5>
-              </div>
-              <div class=" col s2" *ngIf="funcao.convencao">
-                <h5>Data Base:
-                  <small>{{funcao.convencao.dataBase | date: 'shortDate'}}</small>
-                </h5>
-              </div>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
-  <div class="row">
-    <div class="center-align">
-        <button class="waves-effect waves-light btn-large blue-grey darken-3" (click)="voltaContratos()">Voltar</button>
-    </div>
-  </div>
+<h4 class="center">Visualizar Ajuste</h4>
+<div class="divider">
 </div>
+<div>
+  <i class="material-icons-pdf right" (click)="captureScreen(contrato.nomeDaEmpresa)">picture_as_pdf</i>
+</div>
+<br>
+  <div>
+    <div *ngIf="contrato" class="container" >
+      <div class="row" id="{{contrato.nomeDaEmpresa}}">
+        <div class="col s12">
+          <h4 class="left-align">Contrato:
+            <small>{{contrato.nomeDaEmpresa}} - {{contrato.numeroDoContrato}}</small>
+          </h4>
+          <div class="row" *ngIf="codAjuste != 0">
+            <ul>
+              <li class="active">
+                <div class="">
+                  <h5>Vigência</h5>
+                </div>
+                <div class="col s3 offset-s1 highlight">
+                  <h5>De
+                    <small>{{contrato.eventoContratual.dataInicioVigencia | date:'shortDate'}}</small>
+                    a
+                    <small>{{contrato.eventoContratual.dataFimVigencia | date: 'shortDate'}}</small>
+                  </h5>
+                </div>
+                <div class=" col s3 highlight">
+                  <h5>Assinado em:
+                    <small>{{contrato.eventoContratual.dataAssinatura | date: 'shortDate'}}</small>
+                  </h5>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div class="row" *ngIf="codAjuste == 0">
+            <ul>
+              <li class="active">
+                <div class="">
+                  <h5>Vigência</h5>
+                </div>
+                <div class="col s3 offset-s1 highlight">
+                  <h5>De
+                    <small>{{contrato.dataInicio | date:'shortDate'}}</small>
+                    a
+                    <small>{{contrato.dataFim | date: 'shortDate'}}</small>
+                  </h5>
+                </div>
+                <div class=" col s3 highlight">
+                  <h5>Assinado em:
+                    <small>{{contrato.dataAssinatura | date: 'shortDate'}}</small>
+                  </h5>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div class="row" *ngIf="codAjuste != 0">
+            <ul>
+              <li class="active">
+                <div class="">
+                  <h5>Ajuste</h5>
+                </div>
+                <div class="col s3 offset-s1 highlight">
+                  <h5>Tipo de Ajuste:
+                    <small>{{contrato.eventoContratual.tipo.tipo}}</small>
+                  </h5>
+                </div>
+                <div class=" col s3 highlight">
+                  <h5>Prorrogação:
+                    <small>{{contrato.eventoContratual.prorrogacao | afirimativePipe}}</small>
+                  </h5>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div class="row" *ngIf="contrato.historicoGestao.length > 0">
+            <ul>
+              <li class="active">
+                <div>
+                  <h5>Gestão do Contrato</h5>
+                </div>
+                <div class="row highlight" *ngFor="let historico of contrato.historicoGestao">
+                  <div class="col s3 offset-s1">
+                    <h5 *ngIf="historico.codigoPerfilGestao == 1">Gestor:
+                      <small>{{historico.gestor}}</small>
+                    </h5>
+                    <h5 *ngIf="historico.codigoPerfilGestao == 2">Primeiro Substituto:
+                      <small>{{historico.gestor}}</small>
+                    </h5>
+                    <h5 *ngIf="historico.codigoPerfilGestao == 3">Segundo Substituto:
+                      <small>{{historico.gestor}}</small>
+                    </h5>
+                    <h5 *ngIf="historico.codigoPerfilGestao == 4">Terceiro Substituto:
+                      <small>{{historico.gestor}}</small>
+                    </h5>
+                    <h5 *ngIf="historico.codigoPerfilGestao == 5">Quarto Substituto:
+                      <small>{{historico.gestor}}</small>
+                    </h5>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div class="row" *ngIf="contrato.percentuais.length > 0">
+            <ul>
+              <li class="active">
+                <div class="">
+                  <h5>Percentuais</h5>
+                </div>
+                <div class="row highlight" *ngFor="let percentual of contrato.percentuais">
+                  <div class="col s5 offset-s1">
+                    <h5>Percentual:
+                      <small>{{percentual.nome}}</small>
+                    </h5>
+                  </div>
+                  <div class=" col s3">
+                    <h5>Valor:
+                      <small>{{percentual.percentual / 100 | percent:'1.2-2'}}</small>
+                    </h5>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div class="row" *ngIf="contrato.funcoes.length > 0">
+            <ul>
+              <li class="active">
+                <div class="">
+                  <h2>Funções</h2>
+                </div>
+                <div class="row highlight" *ngFor="let funcao of contrato.funcoes">
+                  <div class="col s4 offset-s1">
+                    <h5>Função:
+                      <small>{{funcao.nome}}</small>
+                    </h5>
+                  </div>
+                  <div class=" col s2">
+                    <h5>Salário Base:
+                      <small>{{funcao.remuneracao | currency:'BRL':true:'1.2-2'}}</small>
+                    </h5>
+                  </div>
+                  <div class="col s2">
+                    <h5>Adicionais:
+                      <small>{{funcao.adicionais | currency:'BRL':true:'1.2-2'}}</small>
+                    </h5>
+                  </div>
+                  <div class=" col s2">
+                    <h5>Triênios:
+                      <small>{{funcao.trienios | currency:'BRL':true:'1.2-2'}}</small>
+                    </h5>
+                  </div>
+                  <div class=" col s6 offset-s1" *ngIf="funcao.convencao">
+                    <h5>Convenção Coletiva:
+                      <small>{{funcao.convencao.sigla}}</small>
+                    </h5>
+                  </div>
+                  <div class=" col s2" *ngIf="funcao.convencao">
+                    <h5>Data Base:
+                      <small>{{funcao.convencao.dataBase | date: 'shortDate'}}</small>
+                    </h5>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="center-align">
+    <button class="waves-effect waves-light btn-large blue-grey darken-3" (click)="voltaContratos()">Voltar</button>
+  </div>
+
+
 
