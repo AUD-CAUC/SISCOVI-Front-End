@@ -337,8 +337,8 @@ export class RescisaoCalculosPendentesExecucaoComponent implements OnInit {
         'Valor de\nFérias Vencidas', 'Valor do\nTerço de\nFérias Vencido', 'Incidência Sobre\nFérias Vencidas', 'Incidência Sobre\nTerço de\nFérias Vencido',
         'Multa do FGTS\nSobre\nFérias Vencidas', 'Multa do FGTS\nSobre o Terço\nde Férias Vencido', 'Início de\nFérias Proporcionais', 'Fim de Férias\nProporcionais',
         'Valor de Férias\nProporcionais', 'Terço de Férias\nProporcional', 'Incidência Sobre\nFérias Proporcionais', 'Incidência Sobre\no Terço de Férias\nProporcional',
-        'Multa do FGTS\nSobre Férias\nProporcionais', 'Multa do FGTS\nSobre o Terço de\nFérias Proporcional', 'Multa do FGTS\nSobre o Salário', 'Total']
-    ];
+        'Multa do FGTS\nSobre Férias\nProporcionais', 'Multa do FGTS\nSobre o Terço de\nFérias Proporcional', 'Multa do FGTS\nSobre o Salário', 'Multa do\nFGTS Restante' , 'Total']
+      ];
 
     worksheetRescisExec.addRows(rowHeaders);
 
@@ -369,6 +369,7 @@ export class RescisaoCalculosPendentesExecucaoComponent implements OnInit {
       {header: rowHeaders[24], key: 'multaFgtsFeriasProp', width: 25},
       {header: rowHeaders[25], key: 'multaFgtsTercoProp', width: 35},
       {header: rowHeaders[26], key: 'multaFgtsSalario', width: 25},
+      {header: rowHeaders[26], key: 'multaFgtsRestante', width: 25},
       {header: rowHeaders[27], key: 'Total', width: 20},
     ];
     worksheetRescisExec.getRow(4).font = {name: 'Arial', size: 18};
@@ -392,6 +393,7 @@ export class RescisaoCalculosPendentesExecucaoComponent implements OnInit {
     worksheetRescisExec.getColumn('multaFgtsFeriasProp').numFmt = 'R$ #,##0.00';
     worksheetRescisExec.getColumn('multaFgtsTercoProp').numFmt = 'R$ #,##0.00';
     worksheetRescisExec.getColumn('multaFgtsSalario').numFmt = 'R$ #,##0.00';
+    worksheetRescisExec.getColumn('multaFgtsRestante').numFmt = 'R$ #,##0.00';
     worksheetRescisExec.getColumn('Total').numFmt = 'R$ #,##0.00';
 
     let row;
@@ -426,7 +428,8 @@ export class RescisaoCalculosPendentesExecucaoComponent implements OnInit {
           row.getCell(24).value = this.calculosPendentesExecucao[i].calculos[j].calcularRescisaoModel.totalMultaFgtsFeriasProporcionais;
           row.getCell(25).value = this.calculosPendentesExecucao[i].calculos[j].calcularRescisaoModel.totalMultaFgtsTercoProporcional;
           row.getCell(26).value = this.calculosPendentesExecucao[i].calculos[j].calcularRescisaoModel.totalMultaFgtsSalario;
-          row.getCell(27).value = this.calculosPendentesExecucao[i].calculos[j].total;
+          row.getCell(27).value = this.calculosPendentesExecucao[i].calculos[j].calcularRescisaoModel.totalMultaFgtsRestante;
+          row.getCell(28).value = this.calculosPendentesExecucao[i].calculos[j].total;
         }
         break;
       }
@@ -454,17 +457,18 @@ export class RescisaoCalculosPendentesExecucaoComponent implements OnInit {
     worksheetRescisExec.getRow(j + 6).getCell(24).value = this.somaFgtsFeriasProporcionais[i];
     worksheetRescisExec.getRow(j + 6).getCell(25).value = this.somaFgtsTercoProporcional[i];
     worksheetRescisExec.getRow(j + 6).getCell(26).value = this.somaMultaFgtsSalario[i];
+    worksheetRescisExec.getRow(j + 6).getCell(27).value = this.somaMultaFgtsRestante[i];
     // Totais
     worksheetRescisExec.getRow(j + 7).getCell(6).value = 'Total';
     worksheetRescisExec.getRow(j + 7).font = {name: 'Arial', bold: true};
-    worksheetRescisExec.getRow(j + 7).getCell(27).value = this.somaSaldo[i];
+    worksheetRescisExec.getRow(j + 7).getCell(28).value = this.somaSaldo[i];
     // bloco para formatação dos dados da tabela
     for (let x = 5; x <= 200; x++) {
       worksheetRescisExec.getRow(x).height = 30;
       worksheetRescisExec.getRow(x).alignment = {vertical: 'middle', horizontal: 'center', wrapText: true};
     }
 
-    let k = 28;
+    let k = 29;
     while (k <= 16384) {
       const dobCol = worksheetRescisExec.getColumn(k);
       dobCol.hidden = true;

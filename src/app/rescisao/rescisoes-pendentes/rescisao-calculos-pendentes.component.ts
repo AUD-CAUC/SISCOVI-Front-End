@@ -366,7 +366,7 @@ export class RescisaoCalculosPendentesComponent implements OnInit {
       header: 0.3, footer: 0.3
     };
     // Insere e Formata o título da planilha:
-    worksheetRescisAprov.mergeCells('A1:AA1');
+    worksheetRescisAprov.mergeCells('A1:AB1');
     const rowEmpresa = worksheetRescisAprov.getCell('A1').value = nomeEmpresa;
     worksheetRescisAprov.getCell('A1').font = {name: 'Arial', size: 18};
     worksheetRescisAprov.getCell('A1').alignment = {vertical: 'middle', horizontal: 'center'};
@@ -374,7 +374,7 @@ export class RescisaoCalculosPendentesComponent implements OnInit {
     worksheetRescisAprov.getRow(1).height = 30;
     // Insere e Formata o subtítulo da planilha
     const nomeRelatorio = 'Relatório de Pendências de Aprovação - Rescisão';
-    worksheetRescisAprov.mergeCells('A2:AA2');
+    worksheetRescisAprov.mergeCells('A2:AB2');
     const rowRelAprov = worksheetRescisAprov.getCell('A2').value = nomeRelatorio;
     worksheetRescisAprov.getCell('A2').font = {name: 'Arial', size: 18};
     worksheetRescisAprov.getCell('A2').alignment = {vertical: 'middle', horizontal: 'center'};
@@ -387,7 +387,7 @@ export class RescisaoCalculosPendentesComponent implements OnInit {
         'Valor de\nFérias Vencidas', 'Valor do\nTerço de\nFérias Vencido', 'Incidência Sobre\nFérias Vencidas', 'Incidência Sobre\nTerço de\nFérias Vencido',
         'Multa do FGTS\nSobre\nFérias Vencidas', 'Multa do FGTS\nSobre o Terço\nde Férias Vencido', 'Início de\nFérias Proporcionais', 'Fim de Férias\nProporcionais',
       'Valor de Férias\nProporcionais', 'Terço de Férias\nProporcional', 'Incidência Sobre\nFérias Proporcionais', 'Incidência Sobre\no Terço de Férias\nProporcional',
-      'Multa do FGTS\nSobre Férias\nProporcionais', 'Multa do FGTS\nSobre o Terço de\nFérias Proporcional', 'Multa do FGTS\nSobre o Salário', 'Total']
+      'Multa do FGTS\nSobre Férias\nProporcionais', 'Multa do FGTS\nSobre o Terço de\nFérias Proporcional', 'Multa do FGTS\nSobre o Salário', 'Multa do\nFGTS restante' , 'Total']
     ];
     // Bloco que adiciona os headers das colunas:
     worksheetRescisAprov.addRows(rowHeaders);
@@ -418,7 +418,8 @@ export class RescisaoCalculosPendentesComponent implements OnInit {
       {header: rowHeaders[24], key: 'multaFgtsFeriasProp', width: 25},
       {header: rowHeaders[25], key: 'multaFgtsTercoProp', width: 35},
       {header: rowHeaders[26], key: 'multaFgtsSalario', width: 25},
-      {header: rowHeaders[27], key: 'Total', width: 20},
+      {header: rowHeaders[27], key: 'multaFgtsRestante', width: 25},
+      {header: rowHeaders[28], key: 'Total', width: 20},
     ];
     worksheetRescisAprov.getRow(4).font = {name: 'Arial', size: 18};
     worksheetRescisAprov.getRow(4).alignment = {vertical: 'middle', horizontal: 'center', wrapText: true};
@@ -440,6 +441,7 @@ export class RescisaoCalculosPendentesComponent implements OnInit {
     worksheetRescisAprov.getColumn('multaFgtsFeriasProp').numFmt = 'R$ #,##0.00';
     worksheetRescisAprov.getColumn('multaFgtsTercoProp').numFmt = 'R$ #,##0.00';
     worksheetRescisAprov.getColumn('multaFgtsSalario').numFmt = 'R$ #,##0.00';
+    worksheetRescisAprov.getColumn('multaFgtsRestante').numFmt = 'R$ #,##0.00';
     worksheetRescisAprov.getColumn('Total').numFmt = 'R$ #,##0.00';
 
     let row;
@@ -474,7 +476,8 @@ export class RescisaoCalculosPendentesComponent implements OnInit {
           row.getCell(24).value = this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalMultaFgtsFeriasProporcionais;
           row.getCell(25).value = this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalMultaFgtsTercoProporcional;
           row.getCell(26).value = this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalMultaFgtsSalario;
-          row.getCell(27).value = this.calculosPendentes[i].calculos[j].total;
+          row.getCell(27).value = this.calculosPendentes[i].calculos[j].calcularRescisaoModel.totalMultaFgtsRestante;
+          row.getCell(28).value = this.calculosPendentes[i].calculos[j].total;
         }
         break;
       }
@@ -501,17 +504,18 @@ export class RescisaoCalculosPendentesComponent implements OnInit {
     worksheetRescisAprov.getRow(j + 6).getCell(24).value = this.somaFgtsFeriasProporcionais[i];
     worksheetRescisAprov.getRow(j + 6).getCell(25).value = this.somaFgtsTercoProporcional[i];
     worksheetRescisAprov.getRow(j + 6).getCell(26).value = this.somaMultaFgtsSalario[i];
+    worksheetRescisAprov.getRow(j + 6).getCell(27).value = this.somaMultaFgtsRestante[i];
     // Totais
     worksheetRescisAprov.getRow(j + 7).getCell(6).value = 'Total';
     worksheetRescisAprov.getRow(j + 7).font = {name: 'Arial', bold: true};
-    worksheetRescisAprov.getRow(j + 7).getCell(27).value = this.somaSaldo[i];
+    worksheetRescisAprov.getRow(j + 7).getCell(28).value = this.somaSaldo[i];
     // bloco para formatação dos dados da tabela
     for (let x = 5; x <= 200; x++) {
       worksheetRescisAprov.getRow(x).height = 30;
       worksheetRescisAprov.getRow(x).alignment = {vertical: 'middle', horizontal: 'center', wrapText: true};
     }
 
-    let k = 28;
+    let k = 29;
     while (k <= 16384) {
       const dobCol = worksheetRescisAprov.getColumn(k);
       dobCol.hidden = true;
