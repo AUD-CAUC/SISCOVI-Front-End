@@ -229,7 +229,7 @@ export class TotalMensalExecucaoComponent implements OnInit {
       dataReferencia = dataReferencia.split('-');
 
       pdf.text('Retenção Pendente de Execução', 105, 15, {align: 'center'});
-      pdf.text(nomeEmpresa, 105, 25, {align: 'center'});
+      pdf.text('Mês de referência ' + nomeEmpresa, 105, 25, {align: 'center'});
       pdf.text(dataReferencia[1] + '/' + dataReferencia[0], 105, 35, {align: 'center'});
       pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
 
