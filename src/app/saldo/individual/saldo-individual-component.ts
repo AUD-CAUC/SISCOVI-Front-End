@@ -32,33 +32,26 @@ export class SaldoIndividualComponent {
     this.config = config;
     this.contratoService.getContratosDoUsuario().subscribe(res => {
       this.contratos = res;
-      if (this.codigoContrato) {
-        this.saldoService.getSaldoIndividual(this.codigoContrato).subscribe(res2 => {
-          this.saldos = res2;
-          if (this.saldos.length === 0) {
-            this.saldos = null;
-            this.ref.markForCheck();
-          } else {
-            this.somaFerias = 0;
-            this.somaTerco = 0;
-            this.somaDecimo = 0;
-            this.somaIncidencia = 0;
-            this.somaMultaFGTS = 0;
-            this.somaSaldo = 0;
-            for (let i = 0; i < this.saldos.length; i++) {
-              this.somaFerias = this.somaFerias + this.saldos[i].feriasRetido - this.saldos[i].feriasRestituido;
-              this.somaTerco = this.somaTerco + this.saldos[i].tercoRetido - this.saldos[i].tercoRestituido;
-              this.somaDecimo = this.somaDecimo + this.saldos[i].decimoTerceiroRetido - this.saldos[i].decimoTerceiroRestituido;
-              this.somaIncidencia = this.somaIncidencia + (this.saldos[i].incidenciaRetido - this.saldos[i].incidenciaFeriasRestituido -
-                this.saldos[i].incidenciaTercoRestituido - this.saldos[i].incidenciaDecimoTerceiroRestituido);
-              this.somaMultaFGTS = this.somaMultaFGTS + this.saldos[i].multaFgtsRetido - this.saldos[i].multaFgtsRestituido;
-              this.somaSaldo = this.somaSaldo + this.saldos[i].saldo;
-            }
-          }
-        });
-      }
     });
   }
+
+  montaSomatorio() {
+    this.somaFerias = 0;
+    this.somaTerco = 0;
+    this.somaDecimo = 0;
+    this.somaIncidencia = 0;
+    this.somaMultaFGTS = 0;
+    this.somaSaldo = 0;
+    for (let i = 0; i < this.saldos.length; i++) {
+      this.somaFerias = this.somaFerias + this.saldos[i].feriasRetido - this.saldos[i].feriasRestituido;
+      this.somaTerco = this.somaTerco + this.saldos[i].tercoRetido - this.saldos[i].tercoRestituido;
+      this.somaDecimo = this.somaDecimo + this.saldos[i].decimoTerceiroRetido - this.saldos[i].decimoTerceiroRestituido;
+      this.somaIncidencia = this.somaIncidencia + this.saldos[i].saldoIncidencia;
+      this.somaMultaFGTS = this.somaMultaFGTS + this.saldos[i].multaFgtsRetido - this.saldos[i].multaFgtsRestituido;
+      this.somaSaldo = this.somaSaldo + this.saldos[i].saldo;
+    }
+  }
+
   defineCodigoContrato(codigoContrato: number): void {
     this.codigoContrato = codigoContrato;
     if (this.codigoContrato) {
@@ -68,34 +61,10 @@ export class SaldoIndividualComponent {
           this.saldoService = null;
           this.ref.markForCheck();
         } else {
-          this.somaFerias = 0;
-          this.somaTerco = 0;
-          this.somaDecimo = 0;
-          this.somaIncidencia = 0;
-          this.somaMultaFGTS = 0;
-          this.somaSaldo = 0;
-          for (let i = 0; i < this.saldos.length; i++) {
-            this.somaFerias = this.somaFerias + this.saldos[i].feriasRetido - this.saldos[i].feriasRestituido;
-            this.somaTerco = this.somaTerco + this.saldos[i].tercoRetido - this.saldos[i].tercoRestituido;
-            this.somaDecimo = this.somaDecimo + this.saldos[i].decimoTerceiroRetido - this.saldos[i].decimoTerceiroRestituido;
-            this.somaIncidencia = this.somaIncidencia + (this.saldos[i].incidenciaRetido - this.saldos[i].incidenciaFeriasRestituido -
-              this.saldos[i].incidenciaTercoRestituido - this.saldos[i].incidenciaDecimoTerceiroRestituido);
-            this.somaMultaFGTS = this.somaMultaFGTS + this.saldos[i].multaFgtsRetido - this.saldos[i].multaFgtsRestituido;
-            this.somaSaldo = this.somaSaldo + this.saldos[i].saldo;
-          }
+          this.montaSomatorio();
         }
       });
     }
-  }
-  printDiv() {
-    const divContents = document.getElementById('tabSalInd').innerHTML;
-    const a = window.open('', '', 'height=500, width=500');
-    a.document.write('<html><head></head>');
-    a.document.write('<body ><table class="striped centered responsive-table hoverable highlight bordered" style="box-shadow: none!important;"> ');
-    a.document.write(divContents);
-    a.document.write('</table></body></html>');
-    a.document.close();
-    a.print();
   }
 
   captureScreen(nomeEmpresa) {
@@ -131,10 +100,6 @@ export class SaldoIndividualComponent {
       });
       pdf.save('Saldo ind' + '.pdf'); // Generated PDF
     });
-  }
-
-  mostrar(event: any) {
-    console.log(event);
   }
 
   gerarRelatorioExcel(nomeEmpresa, cod) {

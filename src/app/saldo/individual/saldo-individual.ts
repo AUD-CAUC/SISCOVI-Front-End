@@ -18,6 +18,7 @@ export class SaldoIndividual {
   totalDecimoTerceiroRestituido: number;
   totalRetido: number;
   totalRestituido: number;
+  saldoIncidencia: number;
   saldo: number;
 
 }

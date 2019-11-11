@@ -41,24 +41,23 @@
             <tr *ngFor="let saldo of saldos; let k = index">
               <td>{{saldo.nomeFuncionario}}</td>
               <td>{{saldo.Cpf}}</td>
-              <td>{{saldo.feriasRetido - saldo.feriasRestituido | currency:'BRL':true:'1.2-2'}}</td>
-              <td>{{saldo.tercoRetido - saldo.tercoRestituido | currency:'BRL':true:'1.2-2'}}</td>
-              <td>{{saldo.decimoTerceiroRetido - saldo.decimoTerceiroRestituido | currency:'BRL':true:'1.2-2'}}</td>
-              <td>{{saldo.incidenciaRetido - saldo.incidenciaFeriasRestituido - saldo.incidenciaTercoRestituido -
-              saldo.incidenciaDecimoTerceiroRestituido | currency:'BRL':true:'1.2-2'}}
+              <td>{{saldo.feriasRetido - saldo.feriasRestituido | currency:'BRL':true}}</td>
+              <td>{{saldo.tercoRetido - saldo.tercoRestituido | currency:'BRL':true}}</td>
+              <td>{{saldo.decimoTerceiroRetido - saldo.decimoTerceiroRestituido | currency:'BRL':true}}</td>
+              <td>{{saldo.saldoIncidencia | currency:'BRL':true}}
               </td>
-              <td>{{saldo.multaFgtsRetido - saldo.multaFgtsRestituido | currency:'BRL':true:'1.2-2'}}</td>
-              <td>{{saldo.saldo | currency:'BRL':true:'1.2-2'}}</td>
+              <td>{{saldo.multaFgtsRetido - saldo.multaFgtsRestituido | currency:'BRL':true}}</td>
+              <td>{{saldo.saldo | currency:'BRL':true}}</td>
             </tr>
             <tr>
               <td ><b>Somatório</b></td>
               <td ><b> </b></td>
-              <td ><b>{{somaFerias| currency:'BRL':true:'1.2-2'}}</b></td>
-              <td ><b>{{somaTerco| currency:'BRL':true:'1.2-2'}}</b></td>
-              <td ><b>{{somaDecimo| currency:'BRL':true:'1.2-2'}}</b></td>
-              <td ><b>{{somaIncidencia| currency:'BRL':true:'1.2-2'}}</b></td>
-              <td ><b>{{somaMultaFGTS| currency:'BRL':true:'1.2-2'}}</b></td>
-              <td ><b>{{somaSaldo| currency:'BRL':true:'1.2-2'}}</b></td>
+              <td ><b>{{somaFerias| currency:'BRL':true}}</b></td>
+              <td ><b>{{somaTerco| currency:'BRL':true}}</b></td>
+              <td ><b>{{somaDecimo| currency:'BRL':true}}</b></td>
+              <td ><b>{{somaIncidencia| currency:'BRL':true}}</b></td>
+              <td ><b>{{somaMultaFGTS| currency:'BRL':true}}</b></td>
+              <td ><b>{{somaSaldo| currency:'BRL':true}}</b></td>
             </tr>
             </tbody>
           </table>
