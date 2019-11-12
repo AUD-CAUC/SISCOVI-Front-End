@@ -17,6 +17,7 @@ export class SaldoFuncao {
     valorTotalFeriasRestituido: number;
     valorIncidenciaDecimoTerceiroRestituido: number;
     valorTotalDecimoTerceiroRestituido: number;
+    valorSaldoIncidencia: number;
     valorSaldo: number;
 
 }

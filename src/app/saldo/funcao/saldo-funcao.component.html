@@ -36,21 +36,21 @@
           <tbody>
           <tr *ngFor="let saldo of saldos; let k = index">
             <td>{{saldo.funcao}}</td>
-            <td>{{saldo.valorFeriasRetido - saldo.valorFeriasRestituido| currency:'BRL':true:'1.2-2'}}</td>
-            <td>{{saldo.valorTercoRetido - saldo.valorTercoRestituido | currency:'BRL':true:'1.2-2'}}</td>
-            <td>{{saldo.valorDecimoTerceiroRetido - saldo.valorDecimoTerceiroRestituido | currency:'BRL':true:'1.2-2'}}</td>
-            <td>{{saldo.valorIncidenciaRetido - saldo.valorIncidenciaFeriasRestituido - saldo.valorIncidenciaTercoRestituido - saldo.valorIncidenciaDecimoTerceiroRestituido | currency:'BRL':true:'1.2-2'}}</td>
-            <td>{{saldo.valorMultaFGTSRetido - saldo.valorMultaFGTSRestituido | currency:'BRL':true:'1.2-2'}}</td>
-            <td>{{saldo.valorSaldo | currency:'BRL':true:'1.2-2'}}</td>
+            <td>{{saldo.valorFeriasRetido - saldo.valorFeriasRestituido| currency:'BRL':true}}</td>
+            <td>{{saldo.valorTercoRetido - saldo.valorTercoRestituido | currency:'BRL':true}}</td>
+            <td>{{saldo.valorDecimoTerceiroRetido - saldo.valorDecimoTerceiroRestituido | currency:'BRL':true}}</td>
+            <td>{{saldo.valorSaldoIncidencia | currency:'BRL':true}}</td>
+            <td>{{saldo.valorMultaFGTSRetido - saldo.valorMultaFGTSRestituido | currency:'BRL':true}}</td>
+            <td>{{saldo.valorSaldo | currency:'BRL':true}}</td>
           </tr>
           <tr>
             <td><b>Somatório</b></td>
-            <td><b>{{somaFerias| currency:'BRL':true:'1.2-2'}}</b></td>
-            <td><b>{{somaTerco| currency:'BRL':true:'1.2-2'}}</b></td>
-            <td><b>{{somaDecimo| currency:'BRL':true:'1.2-2'}}</b></td>
-            <td><b>{{somaIncidencia| currency:'BRL':true:'1.2-2'}}</b></td>
-            <td><b>{{somaMultaFGTS| currency:'BRL':true:'1.2-2'}}</b></td>
-            <td><b>{{somaSaldo| currency:'BRL':true:'1.2-2'}}</b></td>
+            <td><b>{{somaFerias| currency:'BRL':true}}</b></td>
+            <td><b>{{somaTerco| currency:'BRL':true}}</b></td>
+            <td><b>{{somaDecimo| currency:'BRL':true}}</b></td>
+            <td><b>{{somaIncidencia| currency:'BRL':true}}</b></td>
+            <td><b>{{somaMultaFGTS| currency:'BRL':true}}</b></td>
+            <td><b>{{somaSaldo| currency:'BRL':true}}</b></td>
           </tr>
           </tbody>
         </table>
@@ -90,14 +90,14 @@
 -->
 
 <!--
-<td >{{saldo.valorTotalRetido | currency:'BRL':true:'1.2-2'}}</td>
-<td >{{saldo.valorFeriasRestituido | currency:'BRL':true:'1.2-2'}}</td>
-<td >{{saldo.valorTercoRestituido | currency:'BRL':true:'1.2-2'}}</td>
-<td >{{saldo.valorIncidenciaFeriasRestituido | currency:'BRL':true:'1.2-2'}}</td>
-<td >{{saldo.valorIncidenciaTercoRestituido | currency:'BRL':true:'1.2-2'}}</td>
-<td >{{saldo.valorTotalFeriasRestituido | currency:'BRL':true:'1.2-2'}}</td>
-<td >{{saldo.valorDecimoTerceiroRestituido | currency:'BRL':true:'1.2-2'}}</td>
-<td >{{saldo.valorIncidenciaDecimoTerceiroRestituido | currency:'BRL':true:'1.2-2'}}</td>
-<td >{{saldo.valorTotalDecimoTerceiroRestituido | currency:'BRL':true:'1.2-2'}}</td>
-<td >{{saldo.valorTotalRestituido | currency:'BRL':true:'1.2-2'}}</td>
+<td >{{saldo.valorTotalRetido | currency:'BRL':true}}</td>
+<td >{{saldo.valorFeriasRestituido | currency:'BRL':true}}</td>
+<td >{{saldo.valorTercoRestituido | currency:'BRL':true}}</td>
+<td >{{saldo.valorIncidenciaFeriasRestituido | currency:'BRL':true}}</td>
+<td >{{saldo.valorIncidenciaTercoRestituido | currency:'BRL':true}}</td>
+<td >{{saldo.valorTotalFeriasRestituido | currency:'BRL':true}}</td>
+<td >{{saldo.valorDecimoTerceiroRestituido | currency:'BRL':true}}</td>
+<td >{{saldo.valorIncidenciaDecimoTerceiroRestituido | currency:'BRL':true}}</td>
+<td >{{saldo.valorTotalDecimoTerceiroRestituido | currency:'BRL':true}}</td>
+<td >{{saldo.valorTotalRestituido | currency:'BRL':true}}</td>
 -->
