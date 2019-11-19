@@ -8,8 +8,6 @@
   width: 115% !important;
 }
 
-
-
 #modal2, #modal4 {
   width: 90% !important ;
 }
@@ -78,7 +76,7 @@
 }
 
 .modal-footer {
-  text-align:center;
+  padding-bottom: 72px;
 }
 .modal-footer button {
   display:inline-block;
@@ -100,4 +98,11 @@
   direction: ltr;
   cursor: pointer;
   padding-right: 5px;
+}
+.preloader-wrapper {
+  margin: 0 20px;
+}
+
+.spinner-layer {
+  border-color: #414e54;
 }

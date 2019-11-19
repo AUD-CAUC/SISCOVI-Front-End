@@ -13,6 +13,8 @@
           {{contrato.numeroDoContrato}}</h5>
       </div>
       <div class="collapsible-body">
+        <i class="fas fa-file-excel right" style="color: #249d76; font-size: 26px; cursor: pointer" title="Gerar relatório em Excel"
+           (click)="gerarRelatorioExcel(contrato.nomeDaEmpresa, contrato.codigo)"></i>
         <div class="row" *ngIf="!saldos && codigoContrato">
           <div class="col s12 grey lighten-4" style="margin-top: 1em">
             <br>

@@ -33,6 +33,7 @@ export class MovimentacaoDecimoTerceiroComponent implements OnInit {
   primeiroItemErrado: number;
   somaDecimo = 0;
   somaIncidencia = 0;
+  isLoading = false;
 
   constructor(private fb: FormBuilder, private decimoTerceiroService: DecimoTerceiroService, private ref: ChangeDetectorRef) {
   }
@@ -166,7 +167,9 @@ export class MovimentacaoDecimoTerceiroComponent implements OnInit {
   }
 
   efetuarCalculo(): void {
+    this.isLoading = true;
     this.decimoTerceiroService.registrarCalculoDecimoTerceiro(this.calculosDecimoTerceiro).subscribe(res => {
+      this.isLoading = false;
       if (res.success) {
         this.closeModal3();
         this.openModal4();
@@ -175,6 +178,7 @@ export class MovimentacaoDecimoTerceiroComponent implements OnInit {
   }
 
   verificaDadosFormulario() {
+    this.isLoading = true;
     this.calculosDecimoTerceiro = [];
     let aux = 0;
     this.primeiroItemErrado = null;
@@ -217,6 +221,7 @@ export class MovimentacaoDecimoTerceiroComponent implements OnInit {
           this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('valorMovimentado').markAsTouched();
           this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('valorMovimentado').markAsDirty();
           aux = undefined;
+          this.isLoading = false;
           this.openModal2();
         }
         console.log(typeof this.decimoTerceiroForm.get('calcularTerceirizados').get('' + i).get('inicioContagem').value);
@@ -224,6 +229,7 @@ export class MovimentacaoDecimoTerceiroComponent implements OnInit {
       }
     }
     if (aux === 0) {
+      this.isLoading = false;
       this.openModal1();
     }
     if ((this.calculosDecimoTerceiro.length > 0) && aux) {
@@ -235,11 +241,11 @@ export class MovimentacaoDecimoTerceiroComponent implements OnInit {
           for (let i = 0; i < this.calculosDecimoTerceiro.length; i++) {
             this.somaDecimo = this.somaDecimo + this.calculosDecimoTerceiro[i].valorMovimentado;
           }
+          this.isLoading = false;
           this.openModal3();
           this.vmsm = true;
         }
       });
-      this.openModal3();
     }
   }
 

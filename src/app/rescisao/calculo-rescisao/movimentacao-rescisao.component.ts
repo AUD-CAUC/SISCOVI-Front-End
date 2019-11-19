@@ -30,6 +30,7 @@ export class MovimentacaoRescisaoComponent implements OnInit {
   modalActions2 = new EventEmitter<string | MaterializeAction>();
   modalActions3 = new EventEmitter<string | MaterializeAction>();
   modalActions4 = new EventEmitter<string | MaterializeAction>();
+  isLoading = false;
   @Output() navegaParaViewDeCalculos = new EventEmitter();
 
   constructor(private fb: FormBuilder, private rescisaoService: RescisaoService, private router: Router, private route: ActivatedRoute) {
@@ -58,7 +59,8 @@ export class MovimentacaoRescisaoComponent implements OnInit {
         resgateFeriasVencidas: new FormControl('T', [Validators.required, this.resgateValidatore]),
         valorFeriasVencidasMovimentado: new FormControl(0),
         valorFeriasProporcionaisMovimentado: new FormControl(0),
-        valorDecimoTerceiroMovimentado: new FormControl(0)
+        valorDecimoTerceiroMovimentado: new FormControl(0),
+        emAnalise: new FormControl(item.emAnalise),
       });
       control.push(addCtrl);
     });
@@ -67,7 +69,12 @@ export class MovimentacaoRescisaoComponent implements OnInit {
       this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('tipoRescisao');
       this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('tipoRestituicao');
       this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataDesligamento');
-      this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasProporcionais').setValue(this.dateToString(this.terceirizados[i].pDataInicioFeriasProporcionais));
+      if (this.dateToString(this.terceirizados[i].pDataInicioFeriasProporcionais)) {
+        this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasProporcionais').setValue(this.dateToString(this.terceirizados[i].pDataInicioFeriasProporcionais));
+      } else {
+        this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasProporcionais').disable();
+        this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorFeriasProporcionaisMovimentado').disable();
+      }
       this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasVencidas').setValidators([Validators.required, this.resgateValidatore]);
       if (!this.terceirizados[i].pDataInicioFeriasIntegrais || !this.terceirizados[i].pDataFimFeriasIntegrais) {
         this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasVencidas').setValue('N');
@@ -81,6 +88,10 @@ export class MovimentacaoRescisaoComponent implements OnInit {
         this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasIntegrais').setValue(this.dateToString(this.terceirizados[i].pDataInicioFeriasIntegrais));
         this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataFimFeriasIntegrais').setValue(this.dateToString(this.terceirizados[i].pDataFimFeriasIntegrais));
         this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasVencidas').setValidators([Validators.required, this.resgateValidatore]);
+      }
+      const emAnalise = this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('emAnalise').value;
+      if (emAnalise) {
+        this.rescisaoForm.get('calcularTerceirizados').get('' + i).disable();
       }
     }
   }
@@ -141,8 +152,10 @@ export class MovimentacaoRescisaoComponent implements OnInit {
   }
 
   efetuarCalculo(): void {
+    this.isLoading = true;
     this.rescisaoService.registrarCalculoRescisao(this.calculosRescisao).subscribe(res => {
       if (res.success) {
+        this.isLoading = false;
         this.closeModal3();
         this.openModal4();
       }
@@ -150,6 +163,7 @@ export class MovimentacaoRescisaoComponent implements OnInit {
   }
 
   verificaDadosFormulario() {
+    this.isLoading = true;
     this.calculosRescisao = [];
     let aux = 0;
     for (let i = 0; i < this.terceirizados.length; i++) {
@@ -163,10 +177,11 @@ export class MovimentacaoRescisaoComponent implements OnInit {
             null,
             null,
             this.stringToDate(this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('dataInicioFeriasProporcionais').value),
-            this.terceirizados[i].dataDesligamento,
+            this.terceirizados[i].pDataFimFeriasProporcionais,
             this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorFeriasVencidasMovimentado').value,
             this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorFeriasProporcionaisMovimentado').value,
             this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('valorDecimoTerceiroMovimentado').value,
+            0,
             0,
             0,
             0,
@@ -204,11 +219,13 @@ export class MovimentacaoRescisaoComponent implements OnInit {
           this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasVencidas').markAsDirty();
           this.rescisaoForm.get('calcularTerceirizados').get('' + i).get('resgateFeriasVencidas').markAsTouched();
           aux = null;
+          this.isLoading = false;
           this.openModal2();
         }
       }
     }
     if (aux === 0) {
+      this.isLoading = false;
       this.openModal1();
     }
     if ((this.calculosRescisao.length > 0) && aux) {
@@ -235,7 +252,9 @@ export class MovimentacaoRescisaoComponent implements OnInit {
                 this.calculosRescisao[i].totalMultaFgtsFeriasProporcionais = terceirizado.valorRestituicaoRescisao.valorFGTSFeriasProporcional;
                 this.calculosRescisao[i].totalIncidenciaTercoProporcional = terceirizado.valorRestituicaoRescisao.valorFGTSTercoProporcional;
                 this.calculosRescisao[i].totalMultaFgtsSalario = terceirizado.valorRestituicaoRescisao.valorFGTSSalario;
+                this.calculosRescisao[i].totalMultaFgtsRestante = terceirizado.valorRestituicaoRescisao.valorFGTSRestante;
                 if (i === (this.calculosRescisao.length - 1)) {
+                  this.isLoading = false;
                   this.openModal3();
                 }
               }

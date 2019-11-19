@@ -26,6 +26,7 @@ export class MovimentacaoFeriasComponent implements OnInit {
   modalActions2 = new EventEmitter<string | MaterializeAction>();
   modalActions3 = new EventEmitter<string | MaterializeAction>();
   modalActions4 = new EventEmitter<string | MaterializeAction>();
+  isLoading = false;
   vmsm = false;
   protected diasConcedidos: number[] = [];
   @Output() navegaParaViewDeCalculos = new EventEmitter();
@@ -562,8 +563,10 @@ export class MovimentacaoFeriasComponent implements OnInit {
   }
 
   efetuarCalculo(): void {
+    this.isLoading = true;
     this.feriasService.calculaFeriasTerceirizados(this.feriasCalcular).subscribe(res => {
       if (res.success) {
+        this.isLoading = false;
         this.closeModal3();
         this.openModal4();
       }

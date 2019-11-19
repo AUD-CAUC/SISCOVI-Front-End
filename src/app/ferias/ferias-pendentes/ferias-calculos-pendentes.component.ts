@@ -10,6 +10,9 @@ import {ListaCalculosPendentes} from './lista-calculos-pendentes';
 import html2canvas from 'html2canvas';
 import * as JsPDF from 'jspdf';
 import {fontSize} from "html2canvas/dist/types/css/property-descriptors/font-size";
+import {Workbook} from 'exceljs';
+import {saveAs} from 'file-saver';
+import {isLoop} from 'tslint';
 
 @Component({
   selector: 'app-ferias-calculos-pendentes',
@@ -19,7 +22,6 @@ import {fontSize} from "html2canvas/dist/types/css/property-descriptors/font-siz
 export class FeriasCalculosPendentesComponent implements OnInit {
   contratos: Contrato[];
   isSelected: boolean[] = [];
-  isRated: string[] = [];
   @Input() calculosPendentes: ListaCalculosPendentes[];
   calculosAvaliados: ListaCalculosPendentes[];
   calculosNegados: ListaCalculosPendentes[];
@@ -38,6 +40,7 @@ export class FeriasCalculosPendentesComponent implements OnInit {
   somaIncidenciaFerias: number[] = [];
   somaIncidenciaTerco: number[] = [];
   somaSaldo: number[] = [];
+  isLoading = false;
   @Output() nav = new EventEmitter();
 
   constructor(private feriasService: FeriasService, private contratoService: ContratosService, config: ConfigService,
@@ -46,6 +49,7 @@ export class FeriasCalculosPendentesComponent implements OnInit {
 
     this.feriasService.getCalculosPendentes().subscribe(res => {
       this.calculosPendentes = res;
+      console.log(this.calculosPendentes);
 
       if (this.calculosPendentes.length === 0) {
         this.calculosPendentes = null;
@@ -75,7 +79,6 @@ export class FeriasCalculosPendentesComponent implements OnInit {
         this.somaIncidenciaFerias = new Array(this.calculosPendentes.length).fill(0);
         this.somaIncidenciaTerco = new Array(this.calculosPendentes.length).fill(0);
         this.somaSaldo = new Array(this.calculosPendentes.length).fill(0);
-        this.isRated = new Array(this.calculosPendentes.length).fill('N');
         for (let i = 0; i < this.calculosPendentes.length; i++) {
           for (let j = 0; j < this.calculosPendentes[i].calculos.length; j++) {
             this.somaFerias[i] = this.somaFerias[i] +
@@ -92,8 +95,6 @@ export class FeriasCalculosPendentesComponent implements OnInit {
         this.ref.markForCheck();
       }
       this.formInit();
-      console.log(this.isRated);
-      console.log(this.isSelected);
     }
   }
 
@@ -118,12 +119,11 @@ export class FeriasCalculosPendentesComponent implements OnInit {
               avaliacao: new FormControl('S')
             });
             newControl2.push(addControl);
-            console.log(this.isRated);
-            console.log(this.isSelected);
           });
           control.push(newControl);
         });
       }
+      console.log(this.feriasForm);
     }
     this.feriasFormAfter = this.fb.group({
       calculosAvaliados: this.fb.array([])
@@ -212,6 +212,7 @@ export class FeriasCalculosPendentesComponent implements OnInit {
         }
       }
       this.calculosAvaliados.push(lista);
+      console.log(this.calculosAvaliados);
     }
     if (aux === 0) {
       this.openModal();
@@ -238,6 +239,7 @@ export class FeriasCalculosPendentesComponent implements OnInit {
   }
 
   salvarAlteracoes() {
+    this.isLoading = true;
     for (let i = 0; i < this.calculosAvaliados.length; i++) {
       for (let j = 0; j < this.calculosAvaliados[i].calculos.length; j++) {
         this.calculosAvaliados[i].calculos[j].observacoes = this.feriasFormAfter
@@ -248,10 +250,12 @@ export class FeriasCalculosPendentesComponent implements OnInit {
       }
     }
     this.feriasService.salvarFeriasAvaliadasLista(this.calculosAvaliados).subscribe(() => {
+      this.isLoading = false;
       this.closeModal2();
       this.openModal3();
     },
       () => {
+      this.isLoading = false;
         this.closeModal2();
         this.openModal5();
       });
@@ -262,11 +266,8 @@ export class FeriasCalculosPendentesComponent implements OnInit {
     this.nav.emit();
   }
   captureScreen(nomeEmpresa, existeNegados) {
-    console.log(nomeEmpresa);
-    console.log(existeNegados);
     if (this.calculosNegados && existeNegados === 1) {
           const data1 = document.getElementById(nomeEmpresa);
-          console.log(data1);
           html2canvas(data1, {scrollX: 0, scrollY: -window.scrollY}).then(canvas => {
             // Few necessary setting options
             const imgWidth = 205;
@@ -302,9 +303,7 @@ export class FeriasCalculosPendentesComponent implements OnInit {
             pdf.save('Relatório_Férias_' + nomeEmpresa + '_Negadas.pdf'); // Generated PDF
           });
     } else {
-      console.log('entrou no else')
       const data2 = document.getElementById(nomeEmpresa);
-      console.log(data2);
       html2canvas(data2, {scrollX: 0, scrollY: -window.scrollY}).then(canvas => {
         // Few necessary setting options
         const imgWidth = 205;
@@ -342,7 +341,153 @@ export class FeriasCalculosPendentesComponent implements OnInit {
       });
     }
   }
-  rejeitaTodos() {
 
+  formatDate(str) {
+    return str.split('-').reverse().join('/');
+  }
+
+  formatParcela(num) {
+    let parcela: string;
+    if (num === 0) {
+      parcela = 'Única';
+    } else if (num === 1) {
+      parcela = 'Primeira';
+    } else if (num === 2) {
+      parcela = 'Segunda';
+    } else if (num === 3) {
+      parcela = 'Terceira';
+    }
+    return parcela;
+  }
+
+  gerarRelatorioExcel(nomeEmpresa) {
+    const workbookFeriasAprov = new Workbook();
+    const worksheetFeriasAprov = workbookFeriasAprov.addWorksheet('Relatório 13º Restituição Aprov', {
+      pageSetup: {
+        fitToPage: true,
+        fitToHeight: 2,
+        fitToWidth: 1,
+        paperSize: 9
+      }
+    });
+
+    worksheetFeriasAprov.eachRow({includeEmpty: true}, function (rowW) {
+      rowW.border = {
+        top: {style: 'thin'},
+        left: {style: 'thin'},
+        bottom: {style: 'thin'},
+        right: {style: 'thin'}
+      };
+    });
+
+    worksheetFeriasAprov.pageSetup.margins = {
+      left: 0.7, right: 0.7,
+      top: 0.5, bottom: 0.5,
+      header: 0.3, footer: 0.3
+    };
+
+    worksheetFeriasAprov.mergeCells('A1:N1');
+    const rowEmpresa = worksheetFeriasAprov.getCell('A1').value = nomeEmpresa;
+    worksheetFeriasAprov.getCell('A1').font = {name: 'Arial', size: 18};
+    worksheetFeriasAprov.getCell('A1').alignment = {vertical: 'middle', horizontal: 'center'};
+    worksheetFeriasAprov.addRow(rowEmpresa);
+    worksheetFeriasAprov.getRow(1).height = 30;
+
+    const nomeRelatorio = 'Relatório de Pendências de Aprovação - Férias';
+    worksheetFeriasAprov.mergeCells('A2:N2');
+    const rowRelAprov = worksheetFeriasAprov.getCell('A2').value = nomeRelatorio;
+    worksheetFeriasAprov.getCell('A2').font = {name: 'Arial', size: 18};
+    worksheetFeriasAprov.getCell('A2').alignment = {vertical: 'middle', horizontal: 'center'};
+    worksheetFeriasAprov.addRow(rowRelAprov);
+    worksheetFeriasAprov.getRow(2).height = 30;
+
+    const rowHeaders = [
+      ['Terceirizado', 'Função', 'Tipo de\nRestituição', 'Parcela', 'Início do\nPeríodo Aquisitivo', 'Fim do\nPeríodo Aquisitivo',
+        'Início do\nUsufruto', 'Fim do\nUsufruto', 'Dias\nVendidos', 'Valor de\nFérias', 'Valor do\nTerço', 'Incidência\nSobre Férias',
+        'Incidência\nSobre o Terço', 'Total']
+    ];
+
+    worksheetFeriasAprov.addRows(rowHeaders);
+
+    worksheetFeriasAprov.columns = [
+      {header: rowHeaders[1], key: 'terceirizado', width: 40},
+      {header: rowHeaders[2], key: 'funcao', width: 65},
+      {header: rowHeaders[3], key: 'tipo', width: 20},
+      {header: rowHeaders[4], key: 'parcela', width: 15},
+      {header: rowHeaders[5], key: 'inicioPA', width: 35},
+      {header: rowHeaders[6], key: 'Fim PA', width: 35},
+      {header: rowHeaders[7], key: 'inicioUsufruto', width: 20},
+      {header: rowHeaders[8], key: 'fimUsufruto', width: 20},
+      {header: rowHeaders[9], key: 'diasVendidos', width: 17},
+      {header: rowHeaders[10], key: 'valorFerias', width: 20},
+      {header: rowHeaders[11], key: 'valorTerco', width: 20},
+      {header: rowHeaders[12], key: 'incidFerias', width: 25},
+      {header: rowHeaders[13], key: 'incidTerco', width: 25},
+      {header: rowHeaders[14], key: 'Total', width: 20},
+      // {header: nomeEmpresa, key: 'contrato', width: 57}
+    ];
+
+    worksheetFeriasAprov.getRow(4).font = {name: 'Arial', size: 18};
+    worksheetFeriasAprov.getRow(4).alignment = {vertical: 'middle', horizontal: 'center', wrapText: true};
+    worksheetFeriasAprov.getRow(4).height = 70;
+
+    worksheetFeriasAprov.getColumn('valorFerias').numFmt = 'R$ #,##0.00';
+    worksheetFeriasAprov.getColumn('valorTerco').numFmt = 'R$ #,##0.00';
+    worksheetFeriasAprov.getColumn('incidFerias').numFmt = 'R$ #,##0.00';
+    worksheetFeriasAprov.getColumn('incidTerco').numFmt = 'R$ #,##0.00';
+    worksheetFeriasAprov.getColumn('Total').numFmt = 'R$ #,##0.00';
+
+    let row;
+    let i, k;
+
+    for (i = 0; i < this.calculosPendentes.length; i++) {
+      if (this.calculosPendentes[i].titulo === nomeEmpresa) {
+        for (k = 0; k < this.calculosPendentes[i].calculos.length; k++) {
+          row = worksheetFeriasAprov.getRow(k + 5);
+          row.getCell(1).value = this.calculosPendentes[i].calculos[k].nomeTerceirizado;
+          row.getCell(2).value = this.calculosPendentes[i].calculos[k].nomeCargo;
+          row.getCell(3).value = this.calculosPendentes[i].calculos[k].calcularFeriasModel.tipoRestituicao;
+          row.getCell(4).value = this.formatParcela(this.calculosPendentes[i].calculos[k].calcularFeriasModel.parcelas);
+          row.getCell(5).value = this.formatDate(this.calculosPendentes[i].calculos[k].calcularFeriasModel.inicioPeriodoAquisitivo);
+          row.getCell(6).value = this.formatDate(this.calculosPendentes[i].calculos[k].calcularFeriasModel.fimPeriodoAquisitivo);
+          row.getCell(7).value = this.formatDate(this.calculosPendentes[i].calculos[k].calcularFeriasModel.inicioFerias);
+          row.getCell(8).value = this.formatDate(this.calculosPendentes[i].calculos[k].calcularFeriasModel.fimFerias);
+          row.getCell(9).value = this.calculosPendentes[i].calculos[k].calcularFeriasModel.diasVendidos;
+          row.getCell(10).value = this.calculosPendentes[i].calculos[k].calcularFeriasModel.pTotalFerias;
+          row.getCell(11).value = this.calculosPendentes[i].calculos[k].calcularFeriasModel.pTotalTercoConstitucional;
+          row.getCell(12).value = this.calculosPendentes[i].calculos[k].calcularFeriasModel.pTotalIncidenciaFerias;
+          row.getCell(13).value = this.calculosPendentes[i].calculos[k].calcularFeriasModel.pTotalIncidenciaTerco;
+          row.getCell(14).value = this.calculosPendentes[i].calculos[k].total;
+        }
+        break;
+      }
+    }
+
+    worksheetFeriasAprov.getRow(k + 6).getCell(9).value = 'Subtotal';
+    worksheetFeriasAprov.getRow(k + 6).font = {name: 'Arial', bold: true};
+    worksheetFeriasAprov.getRow(k + 6).getCell(10).value = this.somaFerias[i];
+    worksheetFeriasAprov.getRow(k + 6).getCell(11).value = this.somaTerco[i];
+    worksheetFeriasAprov.getRow(k + 6).getCell(12).value = this.somaIncidenciaFerias[i];
+    worksheetFeriasAprov.getRow(k + 6).getCell(13).value = this.somaIncidenciaTerco[i];
+
+    worksheetFeriasAprov.getRow(k + 7).getCell(9).value = 'Total';
+    worksheetFeriasAprov.getRow(k + 7).font = {name: 'Arial', bold: true};
+    worksheetFeriasAprov.getRow(k + 7).getCell(14).value = this.somaSaldo[i];
+
+    for (let x = 5; x <= 200; x++) {
+      worksheetFeriasAprov.getRow(x).height = 30;
+      worksheetFeriasAprov.getRow(x).alignment = {vertical: 'middle', horizontal: 'center', wrapText: true};
+    }
+
+    let j = 15;
+    while (j <= 16384) {
+      const dobCol = worksheetFeriasAprov.getColumn(j);
+      dobCol.hidden = true;
+      j++;
+    }
+
+    workbookFeriasAprov.xlsx.writeBuffer()
+      .then(buffer => saveAs(new Blob([buffer]), 'Relatório-Calculos-Pendentes-Aprovação.xlsx'))
+      .catch(err => console.log('Error writing excel export', err));
   }
 }

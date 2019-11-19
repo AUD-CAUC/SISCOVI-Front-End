@@ -22,6 +22,8 @@
               </div>
               <div class="collapsible-body">
                 <i class="material-icons right" (click)="captureScreen(calculo.dataReferencia, cont.nomeDaEmpresa, i)">picture_as_pdf</i>
+                <i class="fas fa-file-excel right" style="color: #249d76; font-size: 26px; cursor: pointer" title="Gerar relatório em Excel"
+                   (click)="gerarRelatorioExcel(calculo.dataReferencia, cont.nomeDaEmpresa, i)"></i>
                 <div class="col xl12 offset-l6 center-align" (click)="mostrar(this)" id= "{{cont.nomeDaEmpresa + i}}">
                   <table class="striped centered responsive-table" >
                     <thead>

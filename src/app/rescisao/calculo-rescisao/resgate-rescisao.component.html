@@ -168,7 +168,14 @@
 <div class="container" *ngIf="tipoRestituicao == 'RESGATE'">
   <div class="row" *ngIf="terceirizados && tipoRestituicao">
     <div class="center-align">
-      <button class="btn waves-effect center" (click)="verificaDadosFormulario()" *ngIf="terceirizados.length !== 0">Calcular</button>
+      <button  class="btn waves-effect center" (click)="verificaDadosFormulario()" *ngIf="terceirizados.length !== 0 && !isLoading">Calcular</button>
+      <div *ngIf="isLoading" class="preloader-wrapper big active">
+        <div class="spinner-layer">
+          <div class="circle-clipper left">
+            <div class="circle"></div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -222,6 +229,7 @@
         <th>Incidência sobre Férias + 1/3 Proporcional</th>
         <th>Multa do FGTS sobre Férias + 1/3 Proporcional</th>
         <th>Multa do FGTS sobre o salário</th>
+        <th>Multa do FGTS restante</th>
       </tr>
       </thead>
       <tbody>
@@ -245,15 +253,21 @@
         <td>{{calculo.totalIncidenciaFeriasProporcionais + calculo.totalIncidenciaTercoProporcional | currency:'BRL':true:'1.2-2'}}</td>
         <td>{{calculo.totalMultaFgtsFeriasProporcionais + calculo.totalMultaFgtsTercoProporcional | currency:'BRL':true:'1.2-2'}}</td>
         <td>{{calculo.totalMultaFgtsSalario | currency:'BRL':true:'1.2-2'}}</td>
+        <td>{{calculo.totalMultaFgtsRestante | currency:'BRL':true:'1.2-2'}}</td>
       </tr>
       </tbody>
     </table>
   </div>
   <div class="modal-footer">
-    <div class="center-align">
-      <button class="btn waves-effect right" (click)="efetuarCalculo()">Confirmar</button>
       <button class="btn waves-effect left" (click)="closeModal3()">Cancelar</button>
-    </div>
+      <button *ngIf="!isLoading" class="btn waves-effect right" (click)="efetuarCalculo()">Confirmar</button>
+      <div *ngIf="isLoading" class="preloader-wrapper active">
+        <div class="spinner-layer">
+          <div class="circle-clipper right">
+            <div class="circle"></div>
+          </div>
+        </div>
+      </div>
   </div>
 </div>
 <div id="modal4" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]"

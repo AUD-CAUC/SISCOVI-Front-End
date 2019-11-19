@@ -22,6 +22,10 @@
         <div>
           <i class="material-icons-pdf right" (click)="captureScreen(calculoPendente.titulo)">picture_as_pdf</i>
         </div>
+        <div>
+          <i class="fas fa-file-excel right" style="color: #249d76; font-size: 26px; cursor: pointer" title="Gerar relatório em Excel"
+             (click)="gerarRelatorioExcel(calculoPendente.titulo)"></i>
+        </div>
         <h6><b>{{calculoPendente.titulo}}</b></h6>
         <table *ngIf="calculosPendentesExecucao" class="highlight centered responsive-table"
                [formGroupName]="i" id="{{calculoPendente.titulo}}">
@@ -59,6 +63,7 @@
             <th>Multa do FGTS sobre férias proporcionais</th>
             <th>Multa do FGTS sobre 1/3 de férias proporcional</th>
             <th>Multa do FGTS sobre o salário</th>
+            <th>Multa do FGTS Restante</th>
             <th>Total</th>
           </tr>
           </thead>
@@ -115,6 +120,7 @@
             <td class="hoverable">{{calculos.calcularRescisaoModel.totalMultaFgtsFeriasProporcionais | currency:'BRL':true:'1.2-2'}}</td>
             <td class="hoverable">{{calculos.calcularRescisaoModel.totalMultaFgtsTercoProporcional | currency:'BRL':true:'1.2-2'}}</td>
             <td class="hoverable">{{calculos.calcularRescisaoModel.totalMultaFgtsSalario | currency:'BRL':true:'1.2-2'}}</td>
+            <td class="hoverable">{{calculos.calcularRescisaoModel.totalMultaFgtsRestante | currency:'BRL':true:'1.2-2'}}</td>
             <td class="hoverable"><b>{{calculos.total | currency:'BRL':true:'1.2-2'}}</b></td>
           </tr>
           <tr>
@@ -146,9 +152,11 @@
             <td><b>{{somaFgtsFeriasProporcionais[i] | currency:'BRL':true:'1.2-2'}}</b></td>
             <td><b>{{somaFgtsTercoProporcional[i] | currency:'BRL':true:'1.2-2'}}</b></td>
             <td><b>{{somaMultaFgtsSalario[i] | currency:'BRL':true:'1.2-2'}}</b></td>
+            <td><b>{{somaMultaFgtsRestante[i] | currency:'BRL':true:'1.2-2'}}</b></td>
             <td></td>
           </tr>
           <tr>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>
@@ -240,6 +248,7 @@
           <th>Multa do FGTS sobre férias proporcionais</th>
           <th>Multa do FGTS sobre 1/3 de férias proporcional</th>
           <th>Multa do FGTS sobre o salário</th>
+          <th>Multa do FGTS Restante</th>
           <th>Total</th>
           <th>Observações</th>
         </tr>
@@ -274,6 +283,7 @@
           <td class="hoverable">{{calculos.calcularRescisaoModel.totalMultaFgtsFeriasProporcionais | currency:'BRL':true:'1.2-2'}}</td>
           <td class="hoverable">{{calculos.calcularRescisaoModel.totalMultaFgtsTercoProporcional | currency:'BRL':true:'1.2-2'}}</td>
           <td class="hoverable">{{calculos.calcularRescisaoModel.totalMultaFgtsSalario | currency:'BRL':true:'1.2-2'}}</td>
+          <td class="hoverable">{{calculos.calcularRescisaoModel.totalMultaFgtsRestante | currency:'BRL':true:'1.2-2'}}</td>
           <td class="hoverable"><b>{{calculos.total | currency:'BRL':true:'1.2-2'}}</b></td>
           <td>
             <div class="row">
@@ -294,7 +304,14 @@
   </div>
   <div class="modal-footer">
     <button class="btn waves-effect left" (click)="closeModal2()">Cancelar</button>
-    <button class="btn waves-effect right" (click)="salvarAlteracoes()">Confirmar</button>
+    <button *ngIf="!isLoading" class="btn waves-effect right" (click)="salvarAlteracoes()">Confirmar</button>
+    <div *ngIf="isLoading" class="preloader-wrapper active">
+      <div class="spinner-layer">
+        <div class="circle-clipper right">
+          <div class="circle"></div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 <div id="modal3" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]"
@@ -344,6 +361,7 @@
           <th>Multa do FGTS sobre férias proporcionais</th>
           <th>Multa do FGTS sobre 1/3 de férias proporcional</th>
           <th>Multa do FGTS sobre o salário</th>
+          <th>Multa do FGTS Restante</th>
           <th>Total</th>
           <th>Observações</th>
         </tr>
@@ -377,6 +395,7 @@
           <td class="hoverable">{{calculos.calcularRescisaoModel.totalMultaFgtsFeriasProporcionais | currency:'BRL':true:'1.2-2'}}</td>
           <td class="hoverable">{{calculos.calcularRescisaoModel.totalMultaFgtsTercoProporcional | currency:'BRL':true:'1.2-2'}}</td>
           <td class="hoverable">{{calculos.calcularRescisaoModel.totalMultaFgtsSalario | currency:'BRL':true:'1.2-2'}}</td>
+          <td class="hoverable">{{calculos.calcularRescisaoModel.totalMultaFgtsRestante | currency:'BRL':true:'1.2-2'}}</td>
           <td class="hoverable"><b>{{calculos.total | currency:'BRL':true:'1.2-2'}}</b></td>
           <td class="hoverable">{{calculos.observacoes}}</td>
         </tr>

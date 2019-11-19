@@ -1,3 +1,28 @@
 h2 {
   font-size: 32px;
 }
+
+.container {
+  margin: 50px 200px 75px 400px;
+}
+
+.row {
+  margin-left: 0px;
+}
+
+.material-icons-pdf {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 26px; /* Preferred icon size */
+  color: #f43636f2;
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+  cursor: pointer;
+  padding-right: 5px;
+}

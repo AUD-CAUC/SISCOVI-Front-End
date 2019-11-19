@@ -77,7 +77,14 @@
 <div class="container" *ngIf="tipoRestituicao == 'MOVIMENTACAO'">
   <div class="row" *ngIf="terceirizados && tipoRestituicao">
     <div class="center-align">
-      <button class="btn waves-effect center" (click)="verificaDadosFormulario()">Calcular</button>
+      <button *ngIf="!isLoading" class="btn waves-effect center" (click)="verificaDadosFormulario()">Calcular</button>
+      <div *ngIf="isLoading" class="preloader-wrapper active">
+        <div class="spinner-layer">
+          <div class="circle-clipper left">
+            <div class="circle"></div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -147,9 +154,14 @@
     </table>
   </div>
   <div class="modal-footer">
-    <div class="center-align">
-      <button class="btn waves-effect right" (click)="efetuarCalculo()">Confirmar</button>
-      <button class="btn waves-effect left" (click)="closeModal3()">Cancelar</button>
+    <button class="btn waves-effect left" (click)="closeModal3()">Cancelar</button>
+    <button *ngIf="!isLoading" class="btn waves-effect right" (click)="efetuarCalculo()">Confirmar</button>
+    <div *ngIf="isLoading" class="preloader-wrapper active">
+      <div class="spinner-layer">
+        <div class="circle-clipper left">
+          <div class="circle"></div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

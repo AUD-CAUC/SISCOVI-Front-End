@@ -1,0 +1,103 @@
+<form [formGroup]="feriasForm" >
+  <div formArrayName="calcularTerceirizados">
+    <table class="highlight centered responsive-table hoverable">
+      <thead>
+      <tr>
+        <th>
+          <input type="checkbox" id="test5" (change)="isSelected = !isSelected"/>
+          <label for="test5"></label>
+        </th>
+        <th>Terceirizados</th>
+        <th>CPF</th>
+        <th>Valor de férias</th>
+        <th>Valor de terço</th>
+        <th>Incidência sobre férias</th>
+        <th>Incidência sobre terço</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let terceirizado of terceirizados; let i = index">
+        <td>
+          <div [formGroupName]="i">
+            <input type="checkbox" [checked]="isSelected" [ngModel]="isSelected" formControlName="selected" id="{{i}}"/>
+            <label for="{{i}}"></label>
+          </div>
+        </td>
+        <td>{{terceirizado.terceirizado}}</td>
+        <td>{{terceirizado.cpf}}</td>
+        <td>{{terceirizado.valorFeriasResidual | currency:'BRL':true:'1.2-2'}}</td>
+        <td>{{terceirizado.valorTercoResidual | currency:'BRL':true:'1.2-2'}}</td>
+        <td>{{terceirizado.valorIncidenciaFeriasResidual | currency:'BRL':true:'1.2-2'}}</td>
+        <td>{{terceirizado.valorIncidenciaTercoResidual | currency:'BRL':true:'1.2-2'}}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</form>
+<br>
+<div class="container">
+  <div class="row" *ngIf="terceirizados && tipoRestituicao">
+    <div class="center-align">
+      <button class="btn waves-effect center" (click)="verificaDadosFormulario()">Calcular</button>
+    </div>
+  </div>
+</div>
+<div id="modal1" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions">
+  <div class="modal-content">
+    <h4 class="center">Atenção</h4>
+    <br>
+    <h5 class=" center">No mínimo uma pessoa deve ser selecionada para se realizar o cálculo !</h5>
+  </div>
+  <div class="modal-footer">
+    <div class="col center-align center">
+      <div class="center">
+        <button class="btn waves-effect center"  (click)="closeModal1()">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="modal3" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions3">
+  <div class="modal-content">
+    <h4 class="center">Atenção</h4>
+    <h5 class="center">Deseja Confirmar o cálculo realizado ?</h5>
+    <p>Obs.: Esta ação não poderá ser desfeita futuramente *</p>
+    <table *ngIf="residuaisFeriasConfirmar"  class="highlight centered responsive-table hoverable">
+      <thead>
+      <tr>
+        <th>Terceirizados</th>
+        <th>CPF</th>
+        <th>Valor de férias</th>
+        <th>Valor de terço</th>
+        <th>Incidência sobre férias</th>
+        <th>Incidência sobre terço</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let residuaisFerias of residuaisFeriasConfirmar; let l = index">
+        <td>{{residuaisFerias.terceirizado}}</td>
+        <td>{{residuaisFerias.cpf}}</td>
+        <td>{{residuaisFerias.valorFeriasResidual | currency:'BRL':true:'1.2-2'}}</td>
+        <td>{{residuaisFerias.valorTercoResidual | currency:'BRL':true:'1.2-2'}}</td>
+        <td>{{residuaisFerias.valorIncidenciaFeriasResidual | currency:'BRL':true:'1.2-2'}}</td>
+        <td>{{residuaisFerias.valorIncidenciaTercoResidual | currency:'BRL':true:'1.2-2'}}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="modal-footer">
+    <div class="center-align">
+      <button class="btn waves-effect right" (click)="efetuarCalculo()">Confirmar</button>
+      <button class="btn waves-effect left" (click)="closeModal3()">Cancelar</button>
+    </div>
+  </div>
+</div>
+<div id="modal4" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions4">
+  <div class="modal-content">
+    <h4 class="center">Cálculo realizado com sucesso !</h4>
+  </div>
+  <div class="modal-footer">
+    <div class="center-align">
+      <button class="btn waves-effect center" (click)="closeModal4()">Ok</button>
+    </div>
+  </div>
+</div>

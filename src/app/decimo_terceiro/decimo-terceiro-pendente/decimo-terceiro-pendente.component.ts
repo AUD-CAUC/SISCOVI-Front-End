@@ -36,6 +36,7 @@ export class DecimoTerceiroPendenteComponent implements OnInit {
   somaSaldo: number[] = [];
   @Output() nav = new EventEmitter();
   view = false;
+  isLoading = false;
   private coluna;
 
   constructor(config: ConfigService, private  fb: FormBuilder, private  ref: ChangeDetectorRef,
@@ -201,6 +202,7 @@ export class DecimoTerceiroPendenteComponent implements OnInit {
   }
 
   salvarAlteracoes() {
+    this.isLoading = true;
     for (let i = 0; i < this.calculosAvaliados.length; i++) {
       for (let j = 0; j < this.calculosAvaliados[i].calculos.length; j++) {
         this.calculosAvaliados[i].calculos[j].observacoes = this.decimoTerceiroFormAfter
@@ -211,10 +213,12 @@ export class DecimoTerceiroPendenteComponent implements OnInit {
       }
     }
     this.decimoTerceiroService.salvarDecimoTerceiroAvaliados(this.calculosAvaliados).subscribe(res => {
+        this.isLoading = false;
         this.closeModal2();
         this.openModal3();
       },
       error1 => {
+        this.isLoading = false;
         this.closeModal2();
         this.openModal5();
       });
@@ -290,71 +294,89 @@ export class DecimoTerceiroPendenteComponent implements OnInit {
     };
 
 
-    worksheetDtAprov.mergeCells('A1:H1'); /* merge de A1 até H1 */
-    const rowEmpresa = worksheetDtAprov.getCell('A1').value = nomeEmpresa; /*Traz o contrato do front*/
-    worksheetDtAprov.getCell('A1').font = {name: 'Arial', size: 18}; /*formatação da celula merjada*/
-    worksheetDtAprov.getCell('A1').alignment = {vertical: 'middle', horizontal: 'center'}; /*formatação da celula merjada*/
-    worksheetDtAprov.addRow(rowEmpresa); /*adiciona o contrato na linha merjada*/
+    worksheetDtAprov.mergeCells('A1:H1');
+    const rowEmpresa = worksheetDtAprov.getCell('A1').value = nomeEmpresa;
+    worksheetDtAprov.getCell('A1').font = {name: 'Arial', size: 18};
+    worksheetDtAprov.getCell('A1').alignment = {vertical: 'middle', horizontal: 'center'};
+    worksheetDtAprov.addRow(rowEmpresa);
+    worksheetDtAprov.getRow(1).height = 30;
 
-    worksheetDtAprov.mergeCells('A2:H2'); /* merge de A1 até H1 */
-    const rowRelAprov = worksheetDtAprov.getCell('A2').value = 'Relatório de Pendências de Aprovação'; /*Traz o contrato do front*/
-    worksheetDtAprov.getCell('A2').font = {name: 'Arial', size: 18}; /*formatação da celula merjada*/
-    worksheetDtAprov.getCell('A2').alignment = {vertical: 'middle', horizontal: 'center'}; /*formatação da celula merjada*/
-    worksheetDtAprov.addRow(rowRelAprov); /*adiciona o contrato na linha merjada*/
+    worksheetDtAprov.mergeCells('A2:H2');
+    const rowRelAprov = worksheetDtAprov.getCell('A2').value = 'Relatório de Pendências de Aprovação - Décimo Terceiro Salário';
+    worksheetDtAprov.getCell('A2').font = {name: 'Arial', size: 18};
+    worksheetDtAprov.getCell('A2').alignment = {vertical: 'middle', horizontal: 'center'};
+    worksheetDtAprov.addRow(rowRelAprov);
+    worksheetDtAprov.getRow(2).height = 30;
 
     const rowHeaders = [
-      ['Terceirizado', 'Função', 'Tipo de Restituição', 'Parcela', 'Data de Início para Contagem', 'Valor de Décimo Terceiro', 'Valor de Incidência', 'Total'], // row by array
+      ['Terceirizado', 'Função', 'Tipo de\nRestituição', 'Parcela', 'Data de Início\npara Contagem', 'Valor de\nDécimo Terceiro',
+        'Valor de\nIncidência', 'Valor Resgatado/\nMovimentado'],
     ];
     worksheetDtAprov.addRows(rowHeaders);
 
     worksheetDtAprov.columns = [
-      {header: rowHeaders[1], key: 'terceirizado', width: 57},
+      {header: rowHeaders[1], key: 'terceirizado', width: 47},
       {header: rowHeaders[2], key: 'funcao', width: 50},
-      {header: rowHeaders[3], key: 'tipo', width: 35},
-      {header: rowHeaders[4], key: 'parcela', width: 30},
-      {header: rowHeaders[5], key: 'dataInicio', width: 57},
-      {header: rowHeaders[6], key: 'valorDecTer', width: 57},
-      {header: rowHeaders[7], key: 'valorIncid', width: 40},
-      {header: rowHeaders[8], key: 'total', width: 25},
-      {header: nomeEmpresa, key: 'movimentado', width: 57}
+      {header: rowHeaders[3], key: 'tipo', width: 20},
+      {header: rowHeaders[4], key: 'parcela', width: 15},
+      {header: rowHeaders[5], key: 'dataInicio', width: 30},
+      {header: rowHeaders[6], key: 'valorDecTer', width: 30},
+      {header: rowHeaders[7], key: 'valorIncid', width: 20},
+      {header: rowHeaders[8], key: 'resMov', width: 30}
+      // {header: nomeEmpresa, key: 'movimentado', width: 57}
     ];
-    worksheetDtAprov.getRow(3).font = {name: 'Arial', size: 18};
-    worksheetDtAprov.getRow(3).alignment = {vertical: 'middle', horizontal: 'center'};
-    let row;
+    worksheetDtAprov.getRow(4).font = {name: 'Arial', size: 18};
+    worksheetDtAprov.getRow(4).alignment = {vertical: 'middle', horizontal: 'center', wrapText: true};
+    worksheetDtAprov.getRow(4).height = 70;
 
-    for (let i = 0; i < this.calculosPendentes.length; i++) { // i=0
+    worksheetDtAprov.getColumn('valorDecTer').numFmt = 'R$ #,##0.00';
+    worksheetDtAprov.getColumn('valorIncid').numFmt = 'R$ #,##0.00';
+    worksheetDtAprov.getColumn('resMov').numFmt = 'R$ #,##0.00';
+
+
+    let row;
+    let i, j;
+
+    for (i = 0; i < this.calculosPendentes.length; i++) {
       if (this.calculosPendentes[i].titulo === nomeEmpresa) {
-        for (let j = 0; j < this.calculosPendentes[i].calculos.length; j++) { // j=0,j=1
-          row = worksheetDtAprov.getRow(j + 4); // j=4,j=5
-          console.log(typeof row);
+        for (j = 0; j < this.calculosPendentes[i].calculos.length; j++) {
+          row = worksheetDtAprov.getRow(j + 5);
           row.getCell(1).value = this.calculosPendentes[i].calculos[j].terceirizadoDecTer.nomeTerceirizado; // A4,A5
           row.getCell(2).value = this.calculosPendentes[i].calculos[j].terceirizadoDecTer.nomeCargo;
           row.getCell(3).value = this.calculosPendentes[i].calculos[j].terceirizadoDecTer.tipoRestituicao;
           row.getCell(4).value = this.formatParcela(this.calculosPendentes[i].calculos[j].terceirizadoDecTer.parcelas);
           row.getCell(5).value = this.formatDate(this.calculosPendentes[i].calculos[j].terceirizadoDecTer.inicioContagem);
-          row.getCell(6).value = this.calculosPendentes[i].calculos[j].terceirizadoDecTer.valoresDecimoTerceiro.
-          valorDecimoTerceiro.toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
-          row.getCell(7).value = this.calculosPendentes[i].calculos[j].terceirizadoDecTer.valoresDecimoTerceiro.
-          valorIncidenciaDecimoTerceiro.toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
+          row.getCell(6).value = this.calculosPendentes[i].calculos[j].terceirizadoDecTer.valoresDecimoTerceiro.valorDecimoTerceiro;
+          row.getCell(7).value = this.calculosPendentes[i].calculos[j].terceirizadoDecTer.valoresDecimoTerceiro.valorIncidenciaDecimoTerceiro;
           row.getCell(8).value = (this.calculosPendentes[i].calculos[j].terceirizadoDecTer.valoresDecimoTerceiro.valorDecimoTerceiro +
-            this.calculosPendentes[i].calculos[j].terceirizadoDecTer.valoresDecimoTerceiro.valorIncidenciaDecimoTerceiro).
-          toLocaleString('pt-br', {style: 'currency', currency: 'BRL'}); // H4,H5
+            this.calculosPendentes[i].calculos[j].terceirizadoDecTer.valoresDecimoTerceiro.valorIncidenciaDecimoTerceiro); // H4,H5
         }
+        break;
       }
-
     }
-    this.coluna = worksheetDtAprov.getColumn('H');
-    console.log(this.coluna);
 
-    let j = 9;
-    while (j <= 16384) {
-      const dobCol = worksheetDtAprov.getColumn(j);
+    worksheetDtAprov.getRow(j + 6).getCell(5).value = 'Subtotais';
+    worksheetDtAprov.getRow(j + 6).font = {name: 'Arial', bold: true};
+    worksheetDtAprov.getRow(j + 6).getCell(6).value = this.somaDecimo[i];
+    worksheetDtAprov.getRow(j + 6).getCell(7).value = this.somaIncidencia[i];
+    worksheetDtAprov.getRow(j + 7).getCell(5).value = 'Total';
+    worksheetDtAprov.getRow(j + 7).font = {name: 'Arial', bold: true};
+    worksheetDtAprov.getRow(j + 7).getCell(8).value = this.somaSaldo[i];
+
+    for (let x = 5; x <= 200; x++) {
+      worksheetDtAprov.getRow(x).height = 30;
+      worksheetDtAprov.getRow(x).alignment = {vertical: 'middle', horizontal: 'center', wrapText: true};
+    }
+
+    let k = 9;
+    while (k <= 16384) {
+      const dobCol = worksheetDtAprov.getColumn(k);
       dobCol.hidden = true;
-      j++;
+      k++;
     }
 
     workbookDtAprov.xlsx.writeBuffer()
-      .then(buffer => saveAs(new Blob([buffer]), 'Relatório-Calculos-Pendentes-Aprovação.xlsx'))
+      .then(buffer => saveAs(new Blob([buffer]), 'Relatório-Décimo-Terceiro-Pendentes-Aprovação.xlsx'))
       .catch(err => console.log('Error writing excel export', err));
   }
 }
