@@ -58,7 +58,7 @@
             <td *ngIf="config.user.perfil.sigla == 'ADMINISTRADOR'">
               <div [formGroupName]="k" [attr.id]="calculoPendente.codigo">
                 <div class="row">
-                  <div class="input-field">
+                  <div>
                     <input type="checkbox" class="checkbox-black" [checked]="isSelected[i]" [ngModel]="isSelected[i]"
                            formControlName="selected"
                            id="{{calculoPendente.codigo}}}{{k}}"/>
