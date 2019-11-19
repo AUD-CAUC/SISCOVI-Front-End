@@ -109,6 +109,13 @@ import {PercentualDinamicoComponent} from './percentuais-dinamicos/percentual-di
 import {CadastrarPercentualDinamicoComponent} from './percentuais-dinamicos/cadastrar-percentual-dinamico/cadastrar-percentual-dinamico.component';
 import {PercentualDinamicoService} from './percentuais-dinamicos/percentual-dinamico.service';
 import {CadastrarConvencaoComponent} from './convencoes-coletivas/cadastrar-convecao/cadastrar-convencao.component';
+import {ResidualComponent} from './residual/residual.component';
+import {ResidualService} from './residual/residual.service';
+import {CalculoResiduaisComponent} from './residual/calculo-residuais/calculo-residuais.component';
+import {MovimentacaoResidualFeriasComponent} from './residual/calculo-residuais/movimentacao-residual-ferias.component';
+import {MovimentacaoResidualDecimoTerceiroComponent} from './residual/calculo-residuais/movimentacao-residual-decimoTerceiro.component';
+import {MovimentacaoResidualRescisaoComponent} from './residual/calculo-residuais/movimentacao-residual-rescisao.component';
+import {ResiduaisCalculosPendentesComponent} from './residual/residuais-pendentes/residuais-calculos-pendentes.component';
 
 
 @NgModule({
@@ -193,6 +200,12 @@ import {CadastrarConvencaoComponent} from './convencoes-coletivas/cadastrar-conv
     CadastrarPercentualEstaticoComponent,
     PercentualDinamicoComponent,
     CadastrarPercentualDinamicoComponent,
+    ResidualComponent,
+    CalculoResiduaisComponent,
+    MovimentacaoResidualFeriasComponent,
+    MovimentacaoResidualDecimoTerceiroComponent,
+    MovimentacaoResidualRescisaoComponent,
+    ResiduaisCalculosPendentesComponent,
   ],
   imports: [
     BrowserModule,
@@ -225,6 +238,7 @@ import {CadastrarConvencaoComponent} from './convencoes-coletivas/cadastrar-conv
     SaldoService,
     PercentualEstaticoService,
     PercentualDinamicoService,
+    ResidualService,
     {provide: LOCALE_ID, useValue: 'pt'},
     {
       provide: HTTP_INTERCEPTORS,

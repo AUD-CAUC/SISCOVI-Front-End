@@ -39,8 +39,11 @@ import {FeriasPendentesExecucaoResolver} from './ferias/ferias-pendentes-execuca
 import {PercentualDinamicoComponent} from './percentuais-dinamicos/percentual-dinamico.component';
 import {CadastrarConvencaoComponent} from './convencoes-coletivas/cadastrar-convecao/cadastrar-convencao.component';
 import {CadastrarPercentualEstaticoComponent} from './percentuais-estaticos/cadastrar-percentual-estatico/cadastrar-percentual-estatico.component';
+import {ResidualComponent} from './residual/residual.component';
 import {CadastrarPercentualDinamicoComponent} from './percentuais-dinamicos/cadastrar-percentual-dinamico/cadastrar-percentual-dinamico.component';
-import {VisualizarAjusteComponent} from "./contratos/visualizar-ajuste/visualizar-ajuste.component";
+import {ResidualFeriasPendentesResolver} from './residual/residual-ferias-pendentes.resolver';
+import {VisualizarAjusteComponent} from './contratos/visualizar-ajuste/visualizar-ajuste.component';
+
 
 const routes: Routes = [
   {path: '', pathMatch: 'full', redirectTo: 'home'},
@@ -96,6 +99,14 @@ const routes: Routes = [
         }
       },
       {path: 'rescisao/funcoes-dos-terceirizados/:codContrato', component: GerenciarCargosTerceirizadosComponent, canActivate: [LoggedInGuard]},
+      {
+        path: 'residual',
+        component: ResidualComponent,
+        canActivate: [LoggedInGuard],
+        resolve: {
+          calculosPendentes: ResidualFeriasPendentesResolver,
+        }
+      },
       {path: 'totalMensal', component: TotalMensalComponent, canActivate: [LoggedInGuard]},
       {path: 'totalMensal/funcoes-dos-terceirizados/:codContrato', component: GerenciarCargosTerceirizadosComponent, canActivate: [LoggedInGuard]},
       {path: 'totalMensal/:id/:dataReferencia', component: RecalculoTotalMensalComponent, canActivate: [LoggedInGuard]},
@@ -127,7 +138,7 @@ const routes: Routes = [
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
-  providers: [FeriasPendentesResolver, FeriasPendentesExecucaoResolver, RescisaoPendenteResolver, RescisaoPendenteExecucaoResolver]
+  providers: [FeriasPendentesResolver, FeriasPendentesExecucaoResolver, RescisaoPendenteResolver, RescisaoPendenteExecucaoResolver, ResidualFeriasPendentesResolver]
 })
 export class AppRoutingModule {
 }

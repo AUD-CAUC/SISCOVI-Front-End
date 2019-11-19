@@ -1,0 +1,29 @@
+<br>
+<div class="row">
+  <div class="input-field col l7">
+    <select id="selecao_contrato"materialize="material_select" [materializeSelectOptions]="contratos" (change)="defineCodigoContrato($event.target.value)">
+      <option disabled>Selecione um Contrato</option>
+      <option *ngFor="let contrato of contratos" [value]="contrato.codigo">{{contrato.nomeDaEmpresa}} - Contrato nº: {{contrato.numeroDoContrato}}</option>
+    </select>
+    <label for="selecao_contrato">Contrato<span class="red-text"> *</span></label>
+  </div>
+  <div class="input-field col l3">
+    <select id="selecao_tipo_restituicao" materialize="material_select" (change)="defineTipoRestituicao($event.target.value)">
+      <option disabled selected>Selecione o tipo de restituição</option>
+      <option value="ferias">Férias</option>
+      <option value="decimo">Décimo Terceiro</option>
+      <option value="rescisao">Rescisão</option>
+    </select>
+    <label for="selecao_tipo_restituicao">Tipo de Restituição<span class="red-text"> *</span></label>
+  </div>
+</div>
+<div  *ngIf="terceirizadosFerias && (tipoRestituicao == 'ferias')">
+  <app-movimentacao-residual-ferias-component [tipoRestituicao]="tipoRestituicao" [codigoContrato]="codigo" [terceirizados]="terceirizadosFerias" (navegaParaViewDeCalculos)="eventNav($event)"></app-movimentacao-residual-ferias-component>
+</div>
+<div  *ngIf="terceirizadosDecimoTerceiro && (tipoRestituicao == 'decimo')">
+  <app-movimentacao-residual-decimo-terceiro-component [tipoRestituicao]="tipoRestituicao" [codigoContrato]="codigo" [terceirizados]="terceirizadosDecimoTerceiro" (navegaParaViewDeCalculos)="eventNav($event)"></app-movimentacao-residual-decimo-terceiro-component>
+</div>
+<div  *ngIf="terceirizadosRescisao && (tipoRestituicao == 'rescisao')">
+  <app-movimentacao-residual-rescisao-component [tipoRestituicao]="tipoRestituicao" [codigoContrato]="codigo" [terceirizados]="terceirizadosRescisao" (navegaParaViewDeCalculos)="eventNav($event)"></app-movimentacao-residual-rescisao-component>
+</div>
+

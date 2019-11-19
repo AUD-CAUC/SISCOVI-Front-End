@@ -17,7 +17,6 @@ import {ConvencaoService} from '../../convencoes-coletivas/convencao.service';
 import {PercentualDinamico} from '../../percentuais-dinamicos/percentual-dinamico';
 import {PercentualDinamicoService} from '../../percentuais-dinamicos/percentual-dinamico.service';
 
-
 @Component({
   selector: 'app-cadastro-contrato',
   templateUrl: './cadastro.contrato.component.html',
@@ -85,6 +84,10 @@ export class CadastroContratoComponent implements OnInit {
                 this.usuarios = res;
             });
         }
+        percentualDinamicoService.getAllPercentuaisDinamicos().subscribe(res => {
+          console.log(this.percentuaisDinamicos);
+          this.percentuaisDinamicos = res;
+        });
     }
     ngOnInit() {
         this.myForm2 = this.fb1.group({

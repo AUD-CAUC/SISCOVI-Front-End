@@ -49,6 +49,7 @@ export class FeriasCalculosPendentesComponent implements OnInit {
 
     this.feriasService.getCalculosPendentes().subscribe(res => {
       this.calculosPendentes = res;
+      console.log(this.calculosPendentes);
 
       if (this.calculosPendentes.length === 0) {
         this.calculosPendentes = null;
@@ -122,6 +123,7 @@ export class FeriasCalculosPendentesComponent implements OnInit {
           control.push(newControl);
         });
       }
+      console.log(this.feriasForm);
     }
     this.feriasFormAfter = this.fb.group({
       calculosAvaliados: this.fb.array([])
@@ -210,6 +212,7 @@ export class FeriasCalculosPendentesComponent implements OnInit {
         }
       }
       this.calculosAvaliados.push(lista);
+      console.log(this.calculosAvaliados);
     }
     if (aux === 0) {
       this.openModal();
