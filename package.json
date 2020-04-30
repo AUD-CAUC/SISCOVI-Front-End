@@ -33,7 +33,7 @@
     "hoek": "^5.0.4",
     "html2canvas": "^1.0.0-rc.3",
     "html2pdf.js": "^0.9.1",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "jspdf": "^1.5.3",
     "materialize-css": "^0.100.2",
     "ng-pick-datetime": "^6.0.16",
