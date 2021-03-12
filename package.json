@@ -34,7 +34,7 @@
     "html2canvas": "^1.0.0-rc.3",
     "html2pdf.js": "^0.9.1",
     "jquery": "^3.4.1",
-    "jspdf": "^1.5.3",
+    "jspdf": "^2.3.1",
     "materialize-css": "^0.100.2",
     "ng-pick-datetime": "^6.0.16",
     "ng2-currency-mask": "^5.3.1",
